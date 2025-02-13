@@ -86,8 +86,6 @@ m$scale(list('weight'))
 # convert data to jax arrays
 m$data_to_model(list('weight', 'height'))
 
-bi.dist.uniform(0, 50, name = 's', shape =c(1),sample=TRUE)
-
 # Define model ------------------------------------------------
 model <- function(height, weight){
   # Parameters priors distributions
