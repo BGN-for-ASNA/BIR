@@ -1,0 +1,5 @@
+bi.dist.gaussianrandomwalk=function(scale=1.0, num_steps=1, validate_args=py_none(), shape=c(), sample=FALSE, seed=0, name='x') { 
+     bi=importBI(platform='cpu');
+    shape=do.call(tuple, as.list(as.integer(shape)));
+    seed=as.integer(seed);
+bi$dist$gaussianrandomwalk(scale=scale,  num_steps= num_steps,  validate_args= validate_args,  shape= shape,  sample= sample,  seed= seed,  name= name)}

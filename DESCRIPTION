@@ -1,0 +1,17 @@
+Package: BI
+Type: Package
+Title: Bayesian inference
+Version: 0.1.0
+Authors@R: c(
+    person(
+      "Sebastian", "Sosa",
+      email = "s.sosa@live.fr",
+      role = c("aut", "cre")
+    )
+  )
+Description: Bayesian Inference (BI) is an R warpper toward python package BI.
+License: MIT
+Encoding: UTF-8
+LazyData: true
+Imports: reticulate
+LinkingTo: reticulate

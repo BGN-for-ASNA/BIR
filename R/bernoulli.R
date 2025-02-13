@@ -1,0 +1,6 @@
+bi.dist.bernoulli=function(probs=py_none(), logits=py_none(), validate_args=py_none(), shape=c(), sample=FALSE, seed=0, name='x') {
+    bi=importBI(platform='cpu');
+    shape=do.call(tuple, as.list(as.integer(shape)));
+    seed=as.integer(seed);
+    bi$dist$bernoulli(probs=probs,  logits= logits,  validate_args= validate_args,  shape= shape,  sample= sample,  seed= seed,  name= name)
+}
