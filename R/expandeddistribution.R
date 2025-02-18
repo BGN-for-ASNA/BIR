@@ -1,5 +1,5 @@
-bi.dist.expandeddistribution=function(base_dist, batch_shape=c(), shape=c(), sample=FALSE, seed=0, name='x') { 
-     bi=importBI(platform='cpu');
-    shape=do.call(tuple, as.list(as.integer(shape)));
-    seed=as.integer(seed);
-bi$dist$expandeddistribution(base_dist,  batch_shape= batch_shape,  shape= shape,  sample= sample,  seed= seed,  name= name)}
+bi.dist.expandeddistribution=function(base_dist, batch_shape=c(), shape=c(), sample=FALSE, seed=0, name='x', obs=py_none()) { 
+     shape=do.call(tuple, as.list(as.integer(shape)))
+     seed=as.integer(seed);
+     .bi$dist$expandeddistribution(base_dist,  batch_shape= batch_shape,  shape= shape,  sample= sample,  seed= seed,  name= name,  obs= obs)
+}

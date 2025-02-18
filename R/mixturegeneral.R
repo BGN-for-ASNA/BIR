@@ -1,5 +1,5 @@
-bi.dist.mixturegeneral=function(mixing_distribution, component_distributions, validate_args=py_none(), shape=c(), sample=FALSE, seed=0, name='x') { 
-     bi=importBI(platform='cpu');
-    shape=do.call(tuple, as.list(as.integer(shape)));
-    seed=as.integer(seed);
-bi$dist$mixturegeneral(mixing_distribution,  component_distributions,  validate_args= validate_args,  shape= shape,  sample= sample,  seed= seed,  name= name)}
+bi.dist.mixturegeneral=function(mixing_distribution, component_distributions, support=py_none(), validate_args=py_none(), shape=c(), sample=FALSE, seed=0, name='x', obs=py_none()) { 
+     shape=do.call(tuple, as.list(as.integer(shape)))
+     seed=as.integer(seed);
+     .bi$dist$mixturegeneral(mixing_distribution,  component_distributions,  support= support,  validate_args= validate_args,  shape= shape,  sample= sample,  seed= seed,  name= name,  obs= obs)
+}

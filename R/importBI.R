@@ -9,6 +9,7 @@ importBI = function(platform='cpu', cores=NULL, deallocate = FALSE){
   jax<<-import('jax')
   jnp<<-import('jax.numpy')
 
+  packageStartupMessage("BIR load BI as .bi do not overwrite it!")
   packageStartupMessage("jax an jax.numpy have been imported as jax and jnp respectivelly")
   m = .bi$bi(platform=platform, cores=reticulate::r_to_py(cores),
              deallocate = reticulate::r_to_py(deallocate))

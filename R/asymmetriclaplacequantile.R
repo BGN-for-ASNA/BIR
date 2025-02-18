@@ -1,5 +1,5 @@
-bi.dist.asymmetriclaplacequantile=function(loc=0.0, scale=1.0, quantile=0.5, validate_args=py_none(), shape=c(), sample=FALSE, seed=0, name='x') { 
-     bi=importBI(platform='cpu');
-    shape=do.call(tuple, as.list(as.integer(shape)));
-    seed=as.integer(seed);
-bi$dist$asymmetriclaplacequantile(loc=loc,  scale= scale,  quantile= quantile,  validate_args= validate_args,  shape= shape,  sample= sample,  seed= seed,  name= name)}
+bi.dist.asymmetriclaplacequantile=function(loc=0.0, scale=1.0, quantile=0.5, validate_args=py_none(), shape=c(), sample=FALSE, seed=0, name='x', obs=py_none()) { 
+     shape=do.call(tuple, as.list(as.integer(shape)))
+     seed=as.integer(seed);
+     .bi$dist$asymmetriclaplacequantile(loc=loc,  scale= scale,  quantile= quantile,  validate_args= validate_args,  shape= shape,  sample= sample,  seed= seed,  name= name,  obs= obs)
+}
