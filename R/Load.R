@@ -15,6 +15,11 @@
     packageStartupMessage("Python package 'jax' not found; installing now...")
     reticulate::py_install("jax", pip = TRUE)
   }
+  if (!reticulate::py_module_available("ipython")){
+    packageStartupMessage("Python package 'ipython' not found; installing now...")
+    reticulate::py_install("ipython", pip = TRUE)
+  }
+
 
 
   #if (!reticulate::py_module_available("BI")) {
