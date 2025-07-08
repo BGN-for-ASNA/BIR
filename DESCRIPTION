@@ -13,5 +13,7 @@ Description: Bayesian Inference (BI) is an R warpper toward python package BI.
 License: MIT
 Encoding: UTF-8
 LazyData: true
-Imports: reticulate
+Imports: 
+    cli,
+    reticulate
 LinkingTo: reticulate
