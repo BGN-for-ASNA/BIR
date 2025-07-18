@@ -11,8 +11,14 @@
 #' @examples
 #' bi.dist.multinomial(sample = TRUE)
 #' @export
-bi.dist.multinomial=function(total_count=1, probs=py_none(), logits=py_none(), total_count_max=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) { 
+bi.dist.multinomial=function(total_count=1, probs=py_none(), logits=py_none(), total_count_max=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
+     event=as.integer(event)
      seed=as.integer(seed);
-     .bi$dist$multinomial(total_count=total_count,  probs= probs,  logits= logits,  total_count_max= total_count_max,  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+     if (py$is_none(logits)){
+      .bi$dist$multinomial(total_count=total_count,  probs= jnp$array(probs),  total_count_max= total_count_max,  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+     }else{
+       .bi$dist$multinomial(total_count=total_count,  logits= jnp$array(logits),  total_count_max= total_count_max,  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+
+     }
 }

@@ -7,10 +7,24 @@
 #' @param mask (jnp.ndarray, bool): Optional boolean array to mask observations. This is passed to the `infer={'obs_mask': ...}` argument of `numpyro.sample`.
 #' @param create_obj (bool): If True, returns the raw NumPyro distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.
 #' @examples
-#' bi.dist.categorical(sample = TRUE)
+#' library(BI)
+#' m=importBI(platform='cpu')
+#' bi.dist.categorical(probs = c(0.5,0.5), sample = TRUE, shape = c(3))
 #' @export
-bi.dist.categorical=function(probs=py_none(), logits=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) { 
+bi.dist.categorical=function(probs=py_none(), logits=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
+     require(reticulate)
      shape=do.call(tuple, as.list(as.integer(shape)))
+     event=as.integer(event)
      seed=as.integer(seed);
-     .bi$dist$categorical(probs=probs,  logits= logits,  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+     py_run_string("def is_none(x): return x is None")
+     if (py$is_none(logits)){
+       .bi$dist$categorical(probs=jnp$array(probs),   validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+
+     }
+     else{
+       .bi$dist$categorical(logits=jnp$array(logits),   validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+     }
 }
+
+
+
