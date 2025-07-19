@@ -8,11 +8,11 @@
 #' @examples
 #' library(BI)
 #' m=importBI(platform='cpu')
-#' bi.dist.exponential(sample = TRUE)
+#' bi.dist.exponential(rate = c(0.1,1,2),sample = TRUE)
 #' @export
 bi.dist.exponential=function(rate=1.0, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      seed=as.integer(seed);
-     .bi$dist$exponential(rate=rate,  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+     .bi$dist$exponential(rate=jnp$array(rate),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

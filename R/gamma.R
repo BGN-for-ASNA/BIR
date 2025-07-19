@@ -15,5 +15,6 @@ bi.dist.gamma=function(concentration, rate=1.0, validate_args=py_none(), name='x
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      seed=as.integer(seed);
-     .bi$dist$gamma(concentration,  rate= rate,  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+     .bi$dist$gamma(jnp$array(concentration),  rate= jnp$array(rate),   validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }
+

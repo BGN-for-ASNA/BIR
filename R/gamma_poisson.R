@@ -9,10 +9,10 @@
 #' @examples
 #' library(BI)
 #' m=importBI(platform='cpu')
-#' bi.dist.gammapoisson(concentration = 1, sample = TRUE)
+#' bi.dist.gamma_poisson(concentration = 1, sample = TRUE)
 #' @export
-bi.dist.gammapoisson=function(concentration, rate=1.0, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
+bi.dist.gamma_poisson=function(concentration, rate=1.0, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      seed=as.integer(seed);
-     .bi$dist$gammapoisson(concentration,  rate= rate,  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+     .bi$dist$gamma_poisson(jnp$array(concentration),  rate= jnp$array(rate),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

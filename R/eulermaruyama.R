@@ -10,11 +10,13 @@
 #' @examples
 #' library(BI)
 #' m=importBI(platform='cpu')
-#' bi.dist.eulermaruyama(0, 1, .bi$dist$normal(0,1,create_obj = T), sample = TRUE, event = c(1,10))
+#' m.dist.euler_maruyama(t=jnp.array([0.0, 0.1, 0.2]), sde_fn=lambda x, t: (x, 1.0), init_dist=m.dist.normal(0.0, 1.0, create_obj=True)
+#' bi.dist.euler_maruyama(t=c(0,0.1,0.2), sde_fn = lambda x, t: (x, 1.0), .bi$dist$normal(0,1,create_obj = T), sample = TRUE, event = c(1,10))
 #' @export
-bi.dist.eulermaruyama=function(t, sde_fn, init_dist, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
-     shape=do.call(tuple, as.list(as.integer(shape)))
-     event=as.integer(event)
-     seed=as.integer(seed);
-     .bi$dist$eulermaruyama(t,  sde_fn,  init_dist,  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+bi.dist.euler_maruyama=function(t, sde_fn, init_dist, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
+     print("Not supported yet")
+     #shape=do.call(tuple, as.list(as.integer(shape)))
+     #event=as.integer(event)
+     #seed=as.integer(seed);
+     #.bi$dist$euler_maruyama(t,  sde_fn,  init_dist,  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

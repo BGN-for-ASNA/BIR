@@ -1,3 +1,4 @@
+library(testthat)
 library(BI)
 m=importBI(platform='cpu')
 
@@ -96,4 +97,25 @@ test_that("bi.dist.discrete_uniform", {
 
   r2 = reticulate::py_to_r(res$tolist())
   expect_equal( r2, 1)
+})
+
+test_that("bi.dist.exponential", {
+  res = bi.dist.exponential(rate = c(0.1,1,2),sample = TRUE)
+
+  r2 = reticulate::py_to_r(res$tolist())
+  expect_equal( r2, c(5.42070555, 0.24372319, 1.68081713))
+})
+
+test_that("bi.dist.gamma_poisson", {
+  res = bi.dist.gamma_poisson(concentration = 1, sample = TRUE)
+
+  r2 = reticulate::py_to_r(res$tolist())
+  expect_equal( r2, 0)
+})
+
+test_that("bi.dist.gamma", {
+  res =  bi.dist.gamma(concentration = 1 , sample = TRUE)
+
+  r2 = reticulate::py_to_r(res$tolist())
+  expect_equal( r2, 0.47552933)
 })
