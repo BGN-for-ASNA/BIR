@@ -14,6 +14,7 @@
 #' bi.dist.bernoulli(logits = 1, sample = TRUE, seed = 5)
 #' @export
 bi.dist.bernoulli=function(probs=py_none(), logits=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
+     require(reticulate)
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      seed=as.integer(seed);

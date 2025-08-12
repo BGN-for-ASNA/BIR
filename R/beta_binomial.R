@@ -16,7 +16,10 @@ bi.dist.beta_binomial=function(concentration1, concentration0, total_count=1, va
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      seed=as.integer(seed);
-     .bi$dist$beta_binomial(concentration1,  concentration0,  total_count = as.integer(total_count),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+     .bi$dist$beta_binomial(
+       concentration1 = jnp$array(concentration1),
+       concentration0 = jnp$array(concentration0),
+       total_count = as.integer(total_count),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }
 
 

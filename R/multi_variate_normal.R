@@ -14,5 +14,5 @@
 bi.dist.multivariatenormal=function(loc=0.0, covariance_matrix=py_none(), precision_matrix=py_none(), scale_tril=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) { 
      shape=do.call(tuple, as.list(as.integer(shape)))
      seed=as.integer(seed);
-     .bi$dist$multivariatenormal(loc=loc,  covariance_matrix= covariance_matrix,  precision_matrix= precision_matrix,  scale_tril= scale_tril,  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+     .bi$dist$multivariatenormal(loc=loc,  covariance_matrix= covariance_matrix,  precision_matrix= precision_matrix,  scale_tril= jnp$array(scale_tril),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

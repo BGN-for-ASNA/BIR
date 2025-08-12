@@ -12,8 +12,21 @@
 #' @examples
 #' bi.dist.gaussianstatespace(sample = TRUE)
 #' @export
-bi.dist.gaussianstatespace=function(num_steps, transition_matrix, covariance_matrix=py_none(), precision_matrix=py_none(), scale_tril=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) { 
+bi.dist.gaussian_state_space=function(num_steps, transition_matrix, covariance_matrix=py_none(), precision_matrix=py_none(), scale_tril=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      seed=as.integer(seed);
-     .bi$dist$gaussianstatespace(num_steps,  transition_matrix,  covariance_matrix= covariance_matrix,  precision_matrix= precision_matrix,  scale_tril= scale_tril,  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+     num_steps=as.integer(num_steps);
+     if(!py$is_none(transition_matrix)){transition_matrix = jnp$array(transition_matrix)}
+     if(!py$is_none(covariance_matrix)){covariance_matrix = jnp$array(covariance_matrix)}
+     if(!py$is_none(precision_matrix)){precision_matrix = jnp$array(precision_matrix)}
+     if(!py$is_none(scale_tril)){scale_tril = jnp$array(scale_tril)}
+
+
+      .bi$dist$gaussian_state_space(
+        num_steps,
+        transition_matrix = transition_matrix,
+        covariance_matrix= covariance_matrix,
+        precision_matrix= precision_matrix,
+        scale_tril= scale_tril,
+        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

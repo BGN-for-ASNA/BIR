@@ -16,5 +16,5 @@ bi.dist.asymmetric_laplace=function(loc=0.0, scale=1.0, asymmetry=1.0, validate_
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      seed=as.integer(seed);
-     .bi$dist$asymmetric_laplace(loc=loc,  scale= scale,  asymmetry= asymmetry,  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+     .bi$dist$asymmetric_laplace(loc=jnp$array(loc),  scale= jnp$array(scale),  asymmetry= asymmetry,  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

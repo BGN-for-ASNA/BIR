@@ -11,8 +11,20 @@
 #' @examples
 #' bi.dist.gaussiancopulabeta(sample = TRUE)
 #' @export
-bi.dist.gaussiancopulabeta=function(concentration1, concentration0, correlation_matrix=py_none(), correlation_cholesky=py_none(), validate_args=FALSE, name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) { 
+bi.dist.gaussian_copula_beta=function(concentration1, concentration0, correlation_matrix=py_none(), correlation_cholesky=py_none(), validate_args=FALSE, name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      seed=as.integer(seed);
-     .bi$dist$gaussiancopulabeta(concentration1,  concentration0,  correlation_matrix= correlation_matrix,  correlation_cholesky= correlation_cholesky,  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+     if(py$is_none(correlation_cholesky)){
+        .bi$dist$gaussian_copula_beta(
+          concentration1 = jnp$array(concentration1),
+          concentration0 = jnp$array(concentration0),
+          correlation_matrix= jnp$array(correlation_matrix),
+          validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+     }else{
+       .bi$dist$gaussian_copula_beta(
+         concentration1 = jnp$array(concentration1),
+         concentration0 = jnp$array(concentration0),
+         correlation_cholesky= jnp$array(correlation_cholesky),
+         validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+     }
 }

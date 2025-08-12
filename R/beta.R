@@ -22,5 +22,8 @@ bi.dist.beta=function(concentration1, concentration0, validate_args=py_none(), n
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      seed=as.integer(seed);
-     .bi$dist$beta(concentration1,  concentration0,  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+     .bi$dist$beta(
+       concentration1 = jnp$array(concentration1),
+       concentration0 = jnp$array(concentration0),
+       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

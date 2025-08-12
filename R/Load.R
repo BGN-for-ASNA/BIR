@@ -16,5 +16,7 @@
     reticulate::py_install("BayesInference", pip = TRUE)
   }
 
+  py_run_string("def is_none(x): return x is None")
+
 
 }

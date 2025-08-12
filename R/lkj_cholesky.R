@@ -10,8 +10,13 @@
 #' @examples
 #' bi.dist.lkjcholesky(sample = TRUE)
 #' @export
-bi.dist.lkjcholesky=function(dimension, concentration=1.0, sample_method='onion', validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) { 
+bi.dist.lkj_cholesky=function(dimension, concentration=1.0, sample_method='onion', validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
+     dimension=as.integer(dimension);
      seed=as.integer(seed);
-     .bi$dist$lkjcholesky(dimension,  concentration= concentration,  sample_method= sample_method,  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+     .bi$dist$lkj_cholesky(
+       dimension,
+       concentration= concentration,
+       sample_method= sample_method,
+       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

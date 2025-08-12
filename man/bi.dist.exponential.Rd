@@ -36,5 +36,5 @@ Exponential distribution wrapper.
 \examples{
 library(BI)
 m=importBI(platform='cpu')
-bi.dist.exponential(sample = TRUE)
+bi.dist.exponential(rate = c(0.1,1,2),sample = TRUE)
 }

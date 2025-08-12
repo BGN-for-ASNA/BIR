@@ -15,5 +15,5 @@ bi.dist.cauchy=function(loc=0.0, scale=1.0, validate_args=py_none(), name='x', o
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      seed=as.integer(seed);
-     .bi$dist$cauchy(loc=loc,  scale= scale,  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+     .bi$dist$cauchy(loc=jnp$array(loc),  scale= jnp$array(scale),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }
