@@ -1,30 +1,48 @@
-#' @title GaussianCopulaBeta distribution wrapper.
-#' @param concentration1 <class 'inspect._empty'>
-#' @param concentration0 <class 'inspect._empty'>
-#' @param correlation_matrix None
-#' @param correlation_cholesky None
-#' @param validate_args False
-#' @param shape (tuple): A multi-purpose argument for shaping. - When sample=False (model building), this is used with `.expand(shape)` to set the distribution's batch shape. - When sample=True (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.
-#' @param event (int): The number of batch dimensions to reinterpret as event dimensions (used in model building).
-#' @param mask (jnp.ndarray, bool): Optional boolean array to mask observations. This is passed to the `infer={'obs_mask': ...}` argument of `numpyro.sample`.
-#' @param create_obj (bool): If True, returns the raw NumPyro distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.
+#' @title Gaussian Copula Beta distribution.
+#' @description Samples from a Gaussian Copula Beta distribution.
+#' This distribution combines a Gaussian copula with a Beta distribution.
+#' The Gaussian copula models the dependence structure between random variables,
+#' while the Beta distribution defines the marginal distributions of each variable.
+#' \eqn{f(x) = \int_{-\infty}^{\infty} g(x|u) h(u) du}
+#'
+#' @param concentration1 A numeric vector or matrix representing the first shape parameter of the Beta distribution.
+#' @param concentration0 A numeric vector or matrix representing the second shape parameter of the Beta distribution.
+#' @param correlation_cholesky A numeric vector, matrix, or array representing the Cholesky decomposition of the correlation matrix.
+#' @param shape A numeric vector.  This is used as `sample_shape` to draw a raw JAX array of the given shape when `sample=True`.
+#' @param event Integer indicating the number of batch dimensions to reinterpret as event dimensions (used in model building).
+#' @param mask A logical vector. Optional boolean array to mask observations.
+#' @param create_obj Logical. If `TRUE`, returns the raw BI distribution object instead of creating a sample site.
+#'
+#' @return
+#'  - When \code{sample=FALSE}, a BI Gaussian Copula Beta distribution object (for model building).
+#'
+#'  - When \code{sample=TRUE}, a JAX array of samples drawn from the Gaussian Copula Beta distribution (for direct sampling).
+#'
+#'  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
+#'
+#' @seealso This is a wrapper of  \url{https://num.pyro.ai/en/stable/distributions.html#gaussiancopulabetadistribution}
+#'
 #' @examples
-#' bi.dist.gaussiancopulabeta(sample = TRUE)
+#' \donttest{
+#' library(BI)
+#' m=importBI(platform='cpu')
+#' bi.dist.gaussian_copula_beta(
+#'   concentration1 = c(2.0, 3.0),
+#'   concentration0 = c(5.0, 3.0),
+#'   correlation_matrix = matrix(c(1.0, 0.7, 0.7, 1.0), nrow = 2, byrow = TRUE),
+#'   sample = TRUE)
+#'   }
 #' @export
 bi.dist.gaussian_copula_beta=function(concentration1, concentration0, correlation_matrix=py_none(), correlation_cholesky=py_none(), validate_args=FALSE, name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      seed=as.integer(seed);
-     if(py$is_none(correlation_cholesky)){
-        .bi$dist$gaussian_copula_beta(
-          concentration1 = jnp$array(concentration1),
-          concentration0 = jnp$array(concentration0),
-          correlation_matrix= jnp$array(correlation_matrix),
-          validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
-     }else{
-       .bi$dist$gaussian_copula_beta(
-         concentration1 = jnp$array(concentration1),
-         concentration0 = jnp$array(concentration0),
-         correlation_cholesky= jnp$array(correlation_cholesky),
-         validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
-     }
+     if(!py$is_none(correlation_cholesky)){correlation_cholesky = jnp$array(correlation_cholesky)}
+     if(!py$is_none(correlation_matrix)){correlation_matrix = jnp$array(correlation_matrix)}
+
+     .bi$dist$gaussian_copula_beta(
+       concentration1 = jnp$array(concentration1),
+       concentration0 = jnp$array(concentration0),
+       correlation_matrix = correlation_matrix,
+       correlation_cholesky = correlation_cholesky,
+       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

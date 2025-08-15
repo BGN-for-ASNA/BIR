@@ -2,7 +2,7 @@
 % Please edit documentation in R/dirichlet_multinomial.R
 \name{bi.dist.dirichlet_multinomial}
 \alias{bi.dist.dirichlet_multinomial}
-\title{DirichletMultinomial distribution wrapper.}
+\title{Samples from a Dirichlet Multinomial distribution.}
 \usage{
 bi.dist.dirichlet_multinomial(
   concentration,
@@ -19,25 +19,38 @@ bi.dist.dirichlet_multinomial(
 )
 }
 \arguments{
-\item{concentration}{<class 'inspect._empty'>}
+\item{concentration}{A numeric vector or array representing the concentration parameter (alpha) for the Dirichlet distribution.}
 
-\item{total_count}{1}
+\item{mask}{A logical vector or array to mask observations.}
 
-\item{validate_args}{None}
+\item{shape}{A numeric vector specifying the shape of the distribution. When `sample=False` (model building),
+this is used with `.expand(shape)` to set the distribution's batch shape. When
+`sample=True` (direct sampling), this is used as `sample_shape` to draw a raw JAX
+array of the given shape.}
 
-\item{mask}{(jnp.ndarray, bool): Optional boolean array to mask observations. This is passed to the `infer={'obs_mask': ...}` argument of `numpyro.sample`.}
+\item{event}{The number of batch dimensions to reinterpret as event dimensions (used in model building).}
 
-\item{shape}{(tuple): A multi-purpose argument for shaping. - When sample=False (model building), this is used with `.expand(shape)` to set the distribution's batch shape. - When sample=True (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{create_obj}{A logical value. If `TRUE`, returns the raw BI distribution object instead of creating a sample site.}
+}
+\value{
+- When \code{sample=FALSE}, a BI Dirichlet Multinomial  distribution object (for model building).
 
-\item{event}{(int): The number of batch dimensions to reinterpret as event dimensions (used in model building).}
+ - When \code{sample=TRUE}, a JAX array of samples drawn from the Dirichlet Multinomial  distribution (for direct sampling).
 
-\item{create_obj}{(bool): If True, returns the raw NumPyro distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+ - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-DirichletMultinomial distribution wrapper.
+This distribution combines a Dirichlet distribution (for the probabilities of categories)
+and a Multinomial distribution (for the counts within each category).  The Dirichlet
+distribution acts as a prior on the probabilities, allowing for a flexible and
+informative model.
+
+Samples from a Dirichlet Multinomial  distribution.
 }
 \examples{
+\donttest{
 library(BI)
 m=importBI(platform='cpu')
 bi.dist.dirichlet_multinomial(concentration = c(0,1), sample = TRUE, shape = (3))
+}
 }

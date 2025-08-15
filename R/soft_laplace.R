@@ -1,16 +1,38 @@
-#' @title SoftLaplace distribution wrapper.
-#' @param loc <class 'inspect._empty'>
-#' @param scale <class 'inspect._empty'>
-#' @param validate_args None
-#' @param shape (tuple): A multi-purpose argument for shaping. - When sample=False (model building), this is used with `.expand(shape)` to set the distribution's batch shape. - When sample=True (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.
-#' @param event (int): The number of batch dimensions to reinterpret as event dimensions (used in model building).
-#' @param mask (jnp.ndarray, bool): Optional boolean array to mask observations. This is passed to the `infer={'obs_mask': ...}` argument of `numpyro.sample`.
-#' @param create_obj (bool): If True, returns the raw NumPyro distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.
+#' @title Samples from a Soft Laplace distribution.
+#' @description
+#' This distribution is a smooth approximation of a Laplace distribution,
+#' characterized by its log-convex density. It offers Laplace-like tails
+#' while being infinitely differentiable, making it suitable for HMC and
+#' Laplace approximation.
+#'
+#' \deqn{f(x) = \log(2 / \pi) - \log(scale) - log_{add exp}((x - loc) / scale, -(x - loc) / scale)}
+#'
+#' @param loc Location parameter.
+#' @param scale Scale parameter.
+#' @param shape A numeric vector specifying the shape. When \code{sample=FALSE} (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When \code{sample=TRUE} (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.
+#' @param event The number of batch dimensions to reinterpret as event dimensions (used in model building).
+#' @param mask An optional boolean vector to mask observations.
+#' @param create_obj Logical; If `TRUE`, returns the raw BI distribution object instead of creating a sample site.
+#'
+#' @return
+#'  - When \code{sample=FALSE}, a BI Soft Laplace distribution object (for model building).
+#'
+#'  - When \code{sample=TRUE}, a JAX array of samples drawn from the Soft Laplace distribution (for direct sampling).
+#'
+#'  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
+#'
 #' @examples
-#' bi.dist.softlaplace(sample = TRUE)
+#' \donttest{
+#' library(BI)
+#' m=importBI(platform='cpu')
+#' bi.dist.soft_laplace(loc = 0, scale = 2, sample = TRUE)
+#' }
 #' @export
-bi.dist.softlaplace=function(loc, scale, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) { 
+bi.dist.soft_laplace=function(loc, scale, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      seed=as.integer(seed);
-     .bi$dist$softlaplace(loc,  scale,  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+     .bi$dist$soft_laplace(
+       loc = jnp$array(loc),
+       scale = jnp$array(scale),
+       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

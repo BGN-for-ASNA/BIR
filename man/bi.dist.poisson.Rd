@@ -2,7 +2,7 @@
 % Please edit documentation in R/poisson.R
 \name{bi.dist.poisson}
 \alias{bi.dist.poisson}
-\title{Poisson distribution wrapper.}
+\title{Poisson Distribution}
 \usage{
 bi.dist.poisson(
   rate,
@@ -19,23 +19,33 @@ bi.dist.poisson(
 )
 }
 \arguments{
-\item{rate}{<class 'inspect._empty'>}
+\item{rate}{A numeric vector representing the average number of events.}
 
-\item{is_sparse}{False}
+\item{mask}{A logical vector to mask observations.}
 
-\item{validate_args}{None}
+\item{shape}{A numeric vector used for shaping. When `sample=False` (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When `sample=True` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
 
-\item{mask}{(jnp.ndarray, bool): Optional boolean array to mask observations. This is passed to the `infer={'obs_mask': ...}` argument of `numpyro.sample`.}
+\item{event}{An integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).}
 
-\item{shape}{(tuple): A multi-purpose argument for shaping. - When sample=False (model building), this is used with `.expand(shape)` to set the distribution's batch shape. - When sample=True (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{create_obj}{A logical value. If `TRUE`, returns the raw BI distribution object instead of creating a sample site.}
+}
+\value{
+- When \code{sample=FALSE}, a BI Poisson distribution object (for model building).
 
-\item{event}{(int): The number of batch dimensions to reinterpret as event dimensions (used in model building).}
+ - When \code{sample=TRUE}, a JAX array of samples drawn from the Poisson distribution (for direct sampling).
 
-\item{create_obj}{(bool): If True, returns the raw NumPyro distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+ - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-Poisson distribution wrapper.
+A discrete probability distribution that models the number of events occurring in a fixed interval of time or space if these events occur with a known average rate and independently of the time since the last event.
+Creates a Poisson distribution, a discrete probability distribution that models the number of events occurring in a fixed interval of time or space if these events occur with a known average rate and independently of the time since the last event.
+
+\deqn{ \mathrm{rate}^k \frac{e^{-\mathrm{rate}}}{k!}}
 }
 \examples{
-bi.dist.poisson(sample = TRUE)
+\donttest{
+library(BI)
+m=importBI(platform='cpu')
+bi.dist.poisson(rate = c(0.2, 0.5, 0.8), sample = TRUE)
+}
 }

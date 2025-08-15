@@ -1,16 +1,41 @@
-#' @title GaussianStateSpace distribution wrapper.
-#' @param num_steps <class 'inspect._empty'>
-#' @param transition_matrix <class 'inspect._empty'>
-#' @param covariance_matrix None
-#' @param precision_matrix None
-#' @param scale_tril None
-#' @param validate_args None
-#' @param shape (tuple): A multi-purpose argument for shaping. - When sample=False (model building), this is used with `.expand(shape)` to set the distribution's batch shape. - When sample=True (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.
-#' @param event (int): The number of batch dimensions to reinterpret as event dimensions (used in model building).
-#' @param mask (jnp.ndarray, bool): Optional boolean array to mask observations. This is passed to the `infer={'obs_mask': ...}` argument of `numpyro.sample`.
-#' @param create_obj (bool): If True, returns the raw NumPyro distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.
+#' @title Gaussian State Space Distribution
+#'
+#' @description Samples from a Gaussian state space model.
+#'
+#' \deqn{z_{t} = A z_{t - 1} + \epsilon_t \\ z_{t} = \sum_{k=1}^{t} A^{t-k} \epsilon_k}
+#'
+#' where \eqn{z_t} is the state vector at step \eqn{t}, \eqn{A}
+#' is the transition matrix, and \eqn{\epsilon} is the innovation noise.
+#'
+#' @param num_steps An integer representing the number of steps.
+#' @param transition_matrix A numeric vector, matrix, or array representing the state space transition matrix \eqn{A}.
+#' @param covariance_matrix A numeric vector, matrix, or array representing the covariance of the innovation noise \eqn{\epsilon}.  Defaults to `reticulate::py_none()`.
+#' @param precision_matrix A numeric vector, matrix, or array representing the precision matrix of the innovation noise \eqn{\epsilon}. Defaults to `reticulate::py_none()`.
+#' @param scale_tril A numeric vector, matrix, or array representing the scale matrix of the innovation noise \eqn{\epsilon}. Defaults to `reticulate::py_none()`.
+#' @param shape A numeric vector specifying the shape. When `sample=FALSE` (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When `sample=TRUE` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.
+#' @param event An integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).
+#' @param mask A logical vector, matrix, or array representing an optional boolean array to mask observations. Defaults to `reticulate::py_none()`.
+#' @param create_obj A logical value. If `TRUE`, returns the raw BI distribution object instead of creating a sample site. Defaults to `FALSE`.
+#'
+#' @return When `sample=FALSE`:
+#'  - When `sample=FALSE`, a BI  Gaussian State Space distribution object (for model building).
+#'
+#'  - When `sample=TRUE`, a JAX array of samples drawn from the  Gaussian State Space distribution (for direct sampling).
+#'
+#'  - When `create_obj=TRUE`, the raw BI distribution object (for advanced use cases).
+#'
+#' @seealso This is a wrapper of  \url{https://numpyroai/en/stable/distributions.html#gaussianstate}
+#'
 #' @examples
-#' bi.dist.gaussianstatespace(sample = TRUE)
+#' \donttest{
+#' library(BI)
+#' m=importBI(platform='cpu')
+#' bi.dist.gaussian_state_space(
+#'   num_steps = 1,
+#'   transition_matrix = matrix(c(0.5), nrow = 1, byrow = TRUE),
+#'   covariance_matrix = matrix(c(1.0, 0.7, 0.7, 1.0), nrow = 2, byrow = TRUE),
+#'   sample = TRUE)
+#'}
 #' @export
 bi.dist.gaussian_state_space=function(num_steps, transition_matrix, covariance_matrix=py_none(), precision_matrix=py_none(), scale_tril=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))

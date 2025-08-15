@@ -2,7 +2,7 @@
 % Please edit documentation in R/uniform.R
 \name{bi.dist.uniform}
 \alias{bi.dist.uniform}
-\title{Uniform distribution wrapper.}
+\title{Uniform Distribution}
 \usage{
 bi.dist.uniform(
   low = 0,
@@ -19,23 +19,39 @@ bi.dist.uniform(
 )
 }
 \arguments{
-\item{low}{0.0}
+\item{low}{A numeric vector, matrix, or array representing the lower bound of the uniform interval.}
 
-\item{high}{1.0}
+\item{high}{A numeric vector, matrix, or array representing the upper bound of the uniform interval.}
 
-\item{validate_args}{None}
+\item{mask}{A logical vector, matrix, or array (optional) to mask observations.}
 
-\item{mask}{(jnp.ndarray, bool): Optional boolean array to mask observations. This is passed to the `infer={'obs_mask': ...}` argument of `numpyro.sample`.}
+\item{shape}{A numeric vector specifying the shape of the output. When \code{sample=FALSE} (model building),
+this is used with `.expand(shape)` to set the distribution's batch shape.
+When \code{sample=TRUE} (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
 
-\item{shape}{(tuple): A multi-purpose argument for shaping. - When sample=False (model building), this is used with `.expand(shape)` to set the distribution's batch shape. - When sample=True (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{event}{An integer representing the number of batch dimensions to reinterpret as event dimensions
+(used in model building).}
 
-\item{event}{(int): The number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{create_obj}{A logical value. If `TRUE`, returns the raw BI distribution object
+instead of creating a sample site.}
+}
+\value{
+- When \code{sample=FALSE}, a BI Uniform distribution object (for model building).
 
-\item{create_obj}{(bool): If True, returns the raw NumPyro distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+ - When \code{sample=TRUE}, a JAX array of samples drawn from the Uniform distribution (for direct sampling).
+
+ - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-Uniform distribution wrapper.
+Samples from a Uniform distribution, which is a continuous probability distribution
+where all values within a given interval are equally likely.
+
+\deqn{f(x) = \frac{1}{b - a}, \text{ for } a \le x \le b}
 }
 \examples{
-bi.dist.uniform(sample = TRUE)
+\donttest{
+library(BI)
+m=importBI(platform='cpu')
+bi.dist.uniform(low = 0, high = 1.5, sample = TRUE)
+}
 }

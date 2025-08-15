@@ -2,7 +2,7 @@
 % Please edit documentation in R/gaussian_copula.R
 \name{bi.dist.gaussian_copula}
 \alias{bi.dist.gaussian_copula}
-\title{GaussianCopula distribution wrapper.}
+\title{Gaussian Copula Distribution}
 \usage{
 bi.dist.gaussian_copula(
   marginal_dist,
@@ -20,27 +20,48 @@ bi.dist.gaussian_copula(
 )
 }
 \arguments{
-\item{marginal_dist}{<class 'inspect._empty'>}
+\item{marginal_dist}{Distribution: Distribution whose last batch axis is to be coupled.}
 
-\item{correlation_matrix}{None}
+\item{correlation_matrix}{array_like, optional: Correlation matrix of the coupling multivariate normal distribution. Defaults to `reticulate::py_none()`.}
 
-\item{correlation_cholesky}{None}
+\item{correlation_cholesky}{array_like, optional: Correlation Cholesky factor of the coupling multivariate normal distribution. Defaults to `reticulate::py_none()`.}
 
-\item{validate_args}{None}
+\item{mask}{jnp.ndarray, bool, optional: Optional boolean array to mask observations. Defaults to `reticulate::py_none()`.}
 
-\item{mask}{(jnp.ndarray, bool): Optional boolean array to mask observations. This is passed to the `infer={'obs_mask': ...}` argument of `numpyro.sample`.}
+\item{shape}{numeric vector: A multi-purpose argument for shaping. When `sample=FALSE` (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When `sample=TRUE` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
 
-\item{shape}{(tuple): A multi-purpose argument for shaping. - When sample=False (model building), this is used with `.expand(shape)` to set the distribution's batch shape. - When sample=True (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{event}{int: The number of batch dimensions to reinterpret as event dimensions (used in model building).}
 
-\item{event}{(int): The number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{create_obj}{bool, optional: If `TRUE`, returns the raw BI distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`. Defaults to `FALSE`.}
+}
+\value{
+- When \code{sample=FALSE}, a BI Gaussian Copula distribution object (for model building).
 
-\item{create_obj}{(bool): If True, returns the raw NumPyro distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+ - When \code{sample=TRUE}, a JAX array of samples drawn from the Gaussian Copula distribution (for direct sampling).
+
+ - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-GaussianCopula distribution wrapper.
+A distribution that links the `batch_shape[:-1]` of a marginal distribution with a multivariate Gaussian copula,
+modelling the correlation between the axes. A copula is a multivariate distribution over the uniform distribution
+on [0, 1]. The Gaussian copula links the marginal distributions through a multivariate normal distribution.
+
+\deqn{ f(x_1, ..., x_d) = \prod_{i=1}^{d} f_i(x_i) \cdot \phi(F_1(x_1), ..., F_d(x_d); \mu, \Sigma)}
+
+where:
+- \eqn{f_i} is the probability density function of the i-th marginal distribution.
+- \eqn{F_i} is the cumulative distribution function of the i-th marginal distribution.
+- \eqn{\phi} is the standard normal PDF.
+- \eqn{\mu} is the mean vector of the multivariate normal distribution.
+- \eqn{\Sigma} is the covariance matrix of the multivariate normal distribution.
 }
 \examples{
+\donttest{
 library(BI)
 m=importBI(platform='cpu')
-bi.dist.gaussiancopula(sample = TRUE)
+bi.dist.gaussian_copula(
+  marginal_dist = bi.dist.gamma(concentration = 1 ,  create_obj = TRUE) ,
+  correlation_matrix =  matrix(c(1.0, 0.7, 0.7, 1.0),, nrow = 2, byrow = TRUE),
+  sample = TRUE)
+}
 }

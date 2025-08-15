@@ -2,7 +2,7 @@
 % Please edit documentation in R/multinomial.R
 \name{bi.dist.multinomial}
 \alias{bi.dist.multinomial}
-\title{Multinomial distribution wrapper.}
+\title{Multinomial distribution.}
 \usage{
 bi.dist.multinomial(
   total_count = 1,
@@ -21,27 +21,34 @@ bi.dist.multinomial(
 )
 }
 \arguments{
-\item{total_count}{1}
+\item{total_count}{An integer or numeric vector representing the number of trials.}
 
-\item{probs}{None}
+\item{probs}{A numeric vector representing event probabilities. Must sum to 1.}
 
-\item{logits}{None}
+\item{logits}{A numeric vector representing event log probabilities.}
 
-\item{total_count_max}{None}
+\item{mask}{A logical vector, optional, to mask observations.}
 
-\item{validate_args}{None}
+\item{shape}{A numeric vector used for shaping. When \code{sample=FALSE} (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When \code{sample=TRUE} (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
 
-\item{mask}{(jnp.ndarray, bool): Optional boolean array to mask observations. This is passed to the `infer={'obs_mask': ...}` argument of `numpyro.sample`.}
+\item{event}{An integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).}
 
-\item{shape}{(tuple): A multi-purpose argument for shaping. - When sample=False (model building), this is used with `.expand(shape)` to set the distribution's batch shape. - When sample=True (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{create_obj}{A logical value, optional. If `TRUE`, returns the raw BI distribution object instead of creating a sample site.}
+}
+\value{
+- When \code{sample=FALSE}, a BI Multinomial distribution object (for model building).
 
-\item{event}{(int): The number of batch dimensions to reinterpret as event dimensions (used in model building).}
+ - When \code{sample=TRUE}, a JAX array of samples drawn from the Multinomial distribution (for direct sampling).
 
-\item{create_obj}{(bool): If True, returns the raw NumPyro distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+ - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-Multinomial distribution wrapper.
+Samples from a Multinomial distribution, which models the probability of different outcomes in a sequence of independent trials, each with a fixed number of trials and a fixed set of possible outcomes.  It generalizes the binomial distribution to multiple categories.
 }
 \examples{
-bi.dist.multinomial(sample = TRUE)
+\donttest{
+library(BI)
+m=importBI(platform='cpu')
+bi.dist.multinomial(probs = c(0.5,0.1), sample = TRUE)
+}
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/beta_proportion.R
 \name{bi.dist.beta_proportion}
 \alias{bi.dist.beta_proportion}
-\title{BetaProportion distribution wrapper.}
+\title{Samples from a Beta-Proportion distribution.}
 \usage{
 bi.dist.beta_proportion(
   mean,
@@ -19,25 +19,43 @@ bi.dist.beta_proportion(
 )
 }
 \arguments{
-\item{mean}{<class 'inspect._empty'>}
+\item{mean}{A numeric vector, matrix, or array representing the mean of the BetaProportion distribution,
+must be between 0 and 1.}
 
-\item{concentration}{<class 'inspect._empty'>}
+\item{concentration}{A numeric vector, matrix, or array representing the concentration parameter of the BetaProportion distribution.}
 
-\item{validate_args}{None}
+\item{mask}{An optional boolean vector to mask observations.}
 
-\item{mask}{(jnp.ndarray, bool): Optional boolean array to mask observations. This is passed to the `infer={'obs_mask': ...}` argument of `numpyro.sample`.}
+\item{shape}{A numeric vector. When `sample=False` (model building), this is used with `.expand(shape)` to set the
+distribution's batch shape. When `sample=True` (direct sampling),
+this is used as `sample_shape` to draw a raw JAX array of the
+given shape.}
 
-\item{shape}{(tuple): A multi-purpose argument for shaping. - When sample=False (model building), this is used with `.expand(shape)` to set the distribution's batch shape. - When sample=True (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{event}{An integer representing the number of batch dimensions to reinterpret as event
+dimensions (used in model building).}
 
-\item{event}{(int): The number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{create_obj}{A logical value. If `TRUE`, returns the raw BI distribution
+object instead of creating a sample site. This is essential for
+building complex distributions like `MixtureSameFamily`.}
+}
+\value{
+- When \code{sample=FALSE}, a BI Beta-Proportion distribution object (for model building).
 
-\item{create_obj}{(bool): If True, returns the raw NumPyro distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+ - When \code{sample=TRUE}, a JAX array of samples drawn from the Beta-Proportion distribution (for direct sampling).
+
+ - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-BetaProportion distribution wrapper.
+The Beta-Proportion  distribution is a reparameterization of the conventional
+Beta distribution in terms of a the variate mean and a
+precision parameter. It's useful for modeling rates and proportions.
+
+\deqn{f(x) = \frac{x^{\alpha - 1} (1 - x)^{\beta - 1}}{B(\alpha, \beta)}}
 }
 \examples{
+\donttest{
 library(BI)
 m=importBI(platform='cpu')
-bi.dist.betaproportion(0, 1, sample = TRUE)
+bi.dist.beta_proportion(0, 1, sample = TRUE)
+}
 }

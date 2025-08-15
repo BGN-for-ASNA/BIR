@@ -2,7 +2,7 @@
 % Please edit documentation in R/mixture.R
 \name{bi.dist.mixture}
 \alias{bi.dist.mixture}
-\title{Mixture distribution wrapper.}
+\title{A marginalized finite mixture of component distributions.}
 \usage{
 bi.dist.mixture(
   mixing_distribution,
@@ -19,23 +19,41 @@ bi.dist.mixture(
 )
 }
 \arguments{
-\item{mixing_distribution}{<class 'inspect._empty'>}
+\item{mask}{A logical vector used to mask observations.}
 
-\item{component_distributions}{<class 'inspect._empty'>}
+\item{shape}{A numeric vector specifying the shape of the distribution.}
 
-\item{validate_args}{None}
+\item{event}{An integer representing the number of batch dimensions to reinterpret as event dimensions.}
 
-\item{mask}{(jnp.ndarray, bool): Optional boolean array to mask observations. This is passed to the `infer={'obs_mask': ...}` argument of `numpyro.sample`.}
-
-\item{shape}{(tuple): A multi-purpose argument for shaping. - When sample=False (model building), this is used with `.expand(shape)` to set the distribution's batch shape. - When sample=True (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
-
-\item{event}{(int): The number of batch dimensions to reinterpret as event dimensions (used in model building).}
-
-\item{create_obj}{(bool): If True, returns the raw NumPyro distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+\item{create_obj}{A logical value. If `TRUE`, returns the raw BI distribution object.}
+}
+\value{
+When \code{sample=FALSE}: A BI Mixture distribution object (for model building).
+        When \code{sample=TRUE}: A JAX array of samples drawn from the Mixture distribution (for direct sampling).
+        When \code{create_obj=TRUE}: The raw BI distribution object (for advanced use cases).
 }
 \description{
-Mixture distribution wrapper.
+This distribution represents a mixture of component distributions, where the
+mixing weights are determined by a Categorical distribution. The resulting
+distribution can be either a MixtureGeneral (when component distributions
+are a list) or a MixtureSameFamily (when component distributions are a single
+distribution).
 }
 \examples{
-bi.dist.mixture(sample = TRUE)
+\donttest{
+library(BI)
+m=importBI(platform='cpu')
+bi.dist.mixture(
+  mixing_distribution = bi.dist.categorical(probs = c(0.3, 0, 7),create_obj = TRUE),
+  component_distributions = c(bi.dist.normal(0,1,create_obj = TRUE), bi.dist.normal(0,1,create_obj = TRUE), bi.dist.normal(0,1,create_obj = TRUE)),
+  sample = TRUE
+)
+}
+}
+\seealso{
+- When \code{sample=FALSE}, a BI marginalized finite mixture distribution object (for model building).
+
+ - When \code{sample=TRUE}, a JAX array of samples drawn from the marginalized finite mixture distribution (for direct sampling).
+
+ - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }

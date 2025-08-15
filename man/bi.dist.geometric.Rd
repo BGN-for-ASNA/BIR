@@ -2,7 +2,7 @@
 % Please edit documentation in R/geometric.R
 \name{bi.dist.geometric}
 \alias{bi.dist.geometric}
-\title{Geometric distribution wrapper.}
+\title{Samples from a Geometric distribution.}
 \usage{
 bi.dist.geometric(
   probs = py_none(),
@@ -19,23 +19,37 @@ bi.dist.geometric(
 )
 }
 \arguments{
-\item{probs}{None}
+\item{probs}{A numeric vector, matrix, or array representing the probability of success on each trial. Must be between 0 and 1.}
 
-\item{logits}{None}
+\item{logits}{A numeric vector, matrix, or array representing the log-odds of success on each trial. `probs = jax.nn.sigmoid(logits)`.}
 
-\item{validate_args}{None}
+\item{mask}{A logical vector, matrix, or array to mask observations.}
 
-\item{mask}{(jnp.ndarray, bool): Optional boolean array to mask observations. This is passed to the `infer={'obs_mask': ...}` argument of `numpyro.sample`.}
+\item{shape}{A numeric vector specifying the shape of the output.  Used to set the distribution's batch shape when \code{sample=FALSE} (model building) or as `sample_shape` to draw a raw JAX array of the given shape when \code{sample=TRUE} (direct sampling).}
 
-\item{shape}{(tuple): A multi-purpose argument for shaping. - When sample=False (model building), this is used with `.expand(shape)` to set the distribution's batch shape. - When sample=True (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{event}{An integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).}
 
-\item{event}{(int): The number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{create_obj}{A logical value. If `TRUE`, returns the raw BI distribution object instead of creating a sample site.}
+}
+\value{
+When \code{sample=FALSE}: A BI Geometric distribution object (for model building).
 
-\item{create_obj}{(bool): If True, returns the raw NumPyro distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+   When \code{sample=TRUE}: A JAX array of samples drawn from the Geometric distribution (for direct sampling).
+
+   When \code{create_obj=TRUE}: The raw BI distribution object (for advanced use cases).
 }
 \description{
-Geometric distribution wrapper.
+The Geometric distribution models the number of failures before the first success in a sequence of Bernoulli trials.
+  It is characterized by a single parameter, the probability of success on each trial.
 }
 \examples{
-bi.dist.geometric(sample = TRUE)
+\donttest{
+library(BI)
+m=importBI(platform='cpu')
+bi.dist.geometric(logits = 0.5, sample = TRUE)
+bi.dist.geometric(probs = 0.5, sample = TRUE)
+}
+}
+\seealso{
+This is a wrapper of  \url{https://num.pyro.ai/en/stable/distributions.html#geometric}
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/laplace.R
 \name{bi.dist.laplace}
 \alias{bi.dist.laplace}
-\title{Laplace distribution wrapper.}
+\title{Laplace Distribution}
 \usage{
 bi.dist.laplace(
   loc = 0,
@@ -19,23 +19,42 @@ bi.dist.laplace(
 )
 }
 \arguments{
-\item{loc}{0.0}
+\item{loc}{A numeric vector representing the location parameter of the Laplace distribution.}
 
-\item{scale}{1.0}
+\item{scale}{A numeric vector representing the scale parameter of the Laplace distribution. Must be positive.}
 
-\item{validate_args}{None}
+\item{mask}{A logical vector, optionally used to mask observations.}
 
-\item{mask}{(jnp.ndarray, bool): Optional boolean array to mask observations. This is passed to the `infer={'obs_mask': ...}` argument of `numpyro.sample`.}
+\item{shape}{A numeric vector used for shaping. When \code{sample=FALSE} (model building),
+this is used with `.expand(shape)` to set the distribution's batch shape.
+When \code{sample=TRUE} (direct sampling), this is used as `sample_shape` to draw a raw
+JAX array of the given shape.}
 
-\item{shape}{(tuple): A multi-purpose argument for shaping. - When sample=False (model building), this is used with `.expand(shape)` to set the distribution's batch shape. - When sample=True (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{event}{Integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).}
 
-\item{event}{(int): The number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{create_obj}{Logical; If TRUE, returns the raw BI distribution object instead of creating a
+sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+}
+\value{
+- When \code{sample=FALSE}: A BI Laplace distribution object (for model building).
 
-\item{create_obj}{(bool): If True, returns the raw NumPyro distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+   - When \code{sample=TRUE}: A JAX array of samples drawn from the Laplace distribution (for direct sampling).
+
+   - When \code{create_obj=TRUE}: The raw BI distribution object (for advanced use cases).
 }
 \description{
-Laplace distribution wrapper.
+Samples from a Laplace distribution, also known as the double exponential distribution.
+The Laplace distribution is defined by its location parameter (loc) and scale parameter (scale).
+
+\deqn{f(x) = \frac{1}{2s} \exp\left(-\frac{|x - \mu|}{s}\right)}
 }
 \examples{
+\donttest{
+library(BI)
+m=importBI(platform='cpu')
 bi.dist.laplace(sample = TRUE)
+}
+}
+\seealso{
+This is a wrapper of  \url{https://num.pyro.ai/en/stable/distributions.html#laplace}
 }

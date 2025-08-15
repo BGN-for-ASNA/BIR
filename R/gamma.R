@@ -1,20 +1,36 @@
-#' @title Gamma distribution wrapper.
-#' @param concentration <class 'inspect._empty'>
-#' @param rate 1.0
-#' @param validate_args None
-#' @param shape (tuple): A multi-purpose argument for shaping. - When sample=False (model building), this is used with `.expand(shape)` to set the distribution's batch shape. - When sample=True (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.
-#' @param event (int): The number of batch dimensions to reinterpret as event dimensions (used in model building).
-#' @param mask (jnp.ndarray, bool): Optional boolean array to mask observations. This is passed to the `infer={'obs_mask': ...}` argument of `numpyro.sample`.
-#' @param create_obj (bool): If True, returns the raw NumPyro distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.
+#' @title Gamma Distribution
+#'
+#' @description The Gamma distribution is a continuous probability distribution that arises frequently in Bayesian statistics,
+#' particularly in prior distributions for variance parameters. It is defined by two positive shape parameters,
+#' concentration (k) and rate (theta).
+#'
+#' @param concentration A numeric vector representing the shape parameter of the Gamma distribution (k > 0).
+#' @param rate A numeric vector representing the rate parameter of the Gamma distribution (theta > 0).
+#' @param shape A numeric vector. When `sample=False` (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When `sample=True` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.
+#' @param event An integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).
+#' @param mask A logical vector. Optional boolean array to mask observations.
+#' @param create_obj A logical value. If `TRUE`, returns the raw BI distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.
+#' @return
+#'  - When \code{sample=FALSE}, a BI Gamma distribution object (for model building).
+#'
+#'  - When \code{sample=TRUE}, a JAX array of samples drawn from the Gamma distribution (for direct sampling).
+#'
+#'  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
+#'
 #' @examples
+#' \donttest{
 #' library(BI)
 #' m=importBI(platform='cpu')
 #' bi.dist.gamma(concentration = 1 , sample = TRUE)
+#' }
 #' @export
 bi.dist.gamma=function(concentration, rate=1.0, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      seed=as.integer(seed);
-     .bi$dist$gamma(jnp$array(concentration),  rate= jnp$array(rate),   validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+     .bi$dist$gamma(
+       concentration = jnp$array(concentration),
+       rate= jnp$array(rate),
+       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/cauchy.R
 \name{bi.dist.cauchy}
 \alias{bi.dist.cauchy}
-\title{Cauchy distribution wrapper.}
+\title{Cauchy Distribution}
 \usage{
 bi.dist.cauchy(
   loc = 0,
@@ -19,25 +19,45 @@ bi.dist.cauchy(
 )
 }
 \arguments{
-\item{loc}{0.0}
+\item{loc}{A numeric vector or scalar representing the location parameter. Defaults to 0.0.}
 
-\item{scale}{1.0}
+\item{scale}{A numeric vector or scalar representing the scale parameter. Must be positive. Defaults to 1.0.}
 
-\item{validate_args}{None}
+\item{mask}{A logical vector, optional, to mask observations. Defaults to `reticulate::py_none()`.}
 
-\item{mask}{(jnp.ndarray, bool): Optional boolean array to mask observations. This is passed to the `infer={'obs_mask': ...}` argument of `numpyro.sample`.}
+\item{shape}{A numeric vector specifying the shape of the distribution.  When `sample=False` (model building), this is used
+with `.expand(shape)` to set the distribution's batch shape. When `sample=True` (direct sampling), this is
+used as `sample_shape` to draw a raw JAX array of the given shape.}
 
-\item{shape}{(tuple): A multi-purpose argument for shaping. - When sample=False (model building), this is used with `.expand(shape)` to set the distribution's batch shape. - When sample=True (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{event}{An integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).
+Defaults to `reticulate::py_none()`.}
 
-\item{event}{(int): The number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{create_obj}{A logical value. If `TRUE`, returns the raw BI distribution object instead of creating a sample
+site. Defaults to `FALSE`.}
+}
+\value{
+- When \code{sample=FALSE}, a BI Cauchy distribution object (for model building).
 
-\item{create_obj}{(bool): If True, returns the raw NumPyro distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+ - When \code{sample=TRUE}, a JAX array of samples drawn from the Cauchy distribution (for direct sampling).
+
+ - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-Cauchy distribution wrapper.
+Samples from a Cauchy distribution.
+
+The Cauchy distribution, also known as the Lorentz distribution, is a continuous probability distribution
+that arises frequently in various fields, including physics and statistics. It is characterized by its
+heavy tails, which extend indefinitely.
+
+\deqn{f(x) = \frac{1}{\pi \gamma} \left[ \frac{\gamma^2}{(x - \mu)^2 + \gamma^2} \right]}
 }
 \examples{
+\donttest{
 library(BI)
 m=importBI(platform='cpu')
 bi.dist.cauchy(sample = TRUE)
+}
+}
+\seealso{
+This is a wrapper of  \url{https://num.pyro.ai/en/stable/distributions.html#cauchy}
 }

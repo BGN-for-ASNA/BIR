@@ -2,7 +2,7 @@
 % Please edit documentation in R/normal.R
 \name{bi.dist.normal}
 \alias{bi.dist.normal}
-\title{Normal distribution wrapper.}
+\title{Samples from a Normal (Gaussian) distribution.}
 \usage{
 bi.dist.normal(
   loc = 0,
@@ -19,23 +19,36 @@ bi.dist.normal(
 )
 }
 \arguments{
-\item{loc}{0.0}
+\item{loc}{A numeric vector, matrix, or array representing the mean of the distribution.}
 
-\item{scale}{1.0}
+\item{scale}{A numeric vector, matrix, or array representing the standard deviation of the distribution.}
 
-\item{validate_args}{None}
+\item{mask}{A logical vector, matrix, or array. Optional boolean array to mask observations.}
 
-\item{mask}{(jnp.ndarray, bool): Optional boolean array to mask observations. This is passed to the `infer={'obs_mask': ...}` argument of `numpyro.sample`.}
+\item{shape}{A numeric vector specifying the shape of the distribution.  Use a vector (e.g., `c(10)`) to define the shape.}
 
-\item{shape}{(tuple): A multi-purpose argument for shaping. - When sample=False (model building), this is used with `.expand(shape)` to set the distribution's batch shape. - When sample=True (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{event}{An integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).}
 
-\item{event}{(int): The number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{create_obj}{A logical value. If `TRUE`, returns the raw BI distribution object instead of creating a sample site.}
+}
+\value{
+- When \code{sample=FALSE}: A BI Normal distribution object (for model building).
 
-\item{create_obj}{(bool): If True, returns the raw NumPyro distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+ - When \code{sample=TRUE}: A JAX array of samples drawn from the Normal distribution (for direct sampling).
+
+ - When \code{create_obj=TRUE}: The raw BI distribution object (for advanced use cases).
 }
 \description{
-Normal distribution wrapper.
+The Normal distribution is characterized by its mean (loc) and standard deviation (scale).
+It's a continuous probability distribution that arises frequently in statistics and
+probability theory.
+
+\deqn{p(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)}
 }
 \examples{
+\donttest{
+library(BI)
+m=importBI(platform='cpu')
 bi.dist.normal(sample = TRUE)
+}
 }

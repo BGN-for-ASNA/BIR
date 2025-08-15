@@ -2,7 +2,7 @@
 % Please edit documentation in R/weibull.R
 \name{bi.dist.weibull}
 \alias{bi.dist.weibull}
-\title{Weibull distribution wrapper.}
+\title{Samples from a Weibull distribution.}
 \usage{
 bi.dist.weibull(
   scale,
@@ -19,23 +19,39 @@ bi.dist.weibull(
 )
 }
 \arguments{
-\item{scale}{<class 'inspect._empty'>}
+\item{scale}{A numeric vector, matrix, or array representing the scale parameter of the Weibull distribution. Must be positive.}
 
-\item{concentration}{<class 'inspect._empty'>}
+\item{concentration}{A numeric vector, matrix, or array representing the shape parameter of the Weibull distribution. Must be positive.}
 
-\item{validate_args}{None}
+\item{mask}{An optional boolean vector to mask observations.}
 
-\item{mask}{(jnp.ndarray, bool): Optional boolean array to mask observations. This is passed to the `infer={'obs_mask': ...}` argument of `numpyro.sample`.}
+\item{shape}{A numeric vector.  This is used with `.expand(shape)` when `sample=False` (model building) to set the distribution's batch shape. When `sample=True` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
 
-\item{shape}{(tuple): A multi-purpose argument for shaping. - When sample=False (model building), this is used with `.expand(shape)` to set the distribution's batch shape. - When sample=True (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{event}{An integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).}
 
-\item{event}{(int): The number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{create_obj}{A logical value. If `TRUE`, returns the raw BI distribution object instead of creating a sample site.}
+}
+\value{
+- When \code{sample=FALSE}, a BI Weibull distribution object (for model building).
 
-\item{create_obj}{(bool): If True, returns the raw NumPyro distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+ - When \code{sample=TRUE}, a JAX array of samples drawn from the Weibull distribution (for direct sampling).
+
+ - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-Weibull distribution wrapper.
+The Weibull distribution is a versatile distribution often used to model failure rates in engineering and reliability studies. It is characterized by its shape and scale parameters.
+
+\deqn{f(x) = \frac{\beta}{\alpha} \left(\frac{x}{\alpha}\right)^{\beta - 1} e^{-\left(\frac{x}{\alpha}\right)^{\beta}} \text{ for } x \ge 0}
+
+where \deqn{\alpha} is the scale parameter and \eqn{\beta} is the shape parameter.
 }
 \examples{
-bi.dist.weibull(sample = TRUE)
+\donttest{
+library(BI)
+m=importBI(platform='cpu')
+bi.dist.weibull(scale = c(10, 10), concentration = c(1,1), sample = TRUE)
+}
+}
+\seealso{
+\url{https://num.pyro.ai/en/stable/distributions.html#weibull}
 }

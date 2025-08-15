@@ -2,7 +2,7 @@
 % Please edit documentation in R/categorical.R
 \name{bi.dist.categorical}
 \alias{bi.dist.categorical}
-\title{Categorical distribution wrapper.}
+\title{Sample from a Categorical distribution.}
 \usage{
 bi.dist.categorical(
   probs = py_none(),
@@ -19,25 +19,39 @@ bi.dist.categorical(
 )
 }
 \arguments{
-\item{probs}{None}
+\item{probs}{A numeric vector of probabilities for each category. Must sum to 1.}
 
-\item{logits}{None}
+\item{mask}{An optional boolean vector to mask observations.}
 
-\item{validate_args}{None}
+\item{shape}{A numeric vector specifying the shape. When \code{sample=FALSE} (model building),
+this is used with `.expand(shape)` to set the distribution's batch shape.
+When \code{sample=TRUE} (direct sampling), this is used as `sample_shape` to draw a raw JAX array
+of the given shape.}
 
-\item{mask}{(jnp.ndarray, bool): Optional boolean array to mask observations. This is passed to the `infer={'obs_mask': ...}` argument of `numpyro.sample`.}
+\item{event}{The number of batch dimensions to reinterpret as event dimensions (used in model building).}
 
-\item{shape}{(tuple): A multi-purpose argument for shaping. - When sample=False (model building), this is used with `.expand(shape)` to set the distribution's batch shape. - When sample=True (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{create_obj}{Logical; If `TRUE`, returns the raw BI distribution object instead of creating a sample site.}
+}
+\value{
+- When \code{sample=FALSE}, a BI Categorical distribution object (for model building).
 
-\item{event}{(int): The number of batch dimensions to reinterpret as event dimensions (used in model building).}
+ - When \code{sample=TRUE}, a JAX array of samples drawn from the Categorical distribution (for direct sampling).
 
-\item{create_obj}{(bool): If True, returns the raw NumPyro distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+ - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-Categorical distribution wrapper.
+The Categorical distribution, also known as the multinomial distribution,
+describes the probability of different outcomes from a finite set of possibilities.
+It is commonly used to model discrete choices or classifications.
+
+\deqn{P(k) = \frac{e^{\log(p_k)}}{\sum_{j=1}^{K} e^{\log(p_j)}}}
+
+where :math:`p_k` is the probability of outcome :math:`k`, and the sum is over all possible outcomes.
 }
 \examples{
+\donttest{
 library(BI)
 m=importBI(platform='cpu')
 bi.dist.categorical(probs = c(0.5,0.5), sample = TRUE, shape = c(3))
+}
 }

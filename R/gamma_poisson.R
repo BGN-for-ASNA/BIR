@@ -1,18 +1,40 @@
-#' @title GammaPoisson distribution wrapper.
-#' @param concentration <class 'inspect._empty'>
-#' @param rate 1.0
-#' @param validate_args None
-#' @param shape (tuple): A multi-purpose argument for shaping. - When sample=False (model building), this is used with `.expand(shape)` to set the distribution's batch shape. - When sample=True (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.
-#' @param event (int): The number of batch dimensions to reinterpret as event dimensions (used in model building).
-#' @param mask (jnp.ndarray, bool): Optional boolean array to mask observations. This is passed to the `infer={'obs_mask': ...}` argument of `numpyro.sample`.
-#' @param create_obj (bool): If True, returns the raw NumPyro distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.
+#' @title Gamma-Poisson Distribution
+#' @description A compound distribution comprising of a gamma-poisson pair, also referred to as
+#' a gamma-poisson mixture. The ``rate`` parameter for the
+#' :class:`bi.dist.poisson` distribution is unknown and randomly
+#' drawn from a :class:`bi.dist.gamma` distribution.
+#'
+#' @param concentration A numeric vector, matrix, or array representing the shape parameter (alpha) of the Gamma distribution.
+#' @param rate A numeric vector, matrix, or array representing the rate parameter (beta) for the Gamma distribution.
+#' @param shape A numeric vector used to shape the distribution. When `sample=FALSE` (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When `sample=TRUE` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.
+#' @param event An integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).
+#' @param mask An optional boolean vector to mask observations.
+#' @param create_obj A logical value. If `TRUE`, returns the raw BI distribution object instead of creating a sample site.
+#'
+#' @return
+#'
+#'  - When \code{sample=FALSE}, a BI Gamma-Poisson distribution object (for model building).
+#'
+#'  - When \code{sample=TRUE}, a JAX array of samples drawn from the Gamma-Poisson distribution (for direct sampling).
+#'
+#'  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
+#'
+#'
+#' @seealso This is a wrapper of  \url{https://num.pyro.ai/en/stable/distributions.html#gammapoisson}
+#'
 #' @examples
+#' \donttest{
 #' library(BI)
 #' m=importBI(platform='cpu')
 #' bi.dist.gamma_poisson(concentration = 1, sample = TRUE)
+#' }
 #' @export
+#'
 bi.dist.gamma_poisson=function(concentration, rate=1.0, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      seed=as.integer(seed);
-     .bi$dist$gamma_poisson(jnp$array(concentration),  rate= jnp$array(rate),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+     .bi$dist$gamma_poisson(
+       concentration = jnp$array(concentration),
+       rate= jnp$array(rate),
+       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

@@ -1,17 +1,55 @@
-#' @title MatrixNormal distribution wrapper.
-#' @param loc <class 'inspect._empty'>
-#' @param scale_tril_row <class 'inspect._empty'>
-#' @param scale_tril_column <class 'inspect._empty'>
-#' @param validate_args None
-#' @param shape (tuple): A multi-purpose argument for shaping. - When sample=False (model building), this is used with `.expand(shape)` to set the distribution's batch shape. - When sample=True (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.
-#' @param event (int): The number of batch dimensions to reinterpret as event dimensions (used in model building).
-#' @param mask (jnp.ndarray, bool): Optional boolean array to mask observations. This is passed to the `infer={'obs_mask': ...}` argument of `numpyro.sample`.
-#' @param create_obj (bool): If True, returns the raw NumPyro distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.
+#' @title Matrix Normal Distribution
+#'
+#' @description
+#' Samples from a Matrix Normal distribution, which is a multivariate normal distribution over matrices.
+#' The distribution is characterized by a location matrix and two lower triangular matrices that define the correlation structure.
+#' The distribution is related to the multivariate normal distribution in the following way.
+#' If \deqn{X ~ MN(loc,U,V)} then \deqn{vec(X) ~ MVN(vec(loc), kron(V,U) }.
+#'
+#' \deqn{p(x) = \frac{1}{2\pi^{p/2} |\Sigma|^{1/2}} \exp\left(-\frac{1}{2} (x - \mu)^T \Sigma^{-1} (x - \mu)\right)}
+#'
+#' @param loc A numeric vector, matrix, or array representing the location of the distribution.
+#' @param scale_tril_row A numeric vector, matrix, or array representing the lower cholesky of rows correlation matrix.
+#' @param scale_tril_column A numeric vector, matrix, or array representing the lower cholesky of columns correlation matrix.
+#' @param shape A numeric vector specifying the shape of the distribution.  Must be a vector.
+#' @param event An integer representing the number of batch dimensions to reinterpret as event dimensions.
+#' @param mask A logical vector, matrix, or array (jnp$array) to mask observations.
+#' @param create_obj A logical value. If `TRUE`, returns the raw BI distribution object instead of creating a sample site.
+#'
+#' @return
+#'  - When \code{sample=FALSE}, a BI Matrix Normal distribution object (for model building).
+#'
+#'  - When \code{sample=TRUE}, a JAX array of samples drawn from the Matrix Normal distribution (for direct sampling).
+#'
+#'  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
+#'
+#' @seealso This is a wrapper of  \url{https://num.pyro.ai/en/stable/distributions.html#matrixnormal_lowercase}
+#'
 #' @examples
-#' bi.dist.matrixnormal(sample = TRUE)
+#' \donttest{
+#' library(BI)
+#' m=importBI(platform='cpu')
+#' n_rows= 3
+#' n_cols = 4
+#' loc = matrix(rep(0,n_rows*n_cols), nrow = n_rows, ncol = n_cols,byrow = TRUE)
+#'
+#' U_row_cov = jnp$array(matrix(c(1.0, 0.5, 0.2, 0.5, 1.0, 0.3, 0.2, 0.3, 1.0), nrow = n_rows, ncol = n_rows,byrow = TRUE))
+#' scale_tril_row = jnp$linalg$cholesky(U_row_cov)
+#'
+#' V_col_cov = jnp$array(matrix(c(2.0, -0.8, 0.1, 0.4, -0.8, 2.0, 0.2, -0.2, 0.1, 0.2, 2.0, 0.0, 0.4, -0.2, 0.0, 2.0), nrow = n_cols, ncol = n_cols,byrow = TRUE))
+#' scale_tril_column = jnp$linalg$cholesky(V_col_cov)
+#'
+#'
+#' bi.dist.matrix_normal( loc = loc, scale_tril_row = scale_tril_row, scale_tril_column = scale_tril_column, sample = TRUE)
+#' }
 #' @export
-bi.dist.matrixnormal=function(loc, scale_tril_row, scale_tril_column, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) { 
+
+bi.dist.matrix_normal=function(loc, scale_tril_row, scale_tril_column, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      seed=as.integer(seed);
-     .bi$dist$matrixnormal(loc,  scale_tril_row,  scale_tril_column,  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+     .bi$dist$matrix_normal(
+       loc = jnp$array(loc),
+       scale_tril_row = jnp$array(scale_tril_row),
+       scale_tril_column = jnp$array(scale_tril_column),
+       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

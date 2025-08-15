@@ -2,7 +2,7 @@
 % Please edit documentation in R/binomial.R
 \name{bi.dist.binomial}
 \alias{bi.dist.binomial}
-\title{Binomial distribution wrapper.}
+\title{Samples from a Binomial distribution.}
 \usage{
 bi.dist.binomial(
   total_count = 1,
@@ -20,28 +20,38 @@ bi.dist.binomial(
 )
 }
 \arguments{
-\item{total_count}{1}
+\item{total_count}{(int): The number of trials *n*.}
 
-\item{probs}{None}
+\item{probs}{(numeric vector, optional): The probability of success *p* for each trial. Must be between 0 and 1.}
 
-\item{logits}{None}
+\item{logits}{(numeric vector, optional): The log-odds of success for each trial. `probs = jax.nn.sigmoid(logits)`.}
 
-\item{validate_args}{None}
+\item{mask}{(numeric vector of booleans, optional): Optional boolean array to mask observations.}
 
-\item{mask}{(jnp.ndarray, bool): Optional boolean array to mask observations. This is passed to the `infer={'obs_mask': ...}` argument of `numpyro.sample`.}
-
-\item{shape}{(tuple): A multi-purpose argument for shaping. - When sample=False (model building), this is used with `.expand(shape)` to set the distribution's batch shape. - When sample=True (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{shape}{(numeric vector): A multi-purpose argument for shaping. When `sample=False` (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When `sample=True` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
 
 \item{event}{(int): The number of batch dimensions to reinterpret as event dimensions (used in model building).}
 
-\item{create_obj}{(bool): If True, returns the raw NumPyro distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+\item{create_obj}{(logical, optional): If `TRUE`, returns the raw BI distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+}
+\value{
+- When \code{sample=FALSE}, a BI Binomial distribution object (for model building).
+
+ - When \code{sample=TRUE}, a JAX array of samples drawn from the Binomial distribution (for direct sampling).
+
+ - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-Binomial distribution wrapper.
+The Binomial distribution models the number of successes in a sequence of independent Bernoulli trials.
+It represents the probability of obtaining exactly *k* successes in *n* trials, where each trial has a probability *p* of success.
+
+\deqn{P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}}
 }
 \examples{
+\donttest{
 library(BI)
 m=importBI(platform='cpu')
 bi.dist.binomial(probs = jnp$array(c(0.5,0.5)), sample = TRUE)
 bi.dist.binomial(logits = 1, sample = TRUE)
+}
 }

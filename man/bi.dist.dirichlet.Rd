@@ -2,7 +2,7 @@
 % Please edit documentation in R/dirichlet.R
 \name{bi.dist.dirichlet}
 \alias{bi.dist.dirichlet}
-\title{Dirichlet distribution wrapper.}
+\title{Samples from a Dirichlet distribution.}
 \usage{
 bi.dist.dirichlet(
   concentration,
@@ -18,21 +18,37 @@ bi.dist.dirichlet(
 )
 }
 \arguments{
-\item{concentration}{<class 'inspect._empty'>}
+\item{concentration}{A numeric vector or array representing the concentration parameter(s) of the Dirichlet distribution. Must be positive.}
 
-\item{validate_args}{None}
+\item{mask}{A logical vector or array to mask observations.}
 
-\item{mask}{(jnp.ndarray, bool): Optional boolean array to mask observations. This is passed to the `infer={'obs_mask': ...}` argument of `numpyro.sample`.}
+\item{shape}{A numeric vector specifying the shape of the distribution.}
 
-\item{shape}{(tuple): A multi-purpose argument for shaping. - When sample=False (model building), this is used with `.expand(shape)` to set the distribution's batch shape. - When sample=True (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{event}{Integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).}
 
-\item{event}{(int): The number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{create_obj}{Logical; If TRUE, returns the raw BI distribution object instead of creating a sample site.}
+}
+\value{
+- When \code{sample=FALSE}, a BI Dirichlet distribution object (for model building).
 
-\item{create_obj}{(bool): If True, returns the raw NumPyro distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+ - When \code{sample=TRUE}, a JAX array of samples drawn from the Dirichlet distribution (for direct sampling).
+
+ - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-Dirichlet distribution wrapper.
+The Dirichlet distribution is a multivariate generalization of the Beta distribution.
+It is a probability distribution over a simplex, which is a set of vectors where each element is non-negative and sums to one.
+It is often used as a prior distribution for categorical distributions.
+
+\deqn{P(x_1, ..., x_K) = \frac{\Gamma(\sum_{i=1}^K \alpha_i)}{\prod_{i=1}^K \Gamma(\alpha_i)} \prod_{i=1}^K x_i^{\alpha_i - 1}}
 }
 \examples{
-bi.dist.dirichlet(sample = TRUE)
+\donttest{
+library(BI)
+m=importBI(platform='cpu')
+bi.dist.dirichlet(concentration =  c(0.1,.9), sample = TRUE)
+}
+}
+\seealso{
+This is a wrapper of  \url{https://num.pyro.ai/en/stable/distributions.html#dirichlet}
 }

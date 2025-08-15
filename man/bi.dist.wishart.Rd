@@ -2,7 +2,7 @@
 % Please edit documentation in R/wishart.R
 \name{bi.dist.wishart}
 \alias{bi.dist.wishart}
-\title{Wishart distribution wrapper.}
+\title{Wishart distribution for covariance matrices.}
 \usage{
 bi.dist.wishart(
   concentration,
@@ -21,27 +21,51 @@ bi.dist.wishart(
 )
 }
 \arguments{
-\item{concentration}{<class 'inspect._empty'>}
+\item{concentration}{A positive concentration parameter analogous to the
+concentration of a Gamma distribution. The concentration must be larger
+than the dimensionality of the scale matrix.}
 
-\item{scale_matrix}{None}
+\item{scale_matrix}{A scale matrix analogous to the inverse rate of a Gamma
+distribution.}
 
-\item{rate_matrix}{None}
+\item{rate_matrix}{A rate matrix anaologous to the rate of a Gamma
+distribution.}
 
-\item{scale_tril}{None}
+\item{scale_tril}{Cholesky decomposition of the `scale_matrix`.}
 
-\item{validate_args}{None}
+\item{mask}{An optional boolean array to mask observations.}
 
-\item{mask}{(jnp.ndarray, bool): Optional boolean array to mask observations. This is passed to the `infer={'obs_mask': ...}` argument of `numpyro.sample`.}
+\item{shape}{A numeric vector specifying the shape. When `sample=False`
+(model building), this is used with `.expand(shape)` to set the
+distribution's batch shape. When `sample=True` (direct sampling), this is
+used as `sample_shape` to draw a raw JAX array of the given shape.}
 
-\item{shape}{(tuple): A multi-purpose argument for shaping. - When sample=False (model building), this is used with `.expand(shape)` to set the distribution's batch shape. - When sample=True (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{event}{The number of batch dimensions to reinterpret as event dimensions
+(used in model building).}
 
-\item{event}{(int): The number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{create_obj}{If `TRUE`, returns the raw BI distribution object
+instead of creating a sample site. This is essential for building complex
+distributions like `MixtureSameFamily`.}
+}
+\value{
+- When \code{sample=FALSE}, a BI Wishart distribution object (for model building).
 
-\item{create_obj}{(bool): If True, returns the raw NumPyro distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+ - When \code{sample=TRUE}, a JAX array of samples drawn from the Wishart distribution (for direct sampling).
+
+ - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-Wishart distribution wrapper.
+The Wishart distribution is a multivariate distribution used to model positive definite matrices,
+often representing covariance matrices. It's commonly used in Bayesian statistics and machine learning,
+particularly in models involving covariance estimation.
 }
 \examples{
-bi.dist.wishart(sample = TRUE)
+\donttest{
+library(BI)
+m=importBI(platform='cpu')
+bi.dist.wishart(concentration = 5, scale_matrix = matrix(c(1,0,0,1), nrow = 2), sample = TRUE)
+}
+}
+\seealso{
+\url{https://num.pyro.ai/en/stable/distributions.html#wishart}
 }

@@ -1,19 +1,49 @@
-#' @title LeftTruncatedDistribution distribution wrapper.
-#' @param base_dist <class 'inspect._empty'>
-#' @param low 0.0
-#' @param validate_args None
-#' @param shape (tuple): A multi-purpose argument for shaping. - When sample=False (model building), this is used with `.expand(shape)` to set the distribution's batch shape. - When sample=True (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.
-#' @param event (int): The number of batch dimensions to reinterpret as event dimensions (used in model building).
-#' @param mask (jnp.ndarray, bool): Optional boolean array to mask observations. This is passed to the `infer={'obs_mask': ...}` argument of `numpyro.sample`.
-#' @param create_obj (bool): If True, returns the raw NumPyro distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.
+#' @title Samples from a left-truncated distribution.
+#'
+#' @description A left-truncated distribution is a probability distribution
+#' obtained by restricting the support of another distribution
+#' to values greater than a specified lower bound. This is useful
+#' when dealing with data that is known to be greater than a certain value.
+#'
+#'
+#' \deqn{f(x) = \begin{cases}
+#'           \frac{f(x)}{P(X > \text{low})} & \text{if } x > \text{low} \\
+#'           0 & \text{otherwise}
+#'           \end{cases}}
+#'
+#' @param base_dist The base distribution to truncate. Must be univariate and have real support.
+#' @param low The lower truncation bound. Values less than this are excluded from the distribution.
+#' @param shape A numeric vector. When \code{sample=FALSE} (model building),
+#'   this is used with `.expand(shape)` to set the distribution's batch shape.
+#'   When \code{sample=TRUE} (direct sampling), this is used as `sample_shape` to draw a raw
+#'   JAX array of the given shape.
+#' @param event The number of batch dimensions to reinterpret as event dimensions (used in model building).
+#' @param mask An optional boolean vector to mask observations.
+#' @param create_obj A logical value. If `TRUE`, returns the raw BI distribution object instead of creating a sample site.
+#'
+#' @return
+#'    - When \code{sample=FALSE}: A BI LeftTruncatedDistribution distribution object (for model building).
+#'
+#'    - When \code{sample=TRUE}: A JAX array of samples drawn from the LeftTruncatedDistribution distribution (for direct sampling).
+#'
+#'    - When \code{create_obj=TRUE}: The raw BI distribution object (for advanced use cases).
+#'
+#'
+#' @seealso This is a wrapper of  \url{https://num.pyro.ai/en/stable/distributions.html#lefttruncateddistribution}
+#'
 #' @examples
-#' bi.dist.lefttruncateddistribution(sample = TRUE)
+#' \donttest{
+#' library(BI)
+#' m=importBI(platform='cpu')
+#' bi.dist.left_truncated_distribution( base_dist = bi.dist.normal(loc = 1, scale = 10 ,  create_obj = TRUE),  sample = TRUE)
+#' }
 #' @export
+
 bi.dist.left_truncated_distribution=function(base_dist, low=0.0, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      seed=as.integer(seed);
      .bi$dist$left_truncated_distribution(
        base_dist,
-       low= low,
+       low = jnp$array(low),
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

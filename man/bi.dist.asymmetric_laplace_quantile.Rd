@@ -2,7 +2,7 @@
 % Please edit documentation in R/asymmetric_laplace_quantile.R
 \name{bi.dist.asymmetric_laplace_quantile}
 \alias{bi.dist.asymmetric_laplace_quantile}
-\title{AsymmetricLaplaceQuantile distribution wrapper.}
+\title{Asymmetric Laplace Quantile Distribution}
 \usage{
 bi.dist.asymmetric_laplace_quantile(
   loc = 0,
@@ -20,27 +20,52 @@ bi.dist.asymmetric_laplace_quantile(
 )
 }
 \arguments{
-\item{loc}{0.0}
+\item{loc}{The location parameter of the distribution.}
 
-\item{scale}{1.0}
+\item{scale}{The scale parameter of the distribution.}
 
-\item{quantile}{0.5}
+\item{quantile}{The quantile parameter, representing the proportion of
+probability density to the left of the median. Must be between 0 and 1.}
 
-\item{validate_args}{None}
+\item{mask}{An optional boolean array to mask observations.}
 
-\item{mask}{(jnp.ndarray, bool): Optional boolean array to mask observations. This is passed to the `infer={'obs_mask': ...}` argument of `numpyro.sample`.}
+\item{shape}{A numeric vector. When `sample=False` (model building), this is
+used with `.expand(shape)` to set the distribution's batch shape. When
+`sample=True` (direct sampling), this is used as `sample_shape` to draw a
+raw JAX array of the given shape.}
 
-\item{shape}{(tuple): A multi-purpose argument for shaping. - When sample=False (model building), this is used with `.expand(shape)` to set the distribution's batch shape. - When sample=True (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{event}{The number of batch dimensions to reinterpret as event
+dimensions (used in model building).}
 
-\item{event}{(int): The number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{create_obj}{If `TRUE`, returns the raw NumPyro distribution object
+instead of creating a sample site. This is essential for building complex
+distributions like `MixtureSameFamily`.}
+}
+\value{
+- When \code{sample=FALSE}, a BI Asymmetric Laplace Quantile distribution object (for model building).
 
-\item{create_obj}{(bool): If True, returns the raw NumPyro distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+ - When \code{sample=TRUE}, a JAX array of samples drawn from the Asymmetric Laplace Quantile distribution (for direct sampling).
+
+ - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-AsymmetricLaplaceQuantile distribution wrapper.
+Samples from an Asymmetric Laplace Quantile distribution.
+
+This distribution is an alternative parameterization of the Asymmetric Laplace
+distribution, commonly used in Bayesian quantile regression. It utilizes a
+`quantile` parameter to define the balance between the left- and right-hand
+sides of the distribution, representing the proportion of probability density
+that falls to the left-hand side.
+
+\deqn{f(x) = \frac{1}{2 \sigma} \exp\left(-\frac{|x - \mu|}{\sigma} \frac{1}{q-1}\right) \left(1 - \frac{1}{2q}\right)}
 }
 \examples{
+\donttest{
 library(BI)
 m=importBI(platform='cpu')
 bi.dist.asymmetriclaplacequantile(sample = TRUE)
+}
+}
+\seealso{
+This is a wrapper of  \url{https://num.pyro.ai/en/stable/distributions.html#asymmetriclaplacequantile}
 }

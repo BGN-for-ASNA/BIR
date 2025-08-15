@@ -2,7 +2,7 @@
 % Please edit documentation in R/car.R
 \name{bi.dist.car}
 \alias{bi.dist.car}
-\title{CAR distribution wrapper.}
+\title{Conditional Autoregressive (CAR) Distribution}
 \usage{
 bi.dist.car(
   loc,
@@ -22,31 +22,41 @@ bi.dist.car(
 )
 }
 \arguments{
-\item{loc}{<class 'inspect._empty'>}
+\item{loc}{Numeric vector, matrix, or array representing the mean of the distribution.}
 
-\item{correlation}{<class 'inspect._empty'>}
+\item{correlation}{Numeric vector, matrix, or array representing the correlation between variables.}
 
-\item{conditional_precision}{<class 'inspect._empty'>}
+\item{conditional_precision}{Numeric vector, matrix, or array representing the precision of the distribution.}
 
-\item{adj_matrix}{<class 'inspect._empty'>}
+\item{adj_matrix}{Numeric vector, matrix, or array representing the adjacency matrix defining the graph.}
 
-\item{is_sparse}{False}
+\item{is_sparse}{Logical indicating whether the adjacency matrix is sparse. Defaults to `FALSE`.}
 
-\item{validate_args}{None}
+\item{validate_args}{Logical indicating whether to validate arguments. Defaults to `reticulate::py_none()`.}
+}
+\value{
+- When \code{sample=FALSE}, a BI CAR distribution object (for model building).
 
-\item{mask}{(jnp.ndarray, bool): Optional boolean array to mask observations. This is passed to the `infer={'obs_mask': ...}` argument of `numpyro.sample`.}
+ - When \code{sample=TRUE}, a JAX array of samples drawn from the CAR distribution (for direct sampling).
 
-\item{shape}{(tuple): A multi-purpose argument for shaping. - When sample=False (model building), this is used with `.expand(shape)` to set the distribution's batch shape. - When sample=True (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
-
-\item{event}{(int): The number of batch dimensions to reinterpret as event dimensions (used in model building).}
-
-\item{create_obj}{(bool): If True, returns the raw NumPyro distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+ - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-CAR distribution wrapper.
+The CAR distribution models a vector of variables where each variable is a linear
+combination of its neighbors in a graph.
+
+\deqn{p(x) = \prod_{i=1}^{K} \mathcal{N}(x_i | \mu_i, \Sigma_i)}
+
+where \eqn{\mu_i} is a function of the values of the neighbors of site \eqn{i}
+and \eqn{\Sigma_i} is the variance of site \eqn{i}.
+
+The CAR distribution is a special case of the multivariate normal distribution.
+It is used to model spatial data, such as temperature or precipitation.
 }
 \examples{
+\donttest{
 library(BI)
 m=importBI(platform='cpu')
-bi.dist.car(loc = 0,correlation = 0.5, conditional_precision = 0.1, adj_matrix = 2, sample = TRUE)
+bi.dist.car(loc = 0, correlation = 0.5, conditional_precision = 0.1, adj_matrix = 2, sample = TRUE)
+}
 }

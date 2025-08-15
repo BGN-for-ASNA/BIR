@@ -2,7 +2,7 @@
 % Please edit documentation in R/discrete_uniform.R
 \name{bi.dist.discrete_uniform}
 \alias{bi.dist.discrete_uniform}
-\title{DiscreteUniform distribution wrapper.}
+\title{Samples from a Discrete Uniform distribution.}
 \usage{
 bi.dist.discrete_uniform(
   low = 0,
@@ -19,25 +19,37 @@ bi.dist.discrete_uniform(
 )
 }
 \arguments{
-\item{low}{0}
+\item{low}{A numeric vector representing the lower bound of the uniform range, inclusive.}
 
-\item{high}{1}
+\item{high}{A numeric vector representing the upper bound of the uniform range, inclusive.}
 
-\item{validate_args}{None}
+\item{mask}{A logical vector. Optional boolean array to mask observations.}
 
-\item{mask}{(jnp.ndarray, bool): Optional boolean array to mask observations. This is passed to the `infer={'obs_mask': ...}` argument of `numpyro.sample`.}
+\item{shape}{A numeric vector.  When \code{sample=FALSE} (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When \code{sample=TRUE} (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
 
-\item{shape}{(tuple): A multi-purpose argument for shaping. - When sample=False (model building), this is used with `.expand(shape)` to set the distribution's batch shape. - When sample=True (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{event}{Integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).}
 
-\item{event}{(int): The number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{create_obj}{Logical. If TRUE, returns the raw BI distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+}
+\value{
+- When \code{sample=FALSE}, a BI Discrete Uniform distribution object (for model building).
 
-\item{create_obj}{(bool): If True, returns the raw NumPyro distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+ - When \code{sample=TRUE}, a JAX array of samples drawn from the Discrete Uniform distribution (for direct sampling).
+
+ - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-DiscreteUniform distribution wrapper.
+The Discrete Uniform distribution defines a uniform distribution over a range of integers.
+It is characterized by a lower bound (`low`) and an upper bound (`high`), inclusive.
+
+\deqn{P(X = k) = \frac{1}{high - low + 1}, \quad k \in \{low, low+1, ..., high\}}
+
+Samples from a Discrete Uniform distribution.
 }
 \examples{
+\donttest{
 library(BI)
 m=importBI(platform='cpu')
 bi.dist.discrete_uniform(sample = TRUE)
+}
 }

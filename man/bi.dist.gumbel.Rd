@@ -2,7 +2,7 @@
 % Please edit documentation in R/gumbel.R
 \name{bi.dist.gumbel}
 \alias{bi.dist.gumbel}
-\title{Gumbel distribution wrapper.}
+\title{Samples from a Gumbel (or Extreme Value) distribution.}
 \usage{
 bi.dist.gumbel(
   loc = 0,
@@ -19,23 +19,35 @@ bi.dist.gumbel(
 )
 }
 \arguments{
-\item{loc}{0.0}
+\item{loc}{Location parameter.}
 
-\item{scale}{1.0}
+\item{scale}{Scale parameter. Must be positive.}
 
-\item{validate_args}{None}
+\item{mask}{Optional boolean array to mask observations.}
 
-\item{mask}{(jnp.ndarray, bool): Optional boolean array to mask observations. This is passed to the `infer={'obs_mask': ...}` argument of `numpyro.sample`.}
+\item{shape}{A numeric vector. When \code{sample=FALSE} (model building), this is used with \code{.expand(shape)} to set the distribution's batch shape. When \code{sample=TRUE} (direct sampling), this is used as \code{sample_shape} to draw a raw JAX array of the given shape.}
 
-\item{shape}{(tuple): A multi-purpose argument for shaping. - When sample=False (model building), this is used with `.expand(shape)` to set the distribution's batch shape. - When sample=True (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{event}{The number of batch dimensions to reinterpret as event dimensions (used in model building).}
 
-\item{event}{(int): The number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{create_obj}{If \code{TRUE}, returns the raw BI distribution object instead of creating a sample site.}
+}
+\value{
+- When \code{sample=FALSE}, a BI Gumbel distribution object (for model building).
 
-\item{create_obj}{(bool): If True, returns the raw NumPyro distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+ - When \code{sample=TRUE}, a JAX array of samples drawn from the Gumbel distribution (for direct sampling).
+
+ - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-Gumbel distribution wrapper.
+The Gumbel distribution is a continuous probability distribution named after German mathematician Carl Gumbel.
+It is often used to model the distribution of maximum values in a sequence of independent random variables.
+
+\deqn{f(x) = \frac{1}{s} e^{-(x - \mu) / s} e^{-e^{- (x - \mu) / s}}}
 }
 \examples{
+\donttest{
+library(BI)
+m=importBI(platform='cpu')
 bi.dist.gumbel(sample = TRUE)
+}
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/bernoulli.R
 \name{bi.dist.bernoulli}
 \alias{bi.dist.bernoulli}
-\title{Bernoulli distribution wrapper.}
+\title{Sample from a Bernoulli distribution.}
 \usage{
 bi.dist.bernoulli(
   probs = py_none(),
@@ -19,27 +19,37 @@ bi.dist.bernoulli(
 )
 }
 \arguments{
-\item{probs}{None}
+\item{probs}{A numeric vector, matrix, or array representing the probability of success for each Bernoulli trial. Must be between 0 and 1.}
 
-\item{logits}{None}
+\item{logits}{A numeric vector, matrix, or array representing the log-odds of success for each Bernoulli trial. `probs = sigmoid(logits)`.}
 
-\item{validate_args}{None}
+\item{mask}{A logical vector, matrix, or array (optional) to mask observations.}
 
-\item{mask}{(jnp.ndarray, bool): Optional boolean array to mask observations. This is passed to the `infer={'obs_mask': ...}` argument of `numpyro.sample`.}
+\item{shape}{A numeric vector specifying the shape of the output.  Used with `.expand(shape)` when `sample=False` (model building) to set the distribution's batch shape. When `sample=True` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
 
-\item{shape}{(tuple): A multi-purpose argument for shaping. - When sample=False (model building), this is used with `.expand(shape)` to set the distribution's batch shape. - When sample=True (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{event}{An integer indicating the number of batch dimensions to reinterpret as event dimensions (used in model building).}
 
-\item{event}{(int): The number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{create_obj}{A logical value (optional). If `TRUE`, returns the raw BI distribution object instead of creating a sample site.}
+}
+\value{
+- When \code{sample=FALSE}, a BI Bernoulli distribution object (for model building).
 
-\item{create_obj}{(bool): If True, returns the raw NumPyro distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+ - When \code{sample=TRUE}, a JAX array of samples drawn from the Bernoulli distribution (for direct sampling).
+
+ - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-Bernoulli distribution wrapper.
+The Bernoulli distribution models a single trial with two possible outcomes: success or failure.
+It is parameterized by the probability of success, often denoted as 'p'.
+
+\deqn{P(X=1) = p \\ P(X=0) = 1 - p}
 }
 \examples{
+\donttest{
 library(BI)
 m=importBI(platform='cpu')
 bi.dist.bernoulli(probs = 0.5, sample = TRUE)
 bi.dist.bernoulli(probs = 0.5, sample = TRUE, seed = 5)
 bi.dist.bernoulli(logits = 1, sample = TRUE, seed = 5)
+}
 }

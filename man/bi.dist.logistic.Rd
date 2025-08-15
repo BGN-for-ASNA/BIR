@@ -2,7 +2,7 @@
 % Please edit documentation in R/logistic.R
 \name{bi.dist.logistic}
 \alias{bi.dist.logistic}
-\title{Logistic distribution wrapper.}
+\title{Samples from a Logistic distribution.}
 \usage{
 bi.dist.logistic(
   loc = 0,
@@ -19,23 +19,32 @@ bi.dist.logistic(
 )
 }
 \arguments{
-\item{loc}{0.0}
+\item{loc}{Numeric vector or single number. The location parameter, specifying the median of the distribution. Defaults to 0.0.}
 
-\item{scale}{1.0}
+\item{scale}{Numeric vector or single number. The scale parameter, which determines the spread of the distribution. Must be positive. Defaults to 1.0.}
 
-\item{validate_args}{None}
+\item{mask}{Logical vector. Optional boolean array to mask observations.}
 
-\item{mask}{(jnp.ndarray, bool): Optional boolean array to mask observations. This is passed to the `infer={'obs_mask': ...}` argument of `numpyro.sample`.}
+\item{shape}{Numeric vector. A multi-purpose argument for shaping. When `sample=False` (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When `sample=True` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
 
-\item{shape}{(tuple): A multi-purpose argument for shaping. - When sample=False (model building), this is used with `.expand(shape)` to set the distribution's batch shape. - When sample=True (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{event}{Integer. The number of batch dimensions to reinterpret as event dimensions (used in model building).}
 
-\item{event}{(int): The number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{create_obj}{Logical. If True, returns the raw BI distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+}
+\value{
+- When \code{sample=FALSE}, a BI Logistic distribution object (for model building).
 
-\item{create_obj}{(bool): If True, returns the raw NumPyro distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+ - When \code{sample=TRUE}, a JAX array of samples drawn from the Logistic distribution (for direct sampling).
+
+ - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-Logistic distribution wrapper.
+The Logistic distribution is a continuous probability distribution defined by two parameters: location and scale. It is often used to model growth processes and is closely related to the normal distribution.
 }
 \examples{
+\donttest{
+library(BI)
+m=importBI(platform='cpu')
 bi.dist.logistic(sample = TRUE)
+}
 }

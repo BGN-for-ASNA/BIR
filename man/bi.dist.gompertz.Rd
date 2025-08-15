@@ -2,7 +2,7 @@
 % Please edit documentation in R/gompertz.R
 \name{bi.dist.gompertz}
 \alias{bi.dist.gompertz}
-\title{Gompertz distribution wrapper.}
+\title{Gompertz Distribution}
 \usage{
 bi.dist.gompertz(
   concentration,
@@ -19,23 +19,41 @@ bi.dist.gompertz(
 )
 }
 \arguments{
-\item{concentration}{<class 'inspect._empty'>}
+\item{concentration}{A positive numeric vector, matrix, or array representing the concentration parameter.}
 
-\item{rate}{1.0}
+\item{rate}{A positive numeric vector, matrix, or array representing the rate parameter.}
 
-\item{validate_args}{None}
+\item{mask}{A boolean vector, matrix, or array representing an optional mask for observations.}
 
-\item{mask}{(jnp.ndarray, bool): Optional boolean array to mask observations. This is passed to the `infer={'obs_mask': ...}` argument of `numpyro.sample`.}
+\item{shape}{A numeric vector representing the shape parameter.}
 
-\item{shape}{(tuple): A multi-purpose argument for shaping. - When sample=False (model building), this is used with `.expand(shape)` to set the distribution's batch shape. - When sample=True (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{event}{Integer representing the number of batch dimensions to reinterpret as event dimensions.}
 
-\item{event}{(int): The number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{create_obj}{Logical value. If `TRUE`, returns the raw BI distribution object instead of creating a sample site.}
+}
+\value{
+A BI Gompertz distribution object when \code{sample=FALSE} (for model building).
 
-\item{create_obj}{(bool): If True, returns the raw NumPyro distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+   A JAX array when \code{sample=TRUE} (for direct sampling).
+
+   A BI distribution object when \code{create_obj=TRUE} (for advanced use cases).
 }
 \description{
-Gompertz distribution wrapper.
+The Gompertz distribution is a distribution with support on the positive real line that is closely
+related to the Gumbel distribution. This implementation follows the notation used in the Wikipedia
+entry for the Gompertz distribution. See https://en.wikipedia.org/wiki/Gompertz_distribution.
+
+The probability density function (PDF) is:
+
+\deqn{f(x) = \frac{con}{rate} \exp \left\{ - \frac{con}{rate} \left [ \exp\{x * rate \} - 1 \right ] \right\} \exp(-x * rate)}
 }
 \examples{
-bi.dist.gompertz(sample = TRUE)
+\donttest{
+library(BI)
+m=importBI(platform='cpu')
+bi.dist.gompertz(concentration = 5., sample = TRUE)
+}
+}
+\seealso{
+This is a wrapper of  \url{https://num.pyro.ai/en/stable/distributions.html#gompertz}
 }

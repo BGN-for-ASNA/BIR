@@ -17,6 +17,7 @@ Imports:
     cli,
     reticulate
 LinkingTo: reticulate
+SystemRequirements: Python (>= 3.6), a virtual environment with the 'BayesInference' library.
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3

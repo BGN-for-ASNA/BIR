@@ -2,7 +2,7 @@
 % Please edit documentation in R/eulermaruyama.R
 \name{bi.dist.euler_maruyama}
 \alias{bi.dist.euler_maruyama}
-\title{EulerMaruyama distribution wrapper.}
+\title{Euler-Maruyama method}
 \usage{
 bi.dist.euler_maruyama(
   t,
@@ -20,28 +20,55 @@ bi.dist.euler_maruyama(
 )
 }
 \arguments{
-\item{t}{<class 'inspect._empty'>}
+\item{t}{A numeric vector representing the discretized time steps.}
 
-\item{sde_fn}{<class 'inspect._empty'>}
+\item{sde_fn}{A function that takes the current state and time as input and returns the drift and diffusion coefficients.}
 
-\item{init_dist}{<class 'inspect._empty'>}
+\item{init_dist}{The initial distribution of the system.}
 
-\item{validate_args}{None}
+\item{validate_args}{A logical value indicating whether to validate the arguments. Defaults to `TRUE`.}
 
-\item{mask}{(jnp.ndarray, bool): Optional boolean array to mask observations. This is passed to the `infer={'obs_mask': ...}` argument of `numpyro.sample`.}
+\item{shape}{A numeric vector specifying the shape of the output tensor.  Defaults to `NULL`.}
 
-\item{shape}{(tuple): A multi-purpose argument for shaping. - When sample=False (model building), this is used with `.expand(shape)` to set the distribution's batch shape. - When sample=True (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{sample_shape}{A numeric vector specifying the shape of the samples to draw. Defaults to `NULL`.}
+}
+\value{
+- When \code{sample=FALSE}, a BI Euler-Maruyama distribution object (for model building).
 
-\item{event}{(int): The number of batch dimensions to reinterpret as event dimensions (used in model building).}
+ - When \code{sample=TRUE}, a JAX array of samples drawn from the Euler-Maruyama distribution (for direct sampling).
 
-\item{create_obj}{(bool): If True, returns the raw NumPyro distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+ - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-EulerMaruyama distribution wrapper.
+Euler-Maruyama method is a method for the approximate numerical solution
+of a stochastic differential equation (SDE). It simulates the solution
+to an SDE by iteratively applying the Euler method to each time step,
+incorporating a random perturbation to account for the diffusion term.
+
+\deqn{dX_t = f(X_t, t) dt + g(X_t, t) dW_t}
+
+where:
+- \eqn{X_t} is the state of the system at time \eqn{t}.
+- \eqn{f(X_t, t)} is the drift coefficient.
+- \eqn{g(X_t, t)} is the diffusion coefficient.
+- \eqn{dW_t} is a Wiener process (Brownian motion).
 }
 \examples{
+\donttest{
 library(BI)
 m=importBI(platform='cpu')
-m.dist.euler_maruyama(t=jnp.array([0.0, 0.1, 0.2]), sde_fn=lambda x, t: (x, 1.0), init_dist=m.dist.normal(0.0, 1.0, create_obj=True)
-bi.dist.euler_maruyama(t=c(0,0.1,0.2), sde_fn = lambda x, t: (x, 1.0), .bi$dist$normal(0,1,create_obj = T), sample = TRUE, event = c(1,10))
+ornstein_uhlenbeck_sde <- function(x, t) {
+ # This function models dX = -theta * X dt + sigma dW
+ theta <- 1.0
+ sigma <- 0.5
+
+ drift <- -theta * x
+ diffusion <- sigma
+
+ # Return a list of two elements: drift and diffusion
+ # reticulate will convert this to a Python tuple
+ return(list(drift, diffusion))
+}
+bi.dist.euler_maruyama(t=c(0.0, 0.1, 0.2), sde_fn = ornstein_uhlenbeck_sde, init_dist=bi.dist.normal(0.0, 1.0, create_obj=TRUE), sample = TRUE)
+}
 }

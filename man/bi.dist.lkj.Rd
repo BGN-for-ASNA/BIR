@@ -2,7 +2,7 @@
 % Please edit documentation in R/lkj.R
 \name{bi.dist.lkj}
 \alias{bi.dist.lkj}
-\title{LKJ distribution wrapper.}
+\title{Samples from an LKJ (Lewandowski, Kurowicka, Joe) distribution for correlation matrices.}
 \usage{
 bi.dist.lkj(
   dimension,
@@ -20,25 +20,43 @@ bi.dist.lkj(
 )
 }
 \arguments{
-\item{dimension}{<class 'inspect._empty'>}
+\item{dimension}{An integer representing the dimension of the correlation matrices.}
 
-\item{concentration}{1.0}
+\item{concentration}{A numeric vector representing the concentration/shape parameter of the distribution (often referred to as eta). Must be positive.}
 
-\item{sample_method}{onion}
+\item{mask}{An optional boolean vector to mask observations.}
 
-\item{validate_args}{None}
+\item{shape}{A numeric vector used for shaping. When `sample=False` (model building), this is used
+with `.expand(shape)` to set the distribution's batch shape. When `sample=True` (direct sampling),
+this is used as `sample_shape` to draw a raw JAX array of the given shape.}
 
-\item{mask}{(jnp.ndarray, bool): Optional boolean array to mask observations. This is passed to the `infer={'obs_mask': ...}` argument of `numpyro.sample`.}
+\item{event}{An integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).}
 
-\item{shape}{(tuple): A multi-purpose argument for shaping. - When sample=False (model building), this is used with `.expand(shape)` to set the distribution's batch shape. - When sample=True (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{create_obj}{A logical value. If `TRUE`, returns the raw BI distribution object instead of creating a sample site.}
+}
+\value{
+- When \code{sample=FALSE}: A BI LKJ distribution object (for model building).
 
-\item{event}{(int): The number of batch dimensions to reinterpret as event dimensions (used in model building).}
+   - When \code{sample=TRUE}: A JAX array of samples drawn from the LKJ distribution (for direct sampling).
 
-\item{create_obj}{(bool): If True, returns the raw NumPyro distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+   - When \code{create_obj=TRUE}: The raw BI distribution object (for advanced use cases).
 }
 \description{
-LKJ distribution wrapper.
+The LKJ distribution is controlled by the concentration parameter \eqn{\eta} to make the
+probability of the correlation matrix \eqn{M} proportional to \eqn{\det(M)^{\eta - 1}}.
+When \eqn{\eta = 1}, the distribution is uniform over correlation matrices.
+When \eqn{\eta > 1}, the distribution favors samples with large determinants.
+When \eqn{\eta < 1}, the distribution favors samples with small determinants.
+
+\deqn{ P(M) \propto |\det(M)|^{\eta - 1}}
 }
 \examples{
-bi.dist.lkj(sample = TRUE)
+\donttest{
+library(BI)
+m=importBI(platform='cpu')
+bi.dist.lkj( dimension = 2, concentration=1.0, shape = c(1), sample = TRUE)
+}
+}
+\seealso{
+This is a wrapper of  \url{https://num.pyro.ai/en/stable/distributions.html#lkj}
 }
