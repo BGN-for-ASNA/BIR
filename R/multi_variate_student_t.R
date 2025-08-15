@@ -32,7 +32,9 @@
 #' bi.dist.multivariate_student_t(
 #' df = 2,
 #' loc =  c(1.0, 0.0, -2.0),
-#' scale_tril = jnp$linalg$cholesky(matrix(c( 2.0,  0.7, -0.3, 0.7,  1.0,  0.5, -0.3,  0.5,  1.5), nrow = 3, byrow = TRUE)),
+#' scale_tril = jnp$linalg$cholesky(
+#' matrix(c( 2.0,  0.7, -0.3, 0.7,  1.0,  0.5, -0.3,  0.5,  1.5),
+#' nrow = 3, byrow = TRUE)),
 #' sample = TRUE)
 #' }
 #' @export

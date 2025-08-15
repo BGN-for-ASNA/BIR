@@ -35,7 +35,11 @@
 #' \donttest{
 #' library(BI)
 #' m=importBI(platform='cpu')
-#' bi.dist.truncated_distribution(base_dist = bi.dist.normal(0,1, create_obj = TRUE), high = 0.7, low = 0.1, sample = TRUE)
+#' bi.dist.truncated_distribution(
+#' base_dist = bi.dist.normal(0,1, create_obj = TRUE),
+#' high = 0.7,
+#' low = 0.1,
+#' sample = TRUE)
 #' }
 #' @export
 bi.dist.truncated_distribution=function(base_dist, low=py_none(), high=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {

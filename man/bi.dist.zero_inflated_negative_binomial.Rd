@@ -56,7 +56,12 @@ compared to what a standard Negative Binomial 2 distribution would predict.
 #' \donttest{
 library(BI)
 m=importBI(platform='cpu')
-bi.dist.zero_inflated_negative_binomial(mean = 2, concentration = 1, gate=0.3, sample = TRUE)
+bi.dist.zero_inflated_negative_binomial(
+  mean = 2,
+  concentration = 1,
+  gate=0.3,
+  sample = TRUE
+)
 }
 }
 \seealso{

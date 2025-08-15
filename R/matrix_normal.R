@@ -33,14 +33,24 @@
 #' n_cols = 4
 #' loc = matrix(rep(0,n_rows*n_cols), nrow = n_rows, ncol = n_cols,byrow = TRUE)
 #'
-#' U_row_cov = jnp$array(matrix(c(1.0, 0.5, 0.2, 0.5, 1.0, 0.3, 0.2, 0.3, 1.0), nrow = n_rows, ncol = n_rows,byrow = TRUE))
+#' U_row_cov = jnp$array(
+#' matrix(c(1.0, 0.5, 0.2, 0.5, 1.0, 0.3, 0.2, 0.3, 1.0),
+#' nrow = n_rows, ncol = n_rows,byrow = TRUE))
 #' scale_tril_row = jnp$linalg$cholesky(U_row_cov)
 #'
-#' V_col_cov = jnp$array(matrix(c(2.0, -0.8, 0.1, 0.4, -0.8, 2.0, 0.2, -0.2, 0.1, 0.2, 2.0, 0.0, 0.4, -0.2, 0.0, 2.0), nrow = n_cols, ncol = n_cols,byrow = TRUE))
+#' V_col_cov = jnp$array(
+#' matrix(c(2.0, -0.8, 0.1, 0.4, -0.8, 2.0, 0.2, -0.2, 0.1,
+#' 0.2, 2.0, 0.0, 0.4, -0.2, 0.0, 2.0),
+#' nrow = n_cols, ncol = n_cols,byrow = TRUE))
 #' scale_tril_column = jnp$linalg$cholesky(V_col_cov)
 #'
 #'
-#' bi.dist.matrix_normal( loc = loc, scale_tril_row = scale_tril_row, scale_tril_column = scale_tril_column, sample = TRUE)
+#' bi.dist.matrix_normal(
+#' loc = loc,
+#' scale_tril_row = scale_tril_row,
+#' scale_tril_column = scale_tril_column,
+#' sample = TRUE
+#' )
 #' }
 #' @export
 

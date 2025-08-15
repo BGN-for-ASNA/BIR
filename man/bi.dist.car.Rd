@@ -57,6 +57,12 @@ It is used to model spatial data, such as temperature or precipitation.
 \donttest{
 library(BI)
 m=importBI(platform='cpu')
-bi.dist.car(loc = 0, correlation = 0.5, conditional_precision = 0.1, adj_matrix = 2, sample = TRUE)
+bi.dist.car(
+  loc = c(1.,2.),
+  correlation = 0.9,
+  conditional_precision = 1.,
+  adj_matrix = matrix(c(1,0,0,1), nrow = 2),
+  sample = TRUE
+ )
 }
 }

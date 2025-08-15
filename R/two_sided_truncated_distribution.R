@@ -28,7 +28,9 @@
 #' \donttest{
 #' library(BI)
 #' m=importBI(platform='cpu')
-#' bi.dist.two_sided_truncated_distribution(base_dist = bi.dist.normal(0,1, create_obj = TRUE), high = 0.5, low = 0.1, sample = TRUE)
+#' bi.dist.two_sided_truncated_distribution(
+#' base_dist = bi.dist.normal(0,1, create_obj = TRUE),
+#' high = 0.5, low = 0.1, sample = TRUE)
 #' }
 #' @export
 bi.dist.two_sided_truncated_distribution=function(base_dist, low=0.0, high=1.0, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {

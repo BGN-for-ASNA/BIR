@@ -1,7 +1,6 @@
 .pkg_env <- new.env(parent = emptyenv())
 
 .onAttach <- function(libname=NULL, pkgname="BI") {
-  require(reticulate)
   if (!requireNamespace("reticulate", quietly = TRUE)) {
     stop("The 'reticulate' package is required but not installed. Please install it via install.packages('reticulate').")
   }
@@ -16,7 +15,7 @@
     reticulate::py_install("BayesInference", pip = TRUE)
   }
 
-  py_run_string("def is_none(x): return x is None")
+  reticulate::py_run_string("def is_none(x): return x is None")
 
 
 }

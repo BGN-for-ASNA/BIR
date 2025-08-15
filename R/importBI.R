@@ -1,6 +1,4 @@
 importBI = function(platform='cpu', cores=NULL, deallocate = FALSE){
-  require(reticulate)
-
   # Construct the path to the directory containing main.py
   .bi <<- import("BI")
   .bi <<-  .bi$bi

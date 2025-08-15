@@ -44,7 +44,9 @@
 #' \donttest{
 #' library(BI)
 #' m=importBI(platform='cpu')
-#' bi.dist.zero_inflated_distribution(base_dist = bi.dist.poisson(5, create_obj = TRUE), gate=0.3, sample = TRUE)
+#' bi.dist.zero_inflated_distribution(
+#' base_dist = bi.dist.poisson(5, create_obj = TRUE),
+#' gate=0.3, sample = TRUE)
 #' }
 #' @export
 bi.dist.zero_inflated_distribution=function(base_dist, gate=py_none(), gate_logits=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {

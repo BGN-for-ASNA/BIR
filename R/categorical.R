@@ -31,11 +31,10 @@
 #' }
 #' @export
 bi.dist.categorical=function(probs=py_none(), logits=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
-     require(reticulate)
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      seed=as.integer(seed);
-     py_run_string("def is_none(x): return x is None")
+     reticulate::py_run_string("def is_none(x): return x is None")
      if(!py$is_none(logits)){logits = jnp$array(logits)}
      if(!py$is_none(probs)){probs = jnp$array(probs)}
      .bi$dist$categorical(probs = probs, logits = logits, validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)

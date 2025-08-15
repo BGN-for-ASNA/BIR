@@ -35,7 +35,9 @@
 #' \donttest{
 #' library(BI)
 #' m=importBI(platform='cpu')
-#' bi.dist.left_truncated_distribution( base_dist = bi.dist.normal(loc = 1, scale = 10 ,  create_obj = TRUE),  sample = TRUE)
+#' bi.dist.left_truncated_distribution(
+#' base_dist = bi.dist.normal(loc = 1, scale = 10 ,  create_obj = TRUE),
+#' sample = TRUE)
 #' }
 #' @export
 

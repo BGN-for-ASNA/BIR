@@ -29,7 +29,13 @@
 #' \donttest{
 #' library(BI)
 #' m=importBI(platform='cpu')
-#' bi.dist.car(loc = 0, correlation = 0.5, conditional_precision = 0.1, adj_matrix = 2, sample = TRUE)
+#' bi.dist.car(
+#'   loc = c(1.,2.),
+#'   correlation = 0.9,
+#'   conditional_precision = 1.,
+#'   adj_matrix = matrix(c(1,0,0,1), nrow = 2),
+#'   sample = TRUE
+#'  )
 #' }
 #' @export
 #'
@@ -41,9 +47,9 @@ bi.dist.car=function(loc, correlation, conditional_precision, adj_matrix, is_spa
      if(!py$is_none(conditional_precision)){conditional_precision = jnp$array(conditional_precision)}
      if(!py$is_none(adj_matrix)){adj_matrix = jnp$array(adj_matrix)}
      .bi$dist$car(
-       loc = loc,
-       correlation,
-       conditional_precision,
-       adj_matrix,
+       loc = jnp$array(loc),
+       correlation=correlation,
+       conditional_precision=conditional_precision,
+       adj_matrix=adj_matrix,
        is_sparse= is_sparse,  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

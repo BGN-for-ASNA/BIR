@@ -39,15 +39,15 @@ test_that("bi.dist.beta_proportion", {
 })
 
 test_that("bi.dist.binomial", {
-  res =  bi.dist.binomial(probs = jnp$array(c(0.5,0.5)), sample = TRUE)
+  res = bi.dist.binomial(probs = jnp$array(c(0.5,0.5)), sample = TRUE)
   r2 = reticulate::py_to_r(res$tolist())
   expect_equal(r2,c(0,0))
 })
 
 test_that("bi.dist.car", {
-  res =  bi.dist.car(loc = 0,correlation = 0.5, conditional_precision = 0.1, adj_matrix = matrix(c(1,0.1,1,0.1), nrow = 2), sample = TRUE)
+  res = bi.dist.car(loc = c(1.,2.), correlation = 0.9, conditional_precision = 1., adj_matrix = matrix(c(1,0,0,1), nrow = 2), sample = TRUE)
   r2 = reticulate::py_to_r(res$tolist())
-  expect_equal(r2,c(-0.65229036, -7.60345139))
+  expect_equal(r2,c(0.34907   , -0.48164728))
 })
 
 test_that("bi.dist.categorical", {

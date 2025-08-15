@@ -45,7 +45,11 @@ library(BI)
 m=importBI(platform='cpu')
 bi.dist.mixture(
   mixing_distribution = bi.dist.categorical(probs = c(0.3, 0, 7),create_obj = TRUE),
-  component_distributions = c(bi.dist.normal(0,1,create_obj = TRUE), bi.dist.normal(0,1,create_obj = TRUE), bi.dist.normal(0,1,create_obj = TRUE)),
+  component_distributions = c(
+  bi.dist.normal(0,1,create_obj = TRUE),
+  bi.dist.normal(0,1,create_obj = TRUE),
+  bi.dist.normal(0,1,create_obj = TRUE)
+  ),
   sample = TRUE
 )
 }

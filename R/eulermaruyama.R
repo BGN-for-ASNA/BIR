@@ -42,7 +42,11 @@
 #'  # reticulate will convert this to a Python tuple
 #'  return(list(drift, diffusion))
 #'}
-#'bi.dist.euler_maruyama(t=c(0.0, 0.1, 0.2), sde_fn = ornstein_uhlenbeck_sde, init_dist=bi.dist.normal(0.0, 1.0, create_obj=TRUE), sample = TRUE)
+#'bi.dist.euler_maruyama(
+#'t=c(0.0, 0.1, 0.2),
+#'sde_fn = ornstein_uhlenbeck_sde,
+#'init_dist=bi.dist.normal(0.0, 1.0, create_obj=TRUE),
+#'sample = TRUE)
 #' }
 #' @export
 bi.dist.euler_maruyama=function(t, sde_fn, init_dist, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {

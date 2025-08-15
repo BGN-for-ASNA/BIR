@@ -57,7 +57,11 @@ effectively removing observations outside the defined interval.
 \donttest{
 library(BI)
 m=importBI(platform='cpu')
-bi.dist.truncated_distribution(base_dist = bi.dist.normal(0,1, create_obj = TRUE), high = 0.7, low = 0.1, sample = TRUE)
+bi.dist.truncated_distribution(
+base_dist = bi.dist.normal(0,1, create_obj = TRUE),
+high = 0.7,
+low = 0.1,
+sample = TRUE)
 }
 }
 \seealso{

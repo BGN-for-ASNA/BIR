@@ -69,7 +69,9 @@ where:
 \donttest{
 library(BI)
 m=importBI(platform='cpu')
-bi.dist.zero_inflated_distribution(base_dist = bi.dist.poisson(5, create_obj = TRUE), gate=0.3, sample = TRUE)
+bi.dist.zero_inflated_distribution(
+base_dist = bi.dist.poisson(5, create_obj = TRUE),
+gate=0.3, sample = TRUE)
 }
 }
 \seealso{

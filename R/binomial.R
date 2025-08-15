@@ -31,7 +31,7 @@ bi.dist.binomial=function(total_count=1, probs=py_none(), logits=py_none(), vali
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      seed=as.integer(seed);
-     py_run_string("def is_none(x): return x is None")
+     reticulate::py_run_string("def is_none(x): return x is None")
      if (py$is_none(logits)){
       .bi$dist$binomial(total_count=jnp$array(as.integer(total_count)),  probs= jnp$array(probs),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
      }else{

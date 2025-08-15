@@ -51,7 +51,9 @@ where \deqn{p(x)} is the probability density function of the base distribution.
 \donttest{
 library(BI)
 m=importBI(platform='cpu')
-bi.dist.two_sided_truncated_distribution(base_dist = bi.dist.normal(0,1, create_obj = TRUE), high = 0.5, low = 0.1, sample = TRUE)
+bi.dist.two_sided_truncated_distribution(
+base_dist = bi.dist.normal(0,1, create_obj = TRUE),
+high = 0.5, low = 0.1, sample = TRUE)
 }
 }
 \seealso{

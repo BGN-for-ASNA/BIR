@@ -69,6 +69,10 @@ ornstein_uhlenbeck_sde <- function(x, t) {
  # reticulate will convert this to a Python tuple
  return(list(drift, diffusion))
 }
-bi.dist.euler_maruyama(t=c(0.0, 0.1, 0.2), sde_fn = ornstein_uhlenbeck_sde, init_dist=bi.dist.normal(0.0, 1.0, create_obj=TRUE), sample = TRUE)
+bi.dist.euler_maruyama(
+t=c(0.0, 0.1, 0.2),
+sde_fn = ornstein_uhlenbeck_sde,
+init_dist=bi.dist.normal(0.0, 1.0, create_obj=TRUE),
+sample = TRUE)
 }
 }
