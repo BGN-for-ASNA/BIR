@@ -1,7 +1,7 @@
-Package: BI
+Package: BayesianInference
 Type: Package
 Title: Bayesian inference
-Version: 0.1.0
+Version: 0.0.1
 Authors@R: c(
     person(
       "Sebastian", "Sosa",
@@ -9,16 +9,13 @@ Authors@R: c(
       role = c("aut", "cre")
     )
   )
-Description: Bayesian Inference (BI) is an R warpper toward python package BI.
+Description: Pre-alpha of Bayesian Inference (BI) is an R warpper toward python package BI.
 Encoding: UTF-8
 LazyData: true
-Imports: 
-    reticulate
-LinkingTo: reticulate
-SystemRequirements: Python (>= 3.6), a virtual environment with the 'BayesInference' library.
+Imports: reticulate
+SystemRequirements: Python (>= 3.6), 'BayesInference' python library.
 Depends: R (>= 3.5.0)
-Suggests: 
-    testthat (>= 3.0.0)
+Suggests: testthat (>= 3.0.0)
 Config/testthat/edition: 3
 RoxygenNote: 7.3.2
-License: GPL (>= 3)
+License: GPL (>= 3) + file LICENSE

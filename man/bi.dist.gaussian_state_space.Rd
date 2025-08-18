@@ -75,7 +75,7 @@ is the transition matrix, and \eqn{\epsilon} is the innovation noise.
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.gaussian_state_space(
   num_steps = 1,

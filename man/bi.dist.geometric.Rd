@@ -61,7 +61,7 @@ The Geometric distribution models the number of failures before the first succes
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.geometric(logits = 0.5, sample = TRUE)
 bi.dist.geometric(probs = 0.5, sample = TRUE)

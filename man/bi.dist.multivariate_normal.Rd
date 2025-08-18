@@ -76,7 +76,7 @@ where:
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.multivariate_normal(
 loc =  c(1.0, 0.0, -2.0),

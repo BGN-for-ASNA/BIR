@@ -72,7 +72,7 @@ covariance structure.
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m <- importBI(platform='cpu')
 bi.dist.lkj_cholesky(dimension = 2, concentration = 1., sample = TRUE)
 }

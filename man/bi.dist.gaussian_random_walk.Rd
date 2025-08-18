@@ -65,7 +65,7 @@ where \eqn{\epsilon_i \sim \mathcal{N}(0, \sigma^2)} are independent Gaussian ra
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.gaussian_random_walk(scale = c(1,5,10), sample = TRUE)
 }

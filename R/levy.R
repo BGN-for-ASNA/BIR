@@ -38,7 +38,7 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' bi.dist.levy( loc = 1, scale = 10,  sample = TRUE)
 #' }
@@ -47,8 +47,8 @@
 bi.dist.levy=function(loc, scale, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      seed=as.integer(seed);
-     .bi$dist$levy(
-       loc = jnp$array(loc),
-       scale = jnp$array(scale),
+     .BI_env$.bi_instance$dist$levy(
+       loc = .BI_env$jnp$array(loc),
+       scale = .BI_env$jnp$array(scale),
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

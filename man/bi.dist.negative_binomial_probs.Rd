@@ -63,7 +63,7 @@ The Negative Binomial distribution models the number of failures before the firs
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.negative_binomial_probs(probs =  c(0.2, 0.3, 0.5), total_count = 10, sample = TRUE)
 }

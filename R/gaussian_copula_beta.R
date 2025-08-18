@@ -37,7 +37,7 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' bi.dist.gaussian_copula_beta(
 #'   concentration1 = c(2.0, 3.0),
@@ -49,12 +49,12 @@
 bi.dist.gaussian_copula_beta=function(concentration1, concentration0, correlation_matrix=py_none(), correlation_cholesky=py_none(), validate_args=FALSE, name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      seed=as.integer(seed);
-     if(!.py$is_none(correlation_cholesky)){correlation_cholesky = jnp$array(correlation_cholesky)}
-     if(!.py$is_none(correlation_matrix)){correlation_matrix = jnp$array(correlation_matrix)}
+     if(!.BI_env$.py$is_none(correlation_cholesky)){correlation_cholesky = .BI_env$jnp$array(correlation_cholesky)}
+     if(!.BI_env$.py$is_none(correlation_matrix)){correlation_matrix = .BI_env$jnp$array(correlation_matrix)}
 
-     .bi$dist$gaussian_copula_beta(
-       concentration1 = jnp$array(concentration1),
-       concentration0 = jnp$array(concentration0),
+     .BI_env$.bi_instance$dist$gaussian_copula_beta(
+       concentration1 = .BI_env$jnp$array(concentration1),
+       concentration0 = .BI_env$jnp$array(concentration0),
        correlation_matrix = correlation_matrix,
        correlation_cholesky = correlation_cholesky,
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)

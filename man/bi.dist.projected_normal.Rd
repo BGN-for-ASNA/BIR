@@ -67,7 +67,7 @@ inference via reparametrized gradients.
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.projected_normal(concentration = c(1.0, 3.0, 2.0), sample = TRUE)
 }

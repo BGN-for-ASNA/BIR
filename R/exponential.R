@@ -34,7 +34,7 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' bi.dist.exponential(rate = c(0.1,1,2),sample = TRUE)
 #' }
@@ -43,7 +43,7 @@ bi.dist.exponential=function(rate=1.0, validate_args=py_none(), name='x', obs=py
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      seed=as.integer(seed);
-     .bi$dist$exponential(
-       rate=jnp$array(rate),
+     .BI_env$.bi_instance$dist$exponential(
+       rate=.BI_env$jnp$array(rate),
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

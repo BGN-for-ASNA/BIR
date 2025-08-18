@@ -63,7 +63,7 @@ Creates a Poisson distribution, a discrete probability distribution that models 
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.poisson(rate = c(0.2, 0.5, 0.8), sample = TRUE)
 }

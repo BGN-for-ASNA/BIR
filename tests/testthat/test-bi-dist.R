@@ -1,10 +1,9 @@
-library(testthat)
-
 test1 = requireNamespace("reticulate", quietly = TRUE)
 test2 = reticulate::py_available(initialize = TRUE)
 test3 = reticulate::py_module_available("BI")
 
 if(test1 & test2 & test3){
+library(testthat)
 library(BI)
 m=importBI(platform='cpu')
 
@@ -45,7 +44,7 @@ test_that("bi.dist.beta_proportion", {
 })
 
 test_that("bi.dist.binomial", {
-  res = bi.dist.binomial(probs = jnp$array(c(0.5,0.5)), sample = TRUE)
+  res = bi.dist.binomial(probs = .BI_env$jnp$array(c(0.5,0.5)), sample = TRUE)
   r2 = reticulate::py_to_r(res$tolist())
   expect_equal(r2,c(0,0))
 })
@@ -319,7 +318,7 @@ test_that("bi.dist.low_rank_multivariate_normal", {
   res =  bi.dist.low_rank_multivariate_normal(
     loc = bi.dist.normal(0,1,shape = c(event_size), sample = TRUE)*2,
     cov_factor = bi.dist.normal(0,1,shape = c(event_size, rank), sample = TRUE),
-    cov_diag = jnp$exp(bi.dist.normal(0,1,shape = c(event_size), sample = TRUE)),
+    cov_diag = .BI_env$jnp$exp(bi.dist.normal(0,1,shape = c(event_size), sample = TRUE)),
     sample = TRUE)
 
   r2 = reticulate::py_to_r(res$tolist())
@@ -338,11 +337,11 @@ test_that("bi.dist.matrix_normal", {
   n_cols = 4
   loc = matrix(rep(0,n_rows*n_cols), nrow = n_rows, ncol = n_cols,byrow = TRUE)
 
-  U_row_cov = jnp$array(matrix(c(1.0, 0.5, 0.2, 0.5, 1.0, 0.3, 0.2, 0.3, 1.0), nrow = n_rows, ncol = n_rows,byrow = TRUE))
-  scale_tril_row = jnp$linalg$cholesky(U_row_cov)
+  U_row_cov = .BI_env$jnp$array(matrix(c(1.0, 0.5, 0.2, 0.5, 1.0, 0.3, 0.2, 0.3, 1.0), nrow = n_rows, ncol = n_rows,byrow = TRUE))
+  scale_tril_row = .BI_env$jnp$linalg$cholesky(U_row_cov)
 
-  V_col_cov = jnp$array(matrix(c(2.0, -0.8, 0.1, 0.4, -0.8, 2.0, 0.2, -0.2, 0.1, 0.2, 2.0, 0.0, 0.4, -0.2, 0.0, 2.0), nrow = n_cols, ncol = n_cols,byrow = TRUE))
-  scale_tril_column = jnp$linalg$cholesky(V_col_cov)
+  V_col_cov = .BI_env$jnp$array(matrix(c(2.0, -0.8, 0.1, 0.4, -0.8, 2.0, 0.2, -0.2, 0.1, 0.2, 2.0, 0.0, 0.4, -0.2, 0.0, 2.0), nrow = n_cols, ncol = n_cols,byrow = TRUE))
+  scale_tril_column = .BI_env$jnp$linalg$cholesky(V_col_cov)
 
 
   res =  bi.dist.matrix_normal( loc = loc, scale_tril_row = scale_tril_row, scale_tril_column = scale_tril_column, sample = TRUE)
@@ -424,7 +423,7 @@ test_that("bi.dist.multivariate_student_t", {
   res = bi.dist.multivariate_student_t(
     df = 2,
     loc =  c(1.0, 0.0, -2.0),
-    scale_tril = jnp$linalg$cholesky(matrix(c( 2.0,  0.7, -0.3, 0.7,  1.0,  0.5, -0.3,  0.5,  1.5), nrow = 3, byrow = TRUE)),
+    scale_tril = .BI_env$jnp$linalg$cholesky(matrix(c( 2.0,  0.7, -0.3, 0.7,  1.0,  0.5, -0.3,  0.5,  1.5), nrow = 3, byrow = TRUE)),
     sample = TRUE)
   r2 = reticulate::py_to_r(res$tolist())
   expect_equal(r2, c(2.91015292,  0.36815279, -2.23324296))
@@ -434,7 +433,7 @@ test_that("bi.dist.multivariate_student_t", {
   res = bi.dist.multivariate_student_t(
     df = 2,
     loc =  c(1.0, 0.0, -2.0),
-    scale_tril = jnp$linalg$cholesky(matrix(c( 2.0,  0.7, -0.3, 0.7,  1.0,  0.5, -0.3,  0.5,  1.5), nrow = 3, byrow = TRUE)),
+    scale_tril = .BI_env$jnp$linalg$cholesky(matrix(c( 2.0,  0.7, -0.3, 0.7,  1.0,  0.5, -0.3,  0.5,  1.5), nrow = 3, byrow = TRUE)),
     sample = TRUE)
   r2 = reticulate::py_to_r(res$tolist())
   expect_equal(r2, c(2.91015292,  0.36815279, -2.23324296))

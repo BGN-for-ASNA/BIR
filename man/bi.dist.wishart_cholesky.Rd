@@ -77,7 +77,7 @@ of its Cholesky decomposition.
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.wishart_cholesky(
 concentration = 5,

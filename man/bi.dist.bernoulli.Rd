@@ -63,7 +63,7 @@ It is parameterized by the probability of success, often denoted as 'p'.
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.bernoulli(probs = 0.5, sample = TRUE)
 bi.dist.bernoulli(probs = 0.5, sample = TRUE, seed = 5)

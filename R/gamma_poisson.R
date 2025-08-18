@@ -36,7 +36,7 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' bi.dist.gamma_poisson(concentration = 1, sample = TRUE)
 #' }
@@ -45,8 +45,8 @@
 bi.dist.gamma_poisson=function(concentration, rate=1.0, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      seed=as.integer(seed);
-     .bi$dist$gamma_poisson(
-       concentration = jnp$array(concentration),
-       rate= jnp$array(rate),
+     .BI_env$.bi_instance$dist$gamma_poisson(
+       concentration = .BI_env$jnp$array(concentration),
+       rate= .BI_env$jnp$array(rate),
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

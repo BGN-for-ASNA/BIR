@@ -69,7 +69,7 @@ For \eqn{x < \mu}, the scale is \eqn{\sigma\kappa}, and for \eqn{x > \mu}, the s
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.asymmetric_laplace(sample = TRUE)
 }

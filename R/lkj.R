@@ -41,7 +41,7 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' bi.dist.lkj( dimension = 2, concentration=1.0, shape = c(1), sample = TRUE)
 #' }
@@ -50,9 +50,9 @@ bi.dist.lkj=function(dimension, concentration=1.0, sample_method='onion', valida
      shape=do.call(tuple, as.list(as.integer(shape)))
      dimension=as.integer(dimension);
      seed=as.integer(seed);
-     .bi$dist$lkj(
+     .BI_env$.bi_instance$dist$lkj(
        dimension = dimension,
-       concentration= jnp$array(concentration),
+       concentration= .BI_env$jnp$array(concentration),
        sample_method= sample_method,
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

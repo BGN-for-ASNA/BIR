@@ -65,7 +65,7 @@ Laplace approximation.
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.soft_laplace(loc = 0, scale = 2, sample = TRUE)
 }

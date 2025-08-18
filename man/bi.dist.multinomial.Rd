@@ -66,7 +66,7 @@ Samples from a Multinomial distribution, which models the probability of differe
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.multinomial(probs = c(0.5,0.1), sample = TRUE)
 }

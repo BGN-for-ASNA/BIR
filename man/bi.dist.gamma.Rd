@@ -62,7 +62,7 @@ concentration (k) and rate (theta).
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.gamma(concentration = 1 , sample = TRUE)
 }

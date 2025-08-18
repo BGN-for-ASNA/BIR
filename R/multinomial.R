@@ -31,7 +31,7 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' bi.dist.multinomial(probs = c(0.5,0.1), sample = TRUE)
 #' }
@@ -40,8 +40,8 @@ bi.dist.multinomial=function(total_count=1, probs=py_none(), logits=py_none(), t
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      seed=as.integer(seed);
-     if(!.py$is_none(total_count_max)){total_count_max=as.integer(total_count_max);}
-     if(!.py$is_none(logits)){logits= jnp$array(logits)}
-     if(!.py$is_none(probs)){probs= jnp$array(probs)}
-     .bi$dist$multinomial(total_count=total_count,  probs= probs, logits= logits, total_count_max= total_count_max,  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+     if(!.BI_env$.py$is_none(total_count_max)){total_count_max=as.integer(total_count_max);}
+     if(!.BI_env$.py$is_none(logits)){logits= .BI_env$jnp$array(logits)}
+     if(!.BI_env$.py$is_none(probs)){probs= .BI_env$jnp$array(probs)}
+     .BI_env$.bi_instance$dist$multinomial(total_count=total_count,  probs= probs, logits= logits, total_count_max= total_count_max,  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

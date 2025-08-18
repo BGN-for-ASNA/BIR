@@ -34,7 +34,7 @@
 #'         When \code{create_obj=TRUE}: The raw BI distribution object (for advanced use cases).
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' bi.dist.asymmetric_laplace(sample = TRUE)
 #' }
@@ -44,8 +44,8 @@ bi.dist.asymmetric_laplace=function(loc=0.0, scale=1.0, asymmetry=1.0, validate_
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      seed=as.integer(seed);
-     .bi$dist$asymmetric_laplace(
-       loc=jnp$array(loc),
-       scale= jnp$array(scale),
-       asymmetry= jnp$array(asymmetry),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+     .BI_env$.bi_instance$dist$asymmetric_laplace(
+       loc=.BI_env$jnp$array(loc),
+       scale= .BI_env$jnp$array(scale),
+       asymmetry= .BI_env$jnp$array(asymmetry),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

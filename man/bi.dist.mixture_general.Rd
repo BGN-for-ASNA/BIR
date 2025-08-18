@@ -65,7 +65,7 @@ A finite mixture of component distributions from different families.
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.mixture_general(
 mixing_distribution = bi.dist.categorical(probs = c(0.3, 0, 7),create_obj = TRUE),

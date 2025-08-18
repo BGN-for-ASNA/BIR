@@ -60,7 +60,7 @@ The Logistic distribution is a continuous probability distribution defined by tw
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.logistic(sample = TRUE)
 }

@@ -59,7 +59,7 @@ The Exponential distribution is a continuous probability distribution that model
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.exponential(rate = c(0.1,1,2),sample = TRUE)
 }

@@ -34,7 +34,7 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' bi.dist.zero_inflated_poisson(gate=0.3, rate = 5, sample = TRUE)
 #' }
@@ -42,8 +42,8 @@
 bi.dist.zero_inflated_poisson=function(gate, rate=1.0, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      seed=as.integer(seed);
-     .bi$dist$zero_inflated_poisson(
-       gate = jnp$array(gate),
-       rate = jnp$array(rate),
+     .BI_env$.bi_instance$dist$zero_inflated_poisson(
+       gate = .BI_env$jnp$array(gate),
+       rate = .BI_env$jnp$array(rate),
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

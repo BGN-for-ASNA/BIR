@@ -63,7 +63,7 @@ Samples from a Beta-Binomial distribution.
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.beta_binomial(0,1,sample = TRUE)
 }

@@ -13,7 +13,7 @@
 #' @param scale_tril_column A numeric vector, matrix, or array representing the lower cholesky of columns correlation matrix.
 #' @param shape A numeric vector specifying the shape of the distribution.  Must be a vector.
 #' @param event An integer representing the number of batch dimensions to reinterpret as event dimensions.
-#' @param mask A logical vector, matrix, or array (jnp$array) to mask observations.
+#' @param mask A logical vector, matrix, or array (.BI_env$jnp$array) to mask observations.
 #' @param create_obj A logical value. If `TRUE`, returns the raw BI distribution object instead of creating a sample site.
 #' @param validate_args Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.
 #' @param sample A logical value that controls the function's behavior. If `TRUE`,
@@ -39,22 +39,21 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' n_rows= 3
 #' n_cols = 4
 #' loc = matrix(rep(0,n_rows*n_cols), nrow = n_rows, ncol = n_cols,byrow = TRUE)
 #'
-#' U_row_cov = jnp$array(
+#' U_row_cov =
 #' matrix(c(1.0, 0.5, 0.2, 0.5, 1.0, 0.3, 0.2, 0.3, 1.0),
-#' nrow = n_rows, ncol = n_rows,byrow = TRUE))
-#' scale_tril_row = jnp$linalg$cholesky(U_row_cov)
+#' nrow = n_rows, ncol = n_rows,byrow = TRUE)
+#' scale_tril_row = chol(U_row_cov)
 #'
-#' V_col_cov = jnp$array(
-#' matrix(c(2.0, -0.8, 0.1, 0.4, -0.8, 2.0, 0.2, -0.2, 0.1,
+#' V_col_cov = matrix(c(2.0, -0.8, 0.1, 0.4, -0.8, 2.0, 0.2, -0.2, 0.1,
 #' 0.2, 2.0, 0.0, 0.4, -0.2, 0.0, 2.0),
-#' nrow = n_cols, ncol = n_cols,byrow = TRUE))
-#' scale_tril_column = jnp$linalg$cholesky(V_col_cov)
+#' nrow = n_cols, ncol = n_cols,byrow = TRUE)
+#' scale_tril_column = chol(V_col_cov)
 #'
 #'
 #' bi.dist.matrix_normal(
@@ -69,9 +68,9 @@
 bi.dist.matrix_normal=function(loc, scale_tril_row, scale_tril_column, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      seed=as.integer(seed);
-     .bi$dist$matrix_normal(
-       loc = jnp$array(loc),
-       scale_tril_row = jnp$array(scale_tril_row),
-       scale_tril_column = jnp$array(scale_tril_column),
+     .BI_env$.bi_instance$dist$matrix_normal(
+       loc = .BI_env$jnp$array(loc),
+       scale_tril_row = .BI_env$jnp$array(scale_tril_row),
+       scale_tril_column = .BI_env$jnp$array(scale_tril_column),
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

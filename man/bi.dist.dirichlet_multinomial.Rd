@@ -66,7 +66,7 @@ informative model.
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.dirichlet_multinomial(concentration = c(0,1), sample = TRUE, shape = (3))
 }

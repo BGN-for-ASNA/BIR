@@ -62,7 +62,7 @@ It is defined by a location parameter (implicitly 0) and a scale parameter.
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.half_normal(sample = TRUE)
 }

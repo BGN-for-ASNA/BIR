@@ -74,7 +74,7 @@ to a specified interval. It is defined by its location (`loc`), scale
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.truncated_normal(loc = 0, scale = 2, low = 0, high = 1.5, sample = TRUE)
 }

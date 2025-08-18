@@ -66,7 +66,7 @@ The probability density function (PDF) is:
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.gompertz(concentration = 5., sample = TRUE)
 }

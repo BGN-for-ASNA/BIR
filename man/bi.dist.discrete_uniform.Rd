@@ -65,7 +65,7 @@ Samples from a Discrete Uniform distribution.
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.discrete_uniform(sample = TRUE)
 }

@@ -62,7 +62,7 @@
 
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' bi.dist.asymmetric_laplace_quantile(sample = TRUE)
 #' }
@@ -71,9 +71,9 @@ bi.dist.asymmetric_laplace_quantile=function(loc=0.0, scale=1.0, quantile=0.5, v
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      seed=as.integer(seed);
-     .bi$dist$asymmetric_laplace_quantile(
-       loc=jnp$array(loc),
-       scale= jnp$array(scale),
-       quantile= jnp$array(quantile),
+     .BI_env$.bi_instance$dist$asymmetric_laplace_quantile(
+       loc=.BI_env$jnp$array(loc),
+       scale= .BI_env$jnp$array(scale),
+       quantile= .BI_env$jnp$array(quantile),
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

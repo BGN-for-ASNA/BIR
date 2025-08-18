@@ -68,7 +68,7 @@ context.
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.beta(concentration1 = 0, concentration0 = 1, sample = TRUE)
 }

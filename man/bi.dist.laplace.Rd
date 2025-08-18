@@ -67,7 +67,7 @@ The Laplace distribution is defined by its location parameter (loc) and scale pa
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.laplace(sample = TRUE)
 }

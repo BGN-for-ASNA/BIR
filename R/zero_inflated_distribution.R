@@ -54,7 +54,7 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' bi.dist.zero_inflated_distribution(
 #' base_dist = bi.dist.poisson(5, create_obj = TRUE),
@@ -66,12 +66,12 @@ bi.dist.zero_inflated_distribution=function(base_dist, gate=py_none(), gate_logi
      event=as.integer(event)
      seed=as.integer(seed);
 
-     if(!.py$is_none(gate)){gate = jnp$array(gate)}
-     if(!.py$is_none(gate_logits)){gate_logits = jnp$array(gate_logits)}
+     if(!.BI_env$.py$is_none(gate)){gate = .BI_env$jnp$array(gate)}
+     if(!.BI_env$.py$is_none(gate_logits)){gate_logits = .BI_env$jnp$array(gate_logits)}
 
-     .bi$dist$zero_inflated_distribution(
+     .BI_env$.bi_instance$dist$zero_inflated_distribution(
        base_dist,
-       gate =  jnp$array(gate),
+       gate =  .BI_env$jnp$array(gate),
        gate_logits = gate_logits,
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

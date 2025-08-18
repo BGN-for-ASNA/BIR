@@ -38,7 +38,7 @@
 #' @seealso \url{https://num.pyro.ai/en/stable/distributions.html#relaxedbernoulli}
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' bi.dist.relaxed_bernoulli(temperature = c(1,1), logits = 0.0, sample = TRUE)
 #' }
@@ -47,10 +47,10 @@ bi.dist.relaxed_bernoulli=function(temperature, probs=py_none(), logits=py_none(
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      seed=as.integer(seed);
-     if(!.py$is_none(logits)){logits=jnp$array(logits)}
-     if(!.py$is_none(probs)){probs=jnp$array(probs)}
-     .bi$dist$relaxed_bernoulli(
-       temperature = jnp$array(temperature),
+     if(!.BI_env$.py$is_none(logits)){logits=.BI_env$jnp$array(logits)}
+     if(!.BI_env$.py$is_none(probs)){probs=.BI_env$jnp$array(probs)}
+     .BI_env$.bi_instance$dist$relaxed_bernoulli(
+       temperature = .BI_env$jnp$array(temperature),
        probs = probs,
        logits = logits,
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)

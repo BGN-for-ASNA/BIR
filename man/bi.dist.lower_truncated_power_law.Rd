@@ -69,7 +69,7 @@ where `a` is the lower bound.
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.lower_truncated_power_law( alpha = c(-2, 2), low = c(1, 0.5),  sample = TRUE)
 }

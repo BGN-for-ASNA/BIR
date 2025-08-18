@@ -76,7 +76,7 @@ effectively removing observations outside the defined interval.
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.truncated_distribution(
 base_dist = bi.dist.normal(0,1, create_obj = TRUE),

@@ -82,7 +82,7 @@ where:
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.zero_inflated_distribution(
 base_dist = bi.dist.poisson(5, create_obj = TRUE),

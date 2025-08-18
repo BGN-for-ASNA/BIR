@@ -78,7 +78,7 @@ that falls to the left-hand side.
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.asymmetric_laplace_quantile(sample = TRUE)
 }

@@ -60,7 +60,7 @@ It is defined on the positive real numbers and is often used in situations where
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.half_cauchy(sample = TRUE)
 }

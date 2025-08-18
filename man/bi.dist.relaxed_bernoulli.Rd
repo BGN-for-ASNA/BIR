@@ -69,7 +69,7 @@ The probability density function (PDF) is defined as:
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.relaxed_bernoulli(temperature = c(1,1), logits = 0.0, sample = TRUE)
 }

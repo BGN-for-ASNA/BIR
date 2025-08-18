@@ -68,7 +68,7 @@ of a random variable is normally distributed.
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.log_normal(sample = TRUE)
 }

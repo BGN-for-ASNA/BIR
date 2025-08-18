@@ -69,7 +69,7 @@ where :math:`p_k` is the probability of outcome :math:`k`, and the sum is over a
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.categorical(probs = c(0.5,0.5), sample = TRUE, shape = c(3))
 }

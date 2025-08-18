@@ -67,7 +67,7 @@ Bayesian non-parametric models.
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.truncated_polya_gamma(batch_shape = c(), sample = TRUE)
 }

@@ -37,7 +37,7 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' bi.dist.ordered_logistic(predictor = c(0.2, 0.5, 0.8), cutpoints = c(-1.0, 0.0, 1.0), sample = TRUE)
 #' }
@@ -45,8 +45,8 @@
 bi.dist.ordered_logistic=function(predictor, cutpoints, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      seed=as.integer(seed);
-     .bi$dist$ordered_logistic(
-       predictor = jnp$array(predictor),
-       cutpoints = jnp$array(cutpoints),
+     .BI_env$.bi_instance$dist$ordered_logistic(
+       predictor = .BI_env$jnp$array(predictor),
+       cutpoints = .BI_env$jnp$array(cutpoints),
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

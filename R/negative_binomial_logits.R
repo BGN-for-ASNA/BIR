@@ -43,7 +43,7 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' bi.dist.negative_binomial_logits(logits =  c(0.2, 0.3, 0.5), total_count = 10, sample = TRUE)
 #' }
@@ -51,10 +51,10 @@
 bi.dist.negative_binomial_logits=function(total_count, logits, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      seed=as.integer(seed);
-     total_count=jnp$array(as.integer(total_count));
+     total_count=.BI_env$jnp$array(as.integer(total_count));
 
-     .bi$dist$negative_binomial_logits(
+     .BI_env$.bi_instance$dist$negative_binomial_logits(
        total_count,
-       logits = jnp$array(logits),
+       logits = .BI_env$jnp$array(logits),
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

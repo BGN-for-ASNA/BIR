@@ -44,7 +44,7 @@
 
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' bi.dist.bernoulli(probs = 0.5, sample = TRUE)
 #' bi.dist.bernoulli(probs = 0.5, sample = TRUE, seed = 5)
@@ -55,11 +55,10 @@ bi.dist.bernoulli=function(probs=py_none(), logits=py_none(), validate_args=py_n
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      seed=as.integer(seed);
-     reticulate::py_run_string("def is_none(x): return x is None")
-     if (.py$is_none(logits)){
-      .bi$dist$bernoulli(probs=jnp$array(probs),   validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+     if (.BI_env$.py$is_none(logits)){
+      .BI_env$.bi_instance$dist$bernoulli(probs=.BI_env$jnp$array(probs),   validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
      }else{
-       .bi$dist$bernoulli(logits= jnp$array(logits),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+       .BI_env$.bi_instance$dist$bernoulli(logits= .BI_env$jnp$array(logits),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 
      }
 }

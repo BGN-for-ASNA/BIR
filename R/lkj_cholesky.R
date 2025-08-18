@@ -44,7 +44,7 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m <- importBI(platform='cpu')
 #' bi.dist.lkj_cholesky(dimension = 2, concentration = 1., sample = TRUE)
 #' }
@@ -54,9 +54,9 @@ bi.dist.lkj_cholesky <- function(dimension, concentration=1.0, sample_method='on
   shape <- do.call(tuple, as.list(as.integer(shape)))
   dimension <- as.integer(dimension)
   seed <- as.integer(seed)
-  .bi$dist$lkj_cholesky(
-    dimension = jnp$array(dimension),
-    concentration = jnp$array(concentration),
+  .BI_env$.bi_instance$dist$lkj_cholesky(
+    dimension = .BI_env$jnp$array(dimension),
+    concentration = .BI_env$jnp$array(concentration),
     sample_method = sample_method,
     validate_args = validate_args,
     name = name,

@@ -34,9 +34,9 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
-#' bi.dist.binomial(probs = jnp$array(c(0.5,0.5)), sample = TRUE)
+#' bi.dist.binomial(probs = c(0.5,0.5), sample = TRUE)
 #' bi.dist.binomial(logits = 1, sample = TRUE)
 #' }
 #' @export
@@ -45,10 +45,10 @@ bi.dist.binomial=function(total_count=1, probs=py_none(), logits=py_none(), vali
      event=as.integer(event)
      seed=as.integer(seed);
      reticulate::py_run_string("def is_none(x): return x is None")
-     if (.py$is_none(logits)){
-      .bi$dist$binomial(total_count=jnp$array(as.integer(total_count)),  probs= jnp$array(probs),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+     if (.BI_env$.py$is_none(logits)){
+       .BI_env$.bi_instance$dist$binomial(total_count=.BI_env$jnp$array(as.integer(total_count)),  probs= .BI_env$jnp$array(probs),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
      }else{
-       .bi$dist$binomial(total_count=jnp$array(as.integer(total_count)),  logits= jnp$array(logits),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+       .BI_env$.bi_instance$dist$binomial(total_count=.BI_env$jnp$array(as.integer(total_count)),  logits= .BI_env$jnp$array(logits),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 
      }
 }

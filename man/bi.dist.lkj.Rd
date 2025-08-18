@@ -71,7 +71,7 @@ When \eqn{\eta < 1}, the distribution favors samples with small determinants.
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.lkj( dimension = 2, concentration=1.0, shape = c(1), sample = TRUE)
 }

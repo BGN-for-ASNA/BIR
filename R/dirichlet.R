@@ -35,7 +35,7 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' bi.dist.dirichlet(concentration =  c(0.1,.9), sample = TRUE)
 #' }
@@ -43,7 +43,7 @@
 bi.dist.dirichlet=function(concentration, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      seed=as.integer(seed);
-     .bi$dist$dirichlet(
-       concentration = jnp$array(concentration),
+     .BI_env$.bi_instance$dist$dirichlet(
+       concentration = .BI_env$jnp$array(concentration),
        validate_args = validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

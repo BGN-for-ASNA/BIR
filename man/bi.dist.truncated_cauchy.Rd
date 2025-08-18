@@ -76,7 +76,7 @@ which extend to infinity. The truncated version limits the support of the Cauchy
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.truncated_cauchy(loc = 0, scale = 2, low = 0, high = 1.5, sample = TRUE)
 }

@@ -63,7 +63,7 @@ It is often used to model the distribution of maximum values in a sequence of in
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.gumbel(sample = TRUE)
 }

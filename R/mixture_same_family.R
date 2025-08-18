@@ -37,7 +37,7 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' bi.dist.mixture_same_family(
 #' mixing_distribution = bi.dist.categorical(probs = c(0.3, 0.7),create_obj = TRUE),
@@ -48,7 +48,7 @@
 bi.dist.mixture_same_family=function(mixing_distribution, component_distribution, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      seed=as.integer(seed);
-     .bi$dist$mixture_same_family(
+     .BI_env$.bi_instance$dist$mixture_same_family(
        mixing_distribution,
        component_distribution ,
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)

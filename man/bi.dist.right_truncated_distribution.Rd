@@ -64,7 +64,7 @@ where observations are only possible within a certain range.
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.right_truncated_distribution(
 base_dist = bi.dist.normal(0,1, create_obj = TRUE),

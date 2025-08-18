@@ -72,7 +72,7 @@ when dealing with data that is known to be greater than a certain value.
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.left_truncated_distribution(
 base_dist = bi.dist.normal(loc = 1, scale = 10 ,  create_obj = TRUE),

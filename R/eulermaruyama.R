@@ -42,7 +42,7 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #'ornstein_uhlenbeck_sde <- function(x, t) {
 #'  # This function models dX = -theta * X dt + sigma dW
@@ -67,8 +67,8 @@ bi.dist.euler_maruyama=function(t, sde_fn, init_dist, validate_args=py_none(), n
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      seed=as.integer(seed);
-     .bi$dist$euler_maruyama(
-       t = jnp$array(t),
+     .BI_env$.bi_instance$dist$euler_maruyama(
+       t = .BI_env$jnp$array(t),
        sde_fn = sde_fn,
        init_dist = init_dist,
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)

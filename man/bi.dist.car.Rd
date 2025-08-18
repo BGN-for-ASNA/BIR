@@ -84,7 +84,7 @@ It is used to model spatial data, such as temperature or precipitation.
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.car(
   loc = c(1.,2.),

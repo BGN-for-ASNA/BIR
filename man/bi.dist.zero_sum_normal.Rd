@@ -60,7 +60,7 @@ Samples from a zero_sum_normal distribution, which is a Normal distribution wher
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.zero_sum_normal(scale=0.3, event_shape = c(), sample = TRUE)
 }

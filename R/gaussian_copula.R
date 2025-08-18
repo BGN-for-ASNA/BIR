@@ -42,7 +42,7 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' bi.dist.gaussian_copula(
 #'   marginal_dist = bi.dist.gamma(concentration = 1 ,  create_obj = TRUE) ,
@@ -53,9 +53,9 @@
 bi.dist.gaussian_copula=function(marginal_dist, correlation_matrix=py_none(), correlation_cholesky=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      seed=as.integer(seed);
-     if(!.py$is_none(correlation_cholesky)){correlation_cholesky = jnp$array(correlation_cholesky)}
-     if(!.py$is_none(correlation_matrix)){correlation_matrix = jnp$array(correlation_matrix)}
-     .bi$dist$gaussian_copula(
+     if(!.BI_env$.py$is_none(correlation_cholesky)){correlation_cholesky = .BI_env$jnp$array(correlation_cholesky)}
+     if(!.BI_env$.py$is_none(correlation_matrix)){correlation_matrix = .BI_env$jnp$array(correlation_matrix)}
+     .BI_env$.bi_instance$dist$gaussian_copula(
        marginal_dist = marginal_dist,
        correlation_matrix = correlation_matrix,
        correlation_cholesky = correlation_cholesky,

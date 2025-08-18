@@ -65,7 +65,7 @@ where each event has a probability of success.
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.negative_binomial(mean = 2, concentration = 0, sample = TRUE)
 }

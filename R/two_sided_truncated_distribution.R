@@ -41,7 +41,7 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' bi.dist.two_sided_truncated_distribution(
 #' base_dist = bi.dist.normal(0,1, create_obj = TRUE),
@@ -51,9 +51,9 @@
 bi.dist.two_sided_truncated_distribution=function(base_dist, low=0.0, high=1.0, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      seed=as.integer(seed);
-     .bi$dist$two_sided_truncated_distribution(
+     .BI_env$.bi_instance$dist$two_sided_truncated_distribution(
        base_dist,
-       low= jnp$array(low),
-       high = jnp$array(high),
+       low= .BI_env$jnp$array(low),
+       high = .BI_env$jnp$array(high),
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

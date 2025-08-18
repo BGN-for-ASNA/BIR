@@ -36,7 +36,7 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' bi.dist.delta(v = 5, sample = TRUE)
 #' }
@@ -47,9 +47,9 @@ bi.dist.delta=function(v=0.0, log_density=0.0, event_dim=0, validate_args=py_non
      event_dim=as.integer(event)
      event=as.integer(event)
      seed=as.integer(seed);
-     .bi$dist$delta(
-       v=jnp$array(v),
-       log_density= jnp$array(log_density),
-       event_dim= jnp$array(event_dim),
+     .BI_env$.bi_instance$dist$delta(
+       v=.BI_env$jnp$array(v),
+       log_density= .BI_env$jnp$array(log_density),
+       event_dim= .BI_env$jnp$array(event_dim),
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

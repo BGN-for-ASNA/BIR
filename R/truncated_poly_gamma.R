@@ -39,7 +39,7 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' bi.dist.truncated_polya_gamma(batch_shape = c(), sample = TRUE)
 #' }
@@ -48,7 +48,7 @@ bi.dist.truncated_polya_gamma=function(batch_shape=c(), validate_args=py_none(),
      shape=do.call(tuple, as.list(as.integer(shape)))
      batch_shape=do.call(tuple, as.list(as.integer(batch_shape)))
      seed=as.integer(seed);
-     .bi$dist$truncated_polya_gamma(
+     .BI_env$.bi_instance$dist$truncated_polya_gamma(
        batch_shape,
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

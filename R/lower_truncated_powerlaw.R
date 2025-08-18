@@ -41,7 +41,7 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' bi.dist.lower_truncated_power_law( alpha = c(-2, 2), low = c(1, 0.5),  sample = TRUE)
 #' }
@@ -50,8 +50,8 @@
 bi.dist.lower_truncated_power_law=function(alpha, low, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      seed=as.integer(seed);
-     .bi$dist$lower_truncated_power_law(
-       alpha = jnp$array(alpha),
-       low = jnp$array(low),
+     .BI_env$.bi_instance$dist$lower_truncated_power_law(
+       alpha = .BI_env$jnp$array(alpha),
+       low = .BI_env$jnp$array(low),
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

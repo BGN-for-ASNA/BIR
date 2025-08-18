@@ -67,7 +67,7 @@ by transforming the output of a Logistic distribution through a sigmoid function
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.relaxed_bernoulli_logits(1, 0.1, sample = TRUE)
 }

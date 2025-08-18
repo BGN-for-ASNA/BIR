@@ -72,14 +72,14 @@ where:
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 event_size = 10
 rank = 5
 bi.dist.low_rank_multivariate_normal(
   loc = bi.dist.normal(0,1,shape = c(event_size), sample = TRUE)*2,
   cov_factor = bi.dist.normal(0,1,shape = c(event_size, rank), sample = TRUE),
-  cov_diag = jnp$exp(bi.dist.normal(0,1,shape = c(event_size), sample = TRUE)),
+  cov_diag = bi.dist.normal(10,0.5,shape = c(event_size), sample = TRUE),
   sample = TRUE)
 }
 }

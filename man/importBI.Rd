@@ -32,6 +32,6 @@ but the initialized BI object is also returned for convenience.
 - Startup messages inform the user about the imports.
 }
 \examples{
-library(BI)
+library(BayesianInference)
 m = importBI()
 }

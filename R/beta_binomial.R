@@ -31,7 +31,7 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' bi.dist.beta_binomial(0,1,sample = TRUE)
 #' }
@@ -40,10 +40,10 @@ bi.dist.beta_binomial=function(concentration1, concentration0, total_count=1, va
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      seed=as.integer(seed);
-     .bi$dist$beta_binomial(
-       concentration1 = jnp$array(concentration1),
-       concentration0 = jnp$array(concentration0),
-       total_count = jnp$array(as.integer(total_count)),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+     .BI_env$.bi_instance$dist$beta_binomial(
+       concentration1 = .BI_env$jnp$array(concentration1),
+       concentration0 = .BI_env$jnp$array(concentration0),
+       total_count = .BI_env$jnp$array(as.integer(total_count)),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }
 
 

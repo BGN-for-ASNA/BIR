@@ -41,7 +41,7 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' bi.dist.beta_proportion(0, 1, sample = TRUE)
 #' }
@@ -50,8 +50,8 @@ bi.dist.beta_proportion=function(mean, concentration, validate_args=py_none(), n
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      seed=as.integer(seed);
-     .bi$dist$beta_proportion(
-       mean = jnp$array(mean),
-       concentration  = jnp$array(concentration),
+     .BI_env$.bi_instance$dist$beta_proportion(
+       mean = .BI_env$jnp$array(mean),
+       concentration  = .BI_env$jnp$array(concentration),
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

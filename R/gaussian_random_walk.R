@@ -35,7 +35,7 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' bi.dist.gaussian_random_walk(scale = c(1,5,10), sample = TRUE)
 #' }
@@ -44,8 +44,8 @@ bi.dist.gaussian_random_walk=function(scale=1.0, num_steps=1, validate_args=py_n
      shape=do.call(tuple, as.list(as.integer(shape)))
      seed=as.integer(seed);
      num_steps=as.integer(num_steps);
-     .bi$dist$gaussian_random_walk(
-       scale = jnp$array(scale),
+     .BI_env$.bi_instance$dist$gaussian_random_walk(
+       scale = .BI_env$jnp$array(scale),
        num_steps = num_steps,
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

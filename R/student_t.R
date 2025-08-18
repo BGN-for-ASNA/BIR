@@ -35,7 +35,7 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' bi.dist.student_t(df = 2, loc = 0, scale = 2, sample = TRUE)
 #' }
@@ -43,9 +43,9 @@
 bi.dist.student_t=function(df, loc=0.0, scale=1.0, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      seed=as.integer(seed);
-     .bi$dist$student_t(
-       df = jnp$array((df)),
-       loc= jnp$array(loc),
-       scale= jnp$array(scale),
+     .BI_env$.bi_instance$dist$student_t(
+       df = .BI_env$jnp$array((df)),
+       loc= .BI_env$jnp$array(loc),
+       scale= .BI_env$jnp$array(scale),
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

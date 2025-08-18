@@ -66,7 +66,7 @@ where \deqn{\mu} is the location parameter and \deqn{c} is the scale parameter.
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.levy( loc = 1, scale = 10,  sample = TRUE)
 }

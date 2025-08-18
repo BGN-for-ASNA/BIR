@@ -74,7 +74,7 @@ where:
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 ornstein_uhlenbeck_sde <- function(x, t) {
  # This function models dX = -theta * X dt + sigma dW

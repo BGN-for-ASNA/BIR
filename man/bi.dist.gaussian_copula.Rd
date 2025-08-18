@@ -74,7 +74,7 @@ where:
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.gaussian_copula(
   marginal_dist = bi.dist.gamma(concentration = 1 ,  create_obj = TRUE) ,

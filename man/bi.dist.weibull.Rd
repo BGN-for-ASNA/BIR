@@ -64,7 +64,7 @@ where \deqn{\alpha} is the scale parameter and \eqn{\beta} is the shape paramete
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.weibull(scale = c(10, 10), concentration = c(1,1), sample = TRUE)
 }

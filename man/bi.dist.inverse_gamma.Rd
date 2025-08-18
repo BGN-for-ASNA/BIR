@@ -68,7 +68,7 @@ precision parameters (inverse variance) in Bayesian statistics.
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.inverse_gamma(concentration = 5., sample = TRUE)
 }

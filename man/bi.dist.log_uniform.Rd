@@ -61,7 +61,7 @@ The Log Uniform distribution is defined over the positive real numbers and is th
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.log_uniform(1,2, sample = TRUE)
 }

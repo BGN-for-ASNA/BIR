@@ -68,7 +68,7 @@ determines the shape of the distribution.
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.chi2(c(0,2),sample = TRUE)
 }

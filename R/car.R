@@ -48,7 +48,7 @@
 
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' bi.dist.car(
 #'   loc = c(1.,2.),
@@ -64,11 +64,11 @@ bi.dist.car=function(loc, correlation, conditional_precision, adj_matrix, is_spa
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      seed=as.integer(seed);
-     if(!.py$is_none(correlation)){correlation = jnp$array(correlation)}
-     if(!.py$is_none(conditional_precision)){conditional_precision = jnp$array(conditional_precision)}
-     if(!.py$is_none(adj_matrix)){adj_matrix = jnp$array(adj_matrix)}
-     .bi$dist$car(
-       loc = jnp$array(loc),
+     if(!.BI_env$.py$is_none(correlation)){correlation = .BI_env$jnp$array(correlation)}
+     if(!.BI_env$.py$is_none(conditional_precision)){conditional_precision = .BI_env$jnp$array(conditional_precision)}
+     if(!.BI_env$.py$is_none(adj_matrix)){adj_matrix = .BI_env$jnp$array(adj_matrix)}
+     .BI_env$.bi_instance$dist$car(
+       loc = .BI_env$jnp$array(loc),
        correlation=correlation,
        conditional_precision=conditional_precision,
        adj_matrix=adj_matrix,

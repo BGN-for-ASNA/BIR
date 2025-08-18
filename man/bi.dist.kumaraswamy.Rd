@@ -65,7 +65,7 @@ It is a flexible distribution that can take on various shapes depending on its p
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.kumaraswamy(concentration1 = 5, concentration0 = 1., sample = TRUE)
 }

@@ -70,7 +70,7 @@ while the Beta distribution defines the marginal distributions of each variable.
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.gaussian_copula_beta(
   concentration1 = c(2.0, 3.0),

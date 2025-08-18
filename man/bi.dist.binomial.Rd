@@ -66,9 +66,9 @@ It represents the probability of obtaining exactly *k* successes in *n* trials, 
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
-bi.dist.binomial(probs = jnp$array(c(0.5,0.5)), sample = TRUE)
+bi.dist.binomial(probs = c(0.5,0.5), sample = TRUE)
 bi.dist.binomial(logits = 1, sample = TRUE)
 }
 }

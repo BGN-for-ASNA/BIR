@@ -65,7 +65,7 @@ The Student's t-distribution is a probability distribution that arises in hypoth
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.student_t(df = 2, loc = 0, scale = 2, sample = TRUE)
 }

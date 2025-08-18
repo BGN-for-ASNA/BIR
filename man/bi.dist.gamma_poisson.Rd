@@ -63,7 +63,7 @@ drawn from a :class:`bi.dist.gamma` distribution.
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.gamma_poisson(concentration = 1, sample = TRUE)
 }

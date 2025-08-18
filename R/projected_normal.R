@@ -41,7 +41,7 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' bi.dist.projected_normal(concentration = c(1.0, 3.0, 2.0), sample = TRUE)
 #' }
@@ -50,7 +50,7 @@
 bi.dist.projected_normal=function(concentration, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      seed=as.integer(seed);
-     .bi$dist$projected_normal(
-       concentration = jnp$array(concentration),
+     .BI_env$.bi_instance$dist$projected_normal(
+       concentration = .BI_env$jnp$array(concentration),
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

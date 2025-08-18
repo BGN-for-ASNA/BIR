@@ -40,7 +40,7 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' bi.dist.kumaraswamy(concentration1 = 5, concentration0 = 1., sample = TRUE)
 #' }
@@ -49,8 +49,8 @@
 bi.dist.kumaraswamy=function(concentration1, concentration0, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      seed=as.integer(seed);
-     .bi$dist$kumaraswamy(
-       concentration1 = jnp$array(concentration1),
-       concentration0 = jnp$array(concentration0),
+     .BI_env$.bi_instance$dist$kumaraswamy(
+       concentration1 = .BI_env$jnp$array(concentration1),
+       concentration0 = .BI_env$jnp$array(concentration0),
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

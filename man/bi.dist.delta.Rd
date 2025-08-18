@@ -65,7 +65,7 @@ The Delta distribution, also known as a point mass distribution, assigns probabi
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.delta(v = 5, sample = TRUE)
 }

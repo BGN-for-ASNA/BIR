@@ -33,7 +33,7 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' bi.dist.zero_sum_normal(scale=0.3, event_shape = c(), sample = TRUE)
 #' }
@@ -42,8 +42,8 @@ bi.dist.zero_sum_normal=function(scale, event_shape, validate_args=py_none(), na
      shape=do.call(tuple, as.list(as.integer(shape)))
      event_shape=do.call(tuple, as.list(as.integer(event_shape)))
      seed=as.integer(seed);
-     .bi$dist$zero_sum_normal(
-       scale = jnp$array(scale),
+     .BI_env$.bi_instance$dist$zero_sum_normal(
+       scale = .BI_env$jnp$array(scale),
        event_shape = event_shape,
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

@@ -21,24 +21,27 @@
 #'   respectively.
 #' - Startup messages inform the user about the imports.
 #' @examples
-#' library(BI)
+#' library(BayesianInference)
 #' m = importBI()
 #'@export
 #'
-importBI = function(platform='cpu', cores=NULL, deallocate = FALSE){
-  # Construct the path to the directory containing main.py
-  .bi <<- reticulate::import("BI")
-  .bi <<-  .bi$bi
-  packageStartupMessage("BIR load BI as .bi do not overwrite it!")
+importBI <- function(platform = 'cpu', cores = NULL, deallocate = FALSE) {
+  # Import the main BI module and its 'bi' class
+  .BI_env$.bi <- reticulate::import("BI")$bi
+  packageStartupMessage("BIR loaded BI into its internal environment.")
 
-  # Import the main module from the
-  jax<<-reticulate::import('jax')
-  jnp<<-reticulate::import('jax.numpy')
-  packageStartupMessage("jax an jax.numpy have been imported as jax and jnp respectivelly")
-  .bi <<- .bi(platform=platform, cores=reticulate::r_to_py(cores),
-              deallocate = reticulate::r_to_py(deallocate))
-  m=.bi
-  .py <<- reticulate::py_run_string("def is_none(x): return x is None")
-  return(m)
+  # Import jax and jax.numpy
+  .BI_env$jax <- reticulate::import('jax')
+  .BI_env$jnp <- reticulate::import('jax.numpy')
+  packageStartupMessage("jax and jax.numpy have been imported.")
+
+  # Initialize the BI class
+  .BI_env$.bi_instance <- .BI_env$.bi(platform = platform,
+                                        cores = reticulate::r_to_py(cores),
+                                        deallocate = reticulate::r_to_py(deallocate))
+
+  # A helper Python function if needed
+  .BI_env$.py <- reticulate::py_run_string("def is_none(x): return x is None")
+
+  invisible(.BI_env$.bi_instance)
 }
-

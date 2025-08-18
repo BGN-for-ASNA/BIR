@@ -71,7 +71,7 @@ precision parameter. It's useful for modeling rates and proportions.
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.beta_proportion(0, 1, sample = TRUE)
 }

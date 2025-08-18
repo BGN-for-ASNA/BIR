@@ -44,7 +44,7 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' bi.dist.wishart_cholesky(
 #' concentration = 5,
@@ -56,11 +56,11 @@
 bi.dist.wishart_cholesky=function(concentration, scale_matrix=py_none(), rate_matrix=py_none(), scale_tril=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      seed=as.integer(seed)
-     if(!.py$is_none(scale_matrix)){scale_matrix = jnp$array(scale_matrix)}
-     if(!.py$is_none(rate_matrix)){rate_matrix = jnp$array(rate_matrix)}
-     if(!.py$is_none(scale_tril)){scale_tril = jnp$array(scale_tril)}
-     .bi$dist$wishart_cholesky(
-       concentration  = jnp$array(concentration),
+     if(!.BI_env$.py$is_none(scale_matrix)){scale_matrix = .BI_env$jnp$array(scale_matrix)}
+     if(!.BI_env$.py$is_none(rate_matrix)){rate_matrix = .BI_env$jnp$array(rate_matrix)}
+     if(!.BI_env$.py$is_none(scale_tril)){scale_tril = .BI_env$jnp$array(scale_tril)}
+     .BI_env$.bi_instance$dist$wishart_cholesky(
+       concentration  = .BI_env$jnp$array(concentration),
        scale_matrix= scale_matrix,
        rate_matrix= rate_matrix,
        scale_tril= scale_tril,

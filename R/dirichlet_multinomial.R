@@ -36,7 +36,7 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' bi.dist.dirichlet_multinomial(concentration = c(0,1), sample = TRUE, shape = (3))
 #' }
@@ -46,8 +46,8 @@ bi.dist.dirichlet_multinomial=function(concentration, total_count=1, validate_ar
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      seed=as.integer(seed);
-     .bi$dist$dirichlet_multinomial(
-       concentration = jnp$array(concentration),
-       total_count = jnp$array(as.integer(total_count)),
+     .BI_env$.bi_instance$dist$dirichlet_multinomial(
+       concentration = .BI_env$jnp$array(concentration),
+       total_count = .BI_env$jnp$array(as.integer(total_count)),
        validate_args = validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

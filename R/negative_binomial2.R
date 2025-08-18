@@ -37,7 +37,7 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' bi.dist.negative_binomial(mean = 2, concentration = 0, sample = TRUE)
 #' }
@@ -46,8 +46,8 @@ bi.dist.negative_binomial=function(mean, concentration, validate_args=py_none(),
      shape=do.call(tuple, as.list(as.integer(shape)))
      seed=as.integer(seed);
 
-     .bi$dist$negative_binomial2(
-       mean = jnp$array(mean),
-       concentration = jnp$array(concentration),
+     .BI_env$.bi_instance$dist$negative_binomial2(
+       mean = .BI_env$jnp$array(mean),
+       concentration = .BI_env$jnp$array(concentration),
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

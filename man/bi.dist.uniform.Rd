@@ -67,7 +67,7 @@ where all values within a given interval are equally likely.
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.uniform(low = 0, high = 1.5, sample = TRUE)
 }

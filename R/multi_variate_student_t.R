@@ -39,12 +39,12 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' bi.dist.multivariate_student_t(
 #' df = 2,
 #' loc =  c(1.0, 0.0, -2.0),
-#' scale_tril = jnp$linalg$cholesky(
+#' scale_tril = chol(
 #' matrix(c( 2.0,  0.7, -0.3, 0.7,  1.0,  0.5, -0.3,  0.5,  1.5),
 #' nrow = 3, byrow = TRUE)),
 #' sample = TRUE)
@@ -53,9 +53,9 @@
 bi.dist.multivariate_student_t=function(df, loc=0.0, scale_tril=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      seed=as.integer(seed);
-     .bi$dist$multivariate_student_t(
-       df = jnp$array(df),
-       loc = jnp$array(loc),
-       scale_tril = jnp$array(scale_tril),
+     .BI_env$.bi_instance$dist$multivariate_student_t(
+       df = .BI_env$jnp$array(df),
+       loc = .BI_env$jnp$array(loc),
+       scale_tril = .BI_env$jnp$array(scale_tril),
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

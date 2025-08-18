@@ -68,12 +68,12 @@ often used to model data that is not normally distributed.
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.multivariate_student_t(
 df = 2,
 loc =  c(1.0, 0.0, -2.0),
-scale_tril = jnp$linalg$cholesky(
+scale_tril = chol(
 matrix(c( 2.0,  0.7, -0.3, 0.7,  1.0,  0.5, -0.3,  0.5,  1.5),
 nrow = 3, byrow = TRUE)),
 sample = TRUE)

@@ -70,7 +70,7 @@ where \deqn{p(x)} is the probability density function of the base distribution.
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.two_sided_truncated_distribution(
 base_dist = bi.dist.normal(0,1, create_obj = TRUE),

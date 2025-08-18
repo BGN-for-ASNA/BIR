@@ -40,7 +40,7 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' bi.dist.gaussian_state_space(
 #'   num_steps = 1,
@@ -53,13 +53,13 @@ bi.dist.gaussian_state_space=function(num_steps, transition_matrix, covariance_m
      shape=do.call(tuple, as.list(as.integer(shape)))
      seed=as.integer(seed);
      num_steps=as.integer(num_steps);
-     if(!.py$is_none(transition_matrix)){transition_matrix = jnp$array(transition_matrix)}
-     if(!.py$is_none(covariance_matrix)){covariance_matrix = jnp$array(covariance_matrix)}
-     if(!.py$is_none(precision_matrix)){precision_matrix = jnp$array(precision_matrix)}
-     if(!.py$is_none(scale_tril)){scale_tril = jnp$array(scale_tril)}
+     if(!.BI_env$.py$is_none(transition_matrix)){transition_matrix = .BI_env$jnp$array(transition_matrix)}
+     if(!.BI_env$.py$is_none(covariance_matrix)){covariance_matrix = .BI_env$jnp$array(covariance_matrix)}
+     if(!.BI_env$.py$is_none(precision_matrix)){precision_matrix = .BI_env$jnp$array(precision_matrix)}
+     if(!.BI_env$.py$is_none(scale_tril)){scale_tril = .BI_env$jnp$array(scale_tril)}
 
 
-      .bi$dist$gaussian_state_space(
+      .BI_env$.bi_instance$dist$gaussian_state_space(
         num_steps,
         transition_matrix = transition_matrix,
         covariance_matrix= covariance_matrix,

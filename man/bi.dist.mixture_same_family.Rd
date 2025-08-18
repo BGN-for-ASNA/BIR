@@ -65,7 +65,7 @@ implementation in :class:`bi.dist.mixture_general`.
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.mixture_same_family(
 mixing_distribution = bi.dist.categorical(probs = c(0.3, 0.7),create_obj = TRUE),

@@ -70,7 +70,7 @@ heavy tails, which extend indefinitely.
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.cauchy(sample = TRUE)
 }

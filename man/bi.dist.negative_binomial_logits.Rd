@@ -70,7 +70,7 @@ of a logit parameter. This allows for more flexible modeling of count data.
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.negative_binomial_logits(logits =  c(0.2, 0.3, 0.5), total_count = 10, sample = TRUE)
 }

@@ -41,7 +41,7 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m <- importBI(platform = "cpu")
 #' bi.dist.zero_inflated_negative_binomial(mean = 2, concentration = 1, gate = 0.3, sample = TRUE)
 #' }
@@ -51,13 +51,13 @@ bi.dist.zero_inflated_negative_binomial=function(mean, concentration, gate=py_no
      event=as.integer(event)
      seed=as.integer(seed);
 
-     if(!.py$is_none(gate)){gate = jnp$array(gate)}
-     if(!.py$is_none(gate_logits)){gate_logits = jnp$array(gate_logits)}
+     if(!.BI_env$.py$is_none(gate)){gate = .BI_env$jnp$array(gate)}
+     if(!.BI_env$.py$is_none(gate_logits)){gate_logits = .BI_env$jnp$array(gate_logits)}
 
 
-     .bi$dist$zero_inflated_negative_binomial2(
-       mean = jnp$array(mean),
-       concentration = jnp$array(concentration),
+     .BI_env$.bi_instance$dist$zero_inflated_negative_binomial2(
+       mean = .BI_env$jnp$array(mean),
+       concentration = .BI_env$jnp$array(concentration),
        gate = gate,
        gate_logits = gate_logits,
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)

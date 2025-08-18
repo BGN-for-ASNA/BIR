@@ -67,7 +67,7 @@ given the logits for each outcome. The logits are the natural logarithm of the o
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.multinomial_logits(logits =  c(0.2, 0.3, 0.5), total_count = 10, sample = TRUE)
 }

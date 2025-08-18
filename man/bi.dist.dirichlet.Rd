@@ -61,7 +61,7 @@ It is often used as a prior distribution for categorical distributions.
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.dirichlet(concentration =  c(0.1,.9), sample = TRUE)
 }

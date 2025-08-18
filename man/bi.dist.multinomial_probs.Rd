@@ -71,7 +71,7 @@ where:
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.multinomial_probs(probs =  c(0.2, 0.3, 0.5), total_count = c(10,10), sample = TRUE)
 }

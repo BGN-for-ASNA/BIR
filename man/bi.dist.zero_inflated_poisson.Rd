@@ -63,7 +63,7 @@ The probability of observing a zero is determined by the 'gate' parameter, while
 }
 \examples{
 \donttest{
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 bi.dist.zero_inflated_poisson(gate=0.3, rate = 5, sample = TRUE)
 }

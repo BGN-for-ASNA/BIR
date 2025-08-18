@@ -42,7 +42,7 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' bi.dist.chi2(c(0,2),sample = TRUE)
 #' }
@@ -52,7 +52,7 @@ bi.dist.chi2=function(df, validate_args=py_none(), name='x', obs=py_none(), mask
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      seed=as.integer(seed);
-     .bi$dist$chi2(
-       df = jnp$array(df),
+     .BI_env$.bi_instance$dist$chi2(
+       df = .BI_env$jnp$array(df),
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 }

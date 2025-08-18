@@ -71,7 +71,7 @@ height∼Normal(μ,σ)
     
 can be declared in the package as
 ```
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 
 # Load csv file

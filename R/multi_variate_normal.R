@@ -46,7 +46,7 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BI)
+#' library(BayesianInference)
 #' m=importBI(platform='cpu')
 #' bi.dist.multivariate_normal(
 #' loc =  c(1.0, 0.0, -2.0),
@@ -58,13 +58,13 @@
 #' @export
 bi.dist.multivariate_normal=function(loc=0.0, covariance_matrix=py_none(), precision_matrix=py_none(), scale_tril=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
-     if(!.py$is_none(covariance_matrix)){covariance_matrix = jnp$array(covariance_matrix)}
-     if(!.py$is_none(precision_matrix)){precision_matrix = jnp$array(precision_matrix)}
-     if(!.py$is_none(scale_tril)){scale_tril = jnp$array(scale_tril)}
+     if(!.BI_env$.py$is_none(covariance_matrix)){covariance_matrix = .BI_env$jnp$array(covariance_matrix)}
+     if(!.BI_env$.py$is_none(precision_matrix)){precision_matrix = .BI_env$jnp$array(precision_matrix)}
+     if(!.BI_env$.py$is_none(scale_tril)){scale_tril = .BI_env$jnp$array(scale_tril)}
 
      seed=as.integer(seed);
-     .bi$dist$multivariate_normal(
-       loc = jnp$array(loc),
+     .BI_env$.bi_instance$dist$multivariate_normal(
+       loc = .BI_env$jnp$array(loc),
        covariance_matrix = covariance_matrix,
        precision_matrix = precision_matrix,
        scale_tril = scale_tril,
