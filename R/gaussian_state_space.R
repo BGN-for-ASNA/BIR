@@ -16,6 +16,18 @@
 #' @param event An integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).
 #' @param mask A logical vector, matrix, or array representing an optional boolean array to mask observations. Defaults to `reticulate::py_none()`.
 #' @param create_obj A logical value. If `TRUE`, returns the raw BI distribution object instead of creating a sample site. Defaults to `FALSE`.
+#' @param validate_args Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.
+#' @param sample A logical value that controls the function's behavior. If `TRUE`,
+#'   the function will directly draw samples from the distribution. If `FALSE`,
+#'   it will create a random variable within a model. Defaults to `FALSE`.
+#' @param seed An integer used to set the random seed for reproducibility when
+#'   `sample = TRUE`. This argument has no effect when `sample = FALSE`, as
+#'   randomness is handled by the model's inference engine. Defaults to 0.
+#' @param obs A numeric vector or array of observed values. If provided, the
+#'   random variable is conditioned on these values. If `NULL`, the variable is
+#'   treated as a latent (unobserved) variable. Defaults to `NULL`.
+#' @param name A character string representing the name of the random variable
+#'   within a model. This is used to uniquely identify the variable. Defaults to 'x'.
 #'
 #' @return When `sample=FALSE`:
 #'  - When `sample=FALSE`, a BI  Gaussian State Space distribution object (for model building).
@@ -41,10 +53,10 @@ bi.dist.gaussian_state_space=function(num_steps, transition_matrix, covariance_m
      shape=do.call(tuple, as.list(as.integer(shape)))
      seed=as.integer(seed);
      num_steps=as.integer(num_steps);
-     if(!py$is_none(transition_matrix)){transition_matrix = jnp$array(transition_matrix)}
-     if(!py$is_none(covariance_matrix)){covariance_matrix = jnp$array(covariance_matrix)}
-     if(!py$is_none(precision_matrix)){precision_matrix = jnp$array(precision_matrix)}
-     if(!py$is_none(scale_tril)){scale_tril = jnp$array(scale_tril)}
+     if(!.py$is_none(transition_matrix)){transition_matrix = jnp$array(transition_matrix)}
+     if(!.py$is_none(covariance_matrix)){covariance_matrix = jnp$array(covariance_matrix)}
+     if(!.py$is_none(precision_matrix)){precision_matrix = jnp$array(precision_matrix)}
+     if(!.py$is_none(scale_tril)){scale_tril = jnp$array(scale_tril)}
 
 
       .bi$dist$gaussian_state_space(

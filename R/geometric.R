@@ -8,6 +8,18 @@
 #' @param event An integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).
 #' @param mask A logical vector, matrix, or array to mask observations.
 #' @param create_obj A logical value. If `TRUE`, returns the raw BI distribution object instead of creating a sample site.
+#' @param validate_args Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.
+#' @param sample A logical value that controls the function's behavior. If `TRUE`,
+#'   the function will directly draw samples from the distribution. If `FALSE`,
+#'   it will create a random variable within a model. Defaults to `FALSE`.
+#' @param seed An integer used to set the random seed for reproducibility when
+#'   `sample = TRUE`. This argument has no effect when `sample = FALSE`, as
+#'   randomness is handled by the model's inference engine. Defaults to 0.
+#' @param obs A numeric vector or array of observed values. If provided, the
+#'   random variable is conditioned on these values. If `NULL`, the variable is
+#'   treated as a latent (unobserved) variable. Defaults to `NULL`.
+#' @param name A character string representing the name of the random variable
+#'   within a model. This is used to uniquely identify the variable. Defaults to 'x'.
 #'
 #' @return
 #'    When \code{sample=FALSE}: A BI Geometric distribution object (for model building).
@@ -30,8 +42,8 @@ bi.dist.geometric=function(probs=py_none(), logits=py_none(), validate_args=py_n
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      seed=as.integer(seed);
-     if(!py$is_none(logits)){logits= jnp$array(logits)}
-     if(!py$is_none(probs)){probs= jnp$array(probs)}
+     if(!.py$is_none(logits)){logits= jnp$array(logits)}
+     if(!.py$is_none(probs)){probs= jnp$array(probs)}
      .bi$dist$geometric(probs = probs, logits = logits,  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 
 }

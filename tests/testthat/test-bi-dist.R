@@ -1,4 +1,10 @@
 library(testthat)
+
+test1 = requireNamespace("reticulate", quietly = TRUE)
+test2 = reticulate::py_available(initialize = TRUE)
+test3 = reticulate::py_module_available("BI")
+
+if(test1 & test2 & test3){
 library(BI)
 m=importBI(platform='cpu')
 
@@ -628,3 +634,4 @@ test_that("bi.dist.zero_sum_normal", {
   r2 = reticulate::py_to_r(res$tolist())
   expect_equal(r2, -0.061752642)
 })
+}

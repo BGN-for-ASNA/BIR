@@ -1,1 +1,1 @@
-utils::globalVariables(c(".bi", "jnp", "py",'jax'))
+utils::globalVariables(c(".bi", ".py","import", "jax", "jnp"))

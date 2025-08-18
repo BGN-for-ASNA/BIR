@@ -21,7 +21,26 @@ bi.dist.zero_sum_normal(
 \arguments{
 \item{scale}{A numeric vector or array representing the standard deviation of the underlying normal distribution before the zerosum constraint is enforced.}
 
+\item{event_shape}{(numeric vector): The shape of the event, defining the dimensions of the vector that will be constrained to sum to zero.}
+
+\item{validate_args}{Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.}
+
+\item{name}{A character string representing the name of the random variable
+within a model. This is used to uniquely identify the variable. Defaults to 'x'.}
+
+\item{obs}{A numeric vector or array of observed values. If provided, the
+random variable is conditioned on these values. If `NULL`, the variable is
+treated as a latent (unobserved) variable. Defaults to `NULL`.}
+
 \item{mask}{A logical vector or array. Optional boolean array to mask observations.}
+
+\item{sample}{A logical value that controls the function's behavior. If `TRUE`,
+the function will directly draw samples from the distribution. If `FALSE`,
+it will create a random variable within a model. Defaults to `FALSE`.}
+
+\item{seed}{An integer used to set the random seed for reproducibility when
+`sample = TRUE`. This argument has no effect when `sample = FALSE`, as
+randomness is handled by the model's inference engine. Defaults to 0.}
 
 \item{shape}{A numeric vector specifying the shape of the distribution. When `sample=False` (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When `sample=True` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
 
@@ -32,7 +51,7 @@ bi.dist.zero_sum_normal(
 \value{
 - When \code{sample=FALSE}, a BI zero_sum_normal distribution object (for model building).
 
- - When \code{sample=TRUE}, a JAX array of samples drawn from the MultinomialProbs distribution (for direct sampling).
+ - When \code{sample=TRUE}, a JAX array of samples drawn from the zero_sum_normal distribution (for direct sampling).
 
  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
@@ -40,7 +59,7 @@ bi.dist.zero_sum_normal(
 Samples from a zero_sum_normal distribution, which is a Normal distribution where one or more axes are constrained to sum to zero.
 }
 \examples{
-#' \donttest{
+\donttest{
 library(BI)
 m=importBI(platform='cpu')
 bi.dist.zero_sum_normal(scale=0.3, event_shape = c(), sample = TRUE)

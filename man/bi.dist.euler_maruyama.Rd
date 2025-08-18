@@ -28,9 +28,28 @@ bi.dist.euler_maruyama(
 
 \item{validate_args}{A logical value indicating whether to validate the arguments. Defaults to `TRUE`.}
 
+\item{name}{A character string representing the name of the random variable
+within a model. This is used to uniquely identify the variable. Defaults to 'x'.}
+
+\item{obs}{A numeric vector or array of observed values. If provided, the
+random variable is conditioned on these values. If `NULL`, the variable is
+treated as a latent (unobserved) variable. Defaults to `NULL`.}
+
+\item{mask}{A logical vector. Optional boolean array to mask observations.}
+
+\item{sample}{A logical value that controls the function's behavior. If `TRUE`,
+the function will directly draw samples from the distribution. If `FALSE`,
+it will create a random variable within a model. Defaults to `FALSE`.}
+
+\item{seed}{An integer used to set the random seed for reproducibility when
+`sample = TRUE`. This argument has no effect when `sample = FALSE`, as
+randomness is handled by the model's inference engine. Defaults to 0.}
+
 \item{shape}{A numeric vector specifying the shape of the output tensor.  Defaults to `NULL`.}
 
-\item{sample_shape}{A numeric vector specifying the shape of the samples to draw. Defaults to `NULL`.}
+\item{event}{Integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).}
+
+\item{create_obj}{Logical. If TRUE, returns the raw BI distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
 }
 \value{
 - When \code{sample=FALSE}, a BI Euler-Maruyama distribution object (for model building).

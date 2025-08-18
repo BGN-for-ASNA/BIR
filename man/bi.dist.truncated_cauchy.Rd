@@ -25,7 +25,29 @@ bi.dist.truncated_cauchy(
 
 \item{scale}{Scale parameter of the Cauchy distribution.}
 
+\item{low}{(float, jnp.ndarray, optional): The lower truncation point. If `None`, the distribution is only truncated on the right. Defaults to `None`.}
+
+\item{high}{(float, jnp.ndarray, optional): The upper truncation point. If `None`, the distribution is only truncated on the left. Defaults to `None`.
+validate_args (bool, optional): Whether to enable validation of distribution parameters. Defaults to `None`.}
+
+\item{validate_args}{Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.}
+
+\item{name}{A character string representing the name of the random variable
+within a model. This is used to uniquely identify the variable. Defaults to 'x'.}
+
+\item{obs}{A numeric vector or array of observed values. If provided, the
+random variable is conditioned on these values. If `NULL`, the variable is
+treated as a latent (unobserved) variable. Defaults to `NULL`.}
+
 \item{mask}{An optional boolean array to mask observations.}
+
+\item{sample}{A logical value that controls the function's behavior. If `TRUE`,
+the function will directly draw samples from the distribution. If `FALSE`,
+it will create a random variable within a model. Defaults to `FALSE`.}
+
+\item{seed}{An integer used to set the random seed for reproducibility when
+`sample = TRUE`. This argument has no effect when `sample = FALSE`, as
+randomness is handled by the model's inference engine. Defaults to 0.}
 
 \item{shape}{A numeric vector. When `sample=False` (model building),
 this is used with `.expand(shape)` to set the distribution's batch shape.
@@ -50,7 +72,7 @@ The Cauchy distribution, also known as the Lorentz distribution, is a continuous
 that appears frequently in various areas of mathematics and physics. It is characterized by its heavy tails,
 which extend to infinity. The truncated version limits the support of the Cauchy distribution to a specified interval.
 
-\deqn{f(x) = \frac{1}{\pi \cdot c \cdot (1 + ((x - b) / c)^2)}  \text{ for } a < x < b}
+\deqn{f_{\text{trunc}}(x) = \frac{f_{\text{base}}(x)}{F_{\text{base}}(\text{high}) - F_{\text{base}}(\text{low})} \quad \text{for } \text{low} \le x \le \text{high}}
 }
 \examples{
 \donttest{
