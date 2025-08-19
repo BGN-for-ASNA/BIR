@@ -31,15 +31,26 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install Python dependencies
-        run: |
-          pip install ipython matplotlib
-
+      # This step installs all R package dependencies, including rcmdcheck.
+      # It's more efficient and uses caching.
       - name: Install R dependencies
-        run: |
-          Rscript -e 'install.packages("remotes")'
-          Rscript -e 'remotes::install_deps(dependencies = TRUE)'
-          Rscript -e 'remotes::install_cran("rcmdcheck")'
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::rcmdcheck
+            any::remotes
 
-      - name: Check
-        run: Rscript -e 'rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "warning", check_dir = "check")'
+      # This is the crucial step. It assumes your Python package setup
+      # is in a subdirectory (e.g., 'inst/python').
+      # 'pip install .' will install the local Python package and pull in all
+      # its dependencies like ipython, numpyro, jax, etc., automatically.
+      # You might need to change the path 'inst/python'.
+      - name: Install Python module and dependencies
+        run: |
+          pip install .
+        working-directory: inst/python # <-- ADJUST THIS PATH if your setup.py is elsewhere
+
+      - name: Check R package
+        run: |
+          rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "warning", check_dir = "check")
+        shell: Rscript {0}
