@@ -1,3 +1,4 @@
+#' @keywords internal
 onLoad <- function(libname = NULL, pkgname = "BI") {
   if (!requireNamespace("reticulate", quietly = TRUE)) {
     packageStartupMessage("The 'reticulate' package is required but not installed. Please install it via install.packages('reticulate').")

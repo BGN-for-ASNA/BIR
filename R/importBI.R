@@ -28,6 +28,21 @@
 #'@export
 #'
 importBI <- function(platform = 'cpu', cores = NULL, deallocate = FALSE) {
+  if(.BI_env$ready == FALSE){
+    test1 = requireNamespace("reticulate", quietly = TRUE)
+    test2 = reticulate::py_available(initialize = TRUE)
+    test3 = reticulate::py_module_available("BI")
+    if(!test1){
+      message("reticulate package is not available and required.")
+    }
+    if(!test2){
+      message("Python is not available and required.")
+    }
+    if(!test3){
+      message("BayesInference module is not available and required.")
+    }
+    stop()
+  }
   # Import the main BI module and its 'bi' class
   .BI_env$.bi <- reticulate::import("BI")$bi
   packageStartupMessage("BIR loaded BI into its internal environment.")
