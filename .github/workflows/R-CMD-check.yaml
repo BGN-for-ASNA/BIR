@@ -1,11 +1,10 @@
-name: R-CMD-check (CRAN Simulation)
+name: R-CMD-check
 
 on:
   push:
   pull_request:
 
-jobs:
-  R-CMD-check:
+jobs R-CMD-check:
     runs-on: ${{ matrix.config.os }}
     name: ${{ matrix.config.os }} (R ${{ matrix.config.r }})
     strategy:
@@ -31,13 +30,21 @@ jobs:
         with:
           python-version: "3.11"
 
-      # We ONLY install the package that runs the checks.
-      # We DO NOT install the dependencies of your package.
-      - name: Install rcmdcheck
-        run: Rscript -e 'install.packages("rcmdcheck")'
+      # This is the crucial step that fixes the errors.
+      # It installs all R packages needed for the check to run:
+      #  1. Your package's dependencies from DESCRIPTION (like reticulate).
+      #  2. The rcmdcheck package itself.
+      # This prepares the environment for the check.
+      - name: Install R Dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::rcmdcheck
+            any::remotes
 
-      # The rcmdcheck function will now be responsible for installing your package
-      # and all its dependencies (R and Python) from scratch.
-      - name: Check R package
+      # The check process will now run. When it tests your package's installation
+      # and examples, your .onLoad function will be triggered, which will then
+      # handle the installation of all necessary Python packages.
+      - name: Check R Package
         run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
         shell: Rscript {0}
