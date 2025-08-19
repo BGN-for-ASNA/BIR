@@ -31,7 +31,7 @@ importBI <- function(platform = 'cpu', cores = NULL, deallocate = FALSE) {
   packageStartupMessage("BIR loaded BI into its internal environment.")
 
   # Import jax and jax.numpy
-  .BI_env$jax <- reticulate::import('jax')
+  #.BI_env$jax <- reticulate::import('jax')
   .BI_env$jnp <- reticulate::import('jax.numpy')
   packageStartupMessage("jax and jax.numpy have been imported.")
 
