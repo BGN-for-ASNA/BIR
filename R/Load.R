@@ -16,6 +16,12 @@ onLoad <- function(libname = NULL, pkgname = "BI") {
       packageStartupMessage("Failed to install 'BayesInference'. Please install it manually using 'reticulate::py_install(\"BayesInference\", pip = TRUE)'.")
     })
   }
+  test1 = requireNamespace("reticulate", quietly = TRUE)
+  test2 = reticulate::py_available(initialize = TRUE)
+  test3 = reticulate::py_module_available("BI")
+  if(any(!test1, !test2, !test3)){
+    .BI_env$ready <- FALSE
+  }
 }
 
 .onAttach <- function(libname, pkgname) {

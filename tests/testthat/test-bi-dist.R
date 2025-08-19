@@ -633,4 +633,14 @@ test_that("bi.dist.zero_sum_normal", {
   r2 = reticulate::py_to_r(res$tolist())
   expect_equal(r2, -0.061752642)
 })
+}else{
+  if(!test1){
+    message("reticulate package is not available and required.")
+  }
+  if(!test2){
+    message("Python is not available and required.")
+  }
+  if(!test3){
+    message("BayesInference module is not available and required.")
+  }
 }
