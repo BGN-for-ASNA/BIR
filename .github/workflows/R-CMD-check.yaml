@@ -39,6 +39,8 @@ jobs:
           packages: |
             any::rcmdcheck
             any::remotes
+            any::reticulate
+            any::testthat
 
 
       - name: Check R package
