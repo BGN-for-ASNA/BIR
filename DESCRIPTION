@@ -9,12 +9,7 @@ Authors@R: c(
       role = c("aut", "cre")
     )
   )
-Description: Pre-alpha version of 'Bayesian Inference' ('BI') using 'python' and 'BI'. 
-It aims to unify the modeling experience by providing an intuitive model-building syntax 
-together with the flexibility of low-level abstraction coding. It also includes pre-built 
-functions for high-level abstraction and supports hardware-accelerated computation for 
-improved scalability, including parallelization, vectorization, and execution on CPU, GPU, or TPU.
-
+Description: Pre-alpha version of 'Bayesian Inference' ('BI') using 'python' and 'BI'. It aims to unify the modeling experience by providing an intuitive model-building syntax together with the flexibility of low-level abstraction coding. It also includes pre-built functions for high-level abstraction and supports hardware-accelerated computation for improved scalability, including parallelization, vectorization, and execution on CPU, GPU, or TPU.
 Encoding: UTF-8
 LazyData: true
 Imports: reticulate
