@@ -25,6 +25,7 @@ onLoad <- function(libname = NULL, pkgname = "BI") {
   }
 }
 
+#' @keywords internal
 .onAttach <- function(libname, pkgname) {
   # This function runs ONLY in an interactive session to show a message.
   packageStartupMessage("For documentation, run the command: bi.doc()")
