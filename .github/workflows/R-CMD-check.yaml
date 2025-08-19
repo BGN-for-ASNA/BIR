@@ -1,4 +1,4 @@
-name: R-CMD-check
+name: R-CMD-check (CRAN Simulation)
 
 on:
   push:
@@ -31,15 +31,13 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install Python dependencies
-        run: |
-          pip install ipython matplotlib
+      # We ONLY install the package that runs the checks.
+      # We DO NOT install the dependencies of your package.
+      - name: Install rcmdcheck
+        run: Rscript -e 'install.packages("rcmdcheck")'
 
-      - name: Install R dependencies
-        run: |
-          Rscript -e 'install.packages("remotes")'
-          Rscript -e 'remotes::install_deps(dependencies = TRUE)'
-          Rscript -e 'remotes::install_cran("rcmdcheck")'
-
-      - name: Check
-        run: Rscript -e 'rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "warning", check_dir = "check")'
+      # The rcmdcheck function will now be responsible for installing your package
+      # and all its dependencies (R and Python) from scratch.
+      - name: Check R package
+        run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
+        shell: Rscript {0}
