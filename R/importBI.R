@@ -21,8 +21,10 @@
 #'   respectively.
 #' - Startup messages inform the user about the imports.
 #' @examples
+#' \dontrun{
 #' library(BayesianInference)
 #' m = importBI()
+#' }
 #'@export
 #'
 importBI <- function(platform = 'cpu', cores = NULL, deallocate = FALSE) {
