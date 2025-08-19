@@ -1,3 +1,8 @@
+#' Package load hook
+#'
+#' Internal function to run when the package is loaded.
+#' @param libname Internal.
+#' @param pkgname Internal.
 #' @keywords internal
 onLoad <- function(libname = NULL, pkgname = "BI") {
   if (!requireNamespace("reticulate", quietly = TRUE)) {
@@ -22,7 +27,7 @@ onLoad <- function(libname = NULL, pkgname = "BI") {
   test3 = reticulate::py_module_available("BI")
   if(any(!test1, !test2, !test3)){
     .BI_env$ready <- FALSE
-  }
+  }else{.BI_env$ready <- TRUE}
 }
 
 #' @keywords internal
