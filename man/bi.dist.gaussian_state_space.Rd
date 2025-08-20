@@ -85,5 +85,5 @@ bi.dist.gaussian_state_space(
 }
 }
 \seealso{
-This is a wrapper of  \url{https://numpyroai/en/stable/distributions.html#gaussianstate}
+This is a wrapper of  \url{https://num.pyro.ai/en/stable/distributions.html#gaussianstatespace}
 }

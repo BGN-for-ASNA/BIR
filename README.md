@@ -46,7 +46,7 @@ Currently, the package provides:
     + ESS evolution plot
       
 # Model and Results Comparisons
-This package has been built following the Rethinking Classes of 2024. Each week, new approaches have been implemented and validated with the main example of the corresponding week. All models can be found in the following [Jupyter notebook](https://github.com/BGN-for-ASNA/BI/blob/main/rethinking.ipynb). 
+This package has been built following the Rethinking Classes of 2024. Each week, new approaches have been implemented and validated with the main example of the corresponding week. All models can be found in the following [Jupyter notebook](https://github.com/BGN-for-ASNA/BI/blob/main/Test/1.Rethinking_np.ipynb). 
 
 # Why?
 ## 1.  To learn

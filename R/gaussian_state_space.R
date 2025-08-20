@@ -36,7 +36,7 @@
 #'
 #'  - When `create_obj=TRUE`, the raw BI distribution object (for advanced use cases).
 #'
-#' @seealso This is a wrapper of  \url{https://numpyroai/en/stable/distributions.html#gaussianstate}
+#' @seealso This is a wrapper of  \url{https://num.pyro.ai/en/stable/distributions.html#gaussianstatespace}
 #'
 #' @examples
 #' \donttest{

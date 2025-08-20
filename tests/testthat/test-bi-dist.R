@@ -4,7 +4,7 @@ test3 = reticulate::py_module_available("BI")
 
 if(test1 & test2 & test3){
 library(testthat)
-library(BI)
+library(BayesianInference)
 m=importBI(platform='cpu')
 
 test_that("bi.dist.asymmetric_laplace", {
