@@ -10,26 +10,31 @@ Currently, the package provides:
       
 + Models (Using Numpyro):
   
-    + [Linear Regression for continuous variable](Documentation/1.&#32;Linear&#32;Regression&#32;for&#32;continuous&#32;variable.qmd)
-    + [Multiple continuous Variable](Documentation/2.&#32;Multiple&#32;continuous&#32;Variables.qmd)
-    + [Interaction between variables](Documentation/3.&#32;Interaction&#32;between&#32;continuous&#32;variables.qmd)
-    + [Categorical variable](Documentation/4.&#32;Categorical&#32;variable.qmd)
-    + [Binomial model](Documentation/5.&#32;Binomial&#32;model.qmd)
-    + [Beta binomial](Documentation/6.&#32;Beta&#32;binomial&#32;model.qmd)
-    + [Poisson model](Documentation/7.&#32;Poisson&#32;model.qmd)
-    + [Gamma-Poisson](Documentation/8.&#32;Gamma-Poisson.qmd)
-    + [Multinomial](Documentation/9.&#32;Multinomial&#32;model.qmd)    
-    + [Dirichlet model](Documentation/10.&#32;Dirichlet&#32;model&#32;(wip).qmd)
-    + [Zero inflated](Documentation/11.&#32;Zero&#32;inflated.qmd)
-    + [Varying intercept](Documentation/12.&#32;Varying&#32;intercepts.qmd)
-    + [Varying slopes](Documentation/13.&#32Varying&#32slopes.qmd)
-    + [Gaussian processes](Documentation/14.&#32;Gaussian&#32;processes&#32;(wip).qmd)  
-    + [Measuring error](Documentation/15.&#32;Measuring&#32;error&#32;(wip).qmd) 
-    + [Latent variable](Documentation/17.&#32;Latent&#32;variable&#32;(wip).qmd) 
-    + [PCA](Documentation/18.&#32;PCA&#32;(wip).qmd) 
-    + [Network model](Documentation/18.&#32;Network&#32;model.qmd) 
-    + [Network with block model](Documentation/19.&#32;Network&#32;with&#32;block&#32;model.qmd)
-    + [Network control for data collection biases ](Documentation/20.&#32;Network&#32;control&#32;for&#32;data&#32;collection&#32;biases&#32;(wip).qmd)
+    + Linear Regression for continuous variable
+    + Multiple continuous Variable
+    + Interaction between variables
+    + Categorical variable
+    + Binomial model
+    + Beta binomial
+    + Poisson model
+    + Gamma-Poisson
+    + Multinomial
+    + Dirichlet model
+    + Zero inflated
+    + Varying intercept
+    + Varying slopes
+    + Gaussian processes
+    + Measuring error
+    + Latent variable
+    + PCA
+    + GMM
+    + DPMM
+    + Network model
+    + Network with block model
+    + Network control for data collection biases 
+    + Network metrics
+    + Network Based Diffusion analysis
+    + BNN
 
 + Model diagnostics (using ARVIZ):
     + Data frame with summary statistics
