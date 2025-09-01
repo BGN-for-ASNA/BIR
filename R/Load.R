@@ -13,18 +13,22 @@ onLoad <- function(libname = NULL, pkgname = "BI") {
     packageStartupMessage("Python is not available on this system. Please install Python before using this package.")
   }
 
-  if (!reticulate::py_module_available("BI")) {
-    packageStartupMessage("Python package 'BI' not found; installing now...")
-    # Consider making this installation optional or asking the user for confirmation.
-    tryCatch({
-      reticulate::py_install("BayesInference", pip = TRUE)
-    }, error = function(e) {
-      packageStartupMessage("Failed to install 'BayesInference'. Please install it manually using 'reticulate::py_install(\"BayesInference\", pip = TRUE)'.")
-    })
-  }
+  test3 <- tryCatch(
+    {
+      reticulate::py_run_string("import BI")
+      message("Python module 'BI' is available.")
+      TRUE   # just the last expression, no return()
+    },
+    error = function(e) {
+      message("'BI' not found, install BayesInference")
+      message('Use: reticulate::py_install("BayesInference", pip = TRUE)')
+      FALSE  # note capital FALSE
+    }
+  )
+  
   test1 = requireNamespace("reticulate", quietly = TRUE)
   test2 = reticulate::py_available(initialize = TRUE)
-  test3 = reticulate::py_module_available("BI")
+
   if(any(!test1, !test2, !test3)){
     .BI_env$ready <- FALSE
   }else{.BI_env$ready <- TRUE}
