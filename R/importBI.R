@@ -31,7 +31,19 @@ importBI <- function(platform = 'cpu', cores = NULL, deallocate = FALSE) {
   if(.BI_env$ready == FALSE){
     test1 = requireNamespace("reticulate", quietly = TRUE)
     test2 = reticulate::py_available(initialize = TRUE)
-    test3 = reticulate::py_module_available("BI")
+      test3 <- tryCatch(
+    {
+      reticulate::py_run_string("import BI")
+      message("Python module 'BI' is available.")
+      TRUE   # just the last expression, no return()
+    },
+    error = function(e) {
+      message("'BI' not found, install BayesInference")
+      message('Use: reticulate::py_install("BayesInference", pip = TRUE)')
+      FALSE  # note capital FALSE
+    }
+  )
+  
     if(!test1){
       message("reticulate package is not available and required.")
     }
