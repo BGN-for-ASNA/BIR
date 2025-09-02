@@ -1,0 +1,47 @@
+#' Install Python dependencies for BayesInference
+#'
+#' Creates a dedicated Python virtual environment and installs the necessary
+#' Python packages for the BayesInference package.
+#'
+#' @param type The installation type. Must be either 'cpu' or 'gpu'.
+#' @param envname The base name for the virtual environment. The function will
+#'   append '-cpu' or '-gpu' to this name.
+#'
+#' @export
+install_BI <- function(type = "cpu", envname = "r-bayes-inference") {
+  # 1. Validate the user's choice
+  if (!type %in% c("cpu", "gpu")) {
+    stop("Error: 'type' must be either 'cpu' or 'gpu'.")
+  }
+  
+  # 2. Create a unique environment name for the chosen type
+  full_envname <- paste0(envname, "-", type)
+  
+  # 3. Check if the environment already exists to avoid errors
+  if (reticulate::virtualenv_exists(full_envname)) {
+    message("Virtual environment '", full_envname, "' already exists.")
+  } else {
+    message("Creating virtual environment '", full_envname, "'...")
+    reticulate::virtualenv_create(full_envname)
+  }
+  
+  # 4. Construct the correct package name with the extra
+  package_to_install <- paste0("BayesInference[", type, "]")
+  
+  message("Installing ", package_to_install, " into '", full_envname, "'...")
+  
+  # 5. Install the packages
+  reticulate::py_install(
+    packages = package_to_install,
+    envname = full_envname,
+    pip = TRUE,
+    pip_options = "--upgrade" # It's good practice to ensure latest packages
+  )
+  
+  message("\n----------------------------------------------------")
+  message("Installation complete!")
+  message("Please restart your R session for the changes to take effect.")
+  message("The BayesInference package will now automatically use the '", full_envname, "' environment.")
+  message("----------------------------------------------------")
+}
+
