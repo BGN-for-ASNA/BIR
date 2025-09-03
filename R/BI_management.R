@@ -89,8 +89,8 @@ BI_check_presence <- function(){
   }
 }
 
-#' Load the BI module from Python
-#'
+#' @title Load the BI module from Python
+#' @details
 #' Internal helper function to import the `BI` Python module.
 #'
 #' @return The Python object corresponding to `BI$bi`.
@@ -104,8 +104,8 @@ BI_load <- function(){
 }
 
 
-#' Run a starting test for the BI environment
-#'
+#' @title Run a starting test for the BI environment
+#' @details
 #' Internal function that checks whether Python and the `BayesInference`
 #' package are available, and sets internal `.BI_env` flags accordingly.
 #'
