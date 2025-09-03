@@ -28,36 +28,7 @@
 #'@export
 #'
 importBI <- function(platform = 'cpu', cores = NULL, deallocate = FALSE) {
-  if(.BI_env$ready == FALSE){
-    test1 = requireNamespace("reticulate", quietly = TRUE)
-    test2 = reticulate::py_available(initialize = TRUE)
-      test3 <- tryCatch(
-    {
-      reticulate::py_run_string("import BI")
-      message("Python module 'BI' is available.")
-      TRUE   # just the last expression, no return()
-    },
-    error = function(e) {
-      message("'BI' not found, install BayesInference")
-      message('Use: reticulate::py_install("BayesInference", pip = TRUE)')
-      FALSE  # note capital FALSE
-    }
-  )
-  
-    if(!test1){
-      message("reticulate package is not available and required.")
-    }
-    if(!test2){
-      message("Python is not available and required.")
-    }
-    if(!test3){
-      message("BayesInference module is not available and required.")
-    }
-    stop()
-  }
-  # Import the main BI module and its 'bi' class
-  .BI_env$.bi <- reticulate::import("BI")$bi
-  packageStartupMessage("BIR loaded BI into its internal environment.")
+  if(.BI_env$loaded == FALSE){BI_starting_test()}
 
   # Import jax and jax.numpy
   #.BI_env$jax <- reticulate::import('jax')
@@ -66,8 +37,8 @@ importBI <- function(platform = 'cpu', cores = NULL, deallocate = FALSE) {
 
   # Initialize the BI class
   .BI_env$.bi_instance <- .BI_env$.bi(platform = platform,
-                                        cores = reticulate::r_to_py(cores),
-                                        deallocate = reticulate::r_to_py(deallocate))
+                                    cores = reticulate::r_to_py(cores),
+                                    deallocate = reticulate::r_to_py(deallocate))
 
   # A helper Python function if needed
   .BI_env$.py <- reticulate::py_run_string("def is_none(x): return x is None")
