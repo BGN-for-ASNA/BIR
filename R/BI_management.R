@@ -84,6 +84,7 @@ BI_check_presence <- function(){
   if(test){return(test)}else{
     packageStartupMessage("\n----------------------------------------------------")
     packageStartupMessage("BI could not be found!")
+    packageStartupMessage("You need to isntall BI python version first with command : BayesianInference::BI_install()")
     packageStartupMessage("----------------------------------------------------")
     return(FALSE)
   }
