@@ -26,9 +26,9 @@ BI_install <- function(type = "cpu") {
 
   # 4. Construct the correct package name with the extra
   package_to_install <- paste0("BayesInference[", type, "]")
-  
+
   message("Installing ", package_to_install, "'...")
-  
+
   # 5. Install the packages
   reticulate::py_install(
     packages = package_to_install,
@@ -36,7 +36,7 @@ BI_install <- function(type = "cpu") {
     pip = TRUE,
     pip_options = "--upgrade" # To ensure latest packages
   )
-  
+
   message("\n----------------------------------------------------")
   message("Installation complete!")
   message("----------------------------------------------------")
@@ -62,7 +62,7 @@ BI_install <- function(type = "cpu") {
 #' @keywords internal
 BI_uninstall <- function(){
   reticulate::virtualenv_remove(
-    packages = "BayesInference", 
+    packages = "BayesInference",
     ignore_installed = FALSE
   )
   packageStartupMessage("\n----------------------------------------------------")
@@ -84,7 +84,7 @@ BI_check_presence <- function(){
   if(test){return(test)}else{
     packageStartupMessage("\n----------------------------------------------------")
     packageStartupMessage("BI could not be found!")
-    packageStartupMessage("You need to isntall BI python version first with command : BayesianInference::BI_install()")
+    packageStartupMessage("You need to isntall BI python version first with command : BI_install()")
     packageStartupMessage("----------------------------------------------------")
     return(FALSE)
   }
@@ -120,11 +120,11 @@ BI_starting_test <- function(){
   if (!requireNamespace("reticulate", quietly = TRUE)) {
     packageStartupMessage("The 'reticulate' package is required but not installed. Please install it via install.packages('reticulate').")
   }
-  
+
   if (!reticulate::py_available(initialize = TRUE)) {
     packageStartupMessage("Python is not available on this system. Please install Python before using this package.")
   }
-  
+
   return = BI_check_presence()
-  
+
 }
