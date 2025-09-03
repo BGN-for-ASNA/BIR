@@ -73,13 +73,13 @@ BI_uninstall <- function(){
 #' @title Check if BayesInference Python package is installed
 #' @description
 #' Internal function to check whether the Python package `BayesInference`
-#' is installed in the virtual environment `"r-bayes-inference-cpu"`.
+#' is installed in the default reticualte virtual environment.
 #'
 #' @return Logical `TRUE` if the package is found, otherwise prints a message
 #'   and returns `NULL`.
 #' @keywords internal
 BI_check_presence <- function(){
-  r = reticulate::py_list_packages(envname = "r-bayes-inference-cpu")
+  r = reticulate::py_list_packages()
   test = "BayesInference" %in% r$package
   if(test){return(test)}else{
     message("\n----------------------------------------------------")
