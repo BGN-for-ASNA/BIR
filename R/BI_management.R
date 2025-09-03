@@ -85,6 +85,7 @@ BI_check_presence <- function(){
     message("\n----------------------------------------------------")
     message("BI could not be found!")
     message("----------------------------------------------------")
+    return(FALSE)
   }
 }
 
@@ -99,7 +100,6 @@ BI_load <- function(){
     message("\n----------------------------------------------------")
     message("An error occurred: ", e$message)
     message("----------------------------------------------------")
-    FALSE
   })
 }
 
@@ -124,14 +124,6 @@ BI_starting_test <- function(){
     packageStartupMessage("Python is not available on this system. Please install Python before using this package.")
   }
   
-  test1 = requireNamespace("reticulate", quietly = TRUE)
-  test2 = reticulate::py_available(initialize = TRUE)
-  test3 = BI_check_presence()
-  if(any(!test1, !test2, !test3)){
-    .BI_env$loaded <- FALSE
-  }else{
-    .BI_env$loaded <- TRUE
-    .BI_env$.bi <- BI_load()
-  }
+  return = BI_check_presence()
   
 }
