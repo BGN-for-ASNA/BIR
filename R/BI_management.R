@@ -95,8 +95,14 @@ BI_check_presence <- function(){
 #' @return The Python object corresponding to `BI$bi`.
 #' @keywords internal
 BI_load <- function(){
-  return(reticulate::import("BI")$bi)
+  tryCatch({reticulate::import("BI")$bi}, error = function(e) {
+    message("\n----------------------------------------------------")
+    message("An error occurred: ", e$message)
+    message("----------------------------------------------------")
+    FALSE
+  })
 }
+
 
 #' Run a starting test for the BI environment
 #'
