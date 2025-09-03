@@ -65,9 +65,9 @@ BI_uninstall <- function(){
     packages = "BayesInference", 
     ignore_installed = FALSE
   )
-  message("\n----------------------------------------------------")
-  message("BI uninstalled")
-  message("----------------------------------------------------")
+  packageStartupMessage("\n----------------------------------------------------")
+  packageStartupMessage("BI uninstalled")
+  packageStartupMessage("----------------------------------------------------")
 }
 
 #' @title Check if BayesInference Python package is installed
@@ -82,9 +82,9 @@ BI_check_presence <- function(){
   r = reticulate::py_list_packages()
   test = "BayesInference" %in% r$package
   if(test){return(test)}else{
-    message("\n----------------------------------------------------")
-    message("BI could not be found!")
-    message("----------------------------------------------------")
+    packageStartupMessage("\n----------------------------------------------------")
+    packageStartupMessage("BI could not be found!")
+    packageStartupMessage("----------------------------------------------------")
     return(FALSE)
   }
 }
