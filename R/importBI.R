@@ -27,9 +27,13 @@
 #' }
 #'@export
 #'
-importBI <- function(platform = 'cpu', cores = NULL, deallocate = FALSE) {
-  if(.BI_env$loaded == FALSE){BI_starting_test()}
-
+importBI <- function(platform = 'cpu', cores = NULL, deallocate = FALSE) { 
+  tryCatch({.BI_env$.bi <- BI_load(); .BI_env$loaded <- TRUE}, error = function(e){
+    message("\n----------------------------------------------------")
+    message("An error occurred: ", e$message)
+    message("----------------------------------------------------")
+  }
+ 
   # Import jax and jax.numpy
   #.BI_env$jax <- reticulate::import('jax')
   .BI_env$jnp <- reticulate::import('jax.numpy')
