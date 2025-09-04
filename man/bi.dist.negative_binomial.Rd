@@ -5,8 +5,9 @@
 \title{Samples from a Negative Binomial distribution.}
 \usage{
 bi.dist.negative_binomial(
-  mean,
-  concentration,
+  total_count,
+  probs,
+  logits = py_none(),
   validate_args = py_none(),
   name = "x",
   obs = py_none(),
@@ -19,10 +20,6 @@ bi.dist.negative_binomial(
 )
 }
 \arguments{
-\item{mean}{A numeric vector, matrix, or array representing the mean of the distribution. This is equivalent to the \eqn{mu} parameter.}
-
-\item{concentration}{A numeric vector, matrix, or array representing the concentration parameter. This is equivalent to the \eqn{alpha} parameter.}
-
 \item{validate_args}{Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.}
 
 \item{name}{A character string representing the name of the random variable
@@ -47,6 +44,10 @@ randomness is handled by the model's inference engine. Defaults to 0.}
 \item{event}{An integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).}
 
 \item{create_obj}{A logical value. If `TRUE`, returns the raw BI distribution object instead of creating a sample site.}
+
+\item{mean}{A numeric vector, matrix, or array representing the mean of the distribution. This is equivalent to the \eqn{mu} parameter.}
+
+\item{concentration}{A numeric vector, matrix, or array representing the concentration parameter. This is equivalent to the \eqn{alpha} parameter.}
 }
 \value{
 - When \code{sample=FALSE}, a BI Negative Binomial distribution object (for model building).
@@ -67,7 +68,7 @@ where each event has a probability of success.
 \donttest{
 library(BayesianInference)
 m=importBI(platform='cpu')
-bi.dist.negative_binomial(mean = 2, concentration = 0, sample = TRUE)
+bi.dist.negative_binomial(total_count = 100, probs = 0.5, sample = TRUE)
 }
 }
 \seealso{

@@ -62,8 +62,7 @@ BI_install <- function(type = "cpu") {
 #' @keywords internal
 BI_uninstall <- function(){
   reticulate::virtualenv_remove(
-    packages = "BayesInference",
-    ignore_installed = FALSE
+    packages = "BayesInference"
   )
   packageStartupMessage("\n----------------------------------------------------")
   packageStartupMessage("BI uninstalled")
@@ -85,9 +84,101 @@ BI_check_presence <- function(){
     packageStartupMessage("\n----------------------------------------------------")
     packageStartupMessage("BI could not be found!")
     packageStartupMessage("You need to isntall BI python version first with command : BI_install()")
+    packageStartupMessage("If you already ran BI_install() and still see this message, you may need to force dependency versions using: BI_force_dependencies_version()")
     packageStartupMessage("----------------------------------------------------")
     return(FALSE)
   }
+}
+
+#' @title Force Installation of Specific Python Dependency Versions
+#' @description
+#' Internal function to install specific versions of Python packages required
+#' for the package to function correctly. This ensures a consistent and stable
+#' environment, avoiding potential conflicts from dependency updates.
+#'
+#' @details
+#' This function uses `reticulate::py_install` to force the installation of
+#' specific versions of `jax`, `jaxlib`, `numpyro`, `numpy`,
+#' `tensorflow_probability`, `arviz`, `matplotlib`, `seaborn`, `pandas`, and
+#' `scipy`. It is particularly useful for ensuring reproducibility of analyses.
+#'
+#' @return Invisible `NULL`. The function is called for its side effect of
+#'   installing Python packages.
+#' @keywords internal
+#'
+BI_force_dependencies_version <- function(){
+  reticulate::py_install(
+    packages = 'jax==0.5.1',
+    #envname = full_envname,
+    pip = TRUE,
+    pip_options = c('--upgrade')
+  )
+
+  reticulate::py_install(
+    packages = 'jaxlib==0.5.1',
+    #envname = full_envname,
+    pip = TRUE,
+    pip_options = c('--upgrade')
+  )
+
+
+  reticulate::py_install(
+    packages = 'numpyro== 0.18.0',
+    #envname = full_envname,
+    pip = TRUE,
+    pip_options = c('--upgrade')
+  )
+
+  reticulate::py_install(
+    packages = 'numpy== 1.26.3',
+    #envname = full_envname,
+    pip = TRUE,
+    pip_options = c('--upgrade')
+  )
+
+
+  reticulate::py_install(
+    packages = 'tensorflow_probability== 0.24.0',
+    #envname = full_envname,
+    pip = TRUE,
+    pip_options = c('--upgrade')
+  )
+
+  reticulate::py_install(
+    packages = 'arviz==0.17.0',
+    #envname = full_envname,
+    pip = TRUE,
+    pip_options = c('--upgrade')
+  )
+
+  reticulate::py_install(
+    packages = 'matplotlib==3.8.2',
+    #envname = full_envname,
+    pip = TRUE,
+    pip_options = c('--upgrade')
+  )
+
+  reticulate::py_install(
+    packages = 'seaborn==0.13.2',
+    #envname = full_envname,
+    pip = TRUE,
+    pip_options = c('--upgrade')
+  )
+
+
+  reticulate::py_install(
+    packages = 'pandas==2.2.3',
+    #envname = full_envname,
+    pip = TRUE,
+    pip_options = c('--upgrade')
+  )
+
+  reticulate::py_install(
+    packages = 'scipy  == 1.11.4',
+    #envname = full_envname,
+    pip = TRUE,
+    pip_options = c('--upgrade')
+  )
 }
 
 #' @title Load the BI module from Python

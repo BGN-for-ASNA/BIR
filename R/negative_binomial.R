@@ -39,15 +39,17 @@
 #' \donttest{
 #' library(BayesianInference)
 #' m=importBI(platform='cpu')
-#' bi.dist.negative_binomial(mean = 2, concentration = 0, sample = TRUE)
+#' bi.dist.negative_binomial(total_count = 100, probs = 0.5, sample = TRUE)
 #' }
 #' @export
-bi.dist.negative_binomial=function(mean, concentration, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
+bi.dist.negative_binomial=function(total_count, probs, logits=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      seed=as.integer(seed);
 
-     .BI_env$.bi_instance$dist$negative_binomial2(
-       mean = .BI_env$jnp$array(mean),
-       concentration = .BI_env$jnp$array(concentration),
-       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+     if (.BI_env$.py$is_none(logits)){
+       .BI_env$.bi_instance$dist$negative_binomial(total_count = .BI_env$jnp$array(total_count), probs=.BI_env$jnp$array(probs),   validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+     }else{
+       .BI_env$.bi_instance$dist$negative_binomial(total_count = .BI_env$jnp$array(total_count), logits= .BI_env$jnp$array(logits),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+
+     }
 }

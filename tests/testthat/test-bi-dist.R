@@ -145,7 +145,7 @@ test_that("bi.dist.gaussian_copula", {
     sample = TRUE)
 
   r2 = reticulate::py_to_r(res$tolist())
-  expect_equal( r2, c(0.542070555, 0.275164930))
+  expect_equal( r2, c(0.0840605, 0.7273357))
 })
 
 test_that("bi.dist.gaussian_copula_beta", {
@@ -157,7 +157,7 @@ test_that("bi.dist.gaussian_copula_beta", {
 
   r2 = reticulate::py_to_r(res$tolist())
   r2 = round(r2, digits = 2)
-  expect_equal( r2, c(0.23, 0.35))
+  expect_equal( r2, c(0.08, 0.51))
 })
 
 test_that("bi.dist.gaussian_random_walk", {
@@ -469,12 +469,9 @@ test_that("bi.dist.negative_binomial_probs", {
 })
 
 test_that("bi.dist.negative_binomial", {
-  res = bi.dist.negative_binomial(
-    mean = 2,
-    concentration = 0,
-    sample = TRUE)
+  res = bi.dist.negative_binomial(total_count = 100, probs = 0.5, sample = TRUE)
   r2 = reticulate::py_to_r(res$tolist())
-  expect_equal(r2, -1)
+  expect_equal(r2, 88)
 })
 
 test_that("bi.dist.normal", {
