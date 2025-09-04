@@ -30,7 +30,7 @@ BI_install <- function(type = "cpu") {
   message("Installing ", package_to_install, "'...")
 
   # 5. Install the packages
-  reticulate::py_install(
+  reticulate::py_require(
     packages = package_to_install,
     #envname = full_envname,
     pip = TRUE,
@@ -107,14 +107,14 @@ BI_check_presence <- function(){
 #' @keywords internal
 #'
 BI_force_dependencies_version <- function(){
-  reticulate::py_install(
+  reticulate::py_require(
     packages = 'jax==0.5.1',
     #envname = full_envname,
     pip = TRUE,
     pip_options = c('--upgrade')
   )
 
-  reticulate::py_install(
+  reticulate::py_require(
     packages = 'jaxlib==0.5.1',
     #envname = full_envname,
     pip = TRUE,
@@ -122,14 +122,14 @@ BI_force_dependencies_version <- function(){
   )
 
 
-  reticulate::py_install(
+  reticulate::py_require(
     packages = 'numpyro== 0.18.0',
     #envname = full_envname,
     pip = TRUE,
     pip_options = c('--upgrade')
   )
 
-  reticulate::py_install(
+  reticulate::py_require(
     packages = 'numpy== 1.26.3',
     #envname = full_envname,
     pip = TRUE,
@@ -137,28 +137,28 @@ BI_force_dependencies_version <- function(){
   )
 
 
-  reticulate::py_install(
+  reticulate::py_require(
     packages = 'tensorflow_probability== 0.24.0',
     #envname = full_envname,
     pip = TRUE,
     pip_options = c('--upgrade')
   )
 
-  reticulate::py_install(
+  reticulate::py_require(
     packages = 'arviz==0.17.0',
     #envname = full_envname,
     pip = TRUE,
     pip_options = c('--upgrade')
   )
 
-  reticulate::py_install(
+  reticulate::py_require(
     packages = 'matplotlib==3.8.2',
     #envname = full_envname,
     pip = TRUE,
     pip_options = c('--upgrade')
   )
 
-  reticulate::py_install(
+  reticulate::py_require(
     packages = 'seaborn==0.13.2',
     #envname = full_envname,
     pip = TRUE,
@@ -166,14 +166,14 @@ BI_force_dependencies_version <- function(){
   )
 
 
-  reticulate::py_install(
+  reticulate::py_require(
     packages = 'pandas==2.2.3',
     #envname = full_envname,
     pip = TRUE,
     pip_options = c('--upgrade')
   )
 
-  reticulate::py_install(
+  reticulate::py_require(
     packages = 'scipy  == 1.11.4',
     #envname = full_envname,
     pip = TRUE,
