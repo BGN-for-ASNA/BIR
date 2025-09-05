@@ -7,8 +7,9 @@
 #'
 #' \deqn{P(k) = \frac{\Gamma(k + \alpha)}{\Gamma(k + 1) \Gamma(\alpha)} \left(\frac{\beta}{\alpha + \beta}\right)^k \left(1 - \frac{\beta}{\alpha + \beta}\right)^k}
 #'
-#' @param mean A numeric vector, matrix, or array representing the mean of the distribution. This is equivalent to the \eqn{mu} parameter.
-#' @param concentration A numeric vector, matrix, or array representing the concentration parameter. This is equivalent to the \eqn{alpha} parameter.
+#' @param total_count (int): The number of trials *n*.
+#' @param probs A numeric vector, matrix, or array representing the probability of success for each Bernoulli trial. Must be between 0 and 1.
+#' @param logits A numeric vector, matrix, or array representing the log-odds of success for each trial.
 #' @param shape A numeric vector.  Used with `.expand(shape)` when `sample=False` (model building) to set the distribution's batch shape. When `sample=True` (direct sampling), used as `sample_shape` to draw a raw JAX array of the given shape.
 #' @param event An integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).
 #' @param mask An optional logical vector to mask observations.

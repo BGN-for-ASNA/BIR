@@ -7,7 +7,7 @@
 #'
 #' @param total_count (int): The number of trials *n*.
 #' @param probs (numeric vector, optional): The probability of success *p* for each trial. Must be between 0 and 1.
-#' @param logits (numeric vector, optional): The log-odds of success for each trial. `probs = jax.nn.sigmoid(logits)`.
+#' @param logits (numeric vector, optional): The log-odds of success for each trial.
 #' @param shape (numeric vector): A multi-purpose argument for shaping. When `sample=False` (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When `sample=True` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.
 #' @param event (int): The number of batch dimensions to reinterpret as event dimensions (used in model building).
 #' @param mask (numeric vector of booleans, optional): Optional boolean array to mask observations.

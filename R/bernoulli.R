@@ -8,7 +8,7 @@
 #'
 #' @param probs A numeric vector, matrix, or array representing the probability of success for each Bernoulli trial. Must be between 0 and 1.
 #'
-#' @param logits A numeric vector, matrix, or array representing the log-odds of success for each Bernoulli trial. `probs = sigmoid(logits)`.
+#' @param logits A numeric vector, matrix, or array representing the log-odds of success for each Bernoulli trial.
 #'
 #' @param shape A numeric vector specifying the shape of the output.  Used with `.expand(shape)` when `sample=False` (model building) to set the distribution's batch shape. When `sample=True` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.
 #'

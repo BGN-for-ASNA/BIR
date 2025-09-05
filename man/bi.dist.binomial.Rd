@@ -24,7 +24,7 @@ bi.dist.binomial(
 
 \item{probs}{(numeric vector, optional): The probability of success *p* for each trial. Must be between 0 and 1.}
 
-\item{logits}{(numeric vector, optional): The log-odds of success for each trial. `probs = jax.nn.sigmoid(logits)`.}
+\item{logits}{(numeric vector, optional): The log-odds of success for each trial.}
 
 \item{validate_args}{Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.}
 

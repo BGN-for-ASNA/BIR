@@ -21,7 +21,7 @@ bi.dist.bernoulli(
 \arguments{
 \item{probs}{A numeric vector, matrix, or array representing the probability of success for each Bernoulli trial. Must be between 0 and 1.}
 
-\item{logits}{A numeric vector, matrix, or array representing the log-odds of success for each Bernoulli trial. `probs = sigmoid(logits)`.}
+\item{logits}{A numeric vector, matrix, or array representing the log-odds of success for each Bernoulli trial.}
 
 \item{validate_args}{Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.}
 
