@@ -81,7 +81,7 @@ setup_env <- function(env_name = "BayesInference", backend = "cpu") {
   } else {
     packageStartupMessage(paste("Virtual environment", env_name, "already exists."))
     packageStartupMessage(paste("Instaling BI dependencies : jax, arviz, numpyro"))
-    py_install(
+    reticulate::py_install(
       packages = all_packages,
       envname = env_name,
       pip = TRUE,
@@ -132,7 +132,7 @@ BI_starting_test <- function(){
       packageStartupMessage("Virtual environment created, Instaling BI dependencies : jax, arviz, numpyro")
       BI_venv_present = check_env()
       if (BI_venv_present) {
-        py_install(
+        reticulate::py_install(
           packages = "BayesInference == 0.0.24",
           envname = 'BayesInference',
           pip = TRUE,
@@ -156,7 +156,7 @@ BI_starting_test <- function(){
       packageStartupMessage("Using 'BayesInference' virtual environment.")
     }else{
       if(reticulate::py_available(initialize = FALSE)){
-        packageStartupMessage("You need to restart R session!")
+        #packageStartupMessage("You need to restart R session!")
       }else{
         reticulate::use_virtualenv("BayesInference", required = TRUE)
       }

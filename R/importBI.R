@@ -32,6 +32,7 @@ importBI <- function(platform = 'cpu', cores = NULL, deallocate = FALSE) {
   message("Loading BI")
   message("----------------------------------------------------")
   tryCatch({
+     BI_starting_test()
     .BI_env$.bi <- BI_load()
     .BI_env$loaded <- TRUE
     }, error = function(e){

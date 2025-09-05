@@ -1,5 +1,11 @@
 # BIR
 Bayesian Inference for R 
+## Installation
+```r
+devtools::install_github("https://github.com/BGN-for-ASNA/BIR")
+```
+
+## Overview
 
 Currently, the package provides:
 
