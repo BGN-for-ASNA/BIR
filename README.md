@@ -86,7 +86,7 @@ library(BayesianInference)
 m=importBI(platform='cpu')
 
 # Load csv file
-m$data(paste(system.file(package = "BI"),"/data/Howell1.csv", sep = ''), sep=';')
+m$data(paste(system.file(package = "BayesianInference"),"/data/Howell1.csv", sep = ''), sep=';')
 
 # fileter data frame
 m$df = m$df[m$df$age > 18,]
@@ -105,12 +105,12 @@ model <- function(height, weight){
   b = bi.dist.normal(0, 1, name = 'b', shape = c(1))
   
   # Likelihood
-  m$lk("y",  bi.dist.normal(a + b * weight, s), obs = height)
+  bi.dist.normal(a + b * weight, s, obs = height)
 }
 
 
 # Run mcmc ------------------------------------------------
-m$run(model) # Optimize model parameters through MCMC sampling
+m$fit(model) # Optimize model parameters through MCMC sampling
 
 # Summary ------------------------------------------------
 m$summary()
