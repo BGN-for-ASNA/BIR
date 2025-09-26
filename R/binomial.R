@@ -46,9 +46,9 @@ bi.dist.binomial=function(total_count=1, probs=py_none(), logits=py_none(), vali
      seed=as.integer(seed);
      reticulate::py_run_string("def is_none(x): return x is None")
      if (.BI_env$.py$is_none(logits)){
-       .BI_env$.bi_instance$dist$binomial(total_count=.BI_env$jnp$array(as.integer(total_count)),  probs= .BI_env$jnp$array(probs),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+       .BI_env$.bi_instance$dist$binomial(total_count=.BI_env$jnp$array(total_count),  probs= .BI_env$jnp$array(probs),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
      }else{
-       .BI_env$.bi_instance$dist$binomial(total_count=.BI_env$jnp$array(as.integer(total_count)),  logits= .BI_env$jnp$array(logits),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+       .BI_env$.bi_instance$dist$binomial(total_count=.BI_env$jnp$array(total_count),  logits= .BI_env$jnp$array(logits),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
 
      }
 }
