@@ -118,6 +118,10 @@ BI_starting_test <- function(){
   if (!BI_venv_present) {
     packageStartupMessage("No Python virtual environments found.")
     packageStartupMessage("You can create one manually with : setup_env().")
+    ask_yes_no("Do you want to install a clean version of pyuthon. (Y/N): ") -> answer
+    if(answer == "Y"){
+      reticulate::install_python(version = "3.11:latest")
+    }
     ask_yes_no("Alternativelly, we can do it now and install required depedencies for Bayesian Inference. (Y/N): ") -> answer
     if(answer == "Y"){
       ask_yes_no("Do you want 'gpu' backend? Note that GPU backend is only available for Linux or WSL2  (Y/N): ") -> answer2
@@ -204,5 +208,4 @@ BI_load <- function(){
     message("----------------------------------------------------")
   })
 }
-
 
