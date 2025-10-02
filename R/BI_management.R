@@ -137,7 +137,7 @@ BI_starting_test <- function(){
       BI_venv_present = check_env()
       if (BI_venv_present) {
         reticulate::py_install(
-          packages = "BayesInference == 0.0.28",
+          packages = "BayesInference == 0.0.29",
           envname = 'BayesInference',
           pip = TRUE,
           pip_options = "--upgrade" # To ensure latest packages
