@@ -61,8 +61,7 @@ importBI <- function(
                                       cores = reticulate::r_to_py(cores),
                                       rand_seed = reticulate::r_to_py(rand_seed),
                                       deallocate = reticulate::r_to_py(deallocate),
-                                      print_devices_found =  reticulate::r_to_py(print_devices_found), 
-                                      backend = reticulate::r_to_py(backend),
+                                      print_devices_found =  reticulate::r_to_py(print_devices_found)
                                       )
   
   # A helper Python function if needed
