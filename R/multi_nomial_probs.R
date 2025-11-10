@@ -46,9 +46,9 @@
 #' bi.dist.multinomial_probs(probs =  c(0.2, 0.3, 0.5), total_count = c(10,10), sample = TRUE)
 #' }
 #' @export
-bi.dist.multinomial_probs=function(probs, total_count=1, total_count_max=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
+bi.dist.multinomial_probs=function(probs, total_count=1, total_count_max=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
-     seed=as.integer(seed)
+     if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
      if(!.BI_env$.py$is_none(total_count_max)){total_count_max= as.integer(total_count_max)}
      total_count= .BI_env$jnp$array(as.integer(total_count))
 

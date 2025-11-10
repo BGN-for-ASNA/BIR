@@ -36,10 +36,11 @@
 #' bi.dist.multinomial(probs = c(0.5,0.1), sample = TRUE)
 #' }
 #' @export
-bi.dist.multinomial=function(total_count=1, probs=py_none(), logits=py_none(), total_count_max=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
+bi.dist.multinomial=function(total_count=1, probs=py_none(), logits=py_none(), total_count_max=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
-     seed=as.integer(seed);
+     reticulate::py_run_string("def is_none(x): return x is None")
+     if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
      if(!.BI_env$.py$is_none(total_count_max)){total_count_max=as.integer(total_count_max);}
      if(!.BI_env$.py$is_none(logits)){logits= .BI_env$jnp$array(logits)}
      if(!.BI_env$.py$is_none(probs)){probs= .BI_env$jnp$array(probs)}

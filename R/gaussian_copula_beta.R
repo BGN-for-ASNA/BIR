@@ -46,9 +46,10 @@
 #'   sample = TRUE)
 #'   }
 #' @export
-bi.dist.gaussian_copula_beta=function(concentration1, concentration0, correlation_matrix=py_none(), correlation_cholesky=py_none(), validate_args=FALSE, name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
+bi.dist.gaussian_copula_beta=function(concentration1, concentration0, correlation_matrix=py_none(), correlation_cholesky=py_none(), validate_args=FALSE, name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
-     seed=as.integer(seed);
+     return(print("No more available since jax > 0.06"))
+     if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
      if(!.BI_env$.py$is_none(correlation_cholesky)){correlation_cholesky = .BI_env$jnp$array(correlation_cholesky)}
      if(!.BI_env$.py$is_none(correlation_matrix)){correlation_matrix = .BI_env$jnp$array(correlation_matrix)}
 

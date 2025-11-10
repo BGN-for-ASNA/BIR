@@ -31,11 +31,11 @@
 #'@export
 #'
 importBI <- function(
-    platform = 'cpu', 
-    cores = NULL, 
+    platform = 'cpu',
+    cores = NULL,
     rand_seed = TRUE,
     deallocate = FALSE,
-    print_devices_found = TRUE, 
+    print_devices_found = TRUE,
     backend='numpyro'
     ) {
   message("\n----------------------------------------------------")
@@ -50,12 +50,12 @@ importBI <- function(
     message("An error occurred: ", e$message)
     message("----------------------------------------------------")
   })
-  
+
   # Import jax and jax.numpy
   #.BI_env$jax <- reticulate::import('jax')
   .BI_env$jnp <- reticulate::import('jax.numpy')
   packageStartupMessage("jax and jax.numpy have been imported.")
-  
+
   # Initialize the BI class
   .BI_env$.bi_instance <- .BI_env$.bi(platform = platform,
                                       cores = reticulate::r_to_py(cores),
@@ -63,9 +63,9 @@ importBI <- function(
                                       deallocate = reticulate::r_to_py(deallocate),
                                       print_devices_found =  reticulate::r_to_py(print_devices_found)
                                       )
-  
+
   # A helper Python function if needed
   .BI_env$.py <- reticulate::py_run_string("def is_none(x): return x is None")
-  
+  reticulate::py_run_string("def is_none(x): return x is None")
   invisible(.BI_env$.bi_instance)
 }

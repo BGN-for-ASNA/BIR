@@ -48,9 +48,9 @@
 #' bi.dist.negative_binomial_logits(logits =  c(0.2, 0.3, 0.5), total_count = 10, sample = TRUE)
 #' }
 #' @export
-bi.dist.negative_binomial_logits=function(total_count, logits, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
+bi.dist.negative_binomial_logits=function(total_count, logits, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
-     seed=as.integer(seed);
+     if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
      total_count=.BI_env$jnp$array(as.integer(total_count));
 
      .BI_env$.bi_instance$dist$negative_binomial_logits(

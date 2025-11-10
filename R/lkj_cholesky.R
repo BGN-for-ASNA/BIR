@@ -50,10 +50,11 @@
 #' }
 #'
 #' @export
-bi.dist.lkj_cholesky <- function(dimension, concentration=1.0, sample_method='onion', validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
+bi.dist.lkj_cholesky <- function(dimension, concentration=1.0, sample_method='onion', validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE) {
   shape <- do.call(tuple, as.list(as.integer(shape)))
   dimension <- as.integer(dimension)
-  seed <- as.integer(seed)
+  reticulate::py_run_string("def is_none(x): return x is None")
+  if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
   .BI_env$.bi_instance$dist$lkj_cholesky(
     dimension = .BI_env$jnp$array(dimension),
     concentration = .BI_env$jnp$array(concentration),

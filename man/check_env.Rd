@@ -12,3 +12,4 @@ A logical value indicating whether the "cpu" or "gpu" environment exists.
 \description{
 This function checks for the existence of the default Python virtual environments.
 }
+\keyword{internal}

@@ -12,7 +12,7 @@ bi.dist.dirichlet_multinomial(
   obs = py_none(),
   mask = py_none(),
   sample = FALSE,
-  seed = 0,
+  seed = py_none(),
   shape = c(),
   event = 0,
   create_obj = FALSE
@@ -68,6 +68,6 @@ informative model.
 \donttest{
 library(BayesianInference)
 m=importBI(platform='cpu')
-bi.dist.dirichlet_multinomial(concentration = c(0,1), sample = TRUE, shape = (3))
+bi.dist.dirichlet_multinomial(concentration = c(0,1), sample = TRUE, shape = c(3))
 }
 }

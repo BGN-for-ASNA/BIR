@@ -50,9 +50,10 @@
 #' sample = TRUE)
 #' }
 #' @export
-bi.dist.multivariate_student_t=function(df, loc=0.0, scale_tril=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
+bi.dist.multivariate_student_t=function(df, loc=0.0, scale_tril=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
-     seed=as.integer(seed);
+     reticulate::py_run_string("def is_none(x): return x is None")
+     if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
      .BI_env$.bi_instance$dist$multivariate_student_t(
        df = .BI_env$jnp$array(df),
        loc = .BI_env$jnp$array(loc),

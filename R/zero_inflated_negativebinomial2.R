@@ -46,10 +46,10 @@
 #' bi.dist.zero_inflated_negative_binomial(mean = 2, concentration = 1, gate = 0.3, sample = TRUE)
 #' }
 #' @export
-bi.dist.zero_inflated_negative_binomial=function(mean, concentration, gate=py_none(), gate_logits=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
+bi.dist.zero_inflated_negative_binomial=function(mean, concentration, gate=py_none(), gate_logits=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
-     seed=as.integer(seed);
+     if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
 
      if(!.BI_env$.py$is_none(gate)){gate = .BI_env$jnp$array(gate)}
      if(!.BI_env$.py$is_none(gate_logits)){gate_logits = .BI_env$jnp$array(gate_logits)}

@@ -37,7 +37,6 @@ check_env <- function() {
 #' @param backend A character string specifying the backend, either "cpu" or "gpu".
 #'
 #' @return The path to the created virtual environment.
-#' @export
 #' Create a Python virtual environment and install dependencies
 #'
 #' This function creates a Python virtual environment and installs a
@@ -211,15 +210,33 @@ update_BI <- function(envname = "BayesInference"){
   reticulate::py_install(
     packages = "BayesInference",
     envname = envname,
-    pip_args = "--upgrade --no-cache-dir"
   )
 
 }
 
 
 #' @keywords internal
-list_package <- function(envname = "BayesInference"){
+list_packages <- function(envname = "BayesInference"){
   reticulate::py_list_packages(envname = envname)
 }
 
+install_dependencies <- function(envname = "BayesInference"){
+  reticulate::py_install(
+    packages = "numpyro",
+    envname = envname,
+    pip_args = "--upgrade --no-cache-dir"
+  )
+  reticulate::py_install(
+    packages = "jax",
+    envname = envname,
+    pip_args = "--upgrade --no-cache-dir"
+  )
+
+  reticulate::py_install(
+    packages = "BayesInference",
+    envname = envname,
+    pip_args = "--upgrade --no-cache-dir"
+  )
+
+}
 

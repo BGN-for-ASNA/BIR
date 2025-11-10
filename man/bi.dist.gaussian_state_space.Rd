@@ -15,7 +15,7 @@ bi.dist.gaussian_state_space(
   obs = py_none(),
   mask = py_none(),
   sample = FALSE,
-  seed = 0,
+  seed = py_none(),
   shape = c(),
   event = 0,
   create_obj = FALSE

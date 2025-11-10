@@ -38,10 +38,10 @@
 #' bi.dist.zero_sum_normal(scale=0.3, event_shape = c(), sample = TRUE)
 #' }
 #' @export
-bi.dist.zero_sum_normal=function(scale, event_shape, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
+bi.dist.zero_sum_normal=function(scale, event_shape, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      event_shape=do.call(tuple, as.list(as.integer(event_shape)))
-     seed=as.integer(seed);
+     if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
      .BI_env$.bi_instance$dist$zero_sum_normal(
        scale = .BI_env$jnp$array(scale),
        event_shape = event_shape,

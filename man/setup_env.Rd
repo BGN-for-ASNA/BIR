@@ -14,6 +14,10 @@ Defaults to "BayesInference-cpu" or "BayesInference-gpu".}
 }
 \value{
 The path to the created virtual environment.
+Create a Python virtual environment and install dependencies
+
+This function creates a Python virtual environment and installs a
+specified set of Python packages, with options for CPU or GPU builds.
 
 The path to the created virtual environment.
 }

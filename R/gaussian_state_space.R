@@ -49,9 +49,9 @@
 #'   sample = TRUE)
 #'}
 #' @export
-bi.dist.gaussian_state_space=function(num_steps, transition_matrix, covariance_matrix=py_none(), precision_matrix=py_none(), scale_tril=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
+bi.dist.gaussian_state_space=function(num_steps, transition_matrix, covariance_matrix=py_none(), precision_matrix=py_none(), scale_tril=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
-     seed=as.integer(seed);
+     if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
      num_steps=as.integer(num_steps);
      if(!.BI_env$.py$is_none(transition_matrix)){transition_matrix = .BI_env$jnp$array(transition_matrix)}
      if(!.BI_env$.py$is_none(covariance_matrix)){covariance_matrix = .BI_env$jnp$array(covariance_matrix)}

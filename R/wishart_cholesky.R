@@ -53,9 +53,10 @@
 #' sample = TRUE)
 #' }
 #' @export
-bi.dist.wishart_cholesky=function(concentration, scale_matrix=py_none(), rate_matrix=py_none(), scale_tril=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
+bi.dist.wishart_cholesky=function(concentration, scale_matrix=py_none(), rate_matrix=py_none(), scale_tril=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
-     seed=as.integer(seed)
+     reticulate::py_run_string("def is_none(x): return x is None")
+     if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
      if(!.BI_env$.py$is_none(scale_matrix)){scale_matrix = .BI_env$jnp$array(scale_matrix)}
      if(!.BI_env$.py$is_none(rate_matrix)){rate_matrix = .BI_env$jnp$array(rate_matrix)}
      if(!.BI_env$.py$is_none(scale_tril)){scale_tril = .BI_env$jnp$array(scale_tril)}

@@ -50,9 +50,12 @@
 #'   sample = TRUE)
 #' }
 #' @export
-bi.dist.gaussian_copula=function(marginal_dist, correlation_matrix=py_none(), correlation_cholesky=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
-     shape=do.call(tuple, as.list(as.integer(shape)))
-     seed=as.integer(seed);
+bi.dist.gaussian_copula=function(marginal_dist, correlation_matrix=py_none(), correlation_cholesky=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE) {
+
+      return(print("No more available since jax > 0.06"))
+
+      shape=do.call(tuple, as.list(as.integer(shape)))
+     if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
      if(!.BI_env$.py$is_none(correlation_cholesky)){correlation_cholesky = .BI_env$jnp$array(correlation_cholesky)}
      if(!.BI_env$.py$is_none(correlation_matrix)){correlation_matrix = .BI_env$jnp$array(correlation_matrix)}
      .BI_env$.bi_instance$dist$gaussian_copula(

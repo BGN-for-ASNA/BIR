@@ -5,7 +5,7 @@
 \title{Samples from a Binomial distribution.}
 \usage{
 bi.dist.binomial(
-  total_count = 1,
+  total_count = 1L,
   probs = py_none(),
   logits = py_none(),
   validate_args = py_none(),
@@ -13,7 +13,7 @@ bi.dist.binomial(
   obs = py_none(),
   mask = py_none(),
   sample = FALSE,
-  seed = 0,
+  seed = py_none(),
   shape = c(),
   event = 0,
   create_obj = FALSE

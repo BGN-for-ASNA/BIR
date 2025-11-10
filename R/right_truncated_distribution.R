@@ -42,9 +42,9 @@
 #' sample = TRUE)
 #' }
 #' @export
-bi.dist.right_truncated_distribution=function(base_dist, high=0.0, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
+bi.dist.right_truncated_distribution=function(base_dist, high=0.0, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
-     seed=as.integer(seed);
+     if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
      .BI_env$.bi_instance$dist$right_truncated_distribution(
        base_dist,
        high = .BI_env$jnp$array(high),

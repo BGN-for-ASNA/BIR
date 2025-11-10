@@ -45,12 +45,13 @@
 #' bi.dist.multinomial_logits(logits =  c(0.2, 0.3, 0.5), total_count = 10, sample = TRUE)
 #' }
 #' @export
-bi.dist.multinomial_logits=function(logits, total_count=1, total_count_max=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
+bi.dist.multinomial_logits=function(logits, total_count=1, total_count_max=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      if(!.BI_env$.py$is_none(total_count_max)){total_count_max= as.integer(total_count_max)}
      total_count= .BI_env$jnp$array(as.integer(total_count))
 
-     seed=as.integer(seed);
+     reticulate::py_run_string("def is_none(x): return x is None");
+     if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
      .BI_env$.bi_instance$dist$multinomial_logits(
        logits = .BI_env$jnp$array(logits),
        total_count = .BI_env$jnp$array(total_count),

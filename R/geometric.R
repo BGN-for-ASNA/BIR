@@ -38,10 +38,10 @@
 #' bi.dist.geometric(probs = 0.5, sample = TRUE)
 #' }
 #' @export
-bi.dist.geometric=function(probs=py_none(), logits=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed=0, shape=c(), event=0, create_obj=FALSE) {
+bi.dist.geometric=function(probs=py_none(), logits=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
-     seed=as.integer(seed);
+     if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
      if(!.BI_env$.py$is_none(logits)){logits= .BI_env$jnp$array(logits)}
      if(!.BI_env$.py$is_none(probs)){probs= .BI_env$jnp$array(probs)}
      .BI_env$.bi_instance$dist$geometric(probs = probs, logits = logits,  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
