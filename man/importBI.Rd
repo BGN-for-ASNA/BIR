@@ -4,7 +4,14 @@
 \alias{importBI}
 \title{Import the BI Python Module}
 \usage{
-importBI(platform = "cpu", cores = NULL, deallocate = FALSE)
+importBI(
+  platform = "cpu",
+  cores = NULL,
+  rand_seed = TRUE,
+  deallocate = FALSE,
+  print_devices_found = TRUE,
+  backend = "numpyro"
+)
 }
 \arguments{
 \item{platform}{Character string, the computational platform to use
@@ -12,8 +19,14 @@ importBI(platform = "cpu", cores = NULL, deallocate = FALSE)
 
 \item{cores}{Integer or `NULL`. Number of CPU cores to use. Defaults to `NULL`.}
 
+\item{rand_seed}{(Boolean): Random seed. Defaults to TRUE.}
+
 \item{deallocate}{Logical. Whether memory should be deallocated when not in use.
 Defaults to `FALSE`.}
+
+\item{print_devices_found}{(bool, optional): Whether to print devices found. Defaults to TRUE.}
+
+\item{backend}{(str, optional): Backend to use (numpyro or tfp). Defaults to 'numpyro'.}
 }
 \value{
 An initialized BI module object (Python object via **reticulate**).

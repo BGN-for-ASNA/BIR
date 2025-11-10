@@ -1,8 +1,5 @@
-#library(reticulate)
-#py_available(initialize = FALSE)
-#virtualenv_list()
-#py_list_packages("BayesInference")
 
+#' @keywords internal
 ask_yes_no <- function(prompt = "Do you want to continue? (Y/N): ") {
   repeat {
     ans <- toupper(trimws(readline(prompt)))
@@ -19,7 +16,7 @@ ask_yes_no <- function(prompt = "Do you want to continue? (Y/N): ") {
 #' This function checks for the existence of the default Python virtual environments.
 #'
 #' @return A logical value indicating whether the "cpu" or "gpu" environment exists.
-#' @export
+#' @keywords internal
 check_env <- function() {
   cpu_env_exists <- reticulate::virtualenv_exists(envname = "BayesInference")
 
@@ -64,8 +61,8 @@ setup_env <- function(env_name = "BayesInference", backend = "cpu") {
   # Backend-specific dependencies
   if (backend == "cpu") {
     backend_packages <- c(
-      "jax==0.6.2",
-      "jaxlib==0.6.2"
+      "jax",
+      "jaxlib"
     )
   } else { # gpu
     backend_packages <- "jax[cuda12_pip]==0.6.2"
@@ -208,4 +205,21 @@ BI_load <- function(){
     message("----------------------------------------------------")
   })
 }
+
+#' @keywords internal
+update_BI <- function(envname = "BayesInference"){
+  reticulate::py_install(
+    packages = "BayesInference",
+    envname = envname,
+    pip_args = "--upgrade --no-cache-dir"
+  )
+
+}
+
+
+#' @keywords internal
+list_package <- function(envname = "BayesInference"){
+  reticulate::py_list_packages(envname = envname)
+}
+
 
