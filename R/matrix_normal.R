@@ -65,7 +65,7 @@
 #' }
 #' @export
 
-bi.dist.matrix_normal=function(loc, scale_tril_row, scale_tril_column, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE) {
+bi.dist.matrix_normal=function(loc, scale_tril_row, scale_tril_column, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      reticulate::py_run_string("def is_none(x): return x is None");
      if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
@@ -73,5 +73,5 @@ bi.dist.matrix_normal=function(loc, scale_tril_row, scale_tril_column, validate_
        loc = .BI_env$jnp$array(loc),
        scale_tril_row = .BI_env$jnp$array(scale_tril_row),
        scale_tril_column = .BI_env$jnp$array(scale_tril_column),
-       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 }

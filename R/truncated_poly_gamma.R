@@ -50,5 +50,5 @@ bi.dist.truncated_polya_gamma=function(batch_shape=c(), validate_args=py_none(),
      if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
      .BI_env$.bi_instance$dist$truncated_polya_gamma(
        batch_shape,
-       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 }

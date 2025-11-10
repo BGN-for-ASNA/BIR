@@ -62,5 +62,5 @@ bi.dist.wishart=function(concentration, scale_matrix=py_none(), rate_matrix=py_n
        scale_matrix= scale_matrix,
        rate_matrix= rate_matrix,
        scale_tril= scale_tril,
-       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 }

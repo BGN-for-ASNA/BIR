@@ -50,7 +50,7 @@
 #' }
 #'
 #' @export
-bi.dist.lkj_cholesky <- function(dimension, concentration=1.0, sample_method='onion', validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE) {
+bi.dist.lkj_cholesky <- function(dimension, concentration=1.0, sample_method='onion', validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
   shape <- do.call(tuple, as.list(as.integer(shape)))
   dimension <- as.integer(dimension)
   reticulate::py_run_string("def is_none(x): return x is None")

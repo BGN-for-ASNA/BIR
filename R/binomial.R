@@ -69,9 +69,9 @@ bi.dist.binomial=function(
          validate_args= validate_args,
          name= name,  obs= obs,  mask= mask,
          sample= sample,  seed= seed,  shape= shape,
-         event= event,  create_obj= create_obj)
+         event= event,  create_obj= create_obj,   to_jax = to_jax)
      }else{
-       .BI_env$.bi_instance$dist$binomial(total_count=.BI_env$jnp$array(total_count),  logits= .BI_env$jnp$array(logits),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+       .BI_env$.bi_instance$dist$binomial(total_count=.BI_env$jnp$array(total_count),  logits= .BI_env$jnp$array(logits),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 
      }
 }

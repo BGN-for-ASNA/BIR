@@ -54,7 +54,7 @@
 #'   sample = TRUE)
 #' }
 #' @export
-bi.dist.low_rank_multivariate_normal=function(loc, cov_factor, cov_diag, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE) {
+bi.dist.low_rank_multivariate_normal=function(loc, cov_factor, cov_diag, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      reticulate::py_run_string("def is_none(x): return x is None");
      if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
@@ -62,5 +62,5 @@ bi.dist.low_rank_multivariate_normal=function(loc, cov_factor, cov_diag, validat
        loc = .BI_env$jnp$array(loc),
        cov_factor = .BI_env$jnp$array(cov_factor),
        cov_diag = .BI_env$jnp$array(cov_diag),
-       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 }

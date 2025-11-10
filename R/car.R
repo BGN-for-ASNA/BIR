@@ -60,7 +60,7 @@
 #' }
 #' @export
 #'
-bi.dist.car=function(loc, correlation, conditional_precision, adj_matrix, is_sparse=FALSE, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE) {
+bi.dist.car=function(loc, correlation, conditional_precision, adj_matrix, is_sparse=FALSE, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
@@ -72,5 +72,5 @@ bi.dist.car=function(loc, correlation, conditional_precision, adj_matrix, is_spa
        correlation=correlation,
        conditional_precision=conditional_precision,
        adj_matrix=adj_matrix,
-       is_sparse= is_sparse,  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+       is_sparse= is_sparse,  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 }

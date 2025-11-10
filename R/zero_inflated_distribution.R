@@ -73,5 +73,5 @@ bi.dist.zero_inflated_distribution=function(base_dist, gate=py_none(), gate_logi
        base_dist,
        gate =  .BI_env$jnp$array(gate),
        gate_logits = gate_logits,
-       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 }

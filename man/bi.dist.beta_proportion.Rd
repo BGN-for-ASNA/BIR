@@ -15,7 +15,8 @@ bi.dist.beta_proportion(
   seed = py_none(),
   shape = c(),
   event = 0,
-  create_obj = FALSE
+  create_obj = FALSE,
+  to_jax = TRUE
 )
 }
 \arguments{

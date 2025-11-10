@@ -34,12 +34,12 @@
 #' bi.dist.logistic(sample = TRUE)
 #' }
 #' @export
-bi.dist.logistic=function(loc=0.0, scale=1.0, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE) {
+bi.dist.logistic=function(loc=0.0, scale=1.0, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      reticulate::py_run_string("def is_none(x): return x is None");
      if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
      .BI_env$.bi_instance$dist$logistic(
        loc = .BI_env$jnp$array(loc),
        scale = .BI_env$jnp$array(scale),
-       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 }

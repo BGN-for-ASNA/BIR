@@ -43,7 +43,7 @@
 #' bi.dist.relaxed_bernoulli(temperature = c(1,1), logits = 0.0, sample = TRUE)
 #' }
 #' @export
-bi.dist.relaxed_bernoulli=function(temperature, probs=py_none(), logits=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE) {
+bi.dist.relaxed_bernoulli=function(temperature, probs=py_none(), logits=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
@@ -53,5 +53,5 @@ bi.dist.relaxed_bernoulli=function(temperature, probs=py_none(), logits=py_none(
        temperature = .BI_env$jnp$array(temperature),
        probs = probs,
        logits = logits,
-       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 }

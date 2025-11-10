@@ -58,5 +58,5 @@ bi.dist.asymmetric_laplace=function(
      .BI_env$.bi_instance$dist$asymmetric_laplace(
        loc=.BI_env$jnp$array(loc),
        scale= .BI_env$jnp$array(scale),
-       asymmetry= .BI_env$jnp$array(asymmetry),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+       asymmetry= .BI_env$jnp$array(asymmetry),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 }

@@ -43,14 +43,14 @@
 #' bi.dist.negative_binomial(total_count = 100, probs = 0.5, sample = TRUE)
 #' }
 #' @export
-bi.dist.negative_binomial=function(total_count, probs, logits=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE) {
+bi.dist.negative_binomial=function(total_count, probs, logits=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
 
      if (.BI_env$.py$is_none(logits)){
-       .BI_env$.bi_instance$dist$negative_binomial(total_count = .BI_env$jnp$array(total_count), probs=.BI_env$jnp$array(probs),   validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+       .BI_env$.bi_instance$dist$negative_binomial(total_count = .BI_env$jnp$array(total_count), probs=.BI_env$jnp$array(probs),   validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
      }else{
-       .BI_env$.bi_instance$dist$negative_binomial(total_count = .BI_env$jnp$array(total_count), logits= .BI_env$jnp$array(logits),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+       .BI_env$.bi_instance$dist$negative_binomial(total_count = .BI_env$jnp$array(total_count), logits= .BI_env$jnp$array(logits),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 
      }
 }

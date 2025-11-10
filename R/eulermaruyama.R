@@ -63,7 +63,7 @@
 #'sample = TRUE)
 #' }
 #' @export
-bi.dist.euler_maruyama=function(t, sde_fn, init_dist, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE) {
+bi.dist.euler_maruyama=function(t, sde_fn, init_dist, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
      shape=do.call(reticulate:::tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      reticulate::py_run_string("def is_none(x): return x is None")
@@ -73,5 +73,5 @@ bi.dist.euler_maruyama=function(t, sde_fn, init_dist, validate_args=py_none(), n
        t = .BI_env$jnp$array(t),
        sde_fn = sde_fn,
        init_dist = init_dist,
-       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 }

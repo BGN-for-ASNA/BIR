@@ -42,11 +42,11 @@
 #' sample = TRUE)
 #' }
 #' @export
-bi.dist.right_truncated_distribution=function(base_dist, high=0.0, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE) {
+bi.dist.right_truncated_distribution=function(base_dist, high=0.0, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
      .BI_env$.bi_instance$dist$right_truncated_distribution(
        base_dist,
        high = .BI_env$jnp$array(high),
-       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 }

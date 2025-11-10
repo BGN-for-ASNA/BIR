@@ -50,7 +50,7 @@
 #'   sample = TRUE)
 #' }
 #' @export
-bi.dist.gaussian_copula=function(marginal_dist, correlation_matrix=py_none(), correlation_cholesky=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE) {
+bi.dist.gaussian_copula=function(marginal_dist, correlation_matrix=py_none(), correlation_cholesky=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
 
       return(print("No more available since jax > 0.06"))
 
@@ -62,5 +62,5 @@ bi.dist.gaussian_copula=function(marginal_dist, correlation_matrix=py_none(), co
        marginal_dist = marginal_dist,
        correlation_matrix = correlation_matrix,
        correlation_cholesky = correlation_cholesky,
-       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 }

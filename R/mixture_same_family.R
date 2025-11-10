@@ -45,12 +45,12 @@
 #' sample = TRUE)
 #' }
 #' @export
-bi.dist.mixture_same_family=function(mixing_distribution, component_distribution, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE) {
+bi.dist.mixture_same_family=function(mixing_distribution, component_distribution, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      reticulate::py_run_string("def is_none(x): return x is None");
      if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
      .BI_env$.bi_instance$dist$mixture_same_family(
        mixing_distribution,
        component_distribution ,
-       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 }

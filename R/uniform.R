@@ -49,5 +49,5 @@ bi.dist.uniform=function(low=0.0, high=1.0, validate_args=py_none(), name='x', o
      .BI_env$.bi_instance$dist$uniform(
        low = .BI_env$jnp$array(low),
        high = .BI_env$jnp$array(high),
-       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 }

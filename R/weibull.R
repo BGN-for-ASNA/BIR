@@ -47,5 +47,5 @@ bi.dist.weibull=function(scale, concentration, validate_args=py_none(), name='x'
      .BI_env$.bi_instance$dist$weibull(
        scale = .BI_env$jnp$array(scale),
        concentration = .BI_env$jnp$array(concentration),
-       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 }

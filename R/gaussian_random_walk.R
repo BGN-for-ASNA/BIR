@@ -40,7 +40,7 @@
 #' bi.dist.gaussian_random_walk(scale = c(1,5,10), sample = TRUE)
 #' }
 #' @export
-bi.dist.gaussian_random_walk=function(scale=1.0, num_steps=1, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE) {
+bi.dist.gaussian_random_walk=function(scale=1.0, num_steps=1, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
   #return(print("No more available since jax > 0.06"))
   shape=do.call(tuple, as.list(as.integer(shape)))
   reticulate::py_run_string("def is_none(x): return x is None")
@@ -49,5 +49,5 @@ bi.dist.gaussian_random_walk=function(scale=1.0, num_steps=1, validate_args=py_n
   .BI_env$.bi_instance$dist$gaussian_random_walk(
        scale = .BI_env$jnp$array(scale),
        num_steps = num_steps,
-       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 }

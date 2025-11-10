@@ -67,7 +67,7 @@
 #' bi.dist.asymmetric_laplace_quantile(sample = TRUE)
 #' }
 #' @export
-bi.dist.asymmetric_laplace_quantile=function(loc=0.0, scale=1.0, quantile=0.5, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE) {
+bi.dist.asymmetric_laplace_quantile=function(loc=0.0, scale=1.0, quantile=0.5, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
@@ -75,5 +75,5 @@ bi.dist.asymmetric_laplace_quantile=function(loc=0.0, scale=1.0, quantile=0.5, v
        loc=.BI_env$jnp$array(loc),
        scale= .BI_env$jnp$array(scale),
        quantile= .BI_env$jnp$array(quantile),
-       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 }

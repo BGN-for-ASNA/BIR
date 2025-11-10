@@ -55,5 +55,5 @@ bi.dist.two_sided_truncated_distribution=function(base_dist, low=0.0, high=1.0, 
        base_dist,
        low= .BI_env$jnp$array(low),
        high = .BI_env$jnp$array(high),
-       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 }
