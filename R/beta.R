@@ -1,8 +1,7 @@
 #' @description Samples from a Beta distribution, defined on the interval [0, 1].
 #' The Beta distribution is a versatile distribution often used to model
 #' probabilities or proportions. It is parameterized by two positive shape
-#' parameters, often referred to as concentration parameters in the BI
-#' context.
+#' parameters, usually denoted \deqn{\alpha} and \deqn{\beta>0}, control the shape of the density (how much mass is pushed toward 0, 1, or intermediate).
 #'
 #' @title Beta Distribution
 #'

@@ -1,8 +1,8 @@
 #' @title Samples from an Exponential distribution.
 #'
-#' @description The Exponential distribution is a continuous probability distribution that models the time until an event occurs in a Poisson process, where events occur continuously and independently at a constant average rate. It is often used to model the duration of events, such as the time until a machine fails or the length of a phone call.
-#'
-#' \deqn{f(x) = \lambda e^{-\lambda x} \text{ for } x \geq 0}
+#' @description The Exponential distribution is a continuous probability distribution that models the time until an event occurs in a Poisson
+#' process, where events occur continuously and independently at a constant average rate. It is often used to model the duration
+#' of events, such as the time until a machine fails or the length of a phone call.
 #'
 #' @param rate A numeric vector, matrix, or array representing the rate parameter, \eqn{`\lambda`}. Must be positive.
 #' @param shape A numeric vector used to shape the distribution. When `sample=False` (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When `sample=True` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.

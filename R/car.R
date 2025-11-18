@@ -1,12 +1,8 @@
 #' @title Conditional Autoregressive (CAR) Distribution
 #'
 #' @description The CAR distribution models a vector of variables where each variable is a linear
-#' combination of its neighbors in a graph.
-#'
-#' \deqn{p(x) = \prod_{i=1}^{K} \mathcal{N}(x_i | \mu_i, \Sigma_i)}
-#'
-#' where \eqn{\mu_i} is a function of the values of the neighbors of site \eqn{i}
-#' and \eqn{\Sigma_i} is the variance of site \eqn{i}.
+#' combination of its neighbors in a graph. The CAR model captures spatial dependence in areal data by modeling each observation as conditionally dependent on its neighbors.It specifies a joint distribution of a vector of random variables $\mathbf{y} = (y_1, y_2, \dots, y_N)$ based on their conditional distributions, where each $y_i$ is conditionally independent of all other variables given its neighbors.
+#' * **Application**: Widely used in disease mapping, environmental modeling, and spatial econometrics to account for spatial autocorrelation.
 #'
 #' The CAR distribution is a special case of the multivariate normal distribution.
 #' It is used to model spatial data, such as temperature or precipitation.

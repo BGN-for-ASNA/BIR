@@ -1,10 +1,5 @@
 #' @title Log Normal distribution
-#' @description The Log Normal distribution is a probability distribution defined for positive real-valued random variables,
-#' parameterized by a location parameter (loc) and a scale parameter (scale).  It arises when the logarithm
-#' of a random variable is normally distributed.
-#'
-#' \deqn{f(x) = \frac{1}{x \sigma \sqrt{2\pi}} e^{-\frac{(log(x) - \mu)^2}{2\sigma^2}}}
-#'
+#' @description The Log Uniform distribution is defined over the positive real numbers and is the result of applying an exponential transformation to a uniform distribution over the interval [low, high]. It is often used when modeling parameters that must be positive.
 #' @param loc Numeric; Location parameter.
 #' @param scale Numeric; Scale parameter.
 #' @param shape Numeric vector; A multi-purpose argument for shaping. When `sample=False` (model building),

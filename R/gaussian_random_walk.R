@@ -1,11 +1,9 @@
 #' @title Samples from a Gaussian Random Walk distribution.
 #'
-#' @description A Gaussian Random Walk is a stochastic process where each step is a Gaussian-distributed increment.
-#' It can be thought of as a discrete-time version of a Brownian motion.
-#'
-#' \deqn{X_{t} = \sum_{i=1}^{t} \epsilon_i}
-#'
-#' where \eqn{\epsilon_i \sim \mathcal{N}(0, \sigma^2)} are independent Gaussian random variables.
+#' @description Creates a distribution over a Gaussian random walk of a specified number of steps.
+#' This is a discrete-time stochastic process where the value at each step is the
+#' previous value plus a Gaussian-distributed increment. The distribution is over
+#' the entire path.
 #'
 #' @param scale A numeric value representing the standard deviation of the Gaussian increments.
 #' @param num_steps (int, optional): The number of steps in the random walk, which determines the event shape of the distribution. Must be positive. Defaults to 1.

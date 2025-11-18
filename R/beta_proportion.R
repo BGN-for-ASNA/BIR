@@ -1,10 +1,8 @@
 #' @title Samples from a Beta-Proportion distribution.
 #'
-#' @description The Beta-Proportion  distribution is a reparameterization of the conventional
-#' Beta distribution in terms of a the variate mean and a
-#' precision parameter. It's useful for modeling rates and proportions.
-#'
-#' \deqn{f(x) = \frac{x^{\alpha - 1} (1 - x)^{\beta - 1}}{B(\alpha, \beta)}}
+#' @description The Beta Proportion distribution is a reparameterization of the conventional
+#' Beta distribution in terms of a the variate mean and a precision parameter. It's useful for modeling rates and proportions. It's essentially the same family as the standard Beta($\alpha,\beta$), but the mapping is:
+#' \deqn{ \alpha = \mu , \kappa,\quad \beta = (1 - \mu), \kappa}.
 #'
 #' @param mean A numeric vector, matrix, or array representing the mean of the BetaProportion distribution,
 #'   must be between 0 and 1.

@@ -1,8 +1,7 @@
 #' @title Samples from a Dirichlet distribution.
 #'
 #' @description The Dirichlet distribution is a multivariate generalization of the Beta distribution.
-#' It is a probability distribution over a simplex, which is a set of vectors where each element is non-negative and sums to one.
-#' It is often used as a prior distribution for categorical distributions.
+#' It is a probability distribution over a simplex, which is a set of vectors where each element is non-negative and sums to one. It is often used as a prior distribution for categorical distributions.
 #'
 #' \deqn{P(x_1, ..., x_K) = \frac{\Gamma(\sum_{i=1}^K \alpha_i)}{\prod_{i=1}^K \Gamma(\alpha_i)} \prod_{i=1}^K x_i^{\alpha_i - 1}}
 #'

@@ -1,9 +1,7 @@
 #' @title Gaussian Copula Beta distribution.
-#' @description Samples from a Gaussian Copula Beta distribution.
-#' This distribution combines a Gaussian copula with a Beta distribution.
+#' @description This distribution combines a Gaussian copula with a Beta distribution.
 #' The Gaussian copula models the dependence structure between random variables,
 #' while the Beta distribution defines the marginal distributions of each variable.
-#' \eqn{f(x) = \int_{-\infty}^{\infty} g(x|u) h(u) du}
 #'
 #' @param concentration1 A numeric vector or matrix representing the first shape parameter of the Beta distribution.
 #' @param concentration0 A numeric vector or matrix representing the second shape parameter of the Beta distribution.

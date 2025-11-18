@@ -4,9 +4,8 @@
 #'
 #' The Cauchy distribution, also known as the Lorentz distribution, is a continuous probability distribution
 #' that arises frequently in various fields, including physics and statistics. It is characterized by its
-#' heavy tails, which extend indefinitely.
-#'
-#' \deqn{f(x) = \frac{1}{\pi \gamma} \left[ \frac{\gamma^2}{(x - \mu)^2 + \gamma^2} \right]}
+#' heavy tails, which extend indefinitely. This means it has a higher probability of extreme values compared to the normal
+#' distribution.
 #'
 #' @param loc A numeric vector or scalar representing the location parameter. Defaults to 0.0.
 #' @param scale A numeric vector or scalar representing the scale parameter. Must be positive. Defaults to 1.0.

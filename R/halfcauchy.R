@@ -1,10 +1,7 @@
 #' @title HalfCauchy Distribution
 #'
 #' @description
-#' The HalfCauchy distribution is a probability distribution that is half of the Cauchy distribution.
-#' It is defined on the positive real numbers and is often used in situations where only positive values are relevant.
-#'
-#' \deqn{ f(x) = \frac{1}{2} \cdot \frac{1}{\pi \cdot \frac{1}{scale} \cdot (x^2 + \frac{1}{scale^2})}}
+#' The HalfCauchy distribution is a probability distribution that is half of the Cauchy distribution. It is defined on the positive real numbers and is often used in situations where only positive values are relevant.
 #'
 #' @param scale A numeric vector representing the scale parameter of the Cauchy distribution. Must be positive.
 #' @param shape A numeric vector used for shaping. When `sample=False` (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When `sample=True` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.

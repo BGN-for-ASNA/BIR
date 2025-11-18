@@ -2,10 +2,8 @@
 #'
 #' @description The Chi-squared distribution is a continuous probability distribution that arises
 #' frequently in hypothesis testing, particularly in ANOVA and chi-squared tests.
-#' It is defined by a single positive parameter, degrees of freedom (df), which
-#' determines the shape of the distribution.
-#'
-#' \deqn{p(x; df) = \frac{1}{2^{df/2} \Gamma(df/2)} x^{df/2 - 1} e^{-x/2}}
+#' It is defined by a single positive parameter, degrees of freedom (df), the number of independent standard normal variables
+#' squared and summed, which determines the shape of the distribution.
 
 #' @param df A numeric vector representing the degrees of freedom. Must be positive.
 #' @param shape A numeric vector used for shaping. When `sample=FALSE` (model building),

@@ -1,9 +1,9 @@
 #' @title Samples from a Dirichlet Multinomial distribution.
 #'
-#' @description This distribution combines a Dirichlet distribution (for the probabilities of categories)
-#' and a Multinomial distribution (for the counts within each category).  The Dirichlet
-#' distribution acts as a prior on the probabilities, allowing for a flexible and
-#' informative model.
+#' @description Creates a Dirichlet-Multinomial compound distribution, which is a Multinomial
+#' distribution with a Dirichlet prior on its probabilities. It is often used in
+#' Bayesian statistics to model count data where the proportions of categories are
+#' uncertain.
 #'
 #' @param concentration A numeric vector or array representing the concentration parameter (alpha) for the Dirichlet distribution.
 #' @param total_count (int, jnp.ndarray, optional): The total number of trials (n). This must be a non-negative integer. Defaults to 1.

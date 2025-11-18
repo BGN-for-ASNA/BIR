@@ -3,11 +3,7 @@
 #' @description The Gompertz distribution is a distribution with support on the positive real line that is closely
 #' related to the Gumbel distribution. This implementation follows the notation used in the Wikipedia
 #' entry for the Gompertz distribution. See https://en.wikipedia.org/wiki/Gompertz_distribution.
-#'
-#' The probability density function (PDF) is:
-#'
-#' \deqn{f(x) = \frac{con}{rate} \exp \left\{ - \frac{con}{rate} \left [ \exp\{x * rate \} - 1 \right ] \right\} \exp(-x * rate)}
-#'
+
 #' @param concentration A positive numeric vector, matrix, or array representing the concentration parameter.
 #' @param rate A positive numeric vector, matrix, or array representing the rate parameter.
 #' @param shape A numeric vector representing the shape parameter.

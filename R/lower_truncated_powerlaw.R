@@ -1,13 +1,10 @@
 #' @title Lower Truncated Power Law Distribution
 #'
-#' @description Lower truncated power law distribution with `alpha` index.
-#'
-#' The probability density function (PDF) is given by:
-#'
-#' \deqn{f(x; \alpha, a) = (-\alpha-1)a^{-\alpha - 1}x^{-\alpha}, \qquad x \geq a, \qquad \alpha < -1,}
-#'
-#' where `a` is the lower bound.
-#'
+#' @description
+#' The *Lower-Truncated Power-Law* distribution (also known as the *Pareto Type I* or *power-law with a lower bound*) models quantities that follow a heavy-tailed power-law behavior but are bounded below by a minimum value ( x_{\min} ). It is commonly used to describe phenomena such as wealth distributions, city sizes, and biological scaling laws.
+
+#' Lower truncated power law distribution with $\alpha` index.
+
 #' @param alpha A numeric vector: index of the power law distribution. Must be less than -1.
 #' @param low A numeric vector: lower bound of the distribution. Must be greater than 0.
 #' @param shape A numeric vector: A multi-purpose argument for shaping. When `sample=False` (model building), this is used

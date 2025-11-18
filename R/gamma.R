@@ -1,8 +1,8 @@
 #' @title Gamma Distribution
 #'
-#' @description The Gamma distribution is a continuous probability distribution that arises frequently in Bayesian statistics,
-#' particularly in prior distributions for variance parameters. It is defined by two positive shape parameters,
-#' concentration (k) and rate (theta).
+#' @description The Gamma distribution is a continuous probability distribution frequently used in Bayesian statistics, particularly as a
+#'prior distribution for variance parameters. It is defined by two positive shape parameters: concentration ((k)) and rate
+#' \deqn{\lambda}.
 #'
 #' @param concentration A numeric vector representing the shape parameter of the Gamma distribution (k > 0).
 #' @param rate A numeric vector representing the rate parameter of the Gamma distribution (theta > 0).

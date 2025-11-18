@@ -4,15 +4,6 @@
 #' modelling the correlation between the axes. A copula is a multivariate distribution over the uniform distribution
 #' on [0, 1]. The Gaussian copula links the marginal distributions through a multivariate normal distribution.
 #'
-#'\deqn{ f(x_1, ..., x_d) = \prod_{i=1}^{d} f_i(x_i) \cdot \phi(F_1(x_1), ..., F_d(x_d); \mu, \Sigma)}
-#'
-#' where:
-#' - \eqn{f_i} is the probability density function of the i-th marginal distribution.
-#' - \eqn{F_i} is the cumulative distribution function of the i-th marginal distribution.
-#' - \eqn{\phi} is the standard normal PDF.
-#' - \eqn{\mu} is the mean vector of the multivariate normal distribution.
-#' - \eqn{\Sigma} is the covariance matrix of the multivariate normal distribution.
-#'
 #' @param marginal_dist Distribution: Distribution whose last batch axis is to be coupled.
 #' @param correlation_matrix array_like, optional: Correlation matrix of the coupling multivariate normal distribution. Defaults to `reticulate::py_none()`.
 #' @param correlation_cholesky array_like, optional: Correlation Cholesky factor of the coupling multivariate normal distribution. Defaults to `reticulate::py_none()`.

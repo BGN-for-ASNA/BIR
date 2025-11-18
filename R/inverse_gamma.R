@@ -1,11 +1,7 @@
 #' @title InverseGamma Distribution
 #'
 #' @description The InverseGamma distribution is a two-parameter family of continuous probability
-#' distributions. It is defined by its shape and rate parameters. It is often used as a prior distribution for
-#' precision parameters (inverse variance) in Bayesian statistics.
-#'
-#' \deqn{p(x) = \frac{1}{Gamma(\alpha)} \left( \frac{\beta}{\Gamma(\alpha)} \right)^{\alpha} x^{\alpha - 1} e^{-\beta x}
-#' \text{ for } x > 0}
+#' distributions. It is defined by its shape \deqn{\alpha} and rate \deqn{\beta} parameters. It is often used as a prior distribution for precision parameters (inverse variance) in Bayesian statistics.
 #'
 #' @param concentration A numeric vector representing the shape parameter (\\alpha) of the InverseGamma distribution. Must be positive.
 #' @param rate A numeric vector representing the rate parameter (\\beta) of the InverseGamma distribution. Must be positive.

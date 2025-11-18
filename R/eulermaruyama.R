@@ -1,6 +1,6 @@
 #' @title Euler-Maruyama method
 #'
-#' @description Euler-Maruyama method is a method for the approximate numerical solution
+#' @description Euler-Maruyama methode is a method for the approximate numerical solution
 #' of a stochastic differential equation (SDE). It simulates the solution
 #' to an SDE by iteratively applying the Euler method to each time step,
 #' incorporating a random perturbation to account for the diffusion term.

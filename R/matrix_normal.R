@@ -4,9 +4,7 @@
 #' Samples from a Matrix Normal distribution, which is a multivariate normal distribution over matrices.
 #' The distribution is characterized by a location matrix and two lower triangular matrices that define the correlation structure.
 #' The distribution is related to the multivariate normal distribution in the following way.
-#' If \deqn{X ~ MN(loc,U,V)} then \deqn{vec(X) ~ MVN(vec(loc), kron(V,U) }.
-#'
-#' \deqn{p(x) = \frac{1}{2\pi^{p/2} |\Sigma|^{1/2}} \exp\left(-\frac{1}{2} (x - \mu)^T \Sigma^{-1} (x - \mu)\right)}
+#' If \deqn{X ~ MN(loc,U,V)$ then $vec(X) ~ MVN(vec(loc), kron(V,U) )}.
 #'
 #' @param loc A numeric vector, matrix, or array representing the location of the distribution.
 #' @param scale_tril_row A numeric vector, matrix, or array representing the lower cholesky of rows correlation matrix.

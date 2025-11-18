@@ -1,7 +1,7 @@
 #' @title A finite mixture of component distributions from different families.
 #'
 #' @description
-#' A finite mixture of component distributions from different families.
+#' A mixture distribution is a probability distribution constructed by selecting one of several component distributions according to specified weights, and then drawing a sample from the chosen component. It allows modelling of heterogeneous populations and multimodal data.
 #'
 #' @param mixing_distribution A `Categorical` distribution specifying the weights for each mixture component.
 #'   The size of this distribution specifies the number of components in the mixture.

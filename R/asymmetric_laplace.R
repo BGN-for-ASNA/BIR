@@ -1,13 +1,8 @@
-#' @title Asymmetric Laplace distribution wrapper.
+#' @title Asymmetric Laplace distribution
 #' @description Samples from an Asymmetric Laplace distribution.
-#' The Asymmetric Laplace distribution is a generalization of the Laplace distribution,
-#' where the two sides of the distribution are scaled differently. It is defined by
-#' a location parameter (`loc`), a scale parameter (`scale`), and an asymmetry parameter (`asymmetry`).
-#'
-#' The probability density function is:
-#' \deqn{f(x; \mu, \sigma, \kappa) = \frac{1}{\sigma(\kappa + 1/\kappa)} \exp\left(-\frac{(x-\mu)\text{sgn}(x-\mu)}{\sigma\kappa^{\text{sgn}(x-\mu)}}\right)}
-#' where \eqn{\mu} is the location, \eqn{\sigma} is the scale, and \eqn{\kappa} is the asymmetry.
-#' For \eqn{x < \mu}, the scale is \eqn{\sigma\kappa}, and for \eqn{x > \mu}, the scale is \eqn{\sigma/\kappa}.
+#'The Asymmetric Laplace distribution is a generalization of the Laplace distribution,
+#'where the two sides of the distribution are scaled differently. It is defined by
+#'a location parameter (loc), a scale parameter (scale), and an asymmetry parameter (asymmetry).
 #'
 #' @param loc A numeric vector or single numeric value representing the location parameter of the distribution. This corresponds to \eqn{\mu}.
 #' @param scale A numeric vector or single numeric value representing the scale parameter of the distribution. This corresponds to \eqn{\sigma}.

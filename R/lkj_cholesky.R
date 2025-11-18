@@ -1,7 +1,7 @@
 #' @title LKJ Cholesky Distribution
 #'
 #' @description
-#' The LKJ Cholesky distribution is a family of distributions
+#' The LKJ (Leonard-Kjærgaard-Jørgensen) Cholesky distribution is a family of distributions
 #' on symmetric matrices, often used as a prior for the Cholesky decomposition of a
 #' symmetric matrix. It is particularly useful in Bayesian inference for models with
 #' covariance structure.

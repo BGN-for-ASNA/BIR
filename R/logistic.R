@@ -1,7 +1,6 @@
 #' @title Samples from a Logistic distribution.
 #' @description
-#' The Logistic distribution is a continuous probability distribution defined by two parameters: location and scale. It is often used to model growth processes and is closely related to the normal distribution.
-#' @param loc Numeric vector or single number. The location parameter, specifying the median of the distribution. Defaults to 0.0.
+#'The Logistic distribution is a continuous probability distribution defined by two parameters: location and scale. It is often used to model growth processes and is closely related to the normal distribution.Its CDF is the logistic (sigmoid) function, which makes it appealing in modeling probabilities, logistic regression, and various growth models. It resembles the normal distribution in shape (bell-shaped, symmetric) but has **heavier tails** (i.e. more probability in the extremes) and simpler closed-form expressions for the CDF.#' @param loc Numeric vector or single number. The location parameter, specifying the median of the distribution. Defaults to 0.0.
 #' @param scale Numeric vector or single number. The scale parameter, which determines the spread of the distribution. Must be positive. Defaults to 1.0.
 #' @param shape Numeric vector. A multi-purpose argument for shaping. When `sample=False` (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When `sample=True` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.
 #' @param event Integer. The number of batch dimensions to reinterpret as event dimensions (used in model building).
