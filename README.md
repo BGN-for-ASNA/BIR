@@ -1,118 +1,204 @@
-# BIR
-Bayesian Inference for R 
-## Installation
+# Bayesian Inference Reimagined for R & Python
+
+<div align="center">
+
+**A unified probabilistic programming library bridging the gap between user-friendly R syntax and high-performance JAX computation.**  
+*Run bespoke models on CPU, GPU, or TPU with ease.*
+
+[![License: GPL (>= 3)](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![R build status](https://github.com/BGN-for-ASNA/BIR/workflows/R-CMD-check/badge.svg)](https://github.com/BGN-for-ASNA/BIR/actions)
+
+</div>
+
+---
+
+## One Mental Model. Two Languages.
+
+Whether you prefer R's formula syntax or Python's object-oriented approach, **BayesianInference (BI)** unifies the experience.
+
+-   ✅ **Zero Context Switching**: Variable names, distribution signatures, and model logic remain consistent.
+-   ✅ **NumPyro Power**: Both interfaces compile down to XLA via JAX for blazing fast inference.
+-   ✅ **Rich Diagnostics**: Seamless integration with ArviZ for posterior analysis.
+
+### Compare the Syntax
+
+<table width="100%">
+<tr>
+<th width="50%">R Syntax</th>
+<th width="50%">Python Syntax</th>
+</tr>
+<tr>
+<td valign="top">
+
 ```r
+model <- function(height, weight){
+  # Priors
+  sigma <- bi.dist.uniform(0, 50, name='sigma', shape=c(1))
+  alpha <- bi.dist.normal(178, 20, name='alpha', shape=c(1))
+  beta  <- bi.dist.normal(0, 1, name='beta', shape=c(1))
+
+  # Likelihood
+  mu <- alpha + beta * weight
+  bi.dist.normal(mu, sigma, obs=height)
+}
+```
+
+</td>
+<td valign="top">
+
+<details>
+<summary><strong>Click to expand Python Code</strong></summary>
+
+```python
+def model(height, weight):
+    # Priors
+    sigma = bi.dist.uniform(0, 50, name='sigma', shape=(1,))
+    alpha = bi.dist.normal(178, 20, name='alpha', shape=(1,))
+    beta  <- bi.dist.normal(0, 1, name='beta', shape=(1,))
+
+    # Likelihood
+    mu = alpha + beta * weight
+    bi.dist.normal(mu, sigma, obs=height)
+```
+
+</details>
+
+</td>
+</tr>
+</table>
+
+---
+
+## Built for Speed
+
+Leveraging Just-In-Time (JIT) compilation, BI outperforms traditional engines on standard hardware and unlocks massive scalability on GPU clusters for large datasets.
+
+**Benchmark: Network Size 100 (Lower is Better)**
+
+| Engine | Execution Time | Relative Performance |
+| :--- | :--- | :--- |
+| **STAN (CPU)** | `████████████████████████████` | *Baseline* |
+| **BI (CPU)** | `████████████` | **~2.5x Faster** |
+
+*> Comparison of execution time for a Social Relations Model. Source: Sosa et al. (2025).*
+
+---
+
+## Installation & Setup
+
+### 1. Install Package
+Use `devtools` to pull the latest development version from GitHub.
+
+```r
+if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
 devtools::install_github("https://github.com/BGN-for-ASNA/BIR")
 ```
 
-## Overview
+### 2. Initialize Environment
+Run the starting test to create the Python virtual environment managed by `reticulate`.
 
-Currently, the package provides:
-
-+ Data manipulation:
-    + One-hot encoding
-    + Conversion of index variables
-    + Scaling
-      
-+ Models (Using Numpyro):
-  
-    + Linear Regression for continuous variable
-    + Multiple continuous Variable
-    + Interaction between variables
-    + Categorical variable
-    + Binomial model
-    + Beta binomial
-    + Poisson model
-    + Gamma-Poisson
-    + Multinomial
-    + Dirichlet model
-    + Zero inflated
-    + Varying intercept
-    + Varying slopes
-    + Gaussian processes
-    + Measuring error
-    + Latent variable
-    + PCA
-    + GMM
-    + DPMM
-    + Network model
-    + Network with block model
-    + Network control for data collection biases 
-    + Network metrics
-    + Network Based Diffusion analysis
-    + BNN
-
-+ Model diagnostics (using ARVIZ):
-    + Data frame with summary statistics
-    + Plot posterior densities
-    + Bar plot of the autocorrelation function (ACF) for a sequence of data
-    + Plot rank order statistics of chains
-    + Forest plot to compare HDI intervals from a number of distributions
-    + Compute the widely applicable information criterion
-    + Compare models based on their expected log pointwise predictive density (ELPD)
-    + Compute estimate of rank normalized split-R-hat for a set of traces
-    + Calculate estimate of the effective sample size (ESS)
-    + Pair plot
-    + Density plot
-    + ESS evolution plot
-      
-# Model and Results Comparisons
-This package has been built following the Rethinking Classes of 2024.
-
-# Why?
-## 1.  To learn
-
-## 2.  Easy Model Building:
-The following linear regression model (rethinking 4.Geocentric Models): 
-```math
-height∼Normal(μ,σ)
-```
-```math
-μ=α+β*weight
-```
-```math 
-α∼Normal(178,20)
-```
-```math
-β∼Normal(0,10)
-```
-```math
-σ∼Uniform(0,50)
-```
-    
-can be declared in the package as
-```
+```r
 library(BayesianInference)
-m=importBI(platform='cpu')
+# Run the starting test to install Python dependencies
+BI_starting_test()
+```
 
-# Load csv file
-m$data(paste(system.file(package = "BayesianInference"),"/data/Howell1.csv", sep = ''), sep=';')
+### 3. Select Backend
+Choose `'cpu'`, `'gpu'`, or `'tpu'` when importing the library.
 
-# fileter data frame
-m$df = m$df[m$df$age > 18,]
+```r
+# Initialize on CPU (default) or GPU/TPU
+m <- importBI(platform = 'cpu')
+```
 
-# Scale
-m$scale(list('weight')) 
+---
 
-# convert data to jax arrays
-m$data_to_model(list('weight', 'height'))
+## Features
 
-# Define model ------------------------------------------------
-model <- function(height, weight){
-  # Parameters priors distributions
-  s = bi.dist.uniform(0, 50, name = 's', shape =c(1))
-  a = bi.dist.normal(178, 20,  name = 'a', shape = c(1))
-  b = bi.dist.normal(0, 1, name = 'b', shape = c(1))
-  
-  # Likelihood
-  bi.dist.normal(a + b * weight, s, obs = height)
-}
+### Data Manipulation
+-   One-hot encoding
+-   Index variable conversion
+-   Scaling and normalization
 
+### Modeling (via NumPyro)
+-   **Linear & Generalized Linear Models**: Regression, Binomial, Poisson, Negative Binomial, etc.
+-   **Hierarchical/Multilevel Models**: Varying intercepts and slopes.
+-   **Time Series & Processes**: Gaussian Processes, Gaussian Random Walks, State Space Models.
+-   **Mixture Models**: GMM, Dirichlet Process Mixtures.
+-   **Network Models**: Network-based diffusion, Block models.
+-   **Bayesian Neural Networks (BNN)**.
 
-# Run mcmc ------------------------------------------------
-m$fit(model) # Optimize model parameters through MCMC sampling
+### Diagnostics (via ArviZ)
+-   Posterior summary statistics and plots.
+-   Trace plots, Density plots, Autocorrelation.
+-   WAIC and LOO (ELPD) model comparison.
+-   R-hat and Effective Sample Size (ESS).
 
-# Summary ------------------------------------------------
-m$summary()
+---
 
-```            
+## Available Distributions
+
+The package provides wrappers for a comprehensive set of distributions from NumPyro.
+
+### Continuous
+-   `bi.dist.normal`, `bi.dist.uniform`, `bi.dist.student_t`
+-   `bi.dist.cauchy`, `bi.dist.halfcauchy`, `bi.dist.halfnormal`
+-   `bi.dist.gamma`, `bi.dist.inverse_gamma`, `bi.dist.exponential`
+-   `bi.dist.beta`, `bi.dist.beta_proportion`
+-   `bi.dist.laplace`, `bi.dist.asymmetric_laplace`
+-   `bi.dist.log_normal`, `bi.dist.log_uniform`
+-   `bi.dist.pareto`, `bi.dist.weibull`, `bi.dist.gumbel`
+-   `bi.dist.chi2`, `bi.dist.gompertz`
+
+### Discrete
+-   `bi.dist.bernoulli`, `bi.dist.binomial`
+-   `bi.dist.poisson`, `bi.dist.negative_binomial`
+-   `bi.dist.geometric`, `bi.dist.discrete_uniform`
+-   `bi.dist.beta_binomial`, `bi.dist.zero_inflated_poisson`
+
+### Multivariate
+-   `bi.dist.multivariate_normal`, `bi.dist.multivariate_student_t`
+-   `bi.dist.dirichlet`, `bi.dist.dirichlet_multinomial`
+-   `bi.dist.multinomial`
+-   `bi.dist.lkj`, `bi.dist.lkj_cholesky`
+-   `bi.dist.wishart`, `bi.dist.wishart_cholesky`
+
+### Time Series & Stochastic Processes
+-   `bi.dist.gaussian_random_walk`
+-   `bi.dist.gaussian_state_space`
+-   `bi.dist.euler_maruyama`
+-   `bi.dist.car` (Conditional AutoRegressive)
+
+### Mixtures & Truncated
+-   `bi.dist.mixture`, `bi.dist.mixture_same_family`
+-   `bi.dist.truncated_normal`, `bi.dist.truncated_cauchy`
+-   `bi.dist.lower_truncated_power_law`
+
+*(See package documentation for the full list)*
+
+---
+
+## Documentation
+
+For full documentation of functions and parameters, you can use the built-in R help or the package helper:
+
+```r
+# Open package documentation
+bi.doc()
+
+# Help for a specific function
+?bi.dist.normal
+```
+
+---
+
+<div align="center">
+
+**BayesianInference (BIR)**  
+Based on "The Bayesian Inference library for Python and R" by Sosa, McElreath, & Ross (2025).
+
+[Documentation](#) | [GitHub](https://github.com/BGN-for-ASNA/BIR) | [Issues](https://github.com/BGN-for-ASNA/BIR/issues)
+
+&copy; 2025 BayesianInference Team. Released under GPL-3.0.
+
+</div>
