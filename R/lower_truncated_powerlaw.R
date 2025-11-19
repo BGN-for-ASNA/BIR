@@ -1,7 +1,7 @@
 #' @title Lower Truncated Power Law Distribution
 #'
 #' @description
-#' The *Lower-Truncated Power-Law* distribution (also known as the *Pareto Type I* or *power-law with a lower bound*) models quantities that follow a heavy-tailed power-law behavior but are bounded below by a minimum value deqn{ x_{min} }. It is commonly used to describe phenomena such as wealth distributions, city sizes, and biological scaling laws. Lower truncated power law distribution with deqn{\alpha} index.
+#' The *Lower-Truncated Power-Law* distribution (also known as the *Pareto Type I* or *power-law with a lower bound*) models quantities that follow a heavy-tailed power-law behavior but are bounded below by a minimum value x_min. It is commonly used to describe phenomena such as wealth distributions, city sizes, and biological scaling laws. Lower truncated power law distribution with alpha index.
 
 #' @param alpha A numeric vector: index of the power law distribution. Must be less than -1.
 #' @param low A numeric vector: lower bound of the distribution. Must be greater than 0.

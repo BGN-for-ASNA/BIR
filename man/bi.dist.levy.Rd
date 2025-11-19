@@ -27,14 +27,7 @@ bi.dist.levy(
 \item{validate_args}{Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.}
 
 \item{name}{A character string representing the name of the random variable
-  within a model. This is used to uniquely identify the variable. Defaults to 'x'.
-
- @return
- - When \code{sample=FALSE}, a BI Levy distribution object (for model building).
-
- - When \code{sample=TRUE}, a JAX array of samples drawn from the Levy distribution (for direct sampling).
-
- - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).}
+within a model. This is used to uniquely identify the variable. Defaults to 'x'.}
 
 \item{obs}{A numeric vector or array of observed values. If provided, the
 random variable is conditioned on these values. If `NULL`, the variable is
@@ -55,6 +48,15 @@ randomness is handled by the model's inference engine. Defaults to 0.}
 \item{event}{Integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).}
 
 \item{create_obj}{Logical; If `TRUE`, returns the raw BI distribution object instead of creating a sample site.}
+
+\item{to_jax}{Logical. Defaults to TRUE.
+
+ @return
+ - When \code{sample=FALSE}, a BI Levy distribution object (for model building).
+
+ - When \code{sample=TRUE}, a JAX array of samples drawn from the Levy distribution (for direct sampling).
+
+ - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).}
 }
 \description{
 Samples from a Levy distribution.
@@ -68,8 +70,8 @@ where \deqn{\mu} is the location parameter and \deqn{c} is the scale parameter.
 \examples{
 \donttest{
 library(BayesianInference)
-m=importBI(platform='cpu')
-bi.dist.levy( loc = 1, scale = 10,  sample = TRUE)
+m <- importBI(platform = "cpu")
+bi.dist.levy(loc = 1, scale = 10, sample = TRUE)
 }
 }
 \seealso{
