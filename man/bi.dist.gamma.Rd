@@ -57,9 +57,9 @@ randomness is handled by the model's inference engine. Defaults to 0.}
  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-The Gamma distribution is a continuous probability distribution that arises frequently in Bayesian statistics,
-particularly in prior distributions for variance parameters. It is defined by two positive shape parameters,
-concentration (k) and rate (theta).
+The Gamma distribution is a continuous probability distribution frequently used in Bayesian statistics, particularly as a
+prior distribution for variance parameters. It is defined by two positive shape parameters: concentration ((k)) and rate
+\deqn{\lambda}.
 }
 \examples{
 \donttest{

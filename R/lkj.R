@@ -1,9 +1,9 @@
 #' @title Samples from an LKJ (Lewandowski, Kurowicka, Joe) distribution for correlation matrices.
 #'
-#' @description The LKJ distribution is controlled by the concentration parameter $\eta$ to make the probability
-#' of the correlation matrix $M` proportional to $\det(M)^{\eta - 1}$. When $\eta = 1$,
-#' the distribution is uniform over correlation matrices.  When $\eta > 1$, the distribution favors
-#' samples with large determinants. When $\eta < 1$, the distribution favors samples with small
+#' @description The LKJ distribution is controlled by the concentration parameter \deqn{\eta} to make the probability
+#' of the correlation matrix M proportional to \deqn{\det(M)^{\eta - 1}}. When \deqn{\eta = 1},
+#' the distribution is uniform over correlation matrices.  When \deqn{\eta > 1}, the distribution favors
+#' samples with large determinants. When \deqn{\eta < 1}, the distribution favors samples with small
 #' determinants.
 #'
 #' @param dimension An integer representing the dimension of the correlation matrices.

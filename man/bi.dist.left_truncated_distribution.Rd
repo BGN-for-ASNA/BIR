@@ -63,7 +63,7 @@ JAX array of the given shape.}
 A left-truncated distribution is a probability distribution
 obtained by restricting the support of another distribution
 to values greater than a specified lower bound. This is useful
-when dealing with data that is known to be greater than a certain value.
+when dealing with data that is known to be greater than a certain value. All the "mass" below (or equal to) (a) is **excluded** (not just unobserved, but removed from the sample/analysis).
 
 
 \deqn{f(x) = \begin{cases}

@@ -60,7 +60,9 @@ randomness is handled by the model's inference engine. Defaults to 0.}
  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-Samples from a Beta-Binomial distribution.
+Samples from a BetaBinomial distribution, a compound distribution where the probability of success in a binomial
+experiment is drawn from a Beta distribution. This models situations where the underlying probability of success
+is not fixed but varies according to a prior belief represented by the Beta distribution. It is often used to model over-dispersion relative to the binomial distribution.
 }
 \examples{
 \donttest{

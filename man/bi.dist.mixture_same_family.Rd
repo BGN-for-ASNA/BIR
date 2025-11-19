@@ -58,11 +58,12 @@ randomness is handled by the model's inference engine. Defaults to 0.}
    - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-This mixture only supports a mixture of component distributions that are all
-of the same family. The different components are specified along the last
-batch dimension of the input ``component_distribution``. If you need a
-mixture of distributions from different families, use the more general
-implementation in :class:`bi.dist.mixture_general`.
+A *Mixture (Same-Family)* distribution is a finite mixture in which **all components come from the same parametric family** (for example, all Normal distributions but with different parameters), and are combined via mixing weights. The class is typically denoted as:
+ Let the mixture have (K) components. Let weights \deqn{w_i\ge0}, \deqn{\sum_{i=1}^K w_i = 1}. Let the component family have density \deqn{f(x \mid \theta_i)} for each component (i). Then the mixture's PDF is
+\deqn{
+ f_X(x) = \sum_{i=1}^K w_i ; f(x \mid \theta_i).
+}
+where each $f(x \mid \theta_i)$ is from the same family with parameter $\theta_i$.
 }
 \examples{
 \donttest{

@@ -20,8 +20,6 @@ bi.dist.logistic(
 )
 }
 \arguments{
-\item{loc}{Numeric vector or single number. The location parameter, specifying the median of the distribution. Defaults to 0.0.}
-
 \item{scale}{Numeric vector or single number. The scale parameter, which determines the spread of the distribution. Must be positive. Defaults to 1.0.}
 
 \item{validate_args}{Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.}
@@ -57,7 +55,7 @@ randomness is handled by the model's inference engine. Defaults to 0.}
  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-The Logistic distribution is a continuous probability distribution defined by two parameters: location and scale. It is often used to model growth processes and is closely related to the normal distribution.
+The Logistic distribution is a continuous probability distribution defined by two parameters: location and scale. It is often used to model growth processes and is closely related to the normal distribution.Its CDF is the logistic (sigmoid) function, which makes it appealing in modeling probabilities, logistic regression, and various growth models. It resembles the normal distribution in shape (bell-shaped, symmetric) but has **heavier tails** (i.e. more probability in the extremes) and simpler closed-form expressions for the CDF.#' @param loc Numeric vector or single number. The location parameter, specifying the median of the distribution. Defaults to 0.0.
 }
 \examples{
 \donttest{

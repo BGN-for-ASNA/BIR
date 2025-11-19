@@ -57,12 +57,10 @@ randomness is handled by the model's inference engine. Defaults to 0.}
  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-A Gaussian Random Walk is a stochastic process where each step is a Gaussian-distributed increment.
-It can be thought of as a discrete-time version of a Brownian motion.
-
-\deqn{X_{t} = \sum_{i=1}^{t} \epsilon_i}
-
-where \eqn{\epsilon_i \sim \mathcal{N}(0, \sigma^2)} are independent Gaussian random variables.
+Creates a distribution over a Gaussian random walk of a specified number of steps.
+This is a discrete-time stochastic process where the value at each step is the
+previous value plus a Gaussian-distributed increment. The distribution is over
+the entire path.
 }
 \examples{
 \donttest{

@@ -46,7 +46,7 @@ bi.dist.asymmetric_laplace=function(
     seed = py_none(),
     shape=c(),
     event=0,
-    create_obj=FALSE) {
+    create_obj=FALSE, to_jax = TRUE ) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}

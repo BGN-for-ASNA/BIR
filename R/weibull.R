@@ -41,7 +41,7 @@
 #' bi.dist.weibull(scale = c(10, 10), concentration = c(1,1), sample = TRUE)
 #' }
 #' @export
-bi.dist.weibull=function(scale, concentration, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE) {
+bi.dist.weibull=function(scale, concentration, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE ) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
      .BI_env$.bi_instance$dist$weibull(

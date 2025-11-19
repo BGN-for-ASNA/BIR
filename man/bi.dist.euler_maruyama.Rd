@@ -60,7 +60,7 @@ randomness is handled by the model's inference engine. Defaults to 0.}
  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-Euler-Maruyama method is a method for the approximate numerical solution
+Euler-Maruyama methode is a method for the approximate numerical solution
 of a stochastic differential equation (SDE). It simulates the solution
 to an SDE by iteratively applying the Euler method to each time step,
 incorporating a random perturbation to account for the diffusion term.

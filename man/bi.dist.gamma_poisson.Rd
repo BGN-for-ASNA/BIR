@@ -57,10 +57,7 @@ randomness is handled by the model's inference engine. Defaults to 0.}
  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-A compound distribution comprising of a gamma-poisson pair, also referred to as
-a gamma-poisson mixture. The ``rate`` parameter for the
-:class:`bi.dist.poisson` distribution is unknown and randomly
-drawn from a :class:`bi.dist.gamma` distribution.
+The Gamma-Poisson distribution, also known as the Negative Binomial distribution, models overdispersed count data. It arises from a hierarchical process where the rate parameter of a Poisson distribution is itself a random variable following a Gamma distribution. This structure allows the model to capture variability in count data that exceeds what is predicted by the Poisson distribution, making it suitable for applications like modeling RNA-sequencing data and microbial count.
 }
 \examples{
 \donttest{

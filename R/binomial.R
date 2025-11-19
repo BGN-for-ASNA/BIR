@@ -53,7 +53,8 @@ bi.dist.binomial=function(
     seed=py_none(),
     shape=c(),
     event=0,
-    create_obj=FALSE
+    create_obj=FALSE,
+    to_jax = TRUE
     ) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
@@ -71,7 +72,7 @@ bi.dist.binomial=function(
          sample= sample,  seed= seed,  shape= shape,
          event= event,  create_obj= create_obj,   to_jax = to_jax)
      }else{
-       .BI_env$.bi_instance$dist$binomial(total_count=.BI_env$jnp$array(total_count),  logits= .BI_env$jnp$array(logits),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
+       .BI_env$.bi_instance$dist$binomial(total_count=.BI_env$jnp$array(total_count),  logits= .BI_env$jnp$array(logits),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj, to_jax = to_jax)
 
      }
 }

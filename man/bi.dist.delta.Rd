@@ -60,9 +60,8 @@ randomness is handled by the model's inference engine. Defaults to 0.}
  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-The Delta distribution, also known as a point mass distribution, assigns probability 1 to a single point and 0 elsewhere. It's useful for representing deterministic variables or as a building block for more complex distributions.
-
-\deqn{P(x = v) = 1}
+The Delta distribution, also known as a point mass distribution, assigns probability 1 to a single point and 0 elsewhere.
+It's useful for representing deterministic variables or as a building block for more complex distributions.
 }
 \examples{
 \donttest{

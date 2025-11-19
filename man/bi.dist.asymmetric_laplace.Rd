@@ -2,7 +2,7 @@
 % Please edit documentation in R/asymmetric_laplace.R
 \name{bi.dist.asymmetric_laplace}
 \alias{bi.dist.asymmetric_laplace}
-\title{Asymmetric Laplace distribution wrapper.}
+\title{Asymmetric Laplace distribution}
 \usage{
 bi.dist.asymmetric_laplace(
   loc = 0,
@@ -16,7 +16,8 @@ bi.dist.asymmetric_laplace(
   seed = py_none(),
   shape = c(),
   event = 0,
-  create_obj = FALSE
+  create_obj = FALSE,
+  to_jax = TRUE
 )
 }
 \arguments{
@@ -60,12 +61,7 @@ When \code{sample=FALSE}: A BI AsymmetricLaplace distribution object (for model 
 Samples from an Asymmetric Laplace distribution.
 The Asymmetric Laplace distribution is a generalization of the Laplace distribution,
 where the two sides of the distribution are scaled differently. It is defined by
-a location parameter (`loc`), a scale parameter (`scale`), and an asymmetry parameter (`asymmetry`).
-
-The probability density function is:
-\deqn{f(x; \mu, \sigma, \kappa) = \frac{1}{\sigma(\kappa + 1/\kappa)} \exp\left(-\frac{(x-\mu)\text{sgn}(x-\mu)}{\sigma\kappa^{\text{sgn}(x-\mu)}}\right)}
-where \eqn{\mu} is the location, \eqn{\sigma} is the scale, and \eqn{\kappa} is the asymmetry.
-For \eqn{x < \mu}, the scale is \eqn{\sigma\kappa}, and for \eqn{x > \mu}, the scale is \eqn{\sigma/\kappa}.
+a location parameter (loc), a scale parameter (scale), and an asymmetry parameter (asymmetry).
 }
 \examples{
 \donttest{

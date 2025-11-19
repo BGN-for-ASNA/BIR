@@ -61,11 +61,7 @@ This is essential for building complex distributions like `MixtureSameFamily`.}
 }
 \description{
 The InverseGamma distribution is a two-parameter family of continuous probability
-distributions. It is defined by its shape and rate parameters. It is often used as a prior distribution for
-precision parameters (inverse variance) in Bayesian statistics.
-
-\deqn{p(x) = \frac{1}{Gamma(\alpha)} \left( \frac{\beta}{\Gamma(\alpha)} \right)^{\alpha} x^{\alpha - 1} e^{-\beta x}
-\text{ for } x > 0}
+distributions. It is defined by its shape \deqn{\alpha} and rate \deqn{\beta} parameters. It is often used as a prior distribution for precision parameters (inverse variance) in Bayesian statistics.
 }
 \examples{
 \donttest{

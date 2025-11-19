@@ -66,7 +66,7 @@ It is commonly used to model discrete choices or classifications.
 
 \deqn{P(k) = \frac{e^{\log(p_k)}}{\sum_{j=1}^{K} e^{\log(p_j)}}}
 
-where :math:`p_k` is the probability of outcome :math:`k`, and the sum is over all possible outcomes.
+where \deqn{p_k} is the probability of outcome \deqn{k}, and the sum is over all possible outcomes.
 }
 \examples{
 \donttest{

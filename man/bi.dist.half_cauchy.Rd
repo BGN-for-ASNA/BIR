@@ -54,10 +54,7 @@ randomness is handled by the model's inference engine. Defaults to 0.}
  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-The HalfCauchy distribution is a probability distribution that is half of the Cauchy distribution.
-It is defined on the positive real numbers and is often used in situations where only positive values are relevant.
-
-\deqn{ f(x) = \frac{1}{2} \cdot \frac{1}{\pi \cdot \frac{1}{scale} \cdot (x^2 + \frac{1}{scale^2})}}
+The HalfCauchy distribution is a probability distribution that is half of the Cauchy distribution. It is defined on the positive real numbers and is often used in situations where only positive values are relevant.
 }
 \examples{
 \donttest{

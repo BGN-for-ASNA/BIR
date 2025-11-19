@@ -63,11 +63,9 @@ randomness is handled by the model's inference engine. Defaults to 0.}
  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-Samples from a Gaussian Copula Beta distribution.
 This distribution combines a Gaussian copula with a Beta distribution.
 The Gaussian copula models the dependence structure between random variables,
 while the Beta distribution defines the marginal distributions of each variable.
-\eqn{f(x) = \int_{-\infty}^{\infty} g(x|u) h(u) du}
 }
 \examples{
 \donttest{

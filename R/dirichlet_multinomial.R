@@ -58,6 +58,7 @@ bi.dist.dirichlet_multinomial=function(concentration, total_count=1, validate_ar
        seed= seed,
        shape= shape,
        event= event,
-       create_obj= create_obj
+       create_obj= create_obj,
+       to_jax = to_jax
        )
 }

@@ -315,7 +315,7 @@ test_that("bi.dist.log_normal", {
   r2 = reticulate::py_to_r(res$tolist())
   expect_equal(r2, c(0.34700316, 0.00106194))
 })
-jnp <- import("jax.numpy")
+jnp <- reticulate::import("jax.numpy")
 test_that("bi.dist.low_rank_multivariate_normal", {
   event_size = 10
   rank = 5

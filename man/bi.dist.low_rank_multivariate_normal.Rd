@@ -60,16 +60,11 @@ randomness is handled by the model's inference engine. Defaults to 0.}
  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-Represents a multivariate normal distribution with a low-rank covariance structure.
-
-The probability density function (PDF) is:
-\deqn{p(x) = \frac{1}{\sqrt{(2\pi)^K |\Sigma|}} \exp\left(-\frac{1}{2} (x - \mu)^T \Sigma^{-1} (x - \mu)\right)}
-
-where:
-
-* \eqn{x} is a vector of observations.
-* \eqn{\mu} is the mean vector.
-* \eqn{\Sigma} is the covariance matrix, represented in a low-rank form.
+The *Low-Rank Multivariate Normal* (LRMVN) distribution is a parameterization of the multivariate normal distribution where the covariance matrix is expressed as a low-rank plus diagonal decomposition:
+ \deqn{
+ \Sigma = F F^\top + D
+ }
+where $F$ is a low-rank matrix (capturing correlations) and $D$ is a diagonal matrix (capturing independent noise). This representation is often used in probabilistic modeling and variational inference to efficiently handle high-dimensional Gaussian distributions with structured covariance.
 }
 \examples{
 \donttest{

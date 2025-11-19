@@ -62,7 +62,7 @@ randomness is handled by the model's inference engine. Defaults to 0.}
    - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-A finite mixture of component distributions from different families.
+A mixture distribution is a probability distribution constructed by selecting one of several component distributions according to specified weights, and then drawing a sample from the chosen component. It allows modelling of heterogeneous populations and multimodal data.
 }
 \examples{
 \donttest{

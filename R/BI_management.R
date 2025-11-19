@@ -210,6 +210,7 @@ update_BI <- function(envname = "BayesInference"){
   reticulate::py_install(
     packages = "BayesInference",
     envname = envname,
+    pip_args = "--upgrade --no-cache-dir"
   )
 
 }

@@ -60,10 +60,10 @@ array of the given shape.}
  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-This distribution combines a Dirichlet distribution (for the probabilities of categories)
-and a Multinomial distribution (for the counts within each category).  The Dirichlet
-distribution acts as a prior on the probabilities, allowing for a flexible and
-informative model.
+Creates a Dirichlet-Multinomial compound distribution, which is a Multinomial
+distribution with a Dirichlet prior on its probabilities. It is often used in
+Bayesian statistics to model count data where the proportions of categories are
+uncertain.
 }
 \examples{
 \donttest{

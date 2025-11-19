@@ -62,13 +62,11 @@ this is used as `sample_shape` to draw a raw JAX array of the given shape.}
    - When \code{create_obj=TRUE}: The raw BI distribution object (for advanced use cases).
 }
 \description{
-The LKJ distribution is controlled by the concentration parameter \eqn{\eta} to make the
-probability of the correlation matrix \eqn{M} proportional to \eqn{\det(M)^{\eta - 1}}.
-When \eqn{\eta = 1}, the distribution is uniform over correlation matrices.
-When \eqn{\eta > 1}, the distribution favors samples with large determinants.
-When \eqn{\eta < 1}, the distribution favors samples with small determinants.
-
-\deqn{ P(M) \propto |\det(M)|^{\eta - 1}}
+The LKJ distribution is controlled by the concentration parameter \deqn{\eta} to make the probability
+of the correlation matrix M proportional to \deqn{\det(M)^{\eta - 1}}. When \deqn{\eta = 1},
+the distribution is uniform over correlation matrices.  When \deqn{\eta > 1}, the distribution favors
+samples with large determinants. When \deqn{\eta < 1}, the distribution favors samples with small
+determinants.
 }
 \examples{
 \donttest{

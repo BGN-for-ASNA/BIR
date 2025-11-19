@@ -51,7 +51,7 @@
 #' bi.dist.wishart(concentration = 5, scale_matrix = matrix(c(1,0,0,1), nrow = 2), sample = TRUE)
 #' }
 #' @export
-bi.dist.wishart=function(concentration, scale_matrix=py_none(), rate_matrix=py_none(), scale_tril=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE) {
+bi.dist.wishart=function(concentration, scale_matrix=py_none(), rate_matrix=py_none(), scale_tril=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE ) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      if(!.BI_env$.py$is_none(scale_matrix)){scale_matrix = .BI_env$jnp$array(scale_matrix)}
      if(!.BI_env$.py$is_none(rate_matrix)){rate_matrix = .BI_env$jnp$array(rate_matrix)}

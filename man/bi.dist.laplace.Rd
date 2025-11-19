@@ -2,7 +2,7 @@
 % Please edit documentation in R/laplace.R
 \name{bi.dist.laplace}
 \alias{bi.dist.laplace}
-\title{Laplace Distribution}
+\title{LKJ Cholesky Distribution}
 \usage{
 bi.dist.laplace(
   loc = 0,
@@ -20,59 +20,55 @@ bi.dist.laplace(
 )
 }
 \arguments{
-\item{loc}{A numeric vector representing the location parameter of the Laplace distribution.}
+\item{validate_args}{Logical: Whether to validate parameter values. Defaults to `reticulate::py_none()`.}
 
-\item{scale}{A numeric vector representing the scale parameter of the Laplace distribution. Must be positive.}
+\item{name}{A character string representing the name of the random variable. Defaults to 'x'.}
 
-\item{validate_args}{Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.}
+\item{obs}{A numeric vector or array of observed values. Defaults to `NULL`.}
 
-\item{name}{A character string representing the name of the random variable
-within a model. This is used to uniquely identify the variable. Defaults to 'x'.}
+\item{mask}{An optional boolean vector to mask observations.}
 
-\item{obs}{A numeric vector or array of observed values. If provided, the
-random variable is conditioned on these values. If `NULL`, the variable is
-treated as a latent (unobserved) variable. Defaults to `NULL`.}
+\item{sample}{A logical value that controls the function's behavior. If `TRUE`, samples are drawn directly. If `FALSE`, a random variable is created. Defaults to `FALSE`.}
 
-\item{mask}{A logical vector, optionally used to mask observations.}
+\item{seed}{An integer used to set the random seed for reproducibility when `sample = TRUE`. Defaults to 0.}
 
-\item{sample}{A logical value that controls the function's behavior. If `TRUE`,
-the function will directly draw samples from the distribution. If `FALSE`,
-it will create a random variable within a model. Defaults to `FALSE`.}
+\item{shape}{A numeric vector used for shaping. When `sample=FALSE` (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When `sample=TRUE`, it is used as `sample_shape`.}
 
-\item{seed}{An integer used to set the random seed for reproducibility when
-`sample = TRUE`. This argument has no effect when `sample = FALSE`, as
-randomness is handled by the model's inference engine. Defaults to 0.}
+\item{event}{An integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).}
 
-\item{shape}{A numeric vector used for shaping. When \code{sample=FALSE} (model building),
-this is used with `.expand(shape)` to set the distribution's batch shape.
-When \code{sample=TRUE} (direct sampling), this is used as `sample_shape` to draw a raw
-JAX array of the given shape.}
+\item{create_obj}{A logical value. If `TRUE`, returns the raw BI distribution object instead of creating a sample site.}
 
-\item{event}{Integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{to_jax}{Logical. Defaults to TRUE.}
 
-\item{create_obj}{Logical; If TRUE, returns the raw BI distribution object instead of creating a
-sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+\item{dimension}{An integer representing the dimension of the correlation
+matrices.}
+
+\item{concentration}{A numeric vector representing the concentration/shape parameter of the distribution (often referred to as eta). Must be positive.}
+
+\item{sample_method}{String: Either "cvine" or "onion". Methods proposed offer the same distribution over correlation matrices but differ in how to generate samples. Defaults to "onion".}
 }
 \value{
-- When \code{sample=FALSE}: A BI Laplace distribution object (for model building).
+- When `sample=FALSE`: A BI LKJ distribution object.
 
-   - When \code{sample=TRUE}: A JAX array of samples drawn from the Laplace distribution (for direct sampling).
+   - When `sample=TRUE`: A JAX array of samples.
 
-   - When \code{create_obj=TRUE}: The raw BI distribution object (for advanced use cases).
+   - When `create_obj=TRUE`: The raw BI distribution object.
 }
 \description{
-Samples from a Laplace distribution, also known as the double exponential distribution.
-The Laplace distribution is defined by its location parameter (loc) and scale parameter (scale).
+Samples from an LKJ (Lewandowski, Kurowicka, Joe) distribution for correlation matrices.
 
-\deqn{f(x) = \frac{1}{2s} \exp\left(-\frac{|x - \mu|}{s}\right)}
+  The LKJ distribution is controlled by the concentration parameter `eta` to make the probability of the correlation matrix M proportional to `det(M)^(eta - 1)`.
+  When `eta = 1`, the distribution is uniform over correlation matrices.
+  When `eta > 1`, the distribution favors samples with large determinants.
+  When `eta < 1`, the distribution favors samples with small determinants.
 }
 \examples{
 \donttest{
 library(BayesianInference)
 m=importBI(platform='cpu')
-bi.dist.laplace(sample = TRUE)
+bi.dist.lkj(dimension = 2, concentration=1.0, shape = c(1), sample = TRUE)
 }
 }
 \seealso{
-This is a wrapper of  \url{https://num.pyro.ai/en/stable/distributions.html#laplace}
+Wrapper of \url{https://num.pyro.ai/en/stable/distributions.html#lkj}
 }
