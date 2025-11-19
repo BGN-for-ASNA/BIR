@@ -34,6 +34,7 @@
 #'
 #' @param name A character string representing the name of the random variable
 #'   within a model. This is used to uniquely identify the variable. Defaults to 'x'.
+#' @param to_jax Boolean. Indicates whether to return a JAX array or not.
 #'
 #' @return
 #'  - When \code{sample=FALSE}, a BI Bernoulli distribution object (for model building).
