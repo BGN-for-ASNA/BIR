@@ -20,6 +20,8 @@ bi.dist.logistic(
 )
 }
 \arguments{
+\item{loc}{Numeric vector or single number. The location parameter, specifying the median of the distribution. Defaults to 0.0.}
+
 \item{scale}{Numeric vector or single number. The scale parameter, which determines the spread of the distribution. Must be positive. Defaults to 1.0.}
 
 \item{validate_args}{Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.}
@@ -46,6 +48,8 @@ randomness is handled by the model's inference engine. Defaults to 0.}
 \item{event}{Integer. The number of batch dimensions to reinterpret as event dimensions (used in model building).}
 
 \item{create_obj}{Logical. If True, returns the raw BI distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+
+\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
 }
 \value{
 - When \code{sample=FALSE}, a BI Logistic distribution object (for model building).
@@ -60,7 +64,7 @@ The Logistic distribution is a continuous probability distribution defined by tw
 \examples{
 \donttest{
 library(BayesianInference)
-m=importBI(platform='cpu')
+m <- importBI(platform = "cpu")
 bi.dist.logistic(sample = TRUE)
 }
 }

@@ -51,6 +51,8 @@ used as `sample_shape` to draw a raw JAX array of the given shape.}
 
 \item{create_obj}{A logical value. If `TRUE`, returns the raw BI distribution object instead of creating a sample site.
 This is essential for building complex distributions like `MixtureSameFamily`.}
+
+\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
 }
 \value{
 - When \code{sample=FALSE}: A BI InverseGamma distribution object (for model building).

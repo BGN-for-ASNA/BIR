@@ -49,6 +49,8 @@ randomness is handled by the model's inference engine. Defaults to 0.}
 \item{event}{An integer representing the number of batch dimensions to reinterpret as event dimensions.}
 
 \item{create_obj}{A logical value. If `TRUE`, returns the raw BI distribution object.}
+
+\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
 }
 \value{
 When \code{sample=FALSE}: A BI Mixture distribution object (for model building).

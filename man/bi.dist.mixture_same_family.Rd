@@ -49,6 +49,8 @@ randomness is handled by the model's inference engine. Defaults to 0.}
 \item{event}{Integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).}
 
 \item{create_obj}{Logical; If TRUE, returns the raw BI distribution object instead of creating a sample site.}
+
+\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
 }
 \value{
 - When \code{sample=FALSE}, a BI MixtureSameFamily distribution object (for model building).
@@ -63,16 +65,17 @@ A *Mixture (Same-Family)* distribution is a finite mixture in which **all compon
 \deqn{
  f_X(x) = \sum_{i=1}^K w_i ; f(x \mid \theta_i).
 }
-where each $f(x \mid \theta_i)$ is from the same family with parameter $\theta_i$.
+where each deqn{f(x \mid \theta_i)} is from the same family with parameter deqn{\theta_i}.
 }
 \examples{
 \donttest{
 library(BayesianInference)
-m=importBI(platform='cpu')
+m <- importBI(platform = "cpu")
 bi.dist.mixture_same_family(
-mixing_distribution = bi.dist.categorical(probs = c(0.3, 0.7),create_obj = TRUE),
-component_distribution = bi.dist.normal(0,1, shape = c(2), create_obj = TRUE),
-sample = TRUE)
+  mixing_distribution = bi.dist.categorical(probs = c(0.3, 0.7), create_obj = TRUE),
+  component_distribution = bi.dist.normal(0, 1, shape = c(2), create_obj = TRUE),
+  sample = TRUE
+)
 }
 }
 \seealso{

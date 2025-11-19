@@ -65,7 +65,7 @@
 #' }
 #' @export
 bi.dist.euler_maruyama=function(t, sde_fn, init_dist, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
-     shape=do.call(reticulate:::tuple, as.list(as.integer(shape)))
+     shape=do.call(reticulate::tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      reticulate::py_run_string("def is_none(x): return x is None")
      if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}

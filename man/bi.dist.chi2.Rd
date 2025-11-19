@@ -51,6 +51,8 @@ dimensions (used in model building).}
 \item{create_obj}{A logical value. If `TRUE`, returns the raw BI distribution object
 instead of creating a sample site. This is essential for building complex distributions
 like `MixtureSameFamily`.}
+
+\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
 }
 \value{
 - When \code{sample=FALSE}, a BI Chi-squared distribution object (for model building).

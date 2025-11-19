@@ -1,9 +1,7 @@
 #' @title Lower Truncated Power Law Distribution
 #'
 #' @description
-#' The *Lower-Truncated Power-Law* distribution (also known as the *Pareto Type I* or *power-law with a lower bound*) models quantities that follow a heavy-tailed power-law behavior but are bounded below by a minimum value ( x_{\min} ). It is commonly used to describe phenomena such as wealth distributions, city sizes, and biological scaling laws.
-
-#' Lower truncated power law distribution with $\alpha` index.
+#' The *Lower-Truncated Power-Law* distribution (also known as the *Pareto Type I* or *power-law with a lower bound*) models quantities that follow a heavy-tailed power-law behavior but are bounded below by a minimum value deqn{ x_{min} }. It is commonly used to describe phenomena such as wealth distributions, city sizes, and biological scaling laws. Lower truncated power law distribution with deqn{\alpha} index.
 
 #' @param alpha A numeric vector: index of the power law distribution. Must be less than -1.
 #' @param low A numeric vector: lower bound of the distribution. Must be greater than 0.
@@ -40,17 +38,20 @@
 #' @examples
 #' \donttest{
 #' library(BayesianInference)
-#' m=importBI(platform='cpu')
-#' bi.dist.lower_truncated_power_law( alpha = c(-2, 2), low = c(1, 0.5),  sample = TRUE)
+#' m <- importBI(platform = "cpu")
+#' bi.dist.lower_truncated_power_law(alpha = c(-2, 2), low = c(1, 0.5), sample = TRUE)
 #' }
 #' @export
 
-bi.dist.lower_truncated_power_law=function(alpha, low, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
-     shape=do.call(tuple, as.list(as.integer(shape)))
-     reticulate::py_run_string("def is_none(x): return x is None");
-     if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
-     .BI_env$.bi_instance$dist$lower_truncated_power_law(
-       alpha = .BI_env$jnp$array(alpha),
-       low = .BI_env$jnp$array(low),
-       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
+bi.dist.lower_truncated_power_law <- function(alpha, low, validate_args = py_none(), name = "x", obs = py_none(), mask = py_none(), sample = FALSE, seed = py_none(), shape = c(), event = 0, create_obj = FALSE, to_jax = TRUE) {
+  shape <- do.call(tuple, as.list(as.integer(shape)))
+  reticulate::py_run_string("def is_none(x): return x is None")
+  if (!.BI_env$.py$is_none(seed)) {
+    seed <- as.integer(seed)
+  }
+  .BI_env$.bi_instance$dist$lower_truncated_power_law(
+    alpha = .BI_env$jnp$array(alpha),
+    low = .BI_env$jnp$array(low),
+    validate_args = validate_args, name = name, obs = obs, mask = mask, sample = sample, seed = seed, shape = shape, event = event, create_obj = create_obj, to_jax = to_jax
+  )
 }

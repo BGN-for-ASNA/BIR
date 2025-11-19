@@ -51,6 +51,8 @@ array of the given shape.}
 \item{event}{The number of batch dimensions to reinterpret as event dimensions (used in model building).}
 
 \item{create_obj}{A logical value. If `TRUE`, returns the raw BI distribution object instead of creating a sample site.}
+
+\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
 }
 \value{
 - When \code{sample=FALSE}, a BI Dirichlet Multinomial  distribution object (for model building).

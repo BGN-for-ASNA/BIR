@@ -57,6 +57,8 @@ randomness is handled by the model's inference engine. Defaults to 0.}
 \item{event}{An integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).}
 
 \item{create_obj}{A logical value. If `TRUE`, returns the raw BI distribution object instead of creating a sample site. Defaults to `FALSE`.}
+
+\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
 }
 \value{
 When `sample=FALSE`:
@@ -81,7 +83,7 @@ m=importBI(platform='cpu')
 bi.dist.gaussian_state_space(
   num_steps = 1,
   transition_matrix = matrix(c(0.5), nrow = 1, byrow = TRUE),
-  covariance_matrix = matrix(c(1.0, 0.7, 0.7, 1.0), nrow = 2, byrow = TRUE),
+  covariance_matrix = matrix(c(1.0), nrow = 1, byrow = TRUE),
   sample = TRUE)
 }
 }

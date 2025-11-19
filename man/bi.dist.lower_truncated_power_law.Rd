@@ -51,6 +51,8 @@ used as `sample_shape` to draw a raw JAX array of the given shape.}
 
 \item{create_obj}{Logical: If `TRUE`, returns the raw BI distribution object instead of creating a sample site.
 This is essential for building complex distributions like `MixtureSameFamily`.}
+
+\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
 }
 \value{
 - When \code{sample=FALSE}, a BI Lower Truncated Power Law distribution object (for model building).
@@ -60,14 +62,14 @@ This is essential for building complex distributions like `MixtureSameFamily`.}
  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-The *Lower-Truncated Power-Law* distribution (also known as the *Pareto Type I* or *power-law with a lower bound*) models quantities that follow a heavy-tailed power-law behavior but are bounded below by a minimum value ( x_{\min} ). It is commonly used to describe phenomena such as wealth distributions, city sizes, and biological scaling laws.
-Lower truncated power law distribution with $\alpha` index.
+The *Lower-Truncated Power-Law* distribution (also known as the *Pareto Type I* or *power-law with a lower bound*) models quantities that follow a heavy-tailed power-law behavior but are bounded below by a minimum value deqn{ x_{\min} }. It is commonly used to describe phenomena such as wealth distributions, city sizes, and biological scaling laws.
+Lower truncated power law distribution with deqn{\alpha} index.
 }
 \examples{
 \donttest{
 library(BayesianInference)
-m=importBI(platform='cpu')
-bi.dist.lower_truncated_power_law( alpha = c(-2, 2), low = c(1, 0.5),  sample = TRUE)
+m <- importBI(platform = "cpu")
+bi.dist.lower_truncated_power_law(alpha = c(-2, 2), low = c(1, 0.5), sample = TRUE)
 }
 }
 \seealso{

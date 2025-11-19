@@ -46,7 +46,7 @@
 #' bi.dist.gaussian_state_space(
 #'   num_steps = 1,
 #'   transition_matrix = matrix(c(0.5), nrow = 1, byrow = TRUE),
-#'   covariance_matrix = matrix(c(1.0, 0.7, 0.7, 1.0), nrow = 2, byrow = TRUE),
+#'   covariance_matrix = matrix(c(1.0), nrow = 1, byrow = TRUE),
 #'   sample = TRUE)
 #'}
 #' @export

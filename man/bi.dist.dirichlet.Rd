@@ -45,6 +45,8 @@ randomness is handled by the model's inference engine. Defaults to 0.}
 \item{event}{Integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).}
 
 \item{create_obj}{Logical; If TRUE, returns the raw BI distribution object instead of creating a sample site.}
+
+\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
 }
 \value{
 - When \code{sample=FALSE}, a BI Dirichlet distribution object (for model building).

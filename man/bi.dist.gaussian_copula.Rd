@@ -51,6 +51,8 @@ randomness is handled by the model's inference engine. Defaults to 0.}
 \item{event}{int: The number of batch dimensions to reinterpret as event dimensions (used in model building).}
 
 \item{create_obj}{bool, optional: If `TRUE`, returns the raw BI distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`. Defaults to `FALSE`.}
+
+\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
 }
 \value{
 - When \code{sample=FALSE}, a BI Gaussian Copula distribution object (for model building).

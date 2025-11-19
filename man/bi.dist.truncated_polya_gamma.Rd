@@ -49,6 +49,8 @@ given shape.}
 \item{event}{An integer representing the number of batch dimensions to reinterpret as event dimensions.}
 
 \item{create_obj}{A logical value. If `TRUE`, returns the raw BI distribution object instead of creating a sample site.}
+
+\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
 }
 \value{
 - When \code{sample=FALSE}, a BI Truncated PolyaGamma distribution object (for model building).

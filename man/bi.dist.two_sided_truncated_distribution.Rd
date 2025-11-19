@@ -51,6 +51,8 @@ randomness is handled by the model's inference engine. Defaults to 0.}
 \item{event}{Integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).}
 
 \item{create_obj}{Logical; if `TRUE`, returns the raw BI distribution object. Defaults to `FALSE`.}
+
+\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
 }
 \value{
 - When \code{sample=FALSE}, a BI Two-Sided Truncated distribution object (for model building).

@@ -24,6 +24,7 @@
 #'   treated as a latent (unobserved) variable. Defaults to `NULL`.
 #' @param name A character string representing the name of the random variable
 #'   within a model. This is used to uniquely identify the variable. Defaults to 'x'.
+#' @param to_jax Logical. Defaults to TRUE.
 #'
 #'  #' @return
 #'  - When \code{sample=FALSE}, a BI Zero Inflated Poisson distribution object (for model building).
@@ -35,15 +36,18 @@
 #' @examples
 #' \donttest{
 #' library(BayesianInference)
-#' m=importBI(platform='cpu')
-#' bi.dist.zero_inflated_poisson(gate=0.3, rate = 5, sample = TRUE)
+#' m <- importBI(platform = "cpu")
+#' bi.dist.zero_inflated_poisson(gate = 0.3, rate = 5, sample = TRUE)
 #' }
 #' @export
-bi.dist.zero_inflated_poisson=function(gate, rate=1.0, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE ) {
-     shape=do.call(tuple, as.list(as.integer(shape)))
-     if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
-     .BI_env$.bi_instance$dist$zero_inflated_poisson(
-       gate = .BI_env$jnp$array(gate),
-       rate = .BI_env$jnp$array(rate),
-       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj)
+bi.dist.zero_inflated_poisson <- function(gate, rate = 1.0, validate_args = py_none(), name = "x", obs = py_none(), mask = py_none(), sample = FALSE, seed = py_none(), shape = c(), event = 0, create_obj = FALSE, to_jax = TRUE) {
+  shape <- do.call(tuple, as.list(as.integer(shape)))
+  if (!.BI_env$.py$is_none(seed)) {
+    seed <- as.integer(seed)
+  }
+  .BI_env$.bi_instance$dist$zero_inflated_poisson(
+    gate = .BI_env$jnp$array(gate),
+    rate = .BI_env$jnp$array(rate),
+    validate_args = validate_args, name = name, obs = obs, mask = mask, sample = sample, seed = seed, shape = shape, event = event, create_obj = create_obj
+  )
 }

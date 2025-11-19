@@ -52,6 +52,8 @@ When \code{sample=TRUE} (direct sampling), this is used as `sample_shape` to dra
 
 \item{create_obj}{A logical value. If `TRUE`, returns the raw BI distribution object
 instead of creating a sample site.}
+
+\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
 }
 \value{
 - When \code{sample=FALSE}, a BI Uniform distribution object (for model building).
