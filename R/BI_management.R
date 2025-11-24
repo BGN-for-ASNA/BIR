@@ -120,7 +120,7 @@ BI_starting_test <- function() {
   if (!BI_venv_present) {
     packageStartupMessage("No Python virtual environments found.")
     packageStartupMessage("You can create one manually with : setup_env().")
-    ask_yes_no("Do you want to install a clean version of pyuthon. (Y/N): ") -> answer
+    ask_yes_no("Do you want to install a clean version of python. (Y/N): ") -> answer
     if (answer == "Y") {
       reticulate::install_python(version = "3.11:latest")
     }
@@ -139,7 +139,7 @@ BI_starting_test <- function() {
       BI_venv_present <- check_env()
       if (BI_venv_present) {
         reticulate::py_install(
-          packages = "BayesInference == 0.0.30",
+          packages = "BayesInference",
           envname = "BayesInference",
           pip = TRUE,
           pip_options = "--upgrade" # To ensure latest packages
