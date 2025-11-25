@@ -12,7 +12,7 @@
 
 ---
 
-## One Mental Model. Two Languages.
+## One Mental Model. Three Languages.
 
 Whether you prefer R's formula syntax or Python's object-oriented approach, **BayesianInference (BI)** unifies the experience.
 
@@ -24,8 +24,9 @@ Whether you prefer R's formula syntax or Python's object-oriented approach, **Ba
 
 <table width="100%">
 <tr>
-<th width="50%">R Syntax</th>
-<th width="50%">Python Syntax</th>
+<th width="33%">R Syntax</th>
+<th width="33%">Python Syntax</th>
+<th width="33%">Julia Syntax</th>
 </tr>
 <tr>
 <td valign="top">
@@ -33,12 +34,12 @@ Whether you prefer R's formula syntax or Python's object-oriented approach, **Ba
 ```r
 model <- function(height, weight){
   # Priors
-  sigma <- bi.dist.uniform(0, 50, name='sigma', shape=c(1))
-  alpha <- bi.dist.normal(178, 20, name='alpha', shape=c(1))
-  beta  <- bi.dist.normal(0, 1, name='beta', shape=c(1))
+  sigma = bi.dist.uniform(0, 50, name='sigma', shape=c(1))
+  alpha = bi.dist.normal(178, 20, name='alpha', shape=c(1))
+  beta  = bi.dist.normal(0, 1, name='beta', shape=c(1))
 
   # Likelihood
-  mu <- alpha + beta * weight
+  mu = alpha + beta * weight
   bi.dist.normal(mu, sigma, obs=height)
 }
 ```
@@ -46,19 +47,31 @@ model <- function(height, weight){
 </td>
 <td valign="top">
 
-<details>
-<summary><strong>Click to expand Python Code</strong></summary>
-
 ```python
 def model(height, weight):
     # Priors
     sigma = bi.dist.uniform(0, 50, name='sigma', shape=(1,))
     alpha = bi.dist.normal(178, 20, name='alpha', shape=(1,))
-    beta  <- bi.dist.normal(0, 1, name='beta', shape=(1,))
+    beta  = bi.dist.normal(0, 1, name='beta', shape=(1,))
 
     # Likelihood
     mu = alpha + beta * weight
     bi.dist.normal(mu, sigma, obs=height)
+```
+
+<td valign="top">
+
+```Julia
+@BI function model(weight, height)
+    # Priors
+    sigma = bi.dist.uniform(0, 50, name='sigma', shape=(1,))
+    alpha = bi.dist.normal(178, 20, name='alpha', shape=(1,))
+    beta  = bi.dist.normal(0, 1, name='beta', shape=(1,))
+
+    # Likelihood
+    mu = alpha + beta * weight
+    bi.dist.normal(mu, sigma, obs=height)
+end
 ```
 
 </details>
@@ -86,7 +99,10 @@ Leveraging Just-In-Time (JIT) compilation, BI outperforms traditional engines on
 
 ## Installation & Setup
 
-### 1. Install Package
+### 1. Install Python
+Download and install [Python](https://www.python.org/downloads/)
+
+### 2. Install Package
 Use `devtools` to pull the latest development version from GitHub.
 
 ```r
@@ -94,7 +110,7 @@ if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
 devtools::install_github("https://github.com/BGN-for-ASNA/BIR")
 ```
 
-### 2. Initialize Environment
+### 3. Initialize Environment
 Run the starting test to create the Python virtual environment managed by `reticulate`.
 
 ```r
@@ -103,7 +119,7 @@ library(BayesianInference)
 BI_starting_test()
 ```
 
-### 3. Select Backend
+### 4. Select Backend
 Choose `'cpu'`, `'gpu'`, or `'tpu'` when importing the library.
 
 ```r
