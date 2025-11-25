@@ -61,7 +61,7 @@ setup_env <- function(env_name = "BayesInference", backend = "cpu") {
   env_name <- paste0("BayesInference")
 
   # Base dependencies
-  base_packages <- c("arviz", "numpyro")
+  base_packages <- c("arviz", "numpyro", "IPython")
 
   # Backend-specific dependencies
   if (backend == "cpu") {
