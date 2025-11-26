@@ -205,6 +205,7 @@ bi.doc()
 # Help for a specific function
 ?bi.dist.normal
 ```
+
 ## Platform Support
 
 -   ✅ Linux
