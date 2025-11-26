@@ -1,4 +1,4 @@
-# Bayesian Inference Reimagined for R & Python
+# Bayesian Inference Reimagined for R, Python and Julia
 
 <div align="center">
 
@@ -205,13 +205,29 @@ bi.doc()
 # Help for a specific function
 ?bi.dist.normal
 ```
+## Platform Support
 
+-   ✅ Linux
+-   ✅ macOS
+-   ✅ Windows
+
+GPU support available on compatible systems with JAX GPU installation.
+
+---
+
+## Related Packages
+
+-   [BI](https://pypi.org/project/BayesInference) - Python implementation
+-   [BIJ](https://github.com/BGN-for-ASNA/BIJ) - J implementation
+
+
+---
 ---
 
 <div align="center">
 
 **BayesianInference (BIR)**  
-Based on "The Bayesian Inference library for Python and R" by Sosa, McElreath, & Ross (2025).
+Based on "The Bayesian Inference library for Python, R and Julia" by Sosa, McElreath, & Ross (2025).
 
 [Documentation](#) | [GitHub](https://github.com/BGN-for-ASNA/BIR) | [Issues](https://github.com/BGN-for-ASNA/BIR/issues)
 
