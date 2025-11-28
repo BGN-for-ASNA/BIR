@@ -99,10 +99,8 @@ Leveraging Just-In-Time (JIT) compilation, BI outperforms traditional engines on
 
 ## Installation & Setup
 
-### 1. Install Python
-Download and install [Python](https://www.python.org/downloads/)
 
-### 2. Install Package
+### 1. Install Package
 Use `devtools` to pull the latest development version from GitHub.
 
 ```r
@@ -110,7 +108,7 @@ if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
 devtools::install_github("https://github.com/BGN-for-ASNA/BIR")
 ```
 
-### 3. Initialize Environment
+### 2. Initialize Environment
 Run the starting test to create the Python virtual environment managed by `reticulate`.
 
 ```r
@@ -119,7 +117,7 @@ library(BayesianInference)
 BI_starting_test()
 ```
 
-### 4. Select Backend
+### 3. Select Backend
 Choose `'cpu'`, `'gpu'`, or `'tpu'` when importing the library.
 
 ```r
