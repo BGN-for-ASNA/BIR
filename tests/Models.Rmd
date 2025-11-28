@@ -1,0 +1,765 @@
+---
+title: "Workshop R"
+author: "Sebastian Sosa"
+date: "2025-11-27"
+output: html_document
+---
+
+## Dependencies
+```{r}
+library(BayesianInference)
+library(reticulate) # to convert python arrays into R objrects
+library(ggplot2)
+library(patchwork)
+library(htmltools) # fro BI interactive plots
+m = importBI(platform='cpu') # BI class initialisation
+jnp = reticulate::import('jax.numpy') # For linear algebra operations
+jax = reticulate::import('jax') # For additional functions
+```
+
+Custom function to covnert jax array into R compatible arrays
+
+```{r}
+library(reticulate)
+
+to_r = function(array){
+  jax <- import("jax")
+  np  <- import("numpy")
+  py_to_r(np$array(array))
+  
+}
+```
+
+## Univariate Linear Regression
+
+### Simulating data
+
+```{r}
+beta = 1.5
+alpha = 0.6
+sigma = 4
+x = bi.dist.normal(0,4, shape = c(100), sample = TRUE, seed = 0)
+mu = alpha + beta * x
+y = bi.dist.normal(mu, sigma, sample = TRUE) 
+ggplot() + geom_point(aes(x = to_r(x), y = to_r(y)), color = "blue")
+```
+
+### Mathematical formula
+
+We can express a Bayesian version of this regression model using the following model:
+
+$$
+Y_i \sim \text{Normal}(\alpha + \beta   X_i, \sigma) \\
+\alpha \sim \text{Normal}(0, 1) \\
+\beta \sim \text{Normal}(0, 1) \\
+\sigma \sim \text{Exponential}(1) \\
+$$
+
+Where:
+
+-   $Y_i$ is the dependent variable for observation *i*.
+
+-   $\alpha$ and $\beta$ are the intercept and regression coefficient, respectively.
+
+-   $X_i$ is the independent variable for observation *i*.
+
+-   $\sigma$ is the standard deviation of the Normal distribution, which describes the variance in the relationship between the dependent variable $Y$ and the independent variable $X$.
+
+### Analytical model
+
+```{r}
+# Import Data & Data Manipulation ------------------------------------------------
+# Import
+m$data_on_model = list(x = x, y = y)
+
+# Define model ------------------------------------------------
+model <- function(x, y){
+  # Each call of distribution function within a model require to specify a name (to track all parameters)
+  alpha = bi.dist.normal(loc = 0, scale = 1, name = 'alpha') 
+  beta = bi.dist.normal(loc = 0, scale = 2, name = 'beta')
+  sigma = bi.dist.exponential(1, name = 'sigma')
+  mu = alpha + beta * x
+  bi.dist.normal(mu, sigma, obs = y)
+}
+
+# Run mcmc ------------------------------------------------
+m$fit(model)  # Optimize model parameters through MCMC sampling
+
+# Summary ------------------------------------------------
+m$summary() # Get posterior distributions
+```
+
+Expected parameters:
+
+```{r}
+beta = 1.5
+alpha = 0.6
+sigma = 4
+```
+
+## Multivariate Linear Regression
+
+### Simulating data
+
+```{r}
+#install.packages("patchwork")
+library(patchwork)
+beta_1 = 1.5
+beta_2 = -0.8
+alpha = 0.3
+sigma = 2
+x1 = bi.dist.normal(0,4, shape = c(100), sample = TRUE)
+x2 = bi.dist.normal(0,6, shape = c(100), sample = TRUE)
+mu = alpha + beta_1 * x1 + beta_2 * x2
+y = bi.dist.normal(mu, sigma, sample = TRUE) 
+p1 <- ggplot() + geom_point(aes(x = to_r(x1), y = to_r(y)), color = "blue")+ggtitle('X1')
+p2 <- ggplot() + geom_point(aes(x = to_r(x2), y = to_r(y)), color = "blue")+ggtitle('X2')
+p1 | p2
+```
+
+### Mathematical formula
+
+$$
+𝑌_i \sim \text{Normal}(\alpha + \sum_{k=1}^K  \beta_k  X_{[K,i]}, σ) \\
+\alpha \sim \text{Normal}(0,1) \\
+\beta_k \sim \text{Normal}(0,1) \\
+σ \sim \text{Exponential}(1)
+$$
+
+Where:
+
+-   $Y_i$ is the dependent variable for observation *i*.
+
+-   $\alpha$ is the intercept term, which in this case has a unit-normal prior.
+
+-   $\beta_k$ are slope coefficients for the *K* distinct independent variables, which also have unit-normal priors.
+
+-   $X_{[1,i]}$, $X_{[2,i]}$, ..., $X_{[K,i]}$ are the values of the independent variables for observation *i*.
+
+-   $\sigma$ is a standard deviation parameter, which here has a Uniform prior that constrains it to be positive.
+
+### Analytical model
+
+```{r}
+# Import Data & Data Manipulation ------------------------------------------------
+# Import
+m$data_on_model = list(x1 = x1, x2 = x2, y = y)
+
+# Define model ------------------------------------------------
+model <- function(x1, x2, y){
+  # Each call of distribution function within a model require to specify a name (to track all parameters)
+  alpha = bi.dist.normal(loc = 0, scale = 1, name = 'alpha') 
+  beta_1 = bi.dist.normal(loc = 0, scale = 2, name = 'beta1')
+  beta_2 = bi.dist.normal(loc = 0, scale = 2, name = 'beta2')
+  sigma = bi.dist.exponential(1, name = 'sigma')
+  mu = alpha + beta_1 * x1 + beta_2 * x2
+  bi.dist.normal(mu, sigma, obs = y)
+}
+
+# Run mcmc ------------------------------------------------
+m$fit(model)  # Optimize model parameters through MCMC sampling
+
+# Summary ------------------------------------------------
+m$summary() # Get posterior distributions
+```
+
+Expected parameters:
+
+```{r}
+beta_1 = 1.5
+beta_2 = -0.8
+alpha = 0.3
+sigma = 2
+```
+
+## Regression with a Categorical Independent Variable
+
+### Simulating data
+
+```{r}
+x = bi.dist.normal(0,4, shape = c(100), sample = TRUE)
+k = bi.dist.categorical(c(0.5, 0.5), shape = c(100), sample = TRUE)
+
+beta = jnp$array(list(1.5, -.5))
+alpha = jnp$array(list(.6, .1))
+sigma = 2
+
+mu = alpha[k] + beta[k] * x
+y = bi.dist.normal(mu, sigma, sample = TRUE) 
+
+df <- data.frame(
+  x = to_r(x),
+  y = to_r(y),
+  k = factor(to_r(k))
+)
+
+
+ggplot(df, aes(x = x, y = y, color = k)) +
+  geom_point()
+```
+
+### Mathematical formula
+
+$$
+Y \sim \text{Normal}(\alpha +  \beta_K X, \sigma) \\
+\alpha \sim \text{Normal}(0,1) \\
+\beta_K \sim \text{Normal}(0,1) \\
+\sigma \sim \text{Exponential}(1) \\
+$$
+
+Where:
+
+-   $Y_i$ is the dependent variable for observation *i*.
+
+-   $\alpha$ is the intercept term, which in this case has a unit-normal prior.
+
+-   $\beta_K$ are slope coefficients for the *K* distinct independent variables categories, which also have unit-normal priors.
+
+-   $X_i$ is the encoded categorical input variable for observation *i*.
+
+-   $\sigma$ is a standard deviation parameter, which here has a Exponential prior that constrains it to be positive.
+
+### Analytical model
+
+```{r}
+# Import Data & Data Manipulation ------------------------------------------------
+# Import
+m$data_on_model = list(x = x, k = k, y = y)
+
+# Define model ------------------------------------------------
+model <- function(x, k, y){
+  # Each call of distribution function within a model require to specify a name (to track all parameters)
+  alpha = bi.dist.normal(loc = 0, scale = 1, name = 'alpha', shape = c(2)) 
+  beta = bi.dist.normal(loc = 0, scale = 2, name = 'beta', shape = c(2))
+  sigma = bi.dist.exponential(1, name = 'sigma')
+  mu = alpha[k] + beta[k] * x 
+  bi.dist.normal(mu, sigma, obs = y)
+}
+
+# Run mcmc ------------------------------------------------
+m$fit(model)  # Optimize model parameters through MCMC sampling
+
+# Summary ------------------------------------------------
+m$summary() # Get posterior distributions
+```
+
+Expected parameters:
+
+```{r}
+beta = jnp$array(list(1.5, -.5))
+alpha = jnp$array(list(.6, .1))
+sigma = 2
+```
+
+## Interaction Terms in Regression
+
+### Simulating data
+
+```{r}
+beta_1 = 1.5
+beta_2 = -0.8
+beta_3 = .9
+alpha = 0.3
+sigma = 2
+x1 = bi.dist.normal(0,4, shape = c(100), sample = TRUE)
+x2 = bi.dist.normal(0,6, shape = c(100), sample = TRUE)
+mu = alpha + beta_1 * x1 + beta_2 * x2 +  beta_3*x1*x2
+y = bi.dist.normal(mu, sigma, sample = TRUE) 
+p1 <- ggplot() + geom_point(aes(x = to_r(x1), y = to_r(y)), color = "blue")+ggtitle('X1')
+p2 <- ggplot() + geom_point(aes(x = to_r(x2), y = to_r(y)), color = "blue")+ggtitle('X2')
+p1 | p2
+```
+
+### Mathematical formula
+
+$$
+Y_i \sim \text{Normal}(\alpha + \beta_1 X_{[1,i]} + \beta_2 X_{[2,i]} + \beta_{3} X_{[1,i]} X_{[2,i]}, \sigma) \\ 
+\alpha \sim \text{Normal}(0,1) \\
+\beta_1 \sim \text{Normal}(0,1) \\
+\beta_2 \sim \text{Normal}(0,1) \\
+\beta_{3} \sim \text{Normal}(0,1) \\
+\sigma \sim \text{Exponential}(1) \\
+$$
+
+Where:
+
+-   $Y_i$ is the dependent variable for observation *i*.
+
+-   $\alpha$ is the intercept term, which in this case has a unit-normal prior.
+
+-   $\beta_1$ and $\beta_2$ are the coefficients for $X_{1}$ and $X_{2}$, respectively, when the other variable has value 0.
+
+-   $\beta_3$ is the coefficient which controls the extent to which the coefficient on one variable depends on the value of the other.
+
+-   $X_{[1,i]}$ and $X_{[2,i]}$ are the two values of the independent continuous variables for observation *i*.
+
+-   $\sigma$ is a standard deviation parameter, which here has an Exponential prior that constrains it to be positive.
+
+### Analytical model
+
+```{r}
+# Import Data & Data Manipulation ------------------------------------------------
+# Import
+m$data_on_model = list(x1 = x1, x2 = x2, y = y)
+
+# Define model ------------------------------------------------
+model <- function(x1, x2, y){
+  # Each call of distribution function within a model require to specify a name (to track all parameters)
+  alpha = bi.dist.normal(loc = 0, scale = 1, name = 'alpha') 
+  beta_1 = bi.dist.normal(loc = 0, scale = 2, name = 'beta1')
+  beta_2 = bi.dist.normal(loc = 0, scale = 2, name = 'beta2')
+  beta_3 = bi.dist.normal(loc = 0, scale = 2, name = 'beta3')
+  sigma = bi.dist.exponential(1, name = 'sigma')
+  mu = alpha + beta_1 * x1 + beta_2 * x2 + beta_3*x1*x2
+  bi.dist.normal(mu, sigma, obs = y)
+}
+
+# Run mcmc ------------------------------------------------
+m$fit(model)  # Optimize model parameters through MCMC sampling
+
+# Summary ------------------------------------------------
+m$summary() # Get posterior distributions
+```
+
+Expected parameters:
+
+```{r}
+beta_1 = 1.5
+beta_2 = -0.8
+beta_3 = .9
+alpha = 0.3
+sigma = 2
+```
+
+## Binomial Model
+
+### Simulating data
+
+```{r}
+beta = 2.5
+alpha = 0.6
+sigma = 4
+x = bi.dist.normal(0,4, shape = c(100), sample = TRUE, seed = 0)
+mu = alpha + beta * x
+y = bi.dist.binomial(total_count = 1L, logits =  mu, sample = TRUE)  # 📝 Or bi.dist.binomial(total_count = 1L, probs =   m$link$inv_logits(mu), sample = TRUE)
+ggplot() + geom_point(aes(x = to_r(x), y = to_r(y)), color = "blue")
+```
+
+### Mathematical formula
+
+We can express the Bayesian Binomial regression model including prior distributions as follows:
+
+$$
+Y_i \sim \text{Binomial}(N_i, p_i) \\
+logit(p_i) = \alpha + \beta X_i \\
+\alpha \sim \text{Normal}(0,1) \\
+$$
+
+Where:
+
+-   $Y_i$ is the count of successes for observation *i* (often a binary 0 or 1).
+
+-   $N_i$ is the count of trials for observation *i* (1 in the case of binary outcomes, as in the example for `total_count` above).
+
+-   $p_i$ is the probability of success (0 \< $p_i$ \< 1) for observation *i*, the probability of a success.
+
+-   $logit(p_i)$ is the log-odds of success, calculated as the log of the odds ratio of success. Through this link function, the relationship between the independent variables and the log-odds of success is modeled linearly, allowing us to interpret the effect of each independent variable on the log-odds of success for observation *i*.
+
+-   $\beta$ and $\alpha$ are the regression coefficient and intercept, respectively.
+
+### Analytical model
+
+```{r}
+# Import Data & Data Manipulation ------------------------------------------------
+# Import
+m$data_on_model = list(x = x, y = y)
+
+# Define model ------------------------------------------------
+model <- function(x, y){
+  # Each call of distribution function within a model require to specify a name (to track all parameters)
+  alpha = bi.dist.normal(loc = 0, scale = 1, name = 'alpha') 
+  beta = bi.dist.normal(loc = 0, scale = 2, name = 'beta')
+  mu = alpha + beta * x
+  bi.dist.binomial(total_count = 1, logits = mu, obs = y)
+}
+
+# Run mcmc ------------------------------------------------
+m$fit(model)  # Optimize model parameters through MCMC sampling
+
+# Summary ------------------------------------------------
+m$summary() # Get posterior distributions
+```
+
+Expected parameters:
+
+```{r}
+beta = 2.5
+alpha = 0.6
+```
+
+
+## Poisson Model
+### Simulating data
+```{r}
+beta = 1.5
+alpha = 0.6
+x = bi.dist.normal(4, shape = c(100), sample = TRUE, seed = 0)
+mu = jnp$exp(alpha + beta * x) # ⚠️ link function
+y = bi.dist.poisson(rate = mu, sample = TRUE)  # 📝 Or bi.dist.binomial(total_count = 1L, probs =   m$link$inv_logits(mu), sample = TRUE)
+ggplot() + geom_point(aes(x = to_r(x), y = to_r(y)), color = "blue")
+```
+
+### Mathematical formula
+We can express the Bayesian regression model accounting for prior distributions as follows:
+
+$$
+Y_i \sim \text{Poisson}(\lambda_i) \\
+log(\lambda_i) = \alpha + \beta X_i \\
+\alpha \sim \text{Normal}(0, 1) \\
+\beta \sim \text{Normal}(0, 1) \\
+$$
+
+
+
+Where:
+
+- $Y_i$ is the dependent variable for observation *i*.
+
+- $\log()$ is the **log link function**. This function links the log of the mean of the response variable, $\lambda_i$, to the linear predictor, $\alpha + \beta X_i$. The logarithm is the canonical link function for the Poisson distribution. It ensures that the predicted mean, $\lambda_i = \exp(\alpha + \beta X_i)$, will always be positive, as required for a Poisson rate parameter.
+
+- $\alpha$ and $\beta$ are the intercept and regression coefficient, respectively, with their associated prior distributions.
+
+- $X_i$ is the value of the independent variable for observation *i*.
+
+### Analytical model
+```{r}
+# Import Data & Data Manipulation ------------------------------------------------
+# Import
+m$data_on_model = list(x = x, y = y)
+
+# Define model ------------------------------------------------
+model <- function(x, y){
+  # Each call of distribution function within a model require to specify a name (to track all parameters)
+  alpha = bi.dist.normal(loc = 0, scale = 1, name = 'alpha') 
+  beta = bi.dist.normal(loc = 0, scale = 2, name = 'beta')
+  mu = jnp$exp(alpha + beta * x)
+  bi.dist.poisson(mu, obs = y)
+}
+
+# Run mcmc ------------------------------------------------
+m$fit(model)  # Optimize model parameters through MCMC sampling
+
+# Summary ------------------------------------------------
+m$summary() # Get posterior distributions
+```
+
+Expected parameters:
+
+```{r}
+beta = 1.5
+alpha = 0.6
+jnp$array(list(0L))
+```
+
+## Categorical Model
+### Simulating data
+```{r}
+a = bi.dist.normal(0, 1, shape=c(2), name='a', sample = TRUE) 
+```
+
+
+```{r}
+x = bi.dist.normal(0,1, shape = c(500), sample = TRUE, seed = 0)
+
+alpha = jnp$array(list(1.5, .9, 0))
+beta = .9
+
+mu1 = alpha[0] + beta * x
+mu2 =  alpha[1] + beta * x
+mu3 =  jnp$zeros_like(x)
+
+p = jax$nn$softmax(jnp$stack(list(mu1, mu2, mu3), axis = 1L), axis = 1L) #stacks these vectors column-wise 
+y = bi.dist.categorical(probs=p, sample = TRUE) # Category asignment
+
+df <- data.frame(
+  x = to_r(x),
+  y = to_r(y),
+  k = factor(to_r(y))
+)
+
+
+ggplot(df, aes(x = x, y = as.numeric(k), color = k)) +
+  geom_jitter(height = 0.15, width = 0) +    # jitter y so points don't overlap
+  scale_y_continuous(breaks = c(1,2,3), labels = c("1","2","3")) +
+  theme_minimal() +
+  labs(y = "category", color = "k")
+
+```
+
+### Mathematical formula
+We can model a *Categorical* model using a $Categorical distribution$. The multinomial distribution models the counts of outcomes falling into different categories. For an outcome variable
+𝑦 with 𝐾 categories, the multinomial likelihood function is:
+
+$$
+Y_i \sim \text{Categorical}(\theta_i) \\
+\theta_i = \text{Softmax}(\phi_i) \\
+\phi_{[i,1]} = \alpha_1 + \beta_1 X_i \\
+\phi_{[i,2]} = \alpha_2 + \beta_2 X_i \\
+... \\
+\phi_{[i,k]} = 0 \\
+\alpha_{k} \sim \text{Normal}(0,1) \\
+\beta_{k} \sim \text{Normal}(0.1)
+$$
+
+Where:
+
+- $Y_i$ is the dependent categorical variable for observation *i* indicating the category of the observation.
+  
+- $\theta_i$ is a vector unique to each observation, *i*, which gives the probability of observing *i* in category *k*.
+  
+- $\phi_i$ give the linear model for each of the $k$ categories. Note that we use the softmax function to ensure that that the probabilities $\theta_i$ form a **simplex**.
+  
+- Each element of $\phi_i$ is obtained by applying a linear regression model with its own respective intercept $\alpha_k$ and slope coefficient $\beta_k$. To ensure the model is identifiable, one category, *K*, is arbitrarily chosen as a reference or baseline category. The linear predictor for this reference category is set to zero. The coefficients for the other categories then represent the change in the log-odds of being in that category versus the reference category.
+
+### Analytical model
+
+```{r}
+# Import Data & Data Manipulation ------------------------------------------------
+# Import
+m$data_on_model = list(x = x, y = y)
+
+# Define model ------------------------------------------------
+model <- function(x,  y){
+  # Each call of distribution function within a model require to specify a name (to track all parameters)
+  alpha = bi.dist.normal(loc = 0, scale = 2, name = 'alpha', shape = c(3)) 
+  beta = bi.dist.normal(loc = 0, scale = 1, name = 'beta')
+
+  mu1 = alpha[0] + beta * x
+  mu2 = alpha[1] + beta * x
+  mu3 = jnp$zeros_like(x)
+
+  p = jax$nn$softmax(jnp$stack(list(mu1, mu2, mu3), axis = 1L), axis = 1L)
+  
+  bi.dist.categorical(probs=p, obs = y) 
+}
+
+# Run mcmc ------------------------------------------------
+m$fit(model)  # Optimize model parameters through MCMC sampling
+
+# Summary ------------------------------------------------
+m$summary() # Get posterior distributions
+```
+
+Expected parameters:
+
+```{r}
+alpha = jnp$array(list(1.5, .9, 0))
+beta = .9
+```
+
+
+
+## Varying Intercepts Models
+### Simulating data
+```{r}
+
+k = bi.dist.categorical(c(0.5, 0.5), shape = c(100), sample = TRUE)
+sigma = 1.8
+alpha_bar = 1.5
+alpha = bi.dist.normal(alpha_bar, sigma, shape = c(2), sample = TRUE, seed = 0) # Fixed seed so we will obtain : Array([ 1.12948415, 0.0874216  ], dtype=float64)
+print(alpha)
+
+p = alpha[k]
+y = bi.dist.binomial(total_count = 1L, logits = p , sample = TRUE)
+
+df <- data.frame(
+  k = to_r(k),
+  y = to_r(y),
+  grp = factor(to_r(k))
+)
+ggplot(df, aes(x = k, y = y, color = grp)) + geom_point() + geom_jitter()
+```
+
+
+
+### Mathematical formula
+
+We model the relationship between the independent variable $X$ and the outcome variable $Y$ while accounting for varying intercepts $\alpha$ for each group where $k(i)$ give us group belonging for observation $i$, using the following equation:
+
+
+$$
+Y_{i} \sim \text{Normal}(\mu_{i}, \sigma) \\
+\mu_{i} = \alpha_{[k(i)]} + \beta X_{i} \\
+\beta \sim \text{Normal}(0, 1) \\
+\sigma \sim \text{Exponential}(1) \\
+\alpha_{[k]} \sim \text{Normal}(\bar{\alpha}, \varsigma) \\
+\bar{\alpha} \sim \text{Normal}(0, 1) \\
+\alpha_{[k]} \sim \text{Normal}(\bar{\alpha}, \varsigma) \\
+\varsigma \sim \text{Exponential}(1) \\
+$$
+
+
+Where:
+
+- $Y_{i}$ is the outcome variable for observation $i$.
+
+- $\alpha_{[k(i)]}$ is the varying intercept corresponding to the group $k$ of observation $i%$.
+
+- $\beta$ is the regression coefficient.
+
+- $\sigma$ is a standard deviation parameter, which here has an Exponential prior that constrains it to be positive.
+
+- $\bar{\alpha}$ is the overall mean intercept.
+
+- $\varsigma$ is the variance of the intercepts across groups.
+
+### Analytical model
+
+```{r}
+# Import Data & Data Manipulation ------------------------------------------------
+# Import
+m$data_on_model = list(k = k, y = y)
+
+# Define model ------------------------------------------------
+model <- function(k, y){
+
+  sigma = bi.dist.exponential(1, name = 'sigma')
+  alpha_bar = bi.dist.normal(loc = 0, scale = 2, name = 'alpha_bar') 
+  alpha = bi.dist.normal(loc = alpha_bar, scale = sigma, name = 'alpha', shape = c(2)) 
+  
+  p = alpha[k] 
+  bi.dist.binomial(total_count = 1L, logits = p, obs = y)
+}
+
+# Run mcmc ------------------------------------------------
+m$fit(model)  # Optimize model parameters through MCMC sampling
+
+# Summary ------------------------------------------------
+m$summary() # Get posterior distributions
+```
+
+Expected parameters:
+
+```{r}
+sigma = 1.8
+alpha_bar = 0.6
+alpha = c( 1.12948415, 0.0874216)
+```
+
+
+## Varying Slopes Models
+### Simulating data
+
+
+```{r}
+
+N_ID <- 20
+N_obs_by_ID <- 10
+Obs_period <- 2
+
+# 1. IDs vector
+ID <- rep(1:N_ID, each = N_obs_by_ID)-1
+ID = jnp$array(ID, dtype = jnp$int32)
+
+# 2. Period vector
+# Each individual has N_obs_by_ID observations, divided over Obs_period periods
+x <- rep(rep(0:(Obs_period-1), length.out = N_obs_by_ID), times = N_ID)
+x = jnp$array(x)
+
+
+alpha = 5
+beta = -1.5
+sigma = 0.6
+
+sigma_N_obs_by_ID = bi.dist.exponential(1, shape= c(2), sample = TRUE)
+Rho = bi.dist.lkj(2, 2,  sample = TRUE)
+cov = jnp$outer(sigma_N_obs_by_ID, sigma_N_obs_by_ID) * Rho
+varying_effects = bi.dist.multivariate_normal(jnp$stack(list(alpha, beta)), cov, sample = TRUE, shape = c(N_ID))   
+varying_intercept = varying_effects[,0]   
+varying_slope = varying_effects[,1] 
+
+mu = varying_intercept[ID] + varying_slope[ID]*x          
+
+y = bi.dist.normal(mu, sigma, sample = TRUE)
+```
+
+
+
+
+### Mathematical formula
+The Gaussian Mixture Model is a hierarchical model where each data point is generated from one of $K$ distinct multivariate Gaussian distributions.
+
+The varying intercepts ($\alpha_k$) and slopes ($\beta_k$) are modeled using a *Multivariate Normal distribution*:
+
+$$
+\begin{pmatrix}
+\alpha_k \\
+\beta_k
+\end{pmatrix} \sim \text{MultivariateNormal}\left(
+\begin{pmatrix}
+\bar{\alpha} \\
+\bar{\beta}
+\end{pmatrix},
+\text{diag}(\varsigma) ~ \Omega ~ \text{diag}(\varsigma)
+\right) \\ 
+
+\bar{\alpha} \sim \text{Normal}(0, 1) \\
+\bar{\beta} \sim \text{Normal}(0, 1) \\
+\varsigma \sim  \text{Exponential}(1) \\
+
+\varsigma \sim  \text{Exponential}(1) \\
+
+\Omega \sim \text{LKJ}(\eta) \\
+$$
+
+
+
+Where:
+
+- $\left(\begin{array}{cc} \bar{\alpha} \\ \bar{\beta} \end{array}\right)$ is a vector composed from concatenating a parameter for the global intercept and a parameter vector of the global slopes.
+
+- $\varsigma$ is a vector giving the standard deviation of the random effects for the intercept and slopes across groups.
+
+- $\Omega$ is the correlation matrix.
+
+### Analytical model
+
+```{r}
+# Import Data & Data Manipulation ------------------------------------------------
+# Import
+m$data_on_model = list(x = x, y = y)
+
+# Define model ------------------------------------------------
+model <- function(x, y){
+  # Each call of distribution function within a model require to specify a name (to track all parameters)
+  alpha = bi.dist.normal(loc = 0, scale = 5, name = 'alpha') 
+  beta = bi.dist.normal(loc = 0, scale = 3, name = 'beta')
+  sigma = bi.dist.exponential(1, name = 'sigma')
+  
+  sigma_N_obs_by_ID = bi.dist.exponential(1, shape= c(2),  name = 'N_obs_by_ID')
+  Rho = bi.dist.lkj(2, 2, name = 'Rho')
+  cov = jnp$outer(sigma_N_obs_by_ID, sigma_N_obs_by_ID) * Rho
+  varying_effects = bi.dist.multivariate_normal(jnp$stack(list(alpha, beta)), cov, shape = c(N_ID), name = 'varying_effects')  
+  
+  varying_intercept = varying_effects[,0] 
+  varying_slope = varying_effects[,1] 
+  
+  mu = varying_intercept[ID] + varying_slope[ID]*x    
+  bi.dist.normal(mu, sigma, obs = y)
+}
+
+# Run mcmc ------------------------------------------------
+m$fit(model)  # Optimize model parameters through MCMC sampling
+
+# Summary ------------------------------------------------
+m$summary() # Get posterior distributions
+```
+
+
+Expected parameters:
+
+```{r}
+alpha = 5
+beta = -1.5
+sigma = 0.6
+```
