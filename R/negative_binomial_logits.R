@@ -1,9 +1,8 @@
 #' @title Samples from a Negative Binomial Logits distribution.
 #'
 #' @description
-#' The Negative Binomial Logits  distribution is a generalization of the Negative Binomial
-#' distribution where the parameter 'r' (number of successes) is expressed as a function
-#' of a logit parameter. This allows for more flexible modeling of count data.
+#' The Negative Binomial Logits distribution is a generalization of the Negative Binomial distribution where the parameter 'r'
+#' (number of successes) is expressed as a function of a logit parameter. This allows for more flexible modeling of count data.
 #'
 #' @param total_count A numeric vector, matrix, or array representing the parameter
 #'   controlling the shape of the distribution. Represents the total number of trials.

@@ -1,9 +1,7 @@
 #' @title A finite mixture of component distributions from the same family.
 #' @description
-#' A *Mixture (Same-Family)* distribution is a finite mixture in which **all components come from the same parametric family** (for example, all Normal distributions but with different parameters), and are combined via mixing weights. The class is typically denoted as:
-
-#'  Let the mixture have K components. Let weights w_i >= 0 with sum(w_i) = 1. Let the component family have density f(x | theta_i) for each component i. Then the mixture's PDF is f_X(x) = sum over i of w_i * f(x | theta_i), where each f(x | theta_i) is from the same family with parameter theta_i.
-#'
+#' A *Mixture (Same-Family)* distribution is a finite mixture in which **all components come from the same parametric family**
+#' (for example, all Normal distributions but with different parameters), and are combined via mixing weights.
 #' @param mixing_distribution A distribution specifying the weights for each mixture component.
 #'   The size of this distribution specifies the number of components in the mixture.
 #' @param component_distribution A list of distributions representing the components of the mixture.

@@ -10,11 +10,6 @@ An object of class \code{environment} of length 0.
 \usage{
 .BI_env
 }
-\arguments{
-\item{libname}{Internal.}
-
-\item{pkgname}{Internal.}
-}
 \description{
 Internal function to run when the package is loaded.
 }

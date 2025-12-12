@@ -1,11 +1,13 @@
 #' @title Low Rank Multivariate Normal Distribution
 #'
 #' @description
-#'The *Low-Rank Multivariate Normal* (LRMVN) distribution is a parameterization of the multivariate normal distribution where the covariance matrix is expressed as a low-rank plus diagonal decomposition:
-#'  \deqn{
-#'  \Sigma = F F^\top + D
-#'  }
-#' where $F$ is a low-rank matrix (capturing correlations) and $D$ is a diagonal matrix (capturing independent noise). This representation is often used in probabilistic modeling and variational inference to efficiently handle high-dimensional Gaussian distributions with structured covariance.
+#' The *Low-Rank Multivariate Normal* (LRMVN) distribution is a parameterizaton of the multivariate normal distribution where the covariance matrix is expressed as a low-rank plus diagonal decomposition:
+#'\deqn{
+#'   \Sigma = F F^\top + D
+#'}
+#' where $F$ is a low-rank matrix (capturing correlations) and $D$ is a diagonal matrix (capturing independent noise).
+#' This representation is often used in probabilistic modeling and variational inference to efficiently handle high-dimensional
+#' Gaussian distributions with structured covariance.
 #'
 #' @param loc A numeric vector representing the mean vector.
 #' @param cov_factor A numeric vector or matrix used to construct the covariance matrix.

@@ -1,6 +1,7 @@
 #' @title Samples from a Dirichlet Multinomial distribution.
 #'
-#' @description Creates a Dirichlet-Multinomial compound distribution, which is a Multinomial
+#' @description
+#' Creates a Dirichlet-Multinomial compound distribution, which is a Multinomial
 #' distribution with a Dirichlet prior on its probabilities. It is often used in
 #' Bayesian statistics to model count data where the proportions of categories are
 #' uncertain.

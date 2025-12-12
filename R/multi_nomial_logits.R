@@ -1,10 +1,11 @@
-#' Samples from a MultinomialLogits distribution.
-#'
-#' This distribution represents the probability of observing a specific outcome from a multinomial experiment,
-#' given the logits for each outcome. The logits are the natural logarithm of the odds of each outcome.
-#'
-#' \deqn{P(k | \mathbf{\pi}) = \frac{n!}{k! (n-k)!} \prod_{i=1}^k \pi_i}
-#'
+#' @description
+#' A *multinomial logits* distribution refers to a categorical (or more generally multinomial)
+#' distribution over (K) classes whose probabilities are given via the softmax of a vector of logits.
+#' That is, given a vector of real-valued logits $\ell = (\ell_1, ., \ell_K)$, the class probabilities are:
+#' \deqn{
+#'   p_k = \frac{\exp(\ell_k)}{\sum_{j=1}^K \exp(\ell_j)}.
+#'  }
+#' Then a single draw from the distribution yields one of the (K) classes (or for a multinomial count version, counts over the classes) with those probabilities.
 #' @export
 #' @importFrom reticulate py_none tuple
 #'

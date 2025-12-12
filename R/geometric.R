@@ -1,7 +1,6 @@
 #' @title Samples from a Geometric distribution.
-#' @description The Geometric distribution models the number of failures before the first success in a sequence of Bernoulli trials.
-#'   It is characterized by a single parameter, the probability of success on each trial.
-#'
+#' @description
+#' Samples from a Geometric distribution, which models the number of failures before the first success in a sequence of independent Bernoulli trials.  It is parameterized by logits, which are transformed into probabilities using the sigmoid function.
 #' @param probs A numeric vector, matrix, or array representing the probability of success on each trial. Must be between 0 and 1.
 #' @param logits A numeric vector, matrix, or array representing the log-odds of success on each trial. `probs = jax.nn.sigmoid(logits)`.
 #' @param shape A numeric vector specifying the shape of the output.  Used to set the distribution's batch shape when \code{sample=FALSE} (model building) or as `sample_shape` to draw a raw JAX array of the given shape when \code{sample=TRUE} (direct sampling).

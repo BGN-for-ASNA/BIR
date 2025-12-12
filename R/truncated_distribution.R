@@ -1,12 +1,14 @@
 #' @title Truncated Distribution
 #'
 #' @description
-#' Samples from a Truncated Distribution.
-#' This distribution represents a base distribution truncated between specified lower and upper bounds.
-#' The truncation modifies the probability density function (PDF) of the base distribution,
-#' effectively removing observations outside the defined interval.
-#'
-#' \deqn{p(x) = \frac{p(x)}{P(\text{lower} \le x \le \text{upper})}}
+#' A **truncated distribution** arises when you take a random variable \deqn{X} that originally has
+#' some distribution (with PDF \deqn{f_X(x)} and CDF \deqn{F_X(x)}) and you restrict attention only to
+#' those values of \deqn{X} that are *above* a given truncation point \deqn{a}. In other words you only
+#' observe $X$ when $X > a$. All the "mass" below (or equal to) \deqn{a$ is **excluded**
+#' (not just unobserved, but removed from the sample/analysis).
+#' This differs from *censoring*, where values below a threshold might be
+#' known (for example "< a"), but here they are entirely excluded from the domain.
+#' Left truncation is common in many applied fields.
 #'
 #' @param base_dist The base distribution to be truncated. This should be a univariate
 #'   distribution. Currently, only the following distributions are supported:

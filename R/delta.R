@@ -1,7 +1,7 @@
 #' @title The Delta distribution.
 #'
-#' @description The Delta distribution, also known as a point mass distribution, assigns probability 1 to a single point and 0 elsewhere.
-#' It's useful for representing deterministic variables or as a building block for more complex distributions.
+#' @description
+#' The Delta distribution, also known as a point mass distribution, assigns probability 1 to a single point and 0 elsewhere. It's useful for representing deterministic variables or as a building block for more complex distributions.
 #'
 #' @importFrom reticulate py_none tuple
 #' @param log_density The log probability density of the point mass. This is primarily for creating distributions that are non-normalized or for specific advanced use cases. For a standard delta distribution, this should be 0. Defaults to 0.0.

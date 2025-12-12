@@ -1,10 +1,15 @@
 #' @title Poisson Distribution
 #'
 #' @description
-#' A discrete probability distribution that models the number of events occurring in a fixed interval of time or space if these events occur with a known average rate and independently of the time since the last event.
-#' Creates a Poisson distribution, a discrete probability distribution that models the number of events occurring in a fixed interval of time or space if these events occur with a known average rate and independently of the time since the last event.
-#'
-#' \deqn{ \mathrm{rate}^k \frac{e^{-\mathrm{rate}}}{k!}}
+#' The **Poisson distribution** models the probability of observing a given number of events $k$ occurring in a fixed interval
+#' of time or space when these events happen independently and at a constant average rate \deqn{\lambda > 0 }.
+#' It is widely used for modeling **count data**, such as the number of emails received per hour or mutations in a DNA strand per unit length.
+
+#' Formally,
+#' \deqn{
+#'   K \sim \text{Poisson}(\lambda)
+#' }
+#' where \deqn{ \lambda } is both the **mean** and **variance** of the distribution.
 #'
 #' @param rate A numeric vector representing the average number of events.
 #' @param  is_sparse (bool, optional): Indicates whether the `rate` parameter is sparse. If `True`, a specialized sparse sampling implementation is used, which can be more efficient for models with many zero-rate components (e.g., zero-inflated models). Defaults to `False`.

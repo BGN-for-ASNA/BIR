@@ -5,8 +5,6 @@
 #' while being infinitely differentiable, making it suitable for HMC and
 #' Laplace approximation.
 #'
-#' \deqn{f(x) = \log(2 / \pi) - \log(scale) - log_{add exp}((x - loc) / scale, -(x - loc) / scale)}
-#'
 #' @param loc Location parameter.
 #' @param scale Scale parameter.
 #' @param shape A numeric vector specifying the shape. When \code{sample=FALSE} (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When \code{sample=TRUE} (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.

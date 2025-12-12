@@ -1,9 +1,10 @@
 #' @title Samples from a Gaussian Random Walk distribution.
 #'
-#' @description Creates a distribution over a Gaussian random walk of a specified number of steps.
-#' This is a discrete-time stochastic process where the value at each step is the
-#' previous value plus a Gaussian-distributed increment. The distribution is over
-#' the entire path.
+#' @description
+#' Creates a distribution over a Gaussian random walk of a specified number of steps.
+#'This is a discrete-time stochastic process where the value at each step is the
+#'previous value plus a Gaussian-distributed increment. The distribution is over
+#'the entire path.
 #'
 #' @param scale A numeric value representing the standard deviation of the Gaussian increments.
 #' @param num_steps (int, optional): The number of steps in the random walk, which determines the event shape of the distribution. Must be positive. Defaults to 1.

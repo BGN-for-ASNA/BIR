@@ -1,8 +1,13 @@
 #' @title Samples from a Negative Binomial distribution.
 #' @description
-#' This distribution is parameterized as a Gamma-Poisson with a modified rate.
-#' It represents the number of events occurring in a fixed amount of time or trials,
-#' where each event has a probability of success.
+#' The NB2 parameterisation of the negative-binomial distribution is a count distribution used for modelling over-dispersed count data
+#' (variance > mean). It is defined such that the variance grows **quadratically** in the mean:
+
+#' \deq{
+#'   mathrm{Var}(Y) = \mu + \alpha,\mu^2,
+#' }
+#' where (\mu = \mathbb{E}[Y]) and (\alpha>0) is the dispersion (heterogeneity) parameter.
+#' Because of this quadratic variance growth, it is called the NB2 family.
 #'
 #'
 #' \deqn{P(k) = \frac{\Gamma(k + \alpha)}{\Gamma(k + 1) \Gamma(\alpha)} \left(\frac{\beta}{\alpha + \beta}\right)^k \left(1 - \frac{\beta}{\alpha + \beta}\right)^k}
@@ -41,10 +46,10 @@
 #' \donttest{
 #' library(BayesianInference)
 #' m=importBI(platform='cpu')
-#' bi.dist.negative_binomial(total_count = 100, probs = 0.5, sample = TRUE)
+#' bi.dist.negative_binomial2(total_count = 100, probs = 0.5, sample = TRUE)
 #' }
 #' @export
-bi.dist.negative_binomial=function(total_count, probs, logits=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
+bi.dist.negative_binomial2=function(total_count, probs, logits=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
 

@@ -1,7 +1,8 @@
 #' @title BetaBinomial
-#' @description Samples from a BetaBinomial distribution, a compound distribution where the probability of success in a binomial
-#' experiment is drawn from a Beta distribution. This models situations where the underlying probability of success
-#' is not fixed but varies according to a prior belief represented by the Beta distribution. It is often used to model over-dispersion relative to the binomial distribution.
+#' @description
+#' Samples from a BetaBinomial distribution, a compound distribution where the probability of success in a binomial
+#'  experiment is drawn from a Beta distribution. This models situations where the underlying probability of success
+#'  is not fixed but varies according to a prior belief represented by the Beta distribution. It is often used to model over-dispersion relative to the binomial distribution.
 #' @param concentration1 A numeric vector, matrix, or array representing the first concentration parameter (alpha) of the Beta distribution.
 #' @param concentration0 A numeric vector, matrix, or array representing the second concentration parameter (beta) of the Beta distribution.
 #' @param total_count A numeric vector, matrix, or array representing the number of Bernoulli trials in the Binomial part of the distribution.

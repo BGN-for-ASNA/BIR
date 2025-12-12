@@ -1,17 +1,8 @@
 #' @title Euler-Maruyama method
 #'
-#' @description Euler-Maruyama methode is a method for the approximate numerical solution
-#' of a stochastic differential equation (SDE). It simulates the solution
-#' to an SDE by iteratively applying the Euler method to each time step,
-#' incorporating a random perturbation to account for the diffusion term.
-#'
-#' \deqn{dX_t = f(X_t, t) dt + g(X_t, t) dW_t}
-#'
-#' where:
-#' - \eqn{X_t} is the state of the system at time \eqn{t}.
-#' - \eqn{f(X_t, t)} is the drift coefficient.
-#' - \eqn{g(X_t, t)} is the diffusion coefficient.
-#' - \eqn{dW_t} is a Wiener process (Brownian motion).
+#' @description
+#' Euler-Maruyama methode is a method for the approximate numerical solution of a stochastic differential equation (SDE).
+#' It simulates the solution to an SDE by iteratively applying the Euler method to each time step, incorporating a random perturbation to account for the diffusion term.
 #'
 #' @param t A numeric vector representing the discretized time steps.
 #' @param sde_fn A function that takes the current state and time as input and returns the drift and diffusion coefficients.

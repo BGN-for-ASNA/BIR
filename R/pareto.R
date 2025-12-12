@@ -1,10 +1,10 @@
 #' @title Samples from a Pareto distribution.
 #' @description
-#' The Pareto distribution is a power-law probability distribution that is often
-#' used to model income, wealth, and the size of cities. It is defined by two
-#' parameters: alpha (shape) and scale.
-#'
-#' \deqn{f(x) = \frac{\alpha \cdot \text{scale}^{\alpha}}{x^{\alpha + 1}} \text{ for } x \geq \text{scale}}
+#' The **Pareto distribution**, named after economist Vilfredo Pareto, is a **power-law** probability distribution used to describe phenomena with "rich-get-richer" or "heavy-tail" properties - for example, income distribution, city sizes, or wealth concentration.
+#'It is characterized by:
+#'  * a **scale parameter** \deqn{  x_m > 0 } (the minimum possible value), and
+#'  * a **shape parameter** \deqn{  \alpha > 0 } (which controls the tail heaviness).
+#'A random variable \deqn{ X \sim \text{Pareto}(\alpha, x_m) } takes values \deqn{  x \ge x_m }.
 #'
 #' @param scale A numeric vector or single number representing the scale parameter of the Pareto distribution. Must be positive.
 #' @param alpha A numeric vector or single number representing the shape parameter of the Pareto distribution. Must be positive.

@@ -1,8 +1,8 @@
 #' @title Sample from a Negative Binomial distribution with probabilities.
 #' @description
-#' The Negative Binomial distribution models the number of failures before the first success in a sequence of independent Bernoulli trials.  It is characterized by two parameters: 'concentration' (r) and 'rate' (p).  In this implementation, the 'concentration' parameter is derived from 'total_count' and the 'rate' parameter is derived from 'probs'.
-#'
-#' \deqn{P(k) = \binom{k + r - 1}{k} p^r (1 - p)^k}
+#' Negative Binomial distribution models the number of failures before the first success in a sequence of independent Bernoulli trials.
+#' It is characterized by two parameters: 'concentration' (r) and 'rate' (p).
+#' In this implementation, the 'concentration' parameter is derived from 'total_count' and the 'rate' parameter is derived from 'probs'.
 #'
 #' @param total_count A numeric vector, matrix, or array representing the parameter
 #'   controlling the shape of the distribution. Represents the total number of trials.

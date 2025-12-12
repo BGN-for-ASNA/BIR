@@ -1,9 +1,8 @@
 #' @title Laplace Distribution
 #'
-#' @description Samples from a Levy distribution.
-#' The Lévy distribution is a continuous probability distribution on the positive real line (or shifted positive line) that is *heavy-tailed*, *skewed*, and arises naturally in connection with stable distributions (specifically the case with stability index \deqn{\alpha = \tfrac12}.
-#' It is often used in contexts such as hitting-time problems for Brownian motion, physics (e.g., van der Waals line-shapes), and modelling very heavy-tailed phenomena. Let (X) be a Lévy-distributed random variable with **location** parameter \deqn{\mu} and **scale** parameter \deqn{c > 0}. The support is \deqn{x \ge \mu}.
-#'
+#' @description
+#' Samples from a Laplace distribution, also known as the double exponential distribution.
+#' The Laplace distribution is defined by its location parameter (loc) and scale parameter (scale).
 #' @param loc A numeric vector representing the location parameter of the Laplace distribution.
 #' @param scale A numeric vector representing the scale parameter of the Laplace distribution. Must be positive.
 #' @param shape A numeric vector used for shaping. When \code{sample=FALSE} (model building),

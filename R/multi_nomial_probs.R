@@ -1,14 +1,8 @@
 #' @title Samples from a Multinomial distribution.
 #'
-#' @description The Multinomial distribution models the number of times each of several discrete outcomes occurs in a fixed number of trials.  Each trial independently results in one of several outcomes, and each outcome has a probability of occurring.
-#'
-#' \deqn{P(X = x) = \frac{n!}{x_1! x_2! \cdots x_k!} p_1^{x_1} p_2^{x_2} \cdots p_k^{x_k}}
-#'
-#' where:
-#'
-#' * \eqn{n} is the total number of trials.
-#' * \eqn{x} is a vector of counts for each outcome.
-#' * \eqn{p} is a vector of probabilities for each outcome.
+#' @description
+#' The Multinomial distribution models the number of times each of several discrete outcomes occurs in a fixed number of trials.
+#' Each trial independently results in one of several outcomes, and each outcome has a probability of occurring.
 #'
 #' @param probs A numeric vector of probabilities for each outcome. Must sum to 1.
 #' @param total_count The number of trials.

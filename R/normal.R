@@ -1,11 +1,10 @@
 #' @title Samples from a Normal (Gaussian) distribution.
 #' @description
 #' The Normal distribution is characterized by its mean (loc) and standard deviation (scale).
-#' It's a continuous probability distribution that arises frequently in statistics and
-#' probability theory.
-#'
-#' \deqn{p(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)}
-#'
+#' It's a continuous probability distribution that arises frequently in statistics and  probability theory.
+#' \deqn{
+#' f(x \mid \mu, \sigma) = \frac{1}{\sqrt{2\pi}\sigma}\exp!\left(-\frac{(x - \mu)^2}{2\sigma^2}\right)
+#' }
 #' @param loc A numeric vector, matrix, or array representing the mean of the distribution.
 #' @param scale A numeric vector, matrix, or array representing the standard deviation of the distribution.
 #' @param shape A numeric vector specifying the shape of the distribution.  Use a vector (e.g., `c(10)`) to define the shape.

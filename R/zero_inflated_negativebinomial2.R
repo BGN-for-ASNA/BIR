@@ -1,12 +1,22 @@
 #' @title Zero-Inflated Negative Binomial  Distribution
 #' @description
-#' This distribution combines a Negative Binomial distribution with a binary gate variable.
-#' Observations are either drawn from the Negative Binomial 2 distribution with probability
-#' (1 - gate) or are treated as zero with probability 'gate'. This models data with excess zeros
-#' compared to what a standard Negative Binomial 2 distribution would predict.
+#' A Zero-Inflated Negative Binomial distribution is used for count data that exhibit **both** (a)
+#' over-dispersion relative to a Poisson (i.e., variance > mean) *and* (b)
+#' an excess of zero counts beyond what a standard Negative Binomial would predict.
+#' It assumes two latent processes:
+
+#'  1. With probability \deqn{\pi $ (sometimes denoted \deqn{\psi} or "zero-inflation probability")
+#'  you are in a "structural zero" state ??? you observe a zero.
+#'  2. With probability \deqn{1 - \pi$, you come from a regular Negative Binomial distribution
+#'  (with parameters e.g. mean \deqn{\mu} and dispersion parameter \deqn{ \alpha }
+#'   or size/r parameter) and then you might observe zero or a positive count.
+
+#'  Thus the model is a mixture of a point-mass at zero + a Negative Binomial for counts.
+
+#'  This distribution combines a Negative Binomial distribution with a binary gate variable. Observations are
+#'  either drawn from the Negative Binomial distribution with probability (1 - gate) or are treated as zero with probability 'gate'.
 #'
-#' \deqn{P(X = x) = (1 - gate) \cdot \frac{\Gamma(x + \alpha)}{\Gamma(x + \alpha + \beta) \Gamma(\alpha)} \left(\frac{\beta}{\alpha + \beta}\right)^x + gate \cdot \delta_{x, 0}}
-#'
+#'   This models data with excess zeros compared to what a standard Negative Binomial distribution would predict.
 #' @param mean Numeric or a numeric vector. The mean of the Negative Binomial 2 distribution.
 #' @param concentration Numeric or a numeric vector. The concentration parameter of the Negative Binomial 2 distribution.
 #' @param gate numeric(1): Probability of extra zeros (between 0 and 1).

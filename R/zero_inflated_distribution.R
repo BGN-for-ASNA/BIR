@@ -1,21 +1,14 @@
 #' @title Generic Zero Inflated distribution.
 #' @description
-#' A Zero-Inflated distribution combines a base distribution with a Bernoulli
-#' distribution to model data with an excess of zero values. It assumes that each observation
-#' is either drawn from the base distribution or is a zero with probability determined
-#' by the Bernoulli distribution (the "gate"). This is useful for modeling data
-#' where zeros are more frequent than expected under a single distribution,
-#' often due to a different underlying process.
+#' The Zero-Inflated Poisson distribution is a discrete count-distribution designed for data with *more zeros*
+#' than would be expected under a standard Poisson. Essentially, it assumes two underlying processes:
+
+#' * With probability \deqn{\pi} you are in a "structural zero" state (i.e., you automatically get a zero count).
+#' * With probability \deqn{1 - \pi} you draw from a standard Poisson distribution with parameter \deqn{\lambda}.
 #'
-#' \deqn{P(x) = \pi \cdot I(x=0) + (1 - \pi) \cdot P_{base}(x)}
-#'
-#' where:
-#'
-#' - \eqn{P_{base}(x)} is the probability density function (PDF) or probability mass function (PMF) of the base distribution.
-#'
-#' - \eqn{\pi} is the probability of generating a zero, governed by the Bernoulli gate.
-#'
-#' - \eqn{I(x=0)} is an indicator function that equals 1 if x=0 and 0 otherwise.
+#' This results in a mixture distribution that places more mass at zero than a Poisson alone would.
+#' It's widely used in, for instance, ecology (species counts with many zeros), insurance/claims problems,
+#' and any count-data setting with excess zeros.
 #'
 #' @param base_dist Distribution: The base distribution to be zero-inflated (e.g., Poisson, NegativeBinomial).
 #' @param gate numeric(1): Probability of extra zeros (between 0 and 1).

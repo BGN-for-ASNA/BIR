@@ -1,10 +1,10 @@
 #' @title Samples from a Weibull distribution.
 #' @description
-#' The Weibull distribution is a versatile distribution often used to model failure rates in engineering and reliability studies. It is characterized by its shape and scale parameters.
-#'
-#' \deqn{f(x) = \frac{\beta}{\alpha} \left(\frac{x}{\alpha}\right)^{\beta - 1} e^{-\left(\frac{x}{\alpha}\right)^{\beta}} \text{ for } x \ge 0}
-#'
-#' where \deqn{\alpha} is the scale parameter and \eqn{\beta} is the shape parameter.
+#' The Weibull distribution is widely used for modeling **lifetime or reliability data**. Its shape parameter (k) controls the hazard function:
+
+#' * (k < 1): decreasing hazard (infant mortality)
+#' * (k = 1): constant hazard ??? reduces to **Exponential distribution**
+#' * (k > 1): increasing hazard (aging/failure over time)
 #'
 #' @param scale A numeric vector, matrix, or array representing the scale parameter of the Weibull distribution. Must be positive.
 #' @param concentration A numeric vector, matrix, or array representing the shape parameter of the Weibull distribution. Must be positive.

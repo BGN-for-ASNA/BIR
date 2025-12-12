@@ -1,9 +1,10 @@
 #' @title Samples from a Projected Normal distribution.
 #' @description
-#' This distribution over directional data is qualitatively similar to the von
-#' Mises and von Mises-Fisher distributions, but permits tractable variational
-#' inference via reparametrized gradients.
-#' \deqn{p(x) = \frac{1}{Z} \exp\left(-\frac{1}{2\sigma^2} ||x - \mu||^2\right)}
+#' The projected normal distribution arises by taking a multivariate normal vector
+#' \deqn{\mathbf X \sim \mathcal N_n (\mu, \Sigma) } in \deqn{\mathbb R^n}
+#' and projecting it to the unit sphere. This distribution is commonly used
+#' in directional statistics (data on circles or spheres) and supports
+#' asymmetric and even multimodal behaviours depending on parameters.
 #'
 #' @param concentration A numeric vector representing the concentration parameter,
 #'   representing the direction towards which the samples are concentrated.

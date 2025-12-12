@@ -1,11 +1,10 @@
 #' @title Samples from a right-truncated distribution.
 #' @description
-#' This distribution truncates the base distribution at a specified high value.  Values greater than `high` are discarded,
-#' effectively creating a distribution that is only supported up to that point. This is useful for modeling data
-#' where observations are only possible within a certain range.
-#'
-#' \deqn{f_{\text{trunc}}(x) = \frac{f_{\text{base}}(x)}{F_{\text{base}}(\text{high})} \quad \text{for } x \le \text{high}}
-#'
+#' A right-truncated distribution is a statistical distribution that arises
+#' when the possible values  of a random variable are restricted to be below a
+#' certain specified value `high`. In essence, the right tail of the original distribution is "cut off"
+#' at a particular point, and the remaining probability is redistributed among the allowable values.
+#' This type of distribution is common in various fields where there are inherent upper limits or observational constraints.
 #' @param base_dist The base distribution to truncate. Must be a univariate distribution with real support.
 #' @param high (float, jnp.ndarray, optional): The upper truncation point. The support of the new distribution is \eqn{(-\infty, \text{high})}. Defaults to 0.0.
 #' @param shape A numeric vector. When \code{sample=FALSE} (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When \code{sample=TRUE} (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.

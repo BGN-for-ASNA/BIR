@@ -1,8 +1,8 @@
 #' @title Samples from a Gumbel (or Extreme Value) distribution.
 #'
-#' @description The Gumbel distribution is a continuous probability distribution named after German mathematician Carl Gumbel.
+#' @description
+#' The Gumbel distribution is a continuous probability distribution named after German mathematician Carl Gumbel.
 #' It is often used to model the distribution of maximum values in a sequence of independent random variables.
-#'
 #' @param loc Location parameter.
 #' @param scale Scale parameter. Must be positive.
 #' @param shape A numeric vector. When \code{sample=FALSE} (model building), this is used with \code{.expand(shape)} to set the distribution's batch shape. When \code{sample=TRUE} (direct sampling), this is used as \code{sample_shape} to draw a raw JAX array of the given shape.

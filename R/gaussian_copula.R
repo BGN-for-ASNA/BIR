@@ -1,8 +1,9 @@
 #' @title Gaussian Copula Distribution
 #'
-#' @description A distribution that links the `batch_shape[:-1]` of a marginal distribution with a multivariate Gaussian copula,
-#' modelling the correlation between the axes. A copula is a multivariate distribution over the uniform distribution
-#' on [0, 1]. The Gaussian copula links the marginal distributions through a multivariate normal distribution.
+#' @description
+#' A distribution that links the `batch_shape[:-1]` of a marginal distribution with a multivariate Gaussian copula, odelling the correlation between the axes.
+#' A copula is a multivariate distribution over the uniform distribution on [0, 1].
+#' The Gaussian copula links the marginal distributions through a multivariate normal distribution.
 #'
 #' @param marginal_dist Distribution: Distribution whose last batch axis is to be coupled.
 #' @param correlation_matrix array_like, optional: Correlation matrix of the coupling multivariate normal distribution. Defaults to `reticulate::py_none()`.

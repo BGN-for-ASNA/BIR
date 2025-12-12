@@ -1,13 +1,12 @@
 #' @title  Levy distribution.
 #'
-#' @description Samples from a Levy distribution.
-#'
-#' The probability density function is given by,
-#'
-#' \deqn{f(x\mid \mu, c) = \sqrt{\frac{c}{2\pi(x-\mu)^{3}}} \exp\left(-\frac{c}{2(x-\mu)}\right), \qquad x > \mu}
-#'
-#' where \deqn{\mu} is the location parameter and \deqn{c} is the scale parameter.
-#'
+#' @description
+#' The Lévy distribution is a continuous probability distribution on the positive real line (or shifted positive line)
+#' that is heavy-tailed, skewed, and arises naturally in connection with stable distributions
+#' specifically the case with stability index \deqn{\alpha = \tfrac12}.
+#' It is often used in contexts such as hitting-time problems for Brownian motion, physics (e.g., van der Waals line-shapes),
+#' and modelling very heavy-tailed phenomena. Let (X) be a Lévy-distributed random variable with location parameter \deqn{\mu}
+#' and scale parameter (c > 0). The support is \deqn{x \ge \mu}.
 #' @param loc A numeric vector, matrix, or array representing the location parameter.
 #' @param scale A numeric vector, matrix, or array representing the scale parameter.
 #' @param shape A numeric vector used for shaping. When `sample=False` (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When `sample=True` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.

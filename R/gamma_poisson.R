@@ -1,6 +1,6 @@
 #' @title Gamma-Poisson Distribution
-#' @description The Gamma-Poisson distribution, also known as the Negative Binomial distribution, models overdispersed count data. It arises from a hierarchical process where the rate parameter of a Poisson distribution is itself a random variable following a Gamma distribution. This structure allows the model to capture variability in count data that exceeds what is predicted by the Poisson distribution, making it suitable for applications like modeling RNA-sequencing data and microbial count.
-
+#' @description
+#' The Gamma-Poisson distribution, also known as the Negative Binomial distribution, models overdispersed count data. It arises from a hierarchical process where the rate parameter of a Poisson distribution is itself a random variable following a Gamma distribution. This structure allows the model to capture variability in count data that exceeds what is predicted by the Poisson distribution, making it suitable for applications like modeling RNA-sequencing data and microbial count.
 #' @param concentration A numeric vector, matrix, or array representing the shape parameter (alpha) of the Gamma distribution.
 #' @param rate A numeric vector, matrix, or array representing the rate parameter (beta) for the Gamma distribution.
 #' @param shape A numeric vector used to shape the distribution. When `sample=FALSE` (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When `sample=TRUE` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.

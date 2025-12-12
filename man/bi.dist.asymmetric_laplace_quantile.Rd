@@ -69,12 +69,12 @@ distributions like `MixtureSameFamily`.}
  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-Samples from a Bernoulli distribution parameterized by logits.
-The Bernoulli distribution models a single binary event (success or failure),
-parameterized by the log-odds ratio of success.  The probability of success
-is given by the sigmoid function applied to the logit.
-
-\deqn{f(x) = \frac{1}{2 \sigma} \exp\left(-\frac{|x - \mu|}{\sigma} \frac{1}{q-1}\right) \left(1 - \frac{1}{2q}\right)}
+Samples from an AsymmetricLaplaceQuantile distribution.
+This distribution is an alternative parameterization of the AsymmetricLaplace
+distribution, commonly used in Bayesian quantile regression. It utilizes a
+`quantile` parameter to define the balance between the left- and right-hand
+sides of the distribution, representing the proportion of probability density
+that falls to the left-hand side.
 }
 \examples{
 \donttest{

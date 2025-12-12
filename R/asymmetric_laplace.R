@@ -1,8 +1,21 @@
 #' @title Asymmetric Laplace distribution
-#' @description Samples from an Asymmetric Laplace distribution.
+#' @description
+#' Samples from an Asymmetric Laplace distribution.
+
 #'The Asymmetric Laplace distribution is a generalization of the Laplace distribution,
 #'where the two sides of the distribution are scaled differently. It is defined by
 #'a location parameter (loc), a scale parameter (scale), and an asymmetry parameter (asymmetry).
+#'
+#' \deqn{
+#'  f(x, \kappa) = \frac{1}{\kappa+\kappa^{-1}}\exp(-x\kappa),\quad x\ge0\\
+#'
+#'= \frac{1}{\kappa+\kappa^{-1}}\exp(x/\kappa),\quad x<0\\
+#'
+#'
+#'for -\infty < x < \infty, \kappa > 0 . \\
+#'
+#'laplace_asymmetric takes 'kappa' as a shape parameter for \kappa. For \kappa = 1, it is identical to a Laplace distribution.}
+#'
 #'
 #' @param loc A numeric vector or single numeric value representing the location parameter of the distribution. This corresponds to \eqn{\mu}.
 #' @param scale A numeric vector or single numeric value representing the scale parameter of the distribution. This corresponds to \eqn{\sigma}.

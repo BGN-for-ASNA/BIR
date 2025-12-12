@@ -1,9 +1,9 @@
 #' @title Samples from a Relaxed Bernoulli distribution.
 #' @description
-#' The Relaxed Bernoulli distribution is a continuous relaxation of the discrete Bernoulli distribution.
-#' It's useful for variational inference and other applications where a differentiable approximation of the Bernoulli is needed.
-#' The probability density function (PDF) is defined as:
-#' \deqn{p(x) = \frac{1}{2} \left( 1 + \tanh\left(\frac{x - \beta \log(\frac{p}{1-p})}{1}\right) \right)}
+#' The Relaxed Bernoulli is a continuous distribution on the interval \deqn{(0,1)}
+#' that smoothly approximates the discrete Bernoulli distribution (which has support \deqn{{0,1}}).
+#' It was introduced to allow for *differentiable* sampling of approximate binary random variables,
+#' which is useful in variational inference and other gradient-based optimization settings.
 #'
 #' @param temperature A numeric value representing the temperature parameter.
 #' @param probs (jnp.ndarray, optional): The probability of success. Must be in the interval `[0, 1]`. Only one of `probs` or `logits` can be specified.

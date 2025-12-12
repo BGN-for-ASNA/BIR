@@ -1,7 +1,5 @@
 #' @title Truncated PolyaGamma Distribution
 #' @description
-#' Samples from a Truncated PolyaGamma distribution.
-#'
 #' This distribution is a truncated version of the PolyaGamma distribution,
 #' defined over the interval [0, truncation_point]. It is often used in
 #' Bayesian non-parametric models.

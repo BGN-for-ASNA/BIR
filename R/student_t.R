@@ -1,8 +1,14 @@
 #' @title Student's t-distribution.
 #' @description
-#' The Student's t-distribution is a probability distribution that arises in hypothesis testing involving the mean of a normally distributed population when the population standard deviation is unknown. It is similar to the normal distribution, but has heavier tails, making it more robust to outliers.
+#' The Student's t-distribution is a probability distribution that arises in hypothesis testing involving the mean of a normally distributed population when the population standard deviation is unknown. It is similar to the normal distribution, but has heavier tails, making it more robust to outliers. For large $ \nu $, it converges to the Normal distribution.
+#' \deqn{
+#'   X \sim t_\nu(\mu, \sigma)
+#' }
+#' where:
 #'
-#' \deqn{f(x) = \frac{1}{\Gamma(\nu/2) \sqrt{\nu \pi}} \left(1 + \frac{x^2}{\nu}\right)^{-(\nu+1)/2}}
+#' * \deqn{ \mu } is the **location (mean)** parameter
+#' * \deqn{ \sigma > 0 } is the **scale** parameter
+#' * \deqn{ \nu > 0 } is the **degrees of freedom** controlling the tail heaviness
 #'
 #' @param df A numeric vector representing degrees of freedom, must be positive.
 #' @param loc A numeric vector representing the location parameter, defaults to 0.0.

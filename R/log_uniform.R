@@ -1,9 +1,10 @@
 #' @title Samples from a Log Uniform distribution.
 #'
 #' @description
-#' The Log Uniform distribution is defined over the positive real numbers and is the result of applying an exponential transformation to a uniform distribution over the interval [low, high]. It is often used when modeling parameters that must be positive.
-#'  \deqn{f(x) = \frac{1}{(high - low) \log(high / low)} \text{ for } low \le x \le high}
-#'
+#' A random variable $X$ is **log-uniform** on \deqn{[a, b]}, with $0 < a < b$, if \deqn{\ln X} is uniformly distributed on \deqn{[\ln a, \ln b]}.
+#' Equivalently, the density of $X$ is proportional to $1/x$ over that interval. This distribution is sometimes called the *reciprocal distribution*.
+#' It is useful in modeling scales spanning several orders of magnitude, where you want every decade (or log-interval) to have equal weight.
+
 #' @param low A numeric vector representing the lower bound of the uniform distribution's log-space. Must be positive.
 #' @param high A numeric vector representing the upper bound of the uniform distribution's log-space. Must be positive.
 #' @param shape A numeric vector specifying the shape of the output. When \code{sample=FALSE} (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When \code{sample=TRUE} (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.

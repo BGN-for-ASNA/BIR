@@ -1,9 +1,13 @@
 #' @title Samples from a Discrete Uniform distribution.
 #'
-#' @description The Discrete Uniform distribution defines a uniform distribution over a range of integers.
+#' @description
+#' The Discrete Uniform distribution defines a uniform distribution over a range of integers.
 #' It is characterized by a lower bound (`low`) and an upper bound (`high`), inclusive.
 #'
-#' \deqn{P(X = k) = \frac{1}{high - low + 1}, \quad k \in \{low, low+1, ..., high\}}
+#'  \deqn{
+#'   P(X = k) = \frac{1}{high - low + 1}, \quad k \in \{low, low+1, ..., high\}
+#' }
+#'   Otherwise (if \deqn{k} is outside the range), $ P(X = k) = 0 $.
 #'
 #' @title DiscreteUniform
 #' @description Samples from a Discrete Uniform distribution.

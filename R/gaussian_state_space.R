@@ -2,11 +2,6 @@
 #'
 #' @description Samples from a Gaussian state space model.
 #'
-#' \deqn{z_{t} = A z_{t - 1} + \epsilon_t \\ z_{t} = \sum_{k=1}^{t} A^{t-k} \epsilon_k}
-#'
-#' where \eqn{z_t} is the state vector at step \eqn{t}, \eqn{A}
-#' is the transition matrix, and \eqn{\epsilon} is the innovation noise.
-#'
 #' @param num_steps An integer representing the number of steps.
 #' @param transition_matrix A numeric vector, matrix, or array representing the state space transition matrix \eqn{A}.
 #' @param covariance_matrix A numeric vector, matrix, or array representing the covariance of the innovation noise \eqn{\epsilon}.  Defaults to `reticulate::py_none()`.

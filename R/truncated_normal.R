@@ -1,7 +1,12 @@
 #' @title Truncated Normal Distribution
-#' @description The Truncated Normal distribution is a normal distribution truncated
-#' to a specified interval. It is defined by its location (`loc`), scale
-#' (`scale`), lower bound (`low`), and upper bound (`high`).
+#' @description
+#' A truncated normal distribution is derived from a normal (Gaussian)
+#' random variable by restricting (truncating) its domain to an interval \deqn{[a, b]}
+#' (which could be one-sided, e.g., (a) only or (b) only). It is defined by its location (`loc`), scale
+#' (`scale`), lower bound  \deqn{a} (`low`), and upper bound \deqn{b} (`high`). In effect:
+#' if \deqn{X \sim \mathcal N(\mu, \sigma^2)}, then the truncated version \deqn{Y = X | (a \le X \le b)}
+#' has the same "shape" but only supports values in \deqn{[a,b]}. This is used when you know that values outside a range
+#' are impossible or not observed (e.g., measurement limits, natural bounds).
 #'
 #' @param loc The location parameter of the normal distribution.
 #' @param scale The scale parameter of the normal distribution.
