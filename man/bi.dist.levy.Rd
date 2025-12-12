@@ -2,7 +2,7 @@
 % Please edit documentation in R/levy.R
 \name{bi.dist.levy}
 \alias{bi.dist.levy}
-\title{Levy distribution.}
+\title{Levy distribution}
 \usage{
 bi.dist.levy(
   loc,
@@ -24,7 +24,7 @@ bi.dist.levy(
 
 \item{scale}{A numeric vector, matrix, or array representing the scale parameter.}
 
-\item{validate_args}{Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.}
+\item{validate_args}{Logical: Whether to validate parameter values. Defaults to `reticulate::py_none()`.}
 
 \item{name}{A character string representing the name of the random variable
 within a model. This is used to uniquely identify the variable. Defaults to 'x'.}
@@ -43,29 +43,29 @@ it will create a random variable within a model. Defaults to `FALSE`.}
 `sample = TRUE`. This argument has no effect when `sample = FALSE`, as
 randomness is handled by the model's inference engine. Defaults to 0.}
 
-\item{shape}{A numeric vector used for shaping. When `sample=False` (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When `sample=True` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{shape}{A numeric vector used for shaping. When `sample=FALSE` (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When `sample=TRUE` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
 
 \item{event}{Integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).}
 
 \item{create_obj}{Logical; If `TRUE`, returns the raw BI distribution object instead of creating a sample site.}
 
-\item{to_jax}{Logical. Defaults to TRUE.
-
- @return
- - When \code{sample=FALSE}, a BI Levy distribution object (for model building).
-
- - When \code{sample=TRUE}, a JAX array of samples drawn from the Levy distribution (for direct sampling).
-
- - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).}
+\item{to_jax}{Logical. Defaults to TRUE.}
+}
+\value{
+\itemize{
+  \item When \code{sample=FALSE}, a BI Levy distribution object (for model building).
+  \item When \code{sample=TRUE}, a JAX array of samples drawn from the Levy distribution (for direct sampling).
+  \item When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
+}
 }
 \description{
-Samples from a Levy distribution.
-
-The probability density function is given by,
-
-\deqn{f(x\mid \mu, c) = \sqrt{\frac{c}{2\pi(x-\mu)^{3}}} \exp\left(-\frac{c}{2(x-\mu)}\right), \qquad x > \mu}
-
-where \deqn{\mu} is the location parameter and \deqn{c} is the scale parameter.
+The Levy distribution (or L\'evy) is a continuous probability distribution on the positive real line
+(or shifted positive line) that is heavy-tailed, skewed, and arises naturally in connection
+with stable distributions, specifically the case with stability index \eqn{\alpha = 1/2}.
+It is often used in contexts such as hitting-time problems for Brownian motion, physics
+(e.g., van der Waals line-shapes), and modelling very heavy-tailed phenomena.
+Let \eqn{X} be a Levy-distributed random variable with location parameter \eqn{\mu}
+and scale parameter \eqn{c > 0}. The support is \eqn{x \ge \mu}.
 }
 \examples{
 \donttest{
@@ -75,5 +75,5 @@ bi.dist.levy(loc = 1, scale = 10, sample = TRUE)
 }
 }
 \seealso{
-This is a wrapper of  \url{https://num.pyro.ai/en/stable/distributions.html#levy}
+This is a wrapper of \url{https://num.pyro.ai/en/stable/distributions.html#levy}
 }

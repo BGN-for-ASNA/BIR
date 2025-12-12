@@ -70,11 +70,6 @@ When `sample=FALSE`:
 }
 \description{
 Samples from a Gaussian state space model.
-
-\deqn{z_{t} = A z_{t - 1} + \epsilon_t \\ z_{t} = \sum_{k=1}^{t} A^{t-k} \epsilon_k}
-
-where \eqn{z_t} is the state vector at step \eqn{t}, \eqn{A}
-is the transition matrix, and \eqn{\epsilon} is the innovation noise.
 }
 \examples{
 \donttest{

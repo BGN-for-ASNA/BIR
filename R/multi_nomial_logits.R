@@ -1,12 +1,12 @@
+#' @title Multinomial logit
 #' @description
 #' A *multinomial logits* distribution refers to a categorical (or more generally multinomial)
-#' distribution over (K) classes whose probabilities are given via the softmax of a vector of logits.
-#' That is, given a vector of real-valued logits $\ell = (\ell_1, ., \ell_K)$, the class probabilities are:
+#' distribution over \eqn{K} classes whose probabilities are given via the softmax of a vector of logits.
+#' That is, given a vector of real-valued logits \eqn{\ell = (\ell_1, \dots, \ell_K)}, the class probabilities are:
 #' \deqn{
 #'   p_k = \frac{\exp(\ell_k)}{\sum_{j=1}^K \exp(\ell_j)}.
 #'  }
-#' Then a single draw from the distribution yields one of the (K) classes (or for a multinomial count version, counts over the classes) with those probabilities.
-#' @export
+#' Then a single draw from the distribution yields one of the \eqn{K} classes (or for a multinomial count version, counts over the classes) with those probabilities.#' @export
 #' @importFrom reticulate py_none tuple
 #'
 #' @param logits A numeric vector, matrix, or array representing the logits for each outcome.

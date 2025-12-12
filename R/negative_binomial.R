@@ -3,10 +3,10 @@
 #' The NB2 parameterisation of the negative-binomial distribution is a count distribution used for modelling over-dispersed count data
 #' (variance > mean). It is defined such that the variance grows **quadratically** in the mean:
 
-#' \deq{
-#'   mathrm{Var}(Y) = \mu + \alpha,\mu^2,
+#' \deqn{
+#'   Var(Y) = \mu + \alpha,\mu^2,
 #' }
-#' where (\mu = \mathbb{E}[Y]) and (\alpha>0) is the dispersion (heterogeneity) parameter.
+#' where \deqn{\mu = E[Y]) and (\alpha>0)} is the dispersion (heterogeneity) parameter.
 #' Because of this quadratic variance growth, it is called the NB2 family.
 #'
 #'

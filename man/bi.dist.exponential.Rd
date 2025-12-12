@@ -56,9 +56,7 @@ randomness is handled by the model's inference engine. Defaults to 0.}
  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-The Exponential distribution is a continuous probability distribution that models the time until an event occurs in a Poisson
-process, where events occur continuously and independently at a constant average rate. It is often used to model the duration
-of events, such as the time until a machine fails or the length of a phone call.
+The Exponential distribution is a continuous probability distribution that models the time until an event occurs in a Poisson process, where events occur continuously and independently at a constant average rate. It is often used to model the duration of events, such as the time until a machine fails or the length of a phone call.
 }
 \examples{
 \donttest{

@@ -60,8 +60,6 @@ given shape.}
  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-Samples from a Truncated PolyaGamma distribution.
-
 This distribution is a truncated version of the PolyaGamma distribution,
 defined over the interval [0, truncation_point]. It is often used in
 Bayesian non-parametric models.

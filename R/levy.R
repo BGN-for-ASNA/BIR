@@ -1,19 +1,21 @@
-#' @title  Levy distribution.
+#' @title Levy distribution
 #'
 #' @description
-#' The Lévy distribution is a continuous probability distribution on the positive real line (or shifted positive line)
-#' that is heavy-tailed, skewed, and arises naturally in connection with stable distributions
-#' specifically the case with stability index \deqn{\alpha = \tfrac12}.
-#' It is often used in contexts such as hitting-time problems for Brownian motion, physics (e.g., van der Waals line-shapes),
-#' and modelling very heavy-tailed phenomena. Let (X) be a Lévy-distributed random variable with location parameter \deqn{\mu}
-#' and scale parameter (c > 0). The support is \deqn{x \ge \mu}.
+#' The Levy distribution (or L\'evy) is a continuous probability distribution on the positive real line
+#' (or shifted positive line) that is heavy-tailed, skewed, and arises naturally in connection
+#' with stable distributions, specifically the case with stability index \eqn{\alpha = 1/2}.
+#' It is often used in contexts such as hitting-time problems for Brownian motion, physics
+#' (e.g., van der Waals line-shapes), and modelling very heavy-tailed phenomena.
+#' Let \eqn{X} be a Levy-distributed random variable with location parameter \eqn{\mu}
+#' and scale parameter \eqn{c > 0}. The support is \eqn{x \ge \mu}.
+#'
 #' @param loc A numeric vector, matrix, or array representing the location parameter.
 #' @param scale A numeric vector, matrix, or array representing the scale parameter.
-#' @param shape A numeric vector used for shaping. When `sample=False` (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When `sample=True` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.
+#' @param shape A numeric vector used for shaping. When `sample=FALSE` (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When `sample=TRUE` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.
 #' @param event Integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).
 #' @param mask A logical vector, matrix, or array to mask observations.
 #' @param create_obj Logical; If `TRUE`, returns the raw BI distribution object instead of creating a sample site.
-#' @param validate_args Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.
+#' @param validate_args Logical: Whether to validate parameter values. Defaults to `reticulate::py_none()`.
 #' @param sample A logical value that controls the function's behavior. If `TRUE`,
 #'   the function will directly draw samples from the distribution. If `FALSE`,
 #'   it will create a random variable within a model. Defaults to `FALSE`.
@@ -27,14 +29,14 @@
 #'   within a model. This is used to uniquely identify the variable. Defaults to 'x'.
 #' @param to_jax Logical. Defaults to TRUE.
 #'
-#'  @return
-#'  - When \code{sample=FALSE}, a BI Levy distribution object (for model building).
+#' @return
+#' \itemize{
+#'   \item When \code{sample=FALSE}, a BI Levy distribution object (for model building).
+#'   \item When \code{sample=TRUE}, a JAX array of samples drawn from the Levy distribution (for direct sampling).
+#'   \item When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
+#' }
 #'
-#'  - When \code{sample=TRUE}, a JAX array of samples drawn from the Levy distribution (for direct sampling).
-#'
-#'  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
-#'
-#' @seealso This is a wrapper of  \url{https://num.pyro.ai/en/stable/distributions.html#levy}
+#' @seealso This is a wrapper of \url{https://num.pyro.ai/en/stable/distributions.html#levy}
 #'
 #' @examples
 #' \donttest{

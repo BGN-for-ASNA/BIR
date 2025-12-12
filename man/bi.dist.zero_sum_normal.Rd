@@ -59,7 +59,10 @@ randomness is handled by the model's inference engine. Defaults to 0.}
  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-Samples from a zero_sum_normal distribution, which is a Normal distribution where one or more axes are constrained to sum to zero.
+A **zero-sum normal**  is a variant of a multivariate normal in which one (or more)
+linear constraint(s) force certain components to **sum to zero**.
+In practice, it's used to model vectors of random effects (e.g. in hierarchical models)
+where the effects are constrained to sum to zero (to avoid overparameterization or enforce identifiability).
 }
 \examples{
 \donttest{

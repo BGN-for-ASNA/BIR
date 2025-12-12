@@ -62,11 +62,9 @@ JAX array of the given shape.}
    - When \code{create_obj=TRUE}: The raw BI distribution object (for advanced use cases).
 }
 \description{
-A left-truncated distribution is a probability distribution
-obtained by restricting the support of another distribution
-to values greater than a specified lower bound. This is useful
-when dealing with data that is known to be greater than a certain value. All the "mass" below (or equal to) (a) is **excluded** (not just unobserved, but removed from the sample/analysis).
-
+A left-truncated distribution is a probability distribution obtained by restricting the support of another distribution to values greater than a specified lower bound.
+This is useful when dealing with data that is known to be greater than a certain value.
+All the "mass" below (or equal to) (a) is excluded (not just unobserved, but removed from the sample/analysis).
 
 \deqn{f(x) = \begin{cases}
           \frac{f(x)}{P(X > \text{low})} & \text{if } x > \text{low} \\

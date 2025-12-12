@@ -1,8 +1,8 @@
 #' @title Ordered Logistic Distribution
 #' @description
 #' The ordered logistic distribution is used for modeling **ordinal** outcome variables
-#' \deq{Y \in {1,2,\dots,K} } (i.e., categories with a natural order) via a latent continuous predictor \deq{\eta } and
-#' a set of increasing *cut-points* \deq{ c_1 < c_2 < \cdots < c_{K-1} }. When \deq{ \eta } crosses thresholds, the observed  \deq{Y}.
+#' \deqn{Y \in {1,2,\dots,K} } (i.e., categories with a natural order) via a latent continuous predictor \deqn{\eta } and
+#' a set of increasing *cut-points* \deqn{ c_1 < c_2 < \cdots < c_{K-1} }. When \deqn{ \eta } crosses thresholds, the observed  \deqn{Y}.
 #'
 #' @param predictor A numeric vector, matrix, or array representing the prediction in real domain; typically this is output of a linear model.
 #' @param cutpoints A numeric vector, matrix, or array representing the positions in real domain to separate categories.

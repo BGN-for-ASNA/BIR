@@ -62,18 +62,8 @@ randomness is handled by the model's inference engine. Defaults to 0.}
  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-Euler-Maruyama methode is a method for the approximate numerical solution
-of a stochastic differential equation (SDE). It simulates the solution
-to an SDE by iteratively applying the Euler method to each time step,
-incorporating a random perturbation to account for the diffusion term.
-
-\deqn{dX_t = f(X_t, t) dt + g(X_t, t) dW_t}
-
-where:
-- \eqn{X_t} is the state of the system at time \eqn{t}.
-- \eqn{f(X_t, t)} is the drift coefficient.
-- \eqn{g(X_t, t)} is the diffusion coefficient.
-- \eqn{dW_t} is a Wiener process (Brownian motion).
+Euler-Maruyama methode is a method for the approximate numerical solution of a stochastic differential equation (SDE).
+It simulates the solution to an SDE by iteratively applying the Euler method to each time step, incorporating a random perturbation to account for the diffusion term.
 }
 \examples{
 \donttest{

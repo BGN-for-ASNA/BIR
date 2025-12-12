@@ -62,9 +62,9 @@ randomness is handled by the model's inference engine. Defaults to 0.}
  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-A distribution that links the `batch_shape[:-1]` of a marginal distribution with a multivariate Gaussian copula,
-modelling the correlation between the axes. A copula is a multivariate distribution over the uniform distribution
-on [0, 1]. The Gaussian copula links the marginal distributions through a multivariate normal distribution.
+A distribution that links the `batch_shape[:-1]` of a marginal distribution with a multivariate Gaussian copula, odelling the correlation between the axes.
+A copula is a multivariate distribution over the uniform distribution on [0, 1].
+The Gaussian copula links the marginal distributions through a multivariate normal distribution.
 }
 \examples{
 \donttest{

@@ -62,11 +62,10 @@ site. This is essential for building complex distributions like `MixtureSameFami
  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-Represents a relaxed version of the Bernoulli distribution, parameterized by logits and a temperature.
-The temperature parameter controls the sharpness of the distribution. The distribution is defined
-by transforming the output of a Logistic distribution through a sigmoid function.
-
-\deqn{P(x) = \sigma\left(\frac{x}{\text{temperature}}\right)}
+The Relaxed Bernoulli (logits) is a **continuous** relaxation of the standard Bernoulli distribution,
+parameterised by logits (or probabilities) and a **temperature** parameter.
+Rather than producing strictly 0 or 1, it produces values in the continuous interval (0, 1).
+As the temperature \eqn{\to 0}, the distribution approximates a Bernoulli; as temperature \eqn{\to \infty}, the distribution approximates a uniform distribution.
 }
 \examples{
 \donttest{

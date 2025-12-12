@@ -67,9 +67,8 @@ like `MixtureSameFamily`.}
  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-The Negative Binomial Logits  distribution is a generalization of the Negative Binomial
-distribution where the parameter 'r' (number of successes) is expressed as a function
-of a logit parameter. This allows for more flexible modeling of count data.
+The Negative Binomial Logits distribution is a generalization of the Negative Binomial distribution where the parameter 'r'
+(number of successes) is expressed as a function of a logit parameter. This allows for more flexible modeling of count data.
 }
 \examples{
 \donttest{

@@ -59,11 +59,11 @@ randomness is handled by the model's inference engine. Defaults to 0.}
  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-The Pareto distribution is a power-law probability distribution that is often
-used to model income, wealth, and the size of cities. It is defined by two
-parameters: alpha (shape) and scale.
-
-\deqn{f(x) = \frac{\alpha \cdot \text{scale}^{\alpha}}{x^{\alpha + 1}} \text{ for } x \geq \text{scale}}
+The **Pareto distribution**, named after economist Vilfredo Pareto, is a **power-law** probability distribution used to describe phenomena with "rich-get-richer" or "heavy-tail" properties - for example, income distribution, city sizes, or wealth concentration.
+It is characterized by:
+ * a **scale parameter** \deqn{  x_m > 0 } (the minimum possible value), and
+ * a **shape parameter** \deqn{  \alpha > 0 } (which controls the tail heaviness).
+A random variable \deqn{ X \sim \text{Pareto}(\alpha, x_m) } takes values \deqn{  x \ge x_m }.
 }
 \examples{
 \donttest{

@@ -474,7 +474,7 @@ test_that("bi.dist.negative_binomial_probs", {
 })
 
 test_that("bi.dist.negative_binomial", {
-  res = bi.dist.negative_binomial(total_count = 100, probs = 0.5, sample = TRUE)
+  res = bi.dist.negative_binomial2(total_count = 100, probs = 0.5, sample = TRUE)
   r2 = reticulate::py_to_r(res$tolist())
   expect_equal(r2, 88)
 })

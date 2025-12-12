@@ -63,11 +63,19 @@ randomness is handled by the model's inference engine. Defaults to 0.}
 }
 \description{
 The Multivariate Student's t distribution is a generalization of the Student's t
-distribution to multiple dimensions. It is a heavy-tailed distribution that is
+ distribution to multiple dimensions. It is a heavy-tailed distribution that is
 often used to model data that is not normally distributed.
-
-\deqn{p(x) = \frac{1}{B(df/2, n/2)} \frac{\Gamma(df/2 + n/2)}{\Gamma(df/2)}
-\left(1 + \frac{(x - \mu)^T \Sigma^{-1} (x - \mu)}{df}\right)^{-(df + n)/2}}
+ The PDF of the multivariate Student's t-distribution for a random vector \deqn{ x \in R^d } is given by:
+\deqn{
+f(x) = \frac{\Gamma\left(\frac{\nu + d}{2}\right)}{\Gamma\left(\frac{\nu}{2}\right) \nu^{d/2} \pi^{d/2} | \Sigma|^{1/2}}
+\left(1 + \frac{1}{\nu} (x - \mu)^T \Sigma^{-1} (x - \mu)\right)^{-(\nu + d)/2}
+}
+where:
+* \deqn{ \Gamma(\cdot) } is the Gamma function.
+* \deqn{ \mu } is the mean vector.
+* \deqn{ \Sigma } is the scale (covariance) matrix.
+* \deqn{ \nu } is the degrees of freedom.
+* \deqn{ d } is the dimensionality of \deqn{ \mathbf{x}}.
 }
 \examples{
 \donttest{

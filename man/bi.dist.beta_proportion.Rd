@@ -67,8 +67,12 @@ building complex distributions like `MixtureSameFamily`.}
 }
 \description{
 The Beta Proportion distribution is a reparameterization of the conventional
-Beta distribution in terms of a the variate mean and a precision parameter. It's useful for modeling rates and proportions. It's essentially the same family as the standard \deqn{Beta(\alpha,\beta)}, but the mapping is:
-\deqn{ \alpha = \mu , \kappa,\quad \beta = (1 - \mu), \kappa}.
+Beta distribution in terms of a the variate mean and a
+precision parameter. It's useful for modeling rates and proportions. It's essentially the same family as the standard Beta \deqn{(\alpha,\beta)}, but the mapping is:
+
+\deqn{
+       \alpha = \mu , \kappa,\quad \beta = (1 - \mu), \kappa.
+}
 }
 \examples{
 \donttest{

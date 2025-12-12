@@ -62,14 +62,10 @@ randomness is handled by the model's inference engine. Defaults to 0.}
  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-This distribution truncates a base distribution between two specified lower and upper bounds.
-
-\deqn{f(x) = \begin{cases}
-        \frac{p(x)}{P(\text{low} \le X \le \text{high})} & \text{if } \text{low} \le x \le \text{high} \\
-        0 & \text{otherwise}
-    \end{cases}}
-
-where \deqn{p(x)} is the probability density function of the base distribution.
+A "two-sided truncated distribution" is a general concept: you take a base continuous distribution
+and **restrict it** to an interval ([`low`, `high`]), discarding all mass outside, then **renormalize**
+ so the inner portion integrates to 1. I'll spell out the general formulas, caveats, sampling strategies,
+ and special cases (e.g. truncated normal) to illustrate.
 }
 \examples{
 \donttest{

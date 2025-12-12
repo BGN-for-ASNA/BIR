@@ -67,8 +67,7 @@ Samples from a Cauchy distribution.
 
 The Cauchy distribution, also known as the Lorentz distribution, is a continuous probability distribution
 that arises frequently in various fields, including physics and statistics. It is characterized by its
-heavy tails, which extend indefinitely. This means it has a higher probability of extreme values compared to the normal
-distribution.
+heavy tails, which extend indefinitely. This means it has a higher probability of extreme values compared to the normal distribution.
 }
 \examples{
 \donttest{

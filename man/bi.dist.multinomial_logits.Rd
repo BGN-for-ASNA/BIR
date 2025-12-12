@@ -2,7 +2,7 @@
 % Please edit documentation in R/multi_nomial_logits.R
 \name{bi.dist.multinomial_logits}
 \alias{bi.dist.multinomial_logits}
-\title{Samples from a MultinomialLogits distribution.}
+\title{Multinomial logit}
 \usage{
 bi.dist.multinomial_logits(
   logits,
@@ -62,11 +62,13 @@ randomness is handled by the model's inference engine. Defaults to 0.}
    - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-This distribution represents the probability of observing a specific outcome from a multinomial experiment,
-given the logits for each outcome. The logits are the natural logarithm of the odds of each outcome.
-}
-\details{
-\deqn{P(k | \mathbf{\pi}) = \frac{n!}{k! (n-k)!} \prod_{i=1}^k \pi_i}
+A *multinomial logits* distribution refers to a categorical (or more generally multinomial)
+distribution over \eqn{K} classes whose probabilities are given via the softmax of a vector of logits.
+That is, given a vector of real-valued logits \eqn{\ell = (\ell_1, \dots, \ell_K)}, the class probabilities are:
+\deqn{
+  p_k = \frac{\exp(\ell_k)}{\sum_{j=1}^K \exp(\ell_j)}.
+ }
+Then a single draw from the distribution yields one of the \eqn{K} classes (or for a multinomial count version, counts over the classes) with those probabilities.#' @export
 }
 \examples{
 \donttest{

@@ -62,7 +62,10 @@ randomness is handled by the model's inference engine. Defaults to 0.}
 The Discrete Uniform distribution defines a uniform distribution over a range of integers.
 It is characterized by a lower bound (`low`) and an upper bound (`high`), inclusive.
 
-\deqn{P(X = k) = \frac{1}{high - low + 1}, \quad k \in \{low, low+1, ..., high\}}
+ \deqn{
+  P(X = k) = \frac{1}{high - low + 1}, \quad k \in \{low, low+1, ..., high\}
+}
+  Otherwise (if \deqn{k} is outside the range), $ P(X = k) = 0 $.
 
 Samples from a Discrete Uniform distribution.
 }

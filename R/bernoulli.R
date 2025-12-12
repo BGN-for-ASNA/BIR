@@ -1,17 +1,15 @@
 #' @title Sample from a Bernoulli distribution.
 #'
 #' @description
-#'         Samples from a Bernoulli distribution parameterized by logits.
-
 #'  The Bernoulli distribution models a single binary event (success or failure),
 #'  parameterized by the log-odds ratio of success.  The probability of success
 #'  is given by the sigmoid function applied to the logit.
 #'
-#'  \deq{
+#'  \deqn{
 #'    p = \sigma(\eta) = \frac{1}{1 + e^{-\eta}}
 #'  }
 #'
-#'  where \deq{\eta} is the log-odds (the *logit*).
+#'  where \deqn{\eta} is the log-odds (the *logit*).
 #'
 #'
 #' @param probs A numeric vector, matrix, or array representing the probability of success for each Bernoulli trial. Must be between 0 and 1.

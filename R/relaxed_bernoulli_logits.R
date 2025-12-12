@@ -3,8 +3,8 @@
 #' The Relaxed Bernoulli (logits) is a **continuous** relaxation of the standard Bernoulli distribution,
 #' parameterised by logits (or probabilities) and a **temperature** parameter.
 #' Rather than producing strictly 0 or 1, it produces values in the continuous interval (0, 1).
-#' As the temperature ??? 0 the distribution approximates a Bernoulli; as temperature ??? $\infty$ the distribution approximates a uniform distribution.
-
+#' As the temperature \eqn{\to 0}, the distribution approximates a Bernoulli; as temperature \eqn{\to \infty}, the distribution approximates a uniform distribution.
+#'
 #' @param temperature A numeric vector or matrix representing the temperature parameter, must be positive.
 #' @param logits A numeric vector or matrix representing the logits parameter.
 #' @param shape A numeric vector specifying the shape of the distribution.  When `sample=False` (model building),

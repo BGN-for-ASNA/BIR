@@ -69,13 +69,10 @@ This is essential for building complex distributions like `MixtureSameFamily`.}
  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-Samples from a Truncated Cauchy distribution.
-
-The Cauchy distribution, also known as the Lorentz distribution, is a continuous probability distribution
-that appears frequently in various areas of mathematics and physics. It is characterized by its heavy tails,
-which extend to infinity. The truncated version limits the support of the Cauchy distribution to a specified interval.
-
-\deqn{f_{\text{trunc}}(x) = \frac{f_{\text{base}}(x)}{F_{\text{base}}(\text{high}) - F_{\text{base}}(\text{low})} \quad \text{for } \text{low} \le x \le \text{high}}
+The Cauchy distribution, also known as the Lorentz distribution,
+is a continuous probability distribution that appears frequently in various areas of mathematics and physics.
+It is characterized by its heavy tails, which extend to infinity.
+The truncated version limits the support of the Cauchy distribution to a specified interval.
 }
 \examples{
 \donttest{

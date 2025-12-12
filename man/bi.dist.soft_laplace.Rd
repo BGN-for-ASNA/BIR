@@ -63,8 +63,6 @@ This distribution is a smooth approximation of a Laplace distribution,
 characterized by its log-convex density. It offers Laplace-like tails
 while being infinitely differentiable, making it suitable for HMC and
 Laplace approximation.
-
-\deqn{f(x) = \log(2 / \pi) - \log(scale) - log_{add exp}((x - loc) / scale, -(x - loc) / scale)}
 }
 \examples{
 \donttest{

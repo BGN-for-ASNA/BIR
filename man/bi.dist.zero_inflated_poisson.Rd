@@ -59,10 +59,13 @@ randomness is handled by the model's inference engine. Defaults to 0.}
  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).}
 }
 \description{
-This distribution combines two Poisson processes: one with a rate parameter and another that generates only zeros.
-The probability of observing a zero is determined by the 'gate' parameter, while the probability of observing a non-zero value is governed by the 'rate' parameter of the underlying Poisson distribution.
+The Zero-Inflated Poisson distribution is a discrete count-distribution designed for data with *more zeros*
+than would be expected under a standard Poisson. Essentially, it assumes two underlying processes:
+* With probability \deqn{\pi} you are in a "structural zero" state (i.e., you automatically get a zero count).
+* With probability \deqn{1 - \pi} you draw from a standard Poisson distribution with parameter \deqn{\lambda}.
 
-\deqn{P(X = k) = (1 - gate) * \frac{e^{-rate} rate^k}{k!} + gate}
+This results in a mixture distribution that places more mass at zero than a Poisson alone would.
+It's widely used in, for instance, ecology (species counts with many zeros), insurance/claims problems, and any count-data setting with excess zeros.
 }
 \examples{
 \donttest{

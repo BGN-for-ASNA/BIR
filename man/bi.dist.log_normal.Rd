@@ -63,7 +63,10 @@ site. This is essential for building complex distributions like `MixtureSameFami
  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-The Log Uniform distribution is defined over the positive real numbers and is the result of applying an exponential transformation to a uniform distribution over the interval [low, high]. It is often used when modeling parameters that must be positive.
+The Log-Normal distribution is a probability distribution defined for positive real-valued random variables,
+parameterized by a location parameter (loc: \deqn{\mu}) and a scale parameter (scale).
+It arises when the logarithm of a random variable is normally distributed.
+It is often used when modeling parameters that must be positive.
 }
 \examples{
 \donttest{

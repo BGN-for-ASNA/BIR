@@ -70,9 +70,16 @@ randomness is handled by the model's inference engine. Defaults to 0.}
  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-The Wishart distribution is a multivariate distribution used as a prior distribution
-for covariance matrices. This implementation represents the distribution in terms
-of its Cholesky decomposition.
+* The **Wishart** distribution is a distribution over positive definite matrices,
+often used as a prior for covariance or precision matrices in multivariate normal models.
+* The **Cholesky parameterization** of the Wishart (called "wishart_cholesky" in Stan, for example)
+reparameterizes the Wishart over its **lower (or upper) triangular Cholesky factor**. This is useful for numerical
+stability and unconstrained parameterization in Bayesian sampling frameworks.
+* In this parameterization, one works with a lower-triangular matrix $L_W$ such that
+\deqn{
+  \Sigma = L_W L_W^\top
+}
+and imposes a density over $L_W$ corresponding to the induced Wishart density on \deqn{\Sigma}.
 
 The Wishart distribution is a multivariate distribution used as a prior distribution
 for covariance matrices. This implementation represents the distribution in terms

@@ -69,13 +69,6 @@ The Multivariate Normal distribution, also known as the Gaussian distribution in
 is a probability distribution that arises frequently in statistics and machine learning. It is
 defined by its mean vector and covariance matrix, which describe the central tendency and
 spread of the distribution, respectively.
-
-\deqn{p(x) = \frac{1}{\sqrt{(2\pi)^n |\Sigma|}} \exp\left(-\frac{1}{2}(x - \mu)^T \Sigma^{-1} (x - \mu)\right)}
-
-where:
-- \eqn{x} is a \eqn{n}-dimensional vector of random variables.
-- \eqn{\mu} is the mean vector.
-- \eqn{\Sigma} is the covariance matrix.
 }
 \examples{
 \donttest{

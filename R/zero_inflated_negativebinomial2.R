@@ -5,9 +5,9 @@
 #' an excess of zero counts beyond what a standard Negative Binomial would predict.
 #' It assumes two latent processes:
 
-#'  1. With probability \deqn{\pi $ (sometimes denoted \deqn{\psi} or "zero-inflation probability")
+#'  1. With probability \deqn{\pi } (sometimes denoted \deqn{\psi} or "zero-inflation probability")
 #'  you are in a "structural zero" state ??? you observe a zero.
-#'  2. With probability \deqn{1 - \pi$, you come from a regular Negative Binomial distribution
+#'  2. With probability \deqn{1 - \pi}, you come from a regular Negative Binomial distribution
 #'  (with parameters e.g. mean \deqn{\mu} and dispersion parameter \deqn{ \alpha }
 #'   or size/r parameter) and then you might observe zero or a positive count.
 

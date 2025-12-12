@@ -60,9 +60,9 @@ randomness is handled by the model's inference engine. Defaults to 0.}
  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-The Negative Binomial distribution models the number of failures before the first success in a sequence of independent Bernoulli trials.  It is characterized by two parameters: 'concentration' (r) and 'rate' (p).  In this implementation, the 'concentration' parameter is derived from 'total_count' and the 'rate' parameter is derived from 'probs'.
-
-\deqn{P(k) = \binom{k + r - 1}{k} p^r (1 - p)^k}
+Negative Binomial distribution models the number of failures before the first success in a sequence of independent Bernoulli trials.
+It is characterized by two parameters: 'concentration' (r) and 'rate' (p).
+In this implementation, the 'concentration' parameter is derived from 'total_count' and the 'rate' parameter is derived from 'probs'.
 }
 \examples{
 \donttest{

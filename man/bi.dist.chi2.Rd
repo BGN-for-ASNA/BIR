@@ -63,9 +63,9 @@ like `MixtureSameFamily`.}
 }
 \description{
 The Chi-squared distribution is a continuous probability distribution that arises
-frequently in hypothesis testing, particularly in ANOVA and chi-squared tests.
-It is defined by a single positive parameter, degrees of freedom (df), the number of independent standard normal variables
-squared and summed, which determines the shape of the distribution.
+ frequently in hypothesis testing, particularly in ANOVA and chi-squared tests.
+ It is defined by a single positive parameter, degrees of freedom (df), the number of independent standard normal variables squared and summed, which
+ determines the shape of the distribution.
 }
 \examples{
 \donttest{

@@ -69,8 +69,8 @@ distributions like `MixtureSameFamily`.}
  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-Samples from an AsymmetricLaplaceQuantile distribution.
-This distribution is an alternative parameterization of the AsymmetricLaplace
+Samples from an Asymmetric Laplace Quantile distribution.
+This distribution is an alternative parameterization of the Asymmetric Laplace
 distribution, commonly used in Bayesian quantile regression. It utilizes a
 `quantile` parameter to define the balance between the left- and right-hand
 sides of the distribution, representing the proportion of probability density

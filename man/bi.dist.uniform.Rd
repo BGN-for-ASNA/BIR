@@ -63,10 +63,8 @@ instead of creating a sample site.}
  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-Samples from a Uniform distribution, which is a continuous probability distribution
-where all values within a given interval are equally likely.
-
-\deqn{f(x) = \frac{1}{b - a}, \text{ for } a \le x \le b}
+The Uniform distribution is the simplest continuous distribution: every value in the interval ([a, b]) is **equally likely**.
+ It is widely used for modeling complete randomness within a fixed range, random sampling, and as a building block for other distributions.
 }
 \examples{
 \donttest{

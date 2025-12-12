@@ -59,10 +59,15 @@ randomness is handled by the model's inference engine. Defaults to 0.}
  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-The Bernoulli distribution models a single trial with two possible outcomes: success or failure.
-It is parameterized by the probability of success, often denoted as 'p'.
+The Bernoulli distribution models a single binary event (success or failure),
+ parameterized by the log-odds ratio of success.  The probability of success
+ is given by the sigmoid function applied to the logit.
 
-\deqn{P(X=1) = p \\ P(X=0) = 1 - p}
+ \deqn{
+   p = \sigma(\eta) = \frac{1}{1 + e^{-\eta}}
+ }
+
+ where \deqn{\eta} is the log-odds (the *logit*).
 }
 \examples{
 \donttest{

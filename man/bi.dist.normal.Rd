@@ -60,10 +60,10 @@ randomness is handled by the model's inference engine. Defaults to 0.}
 }
 \description{
 The Normal distribution is characterized by its mean (loc) and standard deviation (scale).
-It's a continuous probability distribution that arises frequently in statistics and
-probability theory.
-
-\deqn{p(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)}
+It's a continuous probability distribution that arises frequently in statistics and  probability theory.
+\deqn{
+f(x \mid \mu, \sigma) = \frac{1}{\sqrt{2\pi}\sigma}\exp!\left(-\frac{(x - \mu)^2}{2\sigma^2}\right)
+}
 }
 \examples{
 \donttest{

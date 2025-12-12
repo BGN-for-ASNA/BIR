@@ -1,6 +1,9 @@
 #' @title Student's t-distribution.
 #' @description
-#' The Student's t-distribution is a probability distribution that arises in hypothesis testing involving the mean of a normally distributed population when the population standard deviation is unknown. It is similar to the normal distribution, but has heavier tails, making it more robust to outliers. For large $ \nu $, it converges to the Normal distribution.
+#' The Student's t-distribution is a probability distribution that arises in hypothesis
+#' testing involving the mean of a normally distributed population when the population
+#'  standard deviation is unknown. It is similar to the normal distribution, but has heavier tails,
+#'   making it more robust to outliers. For large \deqn{ \nu }, it converges to the Normal distribution.
 #' \deqn{
 #'   X \sim t_\nu(\mu, \sigma)
 #' }

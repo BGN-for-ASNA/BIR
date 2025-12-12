@@ -5,10 +5,11 @@
 #'  distribution to multiple dimensions. It is a heavy-tailed distribution that is
 #' often used to model data that is not normally distributed.
 
-#'  The PDF of the multivariate Student's t-distribution for a random vector ( \mathbf{x} \in \mathbb{R}^d ) is given by:
+#'  The PDF of the multivariate Student's t-distribution for a random vector \deqn{ x \in R^d } is given by:
 
 #' \deqn{
-#' f(\mathbf{x}) = \frac{\Gamma\left(\frac{\nu + d}{2}\right)}{\Gamma\left(\frac{\nu}{2}\right) \nu^{d/2} \pi^{d/2} | \Sigma|^{1/2}} \left(1 + \frac{1}{\nu} (\mathbf{x} - \mu)^T \Sigma^{-1} (\mathbf{x} - \mu)\right)^{-(\nu + d)/2}
+#' f(x) = \frac{\Gamma\left(\frac{\nu + d}{2}\right)}{\Gamma\left(\frac{\nu}{2}\right) \nu^{d/2} \pi^{d/2} | \Sigma|^{1/2}}
+#' \left(1 + \frac{1}{\nu} (x - \mu)^T \Sigma^{-1} (x - \mu)\right)^{-(\nu + d)/2}
 #' }
 #' where:
 #' * \deqn{ \Gamma(\cdot) } is the Gamma function.

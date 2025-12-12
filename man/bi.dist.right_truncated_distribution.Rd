@@ -59,11 +59,11 @@ randomness is handled by the model's inference engine. Defaults to 0.}
  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-This distribution truncates the base distribution at a specified high value.  Values greater than `high` are discarded,
-effectively creating a distribution that is only supported up to that point. This is useful for modeling data
-where observations are only possible within a certain range.
-
-\deqn{f_{\text{trunc}}(x) = \frac{f_{\text{base}}(x)}{F_{\text{base}}(\text{high})} \quad \text{for } x \le \text{high}}
+A right-truncated distribution is a statistical distribution that arises
+when the possible values  of a random variable are restricted to be below a
+certain specified value `high`. In essence, the right tail of the original distribution is "cut off"
+at a particular point, and the remaining probability is redistributed among the allowable values.
+This type of distribution is common in various fields where there are inherent upper limits or observational constraints.
 }
 \examples{
 \donttest{

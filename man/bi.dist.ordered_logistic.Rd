@@ -59,12 +59,9 @@ randomness is handled by the model's inference engine. Defaults to 0.}
  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-A categorical distribution with ordered outcomes. This distribution represents the probability of an event falling into one of several ordered categories, based on a predictor variable and a set of cutpoints. The probability of an event falling into a particular category is determined by the number of categories above it.
-
-\deqn{P(Y = k) = \begin{cases}
-               1 & \text{if } k = 0 \\
-               \frac{1}{k} & \text{if } k > 0
-           \end{cases}}
+The ordered logistic distribution is used for modeling **ordinal** outcome variables
+\deqn{Y \in {1,2,\dots,K} } (i.e., categories with a natural order) via a latent continuous predictor \deqn{\eta } and
+a set of increasing *cut-points* \deqn{ c_1 < c_2 < \cdots < c_{K-1} }. When \deqn{ \eta } crosses thresholds, the observed  \deqn{Y}.
 }
 \examples{
 \donttest{

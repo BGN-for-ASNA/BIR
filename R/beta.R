@@ -3,7 +3,7 @@
 #'Samples from a Beta distribution, defined on the interval [0, 1].
 #'The Beta distribution is a versatile distribution often used to model
 #'probabilities or proportions. It is parameterized by two positive shape
-#'parameters, usually denoted $\alpha$ and $\beta>0$, control the shape of the density (how much mass is pushed toward 0, 1, or intermediate).
+#'parameters, usually denoted \deqn{\alpha} and \deqn{\beta>0}, control the shape of the density (how much mass is pushed toward 0, 1, or intermediate).
 #'
 #'\deqn{
 #'  X \sim Beta(\alpha,\beta), \\f(x)=\frac{ x^{\alpha-1}(1-x)^{\beta-1}}{B(\alpha,\beta)}, \\
@@ -16,7 +16,7 @@
 #'  B(\alpha, \beta) = \int_0^1 x^{\alpha - 1} (1 - x)^{\beta - 1} , dx = \frac{\Gamma(\alpha),\Gamma (\beta)}{\Gamma(\alpha + \beta)}.
 #' }
 #'
-#'  where \deqn{\alpha} and \deqn{\beta} are the concentration parameters, and \deqn{B(x, y}$ is the Beta function.
+#'  where \deqn{\alpha} and \deqn{\beta} are the concentration parameters, and \deqn{B(x, y)} is the Beta function.
 #'
 #' @title Beta Distribution
 #'

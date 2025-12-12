@@ -62,9 +62,18 @@ randomness is handled by the model's inference engine. Defaults to 0.}
  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-The Student's t-distribution is a probability distribution that arises in hypothesis testing involving the mean of a normally distributed population when the population standard deviation is unknown. It is similar to the normal distribution, but has heavier tails, making it more robust to outliers.
+The Student's t-distribution is a probability distribution that arises in hypothesis
+testing involving the mean of a normally distributed population when the population
+ standard deviation is unknown. It is similar to the normal distribution, but has heavier tails,
+  making it more robust to outliers. For large \deqn{ \nu }, it converges to the Normal distribution.
+\deqn{
+  X \sim t_\nu(\mu, \sigma)
+}
+where:
 
-\deqn{f(x) = \frac{1}{\Gamma(\nu/2) \sqrt{\nu \pi}} \left(1 + \frac{x^2}{\nu}\right)^{-(\nu+1)/2}}
+* \deqn{ \mu } is the **location (mean)** parameter
+* \deqn{ \sigma > 0 } is the **scale** parameter
+* \deqn{ \nu > 0 } is the **degrees of freedom** controlling the tail heaviness
 }
 \examples{
 \donttest{

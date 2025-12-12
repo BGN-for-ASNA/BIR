@@ -63,10 +63,11 @@ complex distributions like `MixtureSameFamily`.}
  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
 }
 \description{
-This distribution over directional data is qualitatively similar to the von
-Mises and von Mises-Fisher distributions, but permits tractable variational
-inference via reparametrized gradients.
-\deqn{p(x) = \frac{1}{Z} \exp\left(-\frac{1}{2\sigma^2} ||x - \mu||^2\right)}
+The projected normal distribution arises by taking a multivariate normal vector
+\deqn{\mathbf X \sim \mathcal N_n (\mu, \Sigma) } in \deqn{\mathbb R^n}
+and projecting it to the unit sphere. This distribution is commonly used
+in directional statistics (data on circles or spheres) and supports
+asymmetric and even multimodal behaviours depending on parameters.
 }
 \examples{
 \donttest{

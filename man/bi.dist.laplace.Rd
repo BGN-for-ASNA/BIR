@@ -63,9 +63,8 @@ sample site. This is essential for building complex distributions like `MixtureS
    - When \code{create_obj=TRUE}: The raw BI distribution object (for advanced use cases).
 }
 \description{
-Samples from a Levy distribution.
-The Lévy distribution is a continuous probability distribution on the positive real line (or shifted positive line) that is *heavy-tailed*, *skewed*, and arises naturally in connection with stable distributions (specifically the case with stability index \deqn{\alpha = \tfrac12}.
-It is often used in contexts such as hitting-time problems for Brownian motion, physics (e.g., van der Waals line-shapes), and modelling very heavy-tailed phenomena. Let (X) be a Lévy-distributed random variable with **location** parameter \deqn{\mu} and **scale** parameter \deqn{c > 0}. The support is \deqn{x \ge \mu}.
+Samples from a Laplace distribution, also known as the double exponential distribution.
+The Laplace distribution is defined by its location parameter (loc) and scale parameter (scale).
 }
 \examples{
 \donttest{
