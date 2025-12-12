@@ -7,5 +7,5 @@
 #' of opening a URL.
 #' @export
 bi.doc <- function() {
-  browseURL("https://s-sosa.com")
+  browseURL("https://s-sosa.com/BI")
 }
