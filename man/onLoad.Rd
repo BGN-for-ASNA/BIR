@@ -11,6 +11,9 @@ onLoad(libname = NULL, pkgname = "BI")
 
 \item{pkgname}{Package name.}
 }
+\value{
+No return value, called for side effects.
+}
 \description{
 Internal function to run when the package is loaded.
 }

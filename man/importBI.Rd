@@ -47,6 +47,6 @@ but the initialized BI object is also returned for convenience.
 \examples{
 \dontrun{
 library(BayesianInference)
-m = importBI()
+m <- importBI()
 }
 }

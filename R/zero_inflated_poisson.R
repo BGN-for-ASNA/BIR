@@ -30,12 +30,12 @@
 #'   within a model. This is used to uniquely identify the variable. Defaults to 'x'.
 #' @param to_jax Logical. Defaults to TRUE.
 #'
-#'  #' @return
-#'  - When \code{sample=FALSE}, a BI Zero Inflated Poisson distribution object (for model building).
-#'
-#'  - When \code{sample=TRUE}, a JAX array of samples drawn from the Zero Inflated Poisson distribution (for direct sampling).
-#'
-#'  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
+#' @return
+#' \itemize{
+#'   \item When \code{sample=FALSE}, a BI Zero Inflated Poisson distribution object (for model building).
+#'   \item When \code{sample=TRUE}, a JAX array of samples drawn from the Zero Inflated Poisson distribution (for direct sampling).
+#'   \item When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
+#' }
 #'
 #' @examples
 #' \donttest{

@@ -49,14 +49,14 @@ randomness is handled by the model's inference engine. Defaults to 0.}
 
 \item{create_obj}{Logical; If `TRUE`, returns the raw BI distribution object instead of creating a sample site.}
 
-\item{to_jax}{Logical. Defaults to TRUE.
-
- #' @return
- - When \code{sample=FALSE}, a BI Zero Inflated Poisson distribution object (for model building).
-
- - When \code{sample=TRUE}, a JAX array of samples drawn from the Zero Inflated Poisson distribution (for direct sampling).
-
- - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).}
+\item{to_jax}{Logical. Defaults to TRUE.}
+}
+\value{
+\itemize{
+  \item When \code{sample=FALSE}, a BI Zero Inflated Poisson distribution object (for model building).
+  \item When \code{sample=TRUE}, a JAX array of samples drawn from the Zero Inflated Poisson distribution (for direct sampling).
+  \item When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
+}
 }
 \description{
 The Zero-Inflated Poisson distribution is a discrete count-distribution designed for data with *more zeros*

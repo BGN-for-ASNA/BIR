@@ -9,6 +9,7 @@
 #' Internal function to run when the package is loaded.
 #' @param libname Library name.
 #' @param pkgname Package name.
+#' @return No return value, called for side effects.
 #' @keywords internal
 onLoad <- function(libname = NULL, pkgname = "BI") {
   packageStartupMessage("For documentation, run the command: bi.doc()")
