@@ -2,19 +2,21 @@
 #' @description
 #' Samples from an Asymmetric Laplace distribution.
 
-#'The Asymmetric Laplace distribution is a generalization of the Laplace distribution,
-#'where the two sides of the distribution are scaled differently. It is defined by
-#'a location parameter (loc), a scale parameter (scale), and an asymmetry parameter (asymmetry).
+#' The Asymmetric Laplace distribution is a generalization of the Laplace distribution,
+#' where the two sides of the distribution are scaled differently. It is defined by
+#' a location parameter (loc), a scale parameter (scale), and an asymmetry parameter (asymmetry).
 #'
 #' \deqn{
-#'  f(x, \kappa) = \frac{1}{\kappa+\kappa^{-1}}\exp(-x\kappa),\quad x\ge0\\
+#'  f(x, \kappa) = \frac{1}{\kappa+\kappa^{-1}}\exp(-x\kappa),\quad x\ge0
+#' }
+#' \deqn{
+#'  = \frac{1}{\kappa+\kappa^{-1}}\exp(x/\kappa),\quad x<0
+#' }
+#' \deqn{
+#'  \textrm{for } -\infty < x < \infty, \kappa > 0 .
+#' }
 #'
-#'= \frac{1}{\kappa+\kappa^{-1}}\exp(x/\kappa),\quad x<0\\
-#'
-#'
-#'for -\infty < x < \infty, \kappa > 0 . \\
-#'
-#'laplace_asymmetric takes 'kappa' as a shape parameter for \kappa. For \kappa = 1, it is identical to a Laplace distribution.}
+#' laplace_asymmetric takes 'kappa' as a shape parameter for \eqn{\kappa}. For \eqn{\kappa = 1}, it is identical to a Laplace distribution.
 #'
 #'
 #' @param loc A numeric vector or single numeric value representing the location parameter of the distribution. This corresponds to \eqn{\mu}.
@@ -44,28 +46,31 @@
 #' @examples
 #' \donttest{
 #' library(BayesianInference)
-#' m=importBI(platform='cpu')
+#' m <- importBI(platform = "cpu")
 #' bi.dist.asymmetric_laplace(sample = TRUE)
 #' }
 #' @seealso This is a wrapper of  \url{https://num.pyro.ai/en/stable/distributions.html#asymmetriclaplace}
 #' @export
-bi.dist.asymmetric_laplace=function(
-    loc=0.0,
-    scale=1.0,
-    asymmetry=1.0,
-    validate_args=py_none(),
-    name='x', obs=py_none(),
-    mask=py_none(),
-    sample=FALSE,
+bi.dist.asymmetric_laplace <- function(
+    loc = 0.0,
+    scale = 1.0,
+    asymmetry = 1.0,
+    validate_args = py_none(),
+    name = "x", obs = py_none(),
+    mask = py_none(),
+    sample = FALSE,
     seed = py_none(),
-    shape=c(),
-    event=0,
-    create_obj=FALSE, to_jax = TRUE ) {
-     shape=do.call(tuple, as.list(as.integer(shape)))
-     event=as.integer(event)
-     if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
-     .BI_env$.bi_instance$dist$asymmetric_laplace(
-       loc=.BI_env$jnp$array(loc),
-       scale= .BI_env$jnp$array(scale),
-       asymmetry= .BI_env$jnp$array(asymmetry),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
+    shape = c(),
+    event = 0,
+    create_obj = FALSE, to_jax = TRUE) {
+  shape <- do.call(tuple, as.list(as.integer(shape)))
+  event <- as.integer(event)
+  if (!.BI_env$.py$is_none(seed)) {
+    seed <- as.integer(seed)
+  }
+  .BI_env$.bi_instance$dist$asymmetric_laplace(
+    loc = .BI_env$jnp$array(loc),
+    scale = .BI_env$jnp$array(scale),
+    asymmetry = .BI_env$jnp$array(asymmetry), validate_args = validate_args, name = name, obs = obs, mask = mask, sample = sample, seed = seed, shape = shape, event = event, create_obj = create_obj, to_jax = to_jax
+  )
 }

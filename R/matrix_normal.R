@@ -4,7 +4,7 @@
 #' Samples from a Matrix Normal distribution, which is a multivariate normal distribution over matrices.
 #' The distribution is characterized by a location matrix and two lower triangular matrices that define the correlation structure.
 #' The distribution is related to the multivariate normal distribution in the following way.
-#' If \deqn{X ~ MN(loc,U,V)$ then $vec(X) ~ MVN(vec(loc), kron(V,U) )}.
+#' If \deqn{X \sim MN(loc,U,V) \implies vec(X) \sim MVN(vec(loc), kron(V,U) )}.
 #'
 #' @param loc A numeric vector, matrix, or array representing the location of the distribution.
 #' @param scale_tril_row A numeric vector, matrix, or array representing the lower cholesky of rows correlation matrix.
@@ -39,38 +39,46 @@
 #' @examples
 #' \donttest{
 #' library(BayesianInference)
-#' m=importBI(platform='cpu')
-#' n_rows= 3
-#' n_cols = 4
-#' loc = matrix(rep(0,n_rows*n_cols), nrow = n_rows, ncol = n_cols,byrow = TRUE)
+#' m <- importBI(platform = "cpu")
+#' n_rows <- 3
+#' n_cols <- 4
+#' loc <- matrix(rep(0, n_rows * n_cols), nrow = n_rows, ncol = n_cols, byrow = TRUE)
 #'
-#' U_row_cov =
-#' matrix(c(1.0, 0.5, 0.2, 0.5, 1.0, 0.3, 0.2, 0.3, 1.0),
-#' nrow = n_rows, ncol = n_rows,byrow = TRUE)
-#' scale_tril_row = chol(U_row_cov)
+#' U_row_cov <-
+#'   matrix(c(1.0, 0.5, 0.2, 0.5, 1.0, 0.3, 0.2, 0.3, 1.0),
+#'     nrow = n_rows, ncol = n_rows, byrow = TRUE
+#'   )
+#' scale_tril_row <- chol(U_row_cov)
 #'
-#' V_col_cov = matrix(c(2.0, -0.8, 0.1, 0.4, -0.8, 2.0, 0.2, -0.2, 0.1,
-#' 0.2, 2.0, 0.0, 0.4, -0.2, 0.0, 2.0),
-#' nrow = n_cols, ncol = n_cols,byrow = TRUE)
-#' scale_tril_column = chol(V_col_cov)
+#' V_col_cov <- matrix(
+#'   c(
+#'     2.0, -0.8, 0.1, 0.4, -0.8, 2.0, 0.2, -0.2, 0.1,
+#'     0.2, 2.0, 0.0, 0.4, -0.2, 0.0, 2.0
+#'   ),
+#'   nrow = n_cols, ncol = n_cols, byrow = TRUE
+#' )
+#' scale_tril_column <- chol(V_col_cov)
 #'
 #'
 #' bi.dist.matrix_normal(
-#' loc = loc,
-#' scale_tril_row = scale_tril_row,
-#' scale_tril_column = scale_tril_column,
-#' sample = TRUE
+#'   loc = loc,
+#'   scale_tril_row = scale_tril_row,
+#'   scale_tril_column = scale_tril_column,
+#'   sample = TRUE
 #' )
 #' }
 #' @export
 
-bi.dist.matrix_normal=function(loc, scale_tril_row, scale_tril_column, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
-     shape=do.call(tuple, as.list(as.integer(shape)))
-     reticulate::py_run_string("def is_none(x): return x is None");
-     if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
-     .BI_env$.bi_instance$dist$matrix_normal(
-       loc = .BI_env$jnp$array(loc),
-       scale_tril_row = .BI_env$jnp$array(scale_tril_row),
-       scale_tril_column = .BI_env$jnp$array(scale_tril_column),
-       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
+bi.dist.matrix_normal <- function(loc, scale_tril_row, scale_tril_column, validate_args = py_none(), name = "x", obs = py_none(), mask = py_none(), sample = FALSE, seed = py_none(), shape = c(), event = 0, create_obj = FALSE, to_jax = TRUE) {
+  shape <- do.call(tuple, as.list(as.integer(shape)))
+  reticulate::py_run_string("def is_none(x): return x is None")
+  if (!.BI_env$.py$is_none(seed)) {
+    seed <- as.integer(seed)
+  }
+  .BI_env$.bi_instance$dist$matrix_normal(
+    loc = .BI_env$jnp$array(loc),
+    scale_tril_row = .BI_env$jnp$array(scale_tril_row),
+    scale_tril_column = .BI_env$jnp$array(scale_tril_column),
+    validate_args = validate_args, name = name, obs = obs, mask = mask, sample = sample, seed = seed, shape = shape, event = event, create_obj = create_obj, to_jax = to_jax
+  )
 }

@@ -65,32 +65,37 @@ randomness is handled by the model's inference engine. Defaults to 0.}
 Samples from a Matrix Normal distribution, which is a multivariate normal distribution over matrices.
 The distribution is characterized by a location matrix and two lower triangular matrices that define the correlation structure.
 The distribution is related to the multivariate normal distribution in the following way.
-If \deqn{X ~ MN(loc,U,V)$ then $vec(X) ~ MVN(vec(loc), kron(V,U) )}.
+If \deqn{X \sim MN(loc,U,V) \implies vec(X) \sim MVN(vec(loc), kron(V,U) )}.
 }
 \examples{
 \donttest{
 library(BayesianInference)
-m=importBI(platform='cpu')
-n_rows= 3
-n_cols = 4
-loc = matrix(rep(0,n_rows*n_cols), nrow = n_rows, ncol = n_cols,byrow = TRUE)
+m <- importBI(platform = "cpu")
+n_rows <- 3
+n_cols <- 4
+loc <- matrix(rep(0, n_rows * n_cols), nrow = n_rows, ncol = n_cols, byrow = TRUE)
 
-U_row_cov =
-matrix(c(1.0, 0.5, 0.2, 0.5, 1.0, 0.3, 0.2, 0.3, 1.0),
-nrow = n_rows, ncol = n_rows,byrow = TRUE)
-scale_tril_row = chol(U_row_cov)
+U_row_cov <-
+  matrix(c(1.0, 0.5, 0.2, 0.5, 1.0, 0.3, 0.2, 0.3, 1.0),
+    nrow = n_rows, ncol = n_rows, byrow = TRUE
+  )
+scale_tril_row <- chol(U_row_cov)
 
-V_col_cov = matrix(c(2.0, -0.8, 0.1, 0.4, -0.8, 2.0, 0.2, -0.2, 0.1,
-0.2, 2.0, 0.0, 0.4, -0.2, 0.0, 2.0),
-nrow = n_cols, ncol = n_cols,byrow = TRUE)
-scale_tril_column = chol(V_col_cov)
+V_col_cov <- matrix(
+  c(
+    2.0, -0.8, 0.1, 0.4, -0.8, 2.0, 0.2, -0.2, 0.1,
+    0.2, 2.0, 0.0, 0.4, -0.2, 0.0, 2.0
+  ),
+  nrow = n_cols, ncol = n_cols, byrow = TRUE
+)
+scale_tril_column <- chol(V_col_cov)
 
 
 bi.dist.matrix_normal(
-loc = loc,
-scale_tril_row = scale_tril_row,
-scale_tril_column = scale_tril_column,
-sample = TRUE
+  loc = loc,
+  scale_tril_row = scale_tril_row,
+  scale_tril_column = scale_tril_column,
+  sample = TRUE
 )
 }
 }
