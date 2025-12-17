@@ -217,7 +217,7 @@ GPU support available on compatible systems with JAX GPU installation.
 ## Related Packages
 
 -   [BI](https://pypi.org/project/BayesInference) - Python implementation
--   [BIJ](https://github.com/BGN-for-ASNA/BIJ) - J implementation
+-   [BIJ](https://github.com/BGN-for-ASNA/pyBayesianInference.jl) - J implementation
 
 ---
 
