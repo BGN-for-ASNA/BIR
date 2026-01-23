@@ -7,7 +7,7 @@
 
 [![Website](https://img.shields.io/badge/Website-s--sosa.com/BI-blue?style=flat&logo=google-chrome&logoColor=white)](https://s-sosa.com/BI/)
 [![bioRxiv](https://img.shields.io/badge/bioRxiv-10.64898%2F2026.01.19.700318v1-BD271E?style=flat&logo=biorxiv&logoColor=white)](https://www.biorxiv.org/content/10.64898/2026.01.19.700318v1) 
-[![R build status](https://github.com/BGN-for-ASNA/BIR/workflows/R-CMD-check/badge.svg)](https://github.com/BGN-for-ASNA/BIR/actions)
+![R](https://img.shields.io/badge/R-4.0+-276DC3?logo=r&logoColor=white)
 [![License: GPL (>= 3)](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 </div>
