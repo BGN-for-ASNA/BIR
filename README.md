@@ -5,8 +5,10 @@
 **A unified probabilistic programming library bridging the gap between user-friendly R syntax and high-performance JAX computation.**  
 *Run bespoke models on CPU, GPU, or TPU with ease.*
 
-[![License: GPL (>= 3)](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Website](https://img.shields.io/badge/Website-s--sosa.com/BI-blue?style=flat&logo=google-chrome&logoColor=white)](https://s-sosa.com/BI/)
+[![bioRxiv](https://img.shields.io/badge/bioRxiv-10.64898%2F2026.01.19.700318v1-BD271E?style=flat&logo=biorxiv&logoColor=white)](https://www.biorxiv.org/content/10.64898/2026.01.19.700318v1) 
 [![R build status](https://github.com/BGN-for-ASNA/BIR/workflows/R-CMD-check/badge.svg)](https://github.com/BGN-for-ASNA/BIR/actions)
+[![License: GPL (>= 3)](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 </div>
 
@@ -88,12 +90,14 @@ Leveraging Just-In-Time (JIT) compilation, BI outperforms traditional engines on
 
 **Benchmark: Network Size 100 (Lower is Better)**
 
-| Engine | Execution Time | Relative Performance |
-| :--- | :--- | :--- |
-| **STAN (CPU)** | `████████████████████████████` | *Baseline* |
-| **BI (CPU)** | `████████████` | **~2.5x Faster** |
+| Engine         | Execution Time                 | Relative Performance |
+|:---------------|:-------------------------------|:---------------------|
+| **STAN (CPU)** | `████████████████████████████` | *Baseline*           |
+| **BI (CPU)**   | `████████████`                 | **\~30x Faster**     |
+| **BI (GPU)**   | `██`                           | **\~200x Faster**    |
 
-*> Comparison of execution time for a Social Relations Model. Source: Sosa et al. (2025).*
+*\> Comparison of execution time for a Social Relations Model. Source: [Sosa et al. (2026)](https://www.biorxiv.org/content/10.64898/2026.01.19.700318v1).*
+
 
 ---
 
@@ -224,10 +228,9 @@ GPU support available on compatible systems with JAX GPU installation.
 <div align="center">
 
 **BayesianInference (BIR)**  
-Based on "The Bayesian Inference library for Python, R and Julia" by Sosa, McElreath, & Ross (2025).
+Based on "The Bayesian Inference library for Python, R, Julia" by [Sosa, McElreath, & Ross (2026)](https://www.biorxiv.org/content/10.64898/2026.01.19.700318v1).
 
-[Documentation](#) | [GitHub](https://github.com/BGN-for-ASNA/BIR) | [Issues](https://github.com/BGN-for-ASNA/BIR/issues)
+[Official website](https://s-sosa.com/BI) \| [Issues](https://github.com/BGN-for-ASNA/BIJ/issues) \| [Quick Start](https://s-sosa.com/BI/start/Installation.html)
 
-&copy; 2025 BayesianInference Team. Released under GPL-3.0.
-
+© 2026 Bayesian Inference Team. Released under GPL-3.0.
 </div>
