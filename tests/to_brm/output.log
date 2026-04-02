@@ -1,0 +1,47 @@
+Loading required package: Rcpp
+Loading 'brms' package (version 2.23.0). Useful instructions
+can be found by typing help('brms'). A more detailed introduction
+to the package is available through vignette('brms_overview').
+
+Attaching package: ‘brms’
+
+The following object is masked from ‘package:stats’:
+
+    ar
+
+Loading required package: StanHeaders
+
+rstan version 2.35.0.9000 (Stan version 2.35.0)
+
+For execution on a local, multicore CPU with excess RAM we recommend calling
+options(mc.cores = parallel::detectCores()).
+To avoid recompilation of unchanged Stan programs, we recommend calling
+rstan_options(auto_write = TRUE)
+For within-chain threading using `reduce_sum()` or `map_rect()` Stan functions,
+change `threads_per_chain` option:
+rstan_options(threads_per_chain = 1)
+
+--- Testing BI to brms conversion ---
+Running conversion...
+
+--- Summary of converted object ---
+ Family: gaussian 
+  Links: mu = identity 
+Formula: y ~ x 
+   Data: data (Number of observations: 10) 
+  Draws: 2 chains, each with iter = 100; warmup = 0; thin = 1;
+         total post-warmup draws = 200
+
+Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
+and Tail_ESS are effective sample size measures, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
+
+--- Variance-Covariance Matrix ---
+NULL
+
+--- Testing plotting ---
+null device 
+          1 
+Plots saved to test_plots.pdf
+
+Conversion and basic diagnostics successful!
