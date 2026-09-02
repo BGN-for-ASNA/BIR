@@ -4,7 +4,7 @@
 #' The LKJ (Leonard-Kjærgaard-Jørgensen) Cholesky distribution is a family of distributions on symmetric matrices, often used as a prior for the Cholesky decomposition of a
 #' symmetric matrix. It is particularly useful in Bayesian inference for models with covariance structure.
 #'
-#' @name bi.dist.lkj_cholesky
+#' @name bf.dist.lkj_cholesky
 #'
 #' @param dimension Numeric for the dimensions of the LKJ Cholesky matrix.
 #' @param concentration Numeric. A parameter controlling the concentration of the distribution around the identity matrix. Higher values indicate greater concentration. Must be greater than 1.
@@ -31,20 +31,20 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BayesianInference)
-#' m <- importBI(platform='cpu')
-#' bi.dist.lkj_cholesky(dimension = 2, concentration = 1., sample = TRUE)
+#' library(BayesForge)
+#' m <- importBF(platform='cpu')
+#' bf.dist.lkj_cholesky(dimension = 2, concentration = 1., sample = TRUE)
 #' }
 #'
 #' @export
-bi.dist.lkj_cholesky <- function(dimension, concentration=1.0, sample_method='onion', validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
+bf.dist.lkj_cholesky <- function(dimension, concentration=1.0, sample_method='onion', validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
   shape <- do.call(tuple, as.list(as.integer(shape)))
   dimension <- as.integer(dimension)
   reticulate::py_run_string("def is_none(x): return x is None")
-  if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
-  .BI_env$.bi_instance$dist$lkj_cholesky(
-    dimension = .BI_env$jnp$array(dimension),
-    concentration = .BI_env$jnp$array(concentration),
+  if (!.BF_env$.py$is_none(seed)){seed=as.integer(seed);}
+  .BF_env$.bf_instance$dist$lkj_cholesky(
+    dimension = .BF_env$jnp$array(dimension),
+    concentration = .BF_env$jnp$array(concentration),
     sample_method = sample_method,
     validate_args = validate_args,
     name = name,

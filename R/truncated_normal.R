@@ -45,18 +45,18 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BayesianInference)
-#' m=importBI(platform='cpu')
-#' bi.dist.truncated_normal(loc = 0, scale = 2, low = 0, high = 1.5, sample = TRUE)
+#' library(BayesForge)
+#' m=importBF(platform='cpu')
+#' bf.dist.truncated_normal(loc = 0, scale = 2, low = 0, high = 1.5, sample = TRUE)
 #' }
 #' @export
-bi.dist.truncated_normal=function(loc=0.0, scale=1.0, low=py_none(), high=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
+bf.dist.truncated_normal=function(loc=0.0, scale=1.0, low=py_none(), high=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
-     if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
-     .BI_env$.bi_instance$dist$truncated_normal(
-       loc=.BI_env$jnp$array(loc),
-       scale= .BI_env$jnp$array(scale),
-       low= .BI_env$jnp$array(low),
-       high = .BI_env$jnp$array(high),
+     if (!.BF_env$.py$is_none(seed)){seed=as.integer(seed);}
+     .BF_env$.bf_instance$dist$truncated_normal(
+       loc=.BF_env$jnp$array(loc),
+       scale= .BF_env$jnp$array(scale),
+       low= .BF_env$jnp$array(low),
+       high = .BF_env$jnp$array(high),
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 }

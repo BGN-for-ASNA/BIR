@@ -1,3 +1,8 @@
 exportPattern("^[[:alpha:]]+")
 importFrom("utils", "browseURL")
 importFrom(reticulate, py_none, tuple)
+importFrom("methods", "new")
+importFrom("stats", "gaussian")
+S3method("$", dummy_bf_instance)
+S3method("$", dummy_dist)
+S3method(print, bf_plot_ns)

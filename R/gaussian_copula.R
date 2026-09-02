@@ -35,23 +35,23 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BayesianInference)
-#' m=importBI(platform='cpu')
-#' bi.dist.gaussian_copula(
-#'   marginal_dist = bi.dist.gamma(concentration = 1 ,  create_obj = TRUE) ,
+#' library(BayesForge)
+#' m=importBF(platform='cpu')
+#' bf.dist.gaussian_copula(
+#'   marginal_dist = bf.dist.gamma(concentration = 1 ,  create_obj = TRUE) ,
 #'   correlation_matrix =  matrix(c(1.0, 0.7, 0.7, 1.0),, nrow = 2, byrow = TRUE),
 #'   sample = TRUE)
 #' }
 #' @export
-bi.dist.gaussian_copula=function(marginal_dist, correlation_matrix=py_none(), correlation_cholesky=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
+bf.dist.gaussian_copula=function(marginal_dist, correlation_matrix=py_none(), correlation_cholesky=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
 
       return(print("No more available since jax > 0.06"))
 
       shape=do.call(tuple, as.list(as.integer(shape)))
-     if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
-     if(!.BI_env$.py$is_none(correlation_cholesky)){correlation_cholesky = .BI_env$jnp$array(correlation_cholesky)}
-     if(!.BI_env$.py$is_none(correlation_matrix)){correlation_matrix = .BI_env$jnp$array(correlation_matrix)}
-     .BI_env$.bi_instance$dist$gaussian_copula(
+     if (!.BF_env$.py$is_none(seed)){seed=as.integer(seed);}
+     if(!.BF_env$.py$is_none(correlation_cholesky)){correlation_cholesky = .BF_env$jnp$array(correlation_cholesky)}
+     if(!.BF_env$.py$is_none(correlation_matrix)){correlation_matrix = .BF_env$jnp$array(correlation_matrix)}
+     .BF_env$.bf_instance$dist$gaussian_copula(
        marginal_dist = marginal_dist,
        correlation_matrix = correlation_matrix,
        correlation_cholesky = correlation_cholesky,

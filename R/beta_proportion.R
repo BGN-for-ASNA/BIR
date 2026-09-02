@@ -44,17 +44,17 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BayesianInference)
-#' m=importBI(platform='cpu')
-#' bi.dist.beta_proportion(0, 1, sample = TRUE)
+#' library(BayesForge)
+#' m=importBF(platform='cpu')
+#' bf.dist.beta_proportion(0, 1, sample = TRUE)
 #' }
 #' @export
-bi.dist.beta_proportion=function(mean, concentration, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
+bf.dist.beta_proportion=function(mean, concentration, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
-     if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
-     .BI_env$.bi_instance$dist$beta_proportion(
-       mean = .BI_env$jnp$array(mean),
-       concentration  = .BI_env$jnp$array(concentration),
+     if (!.BF_env$.py$is_none(seed)){seed=as.integer(seed);}
+     .BF_env$.bf_instance$dist$beta_proportion(
+       mean = .BF_env$jnp$array(mean),
+       concentration  = .BF_env$jnp$array(concentration),
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 }

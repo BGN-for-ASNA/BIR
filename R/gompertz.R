@@ -35,16 +35,16 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BayesianInference)
-#' m=importBI(platform='cpu')
-#' bi.dist.gompertz(concentration = 5., sample = TRUE)
+#' library(BayesForge)
+#' m=importBF(platform='cpu')
+#' bf.dist.gompertz(concentration = 5., sample = TRUE)
 #' }
 #' @export
-bi.dist.gompertz=function(concentration, rate=1.0, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
+bf.dist.gompertz=function(concentration, rate=1.0, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
-     if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
-     .BI_env$.bi_instance$dist$gompertz(
-       concentration = .BI_env$jnp$array(concentration),
-       rate = .BI_env$jnp$array(rate),
+     if (!.BF_env$.py$is_none(seed)){seed=as.integer(seed);}
+     .BF_env$.bf_instance$dist$gompertz(
+       concentration = .BF_env$jnp$array(concentration),
+       rate = .BF_env$jnp$array(rate),
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 }

@@ -1,4 +1,4 @@
-Package: BayesianInference
+Package: BayesForge
 Type: Package
 Title: Bayesian Inference
 Version: 0.0.1
@@ -9,14 +9,20 @@ Authors@R: c(
       role = c("aut", "cre")
     )
   )
-Description: Beta version of 'Bayesian Inference' (BI) using 'python' and BI. It aims to unify the modeling experience by providing an intuitive model-building syntax together with the flexibility of low-level abstraction coding. It also includes pre-built functions for high-level abstraction and supports hardware-accelerated computation for improved scalability, including parallelization, vectorization, and execution on CPU, GPU, or TPU.
+Description: BayesForge is a high-performance probabilistic programming library that aims to unify the modeling experience by providing an intuitive model-building syntax together with the flexibility of low-level abstraction coding. It also includes pre-built functions for high-level abstraction and supports hardware-accelerated computation for improved scalability, including parallelization, vectorization, and execution on CPU, GPU, or TPU.
 Encoding: UTF-8
 LazyData: true
-Imports: reticulate
-SystemRequirements: Python (>= 3.6), 'BayesInference' python library.
+Imports:
+    reticulate,
+    abind,
+    methods
+SystemRequirements: Python (>= 3.6), 'bayesforge' python library.
 Depends: R (>= 3.5.0)
-Suggests: testthat (>= 3.0.0)
+Suggests:
+    testthat (>= 3.0.0),
+    brms,
+    rstan
 Config/testthat/edition: 3
-RoxygenNote: 7.3.2
+RoxygenNote: 8.0.0
 License: GPL (>= 3)
-
+Config/roxygen2/version: 8.0.0

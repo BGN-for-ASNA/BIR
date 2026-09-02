@@ -6,7 +6,7 @@
 *Run bespoke models on CPU, GPU, or TPU with ease.*
 
 [![Website](https://img.shields.io/badge/Website-s--sosa.com/BI-blue?style=flat&logo=google-chrome&logoColor=white)](https://s-sosa.com/BI/)
-[![bioRxiv](https://img.shields.io/badge/bioRxiv-10.64898%2F2026.01.19.700318v1-BD271E?style=flat&logo=biorxiv&logoColor=white)](https://www.biorxiv.org/content/10.64898/2026.01.19.700318v1) 
+[![bioRxiv](https://img.shields.io/badge/bioRxiv-10.64898%2F2026.01.19.700318v1-BD271E?style=flat&logo=biorxiv&logoColor=white)](https://www.bforxiv.org/content/10.64898/2026.01.19.700318v1) 
 ![R](https://img.shields.io/badge/R-4.0+-276DC3?logo=r&logoColor=white)
 [![License: GPL (>= 3)](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
@@ -16,7 +16,7 @@
 
 ## One Mental Model. Three Languages.
 
-**BayesianInference (BI)** provides a unified experience across R, Python, and Julia. Whether you work in R's formula syntax, Python's object-oriented approach, or Julia's mathematical elegance, the model logic remains consistent.
+**BFR (BI)** provides a unified experience across R, Python, and Julia. Whether you work in R's formula syntax, Python's object-oriented approach, or Julia's mathematical elegance, the model logic remains consistent.
 
 -   ✅ **Zero Context Switching**: Variable names, distribution signatures, and model logic remain consistent.
 -   ✅ **NumPyro Power**: Both interfaces compile down to XLA via JAX for blazing fast inference.
@@ -36,13 +36,13 @@
 ```r
 model <- function(height, weight){
   # Priors
-  sigma = bi.dist.uniform(0, 50, name='sigma', shape=c(1))
-  alpha = bi.dist.normal(178, 20, name='alpha', shape=c(1))
-  beta  = bi.dist.normal(0, 1, name='beta', shape=c(1))
+  sigma = bf.dist.uniform(0, 50, name='sigma', shape=c(1))
+  alpha = bf.dist.normal(178, 20, name='alpha', shape=c(1))
+  beta  = bf.dist.normal(0, 1, name='beta', shape=c(1))
 
   # Likelihood
   mu = alpha + beta * weight
-  bi.dist.normal(mu, sigma, obs=height)
+  bf.dist.normal(mu, sigma, obs=height)
 }
 ```
 
@@ -52,13 +52,13 @@ model <- function(height, weight){
 ```python
 def model(height, weight):
     # Priors
-    sigma = bi.dist.uniform(0, 50, name='sigma', shape=(1,))
-    alpha = bi.dist.normal(178, 20, name='alpha', shape=(1,))
-    beta  = bi.dist.normal(0, 1, name='beta', shape=(1,))
+    sigma = bf.dist.uniform(0, 50, name='sigma', shape=(1,))
+    alpha = bf.dist.normal(178, 20, name='alpha', shape=(1,))
+    beta  = bf.dist.normal(0, 1, name='beta', shape=(1,))
 
     # Likelihood
     mu = alpha + beta * weight
-    bi.dist.normal(mu, sigma, obs=height)
+    bf.dist.normal(mu, sigma, obs=height)
 ```
 
 <td valign="top">
@@ -66,13 +66,13 @@ def model(height, weight):
 ```Julia
 @BI function model(weight, height)
     # Priors
-    sigma = bi.dist.uniform(0, 50, name='sigma', shape=(1,))
-    alpha = bi.dist.normal(178, 20, name='alpha', shape=(1,))
-    beta  = bi.dist.normal(0, 1, name='beta', shape=(1,))
+    sigma = bf.dist.uniform(0, 50, name='sigma', shape=(1,))
+    alpha = bf.dist.normal(178, 20, name='alpha', shape=(1,))
+    beta  = bf.dist.normal(0, 1, name='beta', shape=(1,))
 
     # Likelihood
     mu = alpha + beta * weight
-    bi.dist.normal(mu, sigma, obs=height)
+    bf.dist.normal(mu, sigma, obs=height)
 end
 ```
 
@@ -96,7 +96,7 @@ Leveraging Just-In-Time (JIT) compilation, BI outperforms traditional engines on
 | **BI (CPU)**   | `████████████`                 | **\~30x Faster**     |
 | **BI (GPU)**   | `██`                           | **\~200x Faster**    |
 
-*\> Comparison of execution time for a Social Relations Model. Source: [Sosa et al. (2026)](https://www.biorxiv.org/content/10.64898/2026.01.19.700318v1).*
+*\> Comparison of execution time for a Social Relations Model. Source: [Sosa et al. (2026)](https://www.bforxiv.org/content/10.64898/2026.01.19.700318v1).*
 
 
 ---
@@ -116,9 +116,9 @@ devtools::install_github("https://github.com/BGN-for-ASNA/BIR")
 Run the starting test to create the Python virtual environment managed by `reticulate`.
 
 ```r
-library(BayesianInference)
+library(BayesForge)
 # Run the starting test to install Python dependencies
-BI_starting_test()
+BF_starting_test()
 ```
 
 ### 3. Select Backend
@@ -126,7 +126,7 @@ Choose `'cpu'`, `'gpu'`, or `'tpu'` when importing the library.
 
 ```r
 # Initialize on CPU (default) or GPU/TPU
-m <- importBI(platform = 'cpu')
+m <- importBF(platform = 'cpu')
 ```
 
 ---
@@ -159,38 +159,38 @@ m <- importBI(platform = 'cpu')
 The package provides wrappers for a comprehensive set of distributions from NumPyro.
 
 ### Continuous
--   `bi.dist.normal`, `bi.dist.uniform`, `bi.dist.student_t`
--   `bi.dist.cauchy`, `bi.dist.halfcauchy`, `bi.dist.halfnormal`
--   `bi.dist.gamma`, `bi.dist.inverse_gamma`, `bi.dist.exponential`
--   `bi.dist.beta`, `bi.dist.beta_proportion`
--   `bi.dist.laplace`, `bi.dist.asymmetric_laplace`
--   `bi.dist.log_normal`, `bi.dist.log_uniform`
--   `bi.dist.pareto`, `bi.dist.weibull`, `bi.dist.gumbel`
--   `bi.dist.chi2`, `bi.dist.gompertz`
+-   `bf.dist.normal`, `bf.dist.uniform`, `bf.dist.student_t`
+-   `bf.dist.cauchy`, `bf.dist.halfcauchy`, `bf.dist.halfnormal`
+-   `bf.dist.gamma`, `bf.dist.inverse_gamma`, `bf.dist.exponential`
+-   `bf.dist.beta`, `bf.dist.beta_proportion`
+-   `bf.dist.laplace`, `bf.dist.asymmetric_laplace`
+-   `bf.dist.log_normal`, `bf.dist.log_uniform`
+-   `bf.dist.pareto`, `bf.dist.weibull`, `bf.dist.gumbel`
+-   `bf.dist.chi2`, `bf.dist.gompertz`
 
 ### Discrete
--   `bi.dist.bernoulli`, `bi.dist.binomial`
--   `bi.dist.poisson`, `bi.dist.negative_binomial`
--   `bi.dist.geometric`, `bi.dist.discrete_uniform`
--   `bi.dist.beta_binomial`, `bi.dist.zero_inflated_poisson`
+-   `bf.dist.bernoulli`, `bf.dist.bfnomial`
+-   `bf.dist.poisson`, `bf.dist.negative_binomial`
+-   `bf.dist.geometric`, `bf.dist.discrete_uniform`
+-   `bf.dist.beta_binomial`, `bf.dist.zero_inflated_poisson`
 
 ### Multivariate
--   `bi.dist.multivariate_normal`, `bi.dist.multivariate_student_t`
--   `bi.dist.dirichlet`, `bi.dist.dirichlet_multinomial`
--   `bi.dist.multinomial`
--   `bi.dist.lkj`, `bi.dist.lkj_cholesky`
--   `bi.dist.wishart`, `bi.dist.wishart_cholesky`
+-   `bf.dist.multivariate_normal`, `bf.dist.multivariate_student_t`
+-   `bf.dist.dirichlet`, `bf.dist.dirichlet_multinomial`
+-   `bf.dist.multinomial`
+-   `bf.dist.lkj`, `bf.dist.lkj_cholesky`
+-   `bf.dist.wishart`, `bf.dist.wishart_cholesky`
 
 ### Time Series & Stochastic Processes
--   `bi.dist.gaussian_random_walk`
--   `bi.dist.gaussian_state_space`
--   `bi.dist.euler_maruyama`
--   `bi.dist.car` (Conditional AutoRegressive)
+-   `bf.dist.gaussian_random_walk`
+-   `bf.dist.gaussian_state_space`
+-   `bf.dist.euler_maruyama`
+-   `bf.dist.car` (Conditional AutoRegressive)
 
 ### Mixtures & Truncated
--   `bi.dist.mixture`, `bi.dist.mixture_same_family`
--   `bi.dist.truncated_normal`, `bi.dist.truncated_cauchy`
--   `bi.dist.lower_truncated_power_law`
+-   `bf.dist.mixture`, `bf.dist.mixture_same_family`
+-   `bf.dist.truncated_normal`, `bf.dist.truncated_cauchy`
+-   `bf.dist.lower_truncated_power_law`
 
 *(See package documentation for the full list)*
 
@@ -202,10 +202,10 @@ For full documentation of functions and parameters, you can use the built-in R h
 
 ```r
 # Open package documentation
-bi.doc()
+bf.doc()
 
 # Help for a specific function
-?bi.dist.normal
+?bf.dist.normal
 ```
 
 ## Platform Support
@@ -220,15 +220,15 @@ GPU support available on compatible systems with JAX GPU installation.
 
 ## Related Packages
 
--   [BI](https://pypi.org/project/BayesInference) - Python implementation
--   [BIJ](https://github.com/BGN-for-ASNA/pyBayesianInference.jl) - J implementation
+-   [BI](https://pypi.org/project/BFR) - Python implementation
+-   [BIJ](https://github.com/BGN-for-ASNA/pyBFR.jl) - J implementation
 
 ---
 
 <div align="center">
 
-**BayesianInference (BIR)**  
-Based on "The Bayesian Inference library for Python, R, Julia" by [Sosa, McElreath, & Ross (2026)](https://www.biorxiv.org/content/10.64898/2026.01.19.700318v1).
+**BFR (BIR)**  
+Based on "The Bayesian Inference library for Python, R, Julia" by [Sosa, McElreath, & Ross (2026)](https://www.bforxiv.org/content/10.64898/2026.01.19.700318v1).
 
 [Official website](https://s-sosa.com/BI) \| [Issues](https://github.com/BGN-for-ASNA/BIJ/issues) \| [Quick Start](https://s-sosa.com/BI/start/Installation.html)
 

@@ -51,21 +51,21 @@
 
 #' @examples
 #' \donttest{
-#' library(BayesianInference)
-#' m=importBI(platform='cpu')
-#' bi.dist.bernoulli(probs = 0.5, sample = TRUE)
-#' bi.dist.bernoulli(probs = 0.5, sample = TRUE, seed = 5)
-#' bi.dist.bernoulli(logits = 1, sample = TRUE, seed = 5)
+#' library(BayesForge)
+#' m=importBF(platform='cpu')
+#' bf.dist.bernoulli(probs = 0.5, sample = TRUE)
+#' bf.dist.bernoulli(probs = 0.5, sample = TRUE, seed = 5)
+#' bf.dist.bernoulli(logits = 1, sample = TRUE, seed = 5)
 #' }
 #' @export
-bi.dist.bernoulli=function(probs=py_none(), logits=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
+bf.dist.bernoulli=function(probs=py_none(), logits=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
-     if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
-     if (.BI_env$.py$is_none(logits)){
-      .BI_env$.bi_instance$dist$bernoulli(probs=.BI_env$jnp$array(probs),   validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
+     if (!.BF_env$.py$is_none(seed)){seed=as.integer(seed);}
+     if (.BF_env$.py$is_none(logits)){
+      .BF_env$.bf_instance$dist$bernoulli(probs=.BF_env$jnp$array(probs),   validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
      }else{
-       .BI_env$.bi_instance$dist$bernoulli(logits= .BI_env$jnp$array(logits),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
+       .BF_env$.bf_instance$dist$bernoulli(logits= .BF_env$jnp$array(logits),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 
      }
 }

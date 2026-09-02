@@ -7,12 +7,12 @@ output: html_document
 
 ## Dependencies
 ```{r}
-library(BayesianInference)
+library(BayesForge)
 library(reticulate) # to convert python arrays into R objrects
 library(ggplot2)
 library(patchwork)
 library(htmltools) # fro BI interactive plots
-m = importBI(platform='cpu') # BI class initialisation
+m = importBF(platform='cpu') # BI class initialisation
 jnp = reticulate::import('jax.numpy') # For linear algebra operations
 jax = reticulate::import('jax') # For additional functions
 ```
@@ -38,9 +38,9 @@ to_r = function(array){
 beta = 1.5
 alpha = 0.6
 sigma = 4
-x = bi.dist.normal(0,4, shape = c(100), sample = TRUE, seed = 0)
+x = bf.dist.normal(0,4, shape = c(100), sample = TRUE, seed = 0)
 mu = alpha + beta * x
-y = bi.dist.normal(mu, sigma, sample = TRUE) 
+y = bf.dist.normal(mu, sigma, sample = TRUE) 
 ggplot() + geom_point(aes(x = to_r(x), y = to_r(y)), color = "blue")
 ```
 
@@ -75,11 +75,11 @@ m$data_on_model = list(x = x, y = y)
 # Define model ------------------------------------------------
 model <- function(x, y){
   # Each call of distribution function within a model require to specify a name (to track all parameters)
-  alpha = bi.dist.normal(loc = 0, scale = 1, name = 'alpha') 
-  beta = bi.dist.normal(loc = 0, scale = 2, name = 'beta')
-  sigma = bi.dist.exponential(1, name = 'sigma')
+  alpha = bf.dist.normal(loc = 0, scale = 1, name = 'alpha') 
+  beta = bf.dist.normal(loc = 0, scale = 2, name = 'beta')
+  sigma = bf.dist.exponential(1, name = 'sigma')
   mu = alpha + beta * x
-  bi.dist.normal(mu, sigma, obs = y)
+  bf.dist.normal(mu, sigma, obs = y)
 }
 
 # Run mcmc ------------------------------------------------
@@ -108,10 +108,10 @@ beta_1 = 1.5
 beta_2 = -0.8
 alpha = 0.3
 sigma = 2
-x1 = bi.dist.normal(0,4, shape = c(100), sample = TRUE)
-x2 = bi.dist.normal(0,6, shape = c(100), sample = TRUE)
+x1 = bf.dist.normal(0,4, shape = c(100), sample = TRUE)
+x2 = bf.dist.normal(0,6, shape = c(100), sample = TRUE)
 mu = alpha + beta_1 * x1 + beta_2 * x2
-y = bi.dist.normal(mu, sigma, sample = TRUE) 
+y = bf.dist.normal(mu, sigma, sample = TRUE) 
 p1 <- ggplot() + geom_point(aes(x = to_r(x1), y = to_r(y)), color = "blue")+ggtitle('X1')
 p2 <- ggplot() + geom_point(aes(x = to_r(x2), y = to_r(y)), color = "blue")+ggtitle('X2')
 p1 | p2
@@ -148,12 +148,12 @@ m$data_on_model = list(x1 = x1, x2 = x2, y = y)
 # Define model ------------------------------------------------
 model <- function(x1, x2, y){
   # Each call of distribution function within a model require to specify a name (to track all parameters)
-  alpha = bi.dist.normal(loc = 0, scale = 1, name = 'alpha') 
-  beta_1 = bi.dist.normal(loc = 0, scale = 2, name = 'beta1')
-  beta_2 = bi.dist.normal(loc = 0, scale = 2, name = 'beta2')
-  sigma = bi.dist.exponential(1, name = 'sigma')
+  alpha = bf.dist.normal(loc = 0, scale = 1, name = 'alpha') 
+  beta_1 = bf.dist.normal(loc = 0, scale = 2, name = 'beta1')
+  beta_2 = bf.dist.normal(loc = 0, scale = 2, name = 'beta2')
+  sigma = bf.dist.exponential(1, name = 'sigma')
   mu = alpha + beta_1 * x1 + beta_2 * x2
-  bi.dist.normal(mu, sigma, obs = y)
+  bf.dist.normal(mu, sigma, obs = y)
 }
 
 # Run mcmc ------------------------------------------------
@@ -177,15 +177,15 @@ sigma = 2
 ### Simulating data
 
 ```{r}
-x = bi.dist.normal(0,4, shape = c(100), sample = TRUE)
-k = bi.dist.categorical(c(0.5, 0.5), shape = c(100), sample = TRUE)
+x = bf.dist.normal(0,4, shape = c(100), sample = TRUE)
+k = bf.dist.categorical(c(0.5, 0.5), shape = c(100), sample = TRUE)
 
 beta = jnp$array(list(1.5, -.5))
 alpha = jnp$array(list(.6, .1))
 sigma = 2
 
 mu = alpha[k] + beta[k] * x
-y = bi.dist.normal(mu, sigma, sample = TRUE) 
+y = bf.dist.normal(mu, sigma, sample = TRUE) 
 
 df <- data.frame(
   x = to_r(x),
@@ -229,11 +229,11 @@ m$data_on_model = list(x = x, k = k, y = y)
 # Define model ------------------------------------------------
 model <- function(x, k, y){
   # Each call of distribution function within a model require to specify a name (to track all parameters)
-  alpha = bi.dist.normal(loc = 0, scale = 1, name = 'alpha', shape = c(2)) 
-  beta = bi.dist.normal(loc = 0, scale = 2, name = 'beta', shape = c(2))
-  sigma = bi.dist.exponential(1, name = 'sigma')
+  alpha = bf.dist.normal(loc = 0, scale = 1, name = 'alpha', shape = c(2)) 
+  beta = bf.dist.normal(loc = 0, scale = 2, name = 'beta', shape = c(2))
+  sigma = bf.dist.exponential(1, name = 'sigma')
   mu = alpha[k] + beta[k] * x 
-  bi.dist.normal(mu, sigma, obs = y)
+  bf.dist.normal(mu, sigma, obs = y)
 }
 
 # Run mcmc ------------------------------------------------
@@ -261,10 +261,10 @@ beta_2 = -0.8
 beta_3 = .9
 alpha = 0.3
 sigma = 2
-x1 = bi.dist.normal(0,4, shape = c(100), sample = TRUE)
-x2 = bi.dist.normal(0,6, shape = c(100), sample = TRUE)
+x1 = bf.dist.normal(0,4, shape = c(100), sample = TRUE)
+x2 = bf.dist.normal(0,6, shape = c(100), sample = TRUE)
 mu = alpha + beta_1 * x1 + beta_2 * x2 +  beta_3*x1*x2
-y = bi.dist.normal(mu, sigma, sample = TRUE) 
+y = bf.dist.normal(mu, sigma, sample = TRUE) 
 p1 <- ggplot() + geom_point(aes(x = to_r(x1), y = to_r(y)), color = "blue")+ggtitle('X1')
 p2 <- ggplot() + geom_point(aes(x = to_r(x2), y = to_r(y)), color = "blue")+ggtitle('X2')
 p1 | p2
@@ -305,13 +305,13 @@ m$data_on_model = list(x1 = x1, x2 = x2, y = y)
 # Define model ------------------------------------------------
 model <- function(x1, x2, y){
   # Each call of distribution function within a model require to specify a name (to track all parameters)
-  alpha = bi.dist.normal(loc = 0, scale = 1, name = 'alpha') 
-  beta_1 = bi.dist.normal(loc = 0, scale = 2, name = 'beta1')
-  beta_2 = bi.dist.normal(loc = 0, scale = 2, name = 'beta2')
-  beta_3 = bi.dist.normal(loc = 0, scale = 2, name = 'beta3')
-  sigma = bi.dist.exponential(1, name = 'sigma')
+  alpha = bf.dist.normal(loc = 0, scale = 1, name = 'alpha') 
+  beta_1 = bf.dist.normal(loc = 0, scale = 2, name = 'beta1')
+  beta_2 = bf.dist.normal(loc = 0, scale = 2, name = 'beta2')
+  beta_3 = bf.dist.normal(loc = 0, scale = 2, name = 'beta3')
+  sigma = bf.dist.exponential(1, name = 'sigma')
   mu = alpha + beta_1 * x1 + beta_2 * x2 + beta_3*x1*x2
-  bi.dist.normal(mu, sigma, obs = y)
+  bf.dist.normal(mu, sigma, obs = y)
 }
 
 # Run mcmc ------------------------------------------------
@@ -339,9 +339,9 @@ sigma = 2
 beta = 2.5
 alpha = 0.6
 sigma = 4
-x = bi.dist.normal(0,4, shape = c(100), sample = TRUE, seed = 0)
+x = bf.dist.normal(0,4, shape = c(100), sample = TRUE, seed = 0)
 mu = alpha + beta * x
-y = bi.dist.binomial(total_count = 1L, logits =  mu, sample = TRUE)  # 📝 Or bi.dist.binomial(total_count = 1L, probs =   m$link$inv_logits(mu), sample = TRUE)
+y = bf.dist.bfnomial(total_count = 1L, logits =  mu, sample = TRUE)  # 📝 Or bf.dist.bfnomial(total_count = 1L, probs =   m$link$inv_logits(mu), sample = TRUE)
 ggplot() + geom_point(aes(x = to_r(x), y = to_r(y)), color = "blue")
 ```
 
@@ -377,10 +377,10 @@ m$data_on_model = list(x = x, y = y)
 # Define model ------------------------------------------------
 model <- function(x, y){
   # Each call of distribution function within a model require to specify a name (to track all parameters)
-  alpha = bi.dist.normal(loc = 0, scale = 1, name = 'alpha') 
-  beta = bi.dist.normal(loc = 0, scale = 2, name = 'beta')
+  alpha = bf.dist.normal(loc = 0, scale = 1, name = 'alpha') 
+  beta = bf.dist.normal(loc = 0, scale = 2, name = 'beta')
   mu = alpha + beta * x
-  bi.dist.binomial(total_count = 1, logits = mu, obs = y)
+  bf.dist.bfnomial(total_count = 1, logits = mu, obs = y)
 }
 
 # Run mcmc ------------------------------------------------
@@ -403,9 +403,9 @@ alpha = 0.6
 ```{r}
 beta = 1.5
 alpha = 0.6
-x = bi.dist.normal(4, shape = c(100), sample = TRUE, seed = 0)
+x = bf.dist.normal(4, shape = c(100), sample = TRUE, seed = 0)
 mu = jnp$exp(alpha + beta * x) # ⚠️ link function
-y = bi.dist.poisson(rate = mu, sample = TRUE)  # 📝 Or bi.dist.binomial(total_count = 1L, probs =   m$link$inv_logits(mu), sample = TRUE)
+y = bf.dist.poisson(rate = mu, sample = TRUE)  # 📝 Or bf.dist.bfnomial(total_count = 1L, probs =   m$link$inv_logits(mu), sample = TRUE)
 ggplot() + geom_point(aes(x = to_r(x), y = to_r(y)), color = "blue")
 ```
 
@@ -440,10 +440,10 @@ m$data_on_model = list(x = x, y = y)
 # Define model ------------------------------------------------
 model <- function(x, y){
   # Each call of distribution function within a model require to specify a name (to track all parameters)
-  alpha = bi.dist.normal(loc = 0, scale = 1, name = 'alpha') 
-  beta = bi.dist.normal(loc = 0, scale = 2, name = 'beta')
+  alpha = bf.dist.normal(loc = 0, scale = 1, name = 'alpha') 
+  beta = bf.dist.normal(loc = 0, scale = 2, name = 'beta')
   mu = jnp$exp(alpha + beta * x)
-  bi.dist.poisson(mu, obs = y)
+  bf.dist.poisson(mu, obs = y)
 }
 
 # Run mcmc ------------------------------------------------
@@ -464,12 +464,12 @@ jnp$array(list(0L))
 ## Categorical Model
 ### Simulating data
 ```{r}
-a = bi.dist.normal(0, 1, shape=c(2), name='a', sample = TRUE) 
+a = bf.dist.normal(0, 1, shape=c(2), name='a', sample = TRUE) 
 ```
 
 
 ```{r}
-x = bi.dist.normal(0,1, shape = c(500), sample = TRUE, seed = 0)
+x = bf.dist.normal(0,1, shape = c(500), sample = TRUE, seed = 0)
 
 alpha = jnp$array(list(1.5, .9, 0))
 beta = .9
@@ -479,7 +479,7 @@ mu2 =  alpha[1] + beta * x
 mu3 =  jnp$zeros_like(x)
 
 p = jax$nn$softmax(jnp$stack(list(mu1, mu2, mu3), axis = 1L), axis = 1L) #stacks these vectors column-wise 
-y = bi.dist.categorical(probs=p, sample = TRUE) # Category asignment
+y = bf.dist.categorical(probs=p, sample = TRUE) # Category asignment
 
 df <- data.frame(
   x = to_r(x),
@@ -531,8 +531,8 @@ m$data_on_model = list(x = x, y = y)
 # Define model ------------------------------------------------
 model <- function(x,  y){
   # Each call of distribution function within a model require to specify a name (to track all parameters)
-  alpha = bi.dist.normal(loc = 0, scale = 2, name = 'alpha', shape = c(3)) 
-  beta = bi.dist.normal(loc = 0, scale = 1, name = 'beta')
+  alpha = bf.dist.normal(loc = 0, scale = 2, name = 'alpha', shape = c(3)) 
+  beta = bf.dist.normal(loc = 0, scale = 1, name = 'beta')
 
   mu1 = alpha[0] + beta * x
   mu2 = alpha[1] + beta * x
@@ -540,7 +540,7 @@ model <- function(x,  y){
 
   p = jax$nn$softmax(jnp$stack(list(mu1, mu2, mu3), axis = 1L), axis = 1L)
   
-  bi.dist.categorical(probs=p, obs = y) 
+  bf.dist.categorical(probs=p, obs = y) 
 }
 
 # Run mcmc ------------------------------------------------
@@ -563,14 +563,14 @@ beta = .9
 ### Simulating data
 ```{r}
 
-k = bi.dist.categorical(c(0.5, 0.5), shape = c(100), sample = TRUE)
+k = bf.dist.categorical(c(0.5, 0.5), shape = c(100), sample = TRUE)
 sigma = 1.8
 alpha_bar = 1.5
-alpha = bi.dist.normal(alpha_bar, sigma, shape = c(2), sample = TRUE, seed = 0) # Fixed seed so we will obtain : Array([ 1.12948415, 0.0874216  ], dtype=float64)
+alpha = bf.dist.normal(alpha_bar, sigma, shape = c(2), sample = TRUE, seed = 0) # Fixed seed so we will obtain : Array([ 1.12948415, 0.0874216  ], dtype=float64)
 print(alpha)
 
 p = alpha[k]
-y = bi.dist.binomial(total_count = 1L, logits = p , sample = TRUE)
+y = bf.dist.bfnomial(total_count = 1L, logits = p , sample = TRUE)
 
 df <- data.frame(
   k = to_r(k),
@@ -623,12 +623,12 @@ m$data_on_model = list(k = k, y = y)
 # Define model ------------------------------------------------
 model <- function(k, y){
 
-  sigma = bi.dist.exponential(1, name = 'sigma')
-  alpha_bar = bi.dist.normal(loc = 0, scale = 2, name = 'alpha_bar') 
-  alpha = bi.dist.normal(loc = alpha_bar, scale = sigma, name = 'alpha', shape = c(2)) 
+  sigma = bf.dist.exponential(1, name = 'sigma')
+  alpha_bar = bf.dist.normal(loc = 0, scale = 2, name = 'alpha_bar') 
+  alpha = bf.dist.normal(loc = alpha_bar, scale = sigma, name = 'alpha', shape = c(2)) 
   
   p = alpha[k] 
-  bi.dist.binomial(total_count = 1L, logits = p, obs = y)
+  bf.dist.bfnomial(total_count = 1L, logits = p, obs = y)
 }
 
 # Run mcmc ------------------------------------------------
@@ -671,16 +671,16 @@ alpha = 5
 beta = -1.5
 sigma = 0.6
 
-sigma_N_obs_by_ID = bi.dist.exponential(1, shape= c(2), sample = TRUE)
-Rho = bi.dist.lkj(2, 2,  sample = TRUE)
+sigma_N_obs_by_ID = bf.dist.exponential(1, shape= c(2), sample = TRUE)
+Rho = bf.dist.lkj(2, 2,  sample = TRUE)
 cov = jnp$outer(sigma_N_obs_by_ID, sigma_N_obs_by_ID) * Rho
-varying_effects = bi.dist.multivariate_normal(jnp$stack(list(alpha, beta)), cov, sample = TRUE, shape = c(N_ID))   
+varying_effects = bf.dist.multivariate_normal(jnp$stack(list(alpha, beta)), cov, sample = TRUE, shape = c(N_ID))   
 varying_intercept = varying_effects[,0]   
 varying_slope = varying_effects[,1] 
 
 mu = varying_intercept[ID] + varying_slope[ID]*x          
 
-y = bi.dist.normal(mu, sigma, sample = TRUE)
+y = bf.dist.normal(mu, sigma, sample = TRUE)
 ```
 
 
@@ -732,20 +732,20 @@ m$data_on_model = list(x = x, y = y)
 # Define model ------------------------------------------------
 model <- function(x, y){
   # Each call of distribution function within a model require to specify a name (to track all parameters)
-  alpha = bi.dist.normal(loc = 0, scale = 5, name = 'alpha') 
-  beta = bi.dist.normal(loc = 0, scale = 3, name = 'beta')
-  sigma = bi.dist.exponential(1, name = 'sigma')
+  alpha = bf.dist.normal(loc = 0, scale = 5, name = 'alpha') 
+  beta = bf.dist.normal(loc = 0, scale = 3, name = 'beta')
+  sigma = bf.dist.exponential(1, name = 'sigma')
   
-  sigma_N_obs_by_ID = bi.dist.exponential(1, shape= c(2),  name = 'N_obs_by_ID')
-  Rho = bi.dist.lkj(2, 2, name = 'Rho')
+  sigma_N_obs_by_ID = bf.dist.exponential(1, shape= c(2),  name = 'N_obs_by_ID')
+  Rho = bf.dist.lkj(2, 2, name = 'Rho')
   cov = jnp$outer(sigma_N_obs_by_ID, sigma_N_obs_by_ID) * Rho
-  varying_effects = bi.dist.multivariate_normal(jnp$stack(list(alpha, beta)), cov, shape = c(N_ID), name = 'varying_effects')  
+  varying_effects = bf.dist.multivariate_normal(jnp$stack(list(alpha, beta)), cov, shape = c(N_ID), name = 'varying_effects')  
   
   varying_intercept = varying_effects[,0] 
   varying_slope = varying_effects[,1] 
   
   mu = varying_intercept[ID] + varying_slope[ID]*x    
-  bi.dist.normal(mu, sigma, obs = y)
+  bf.dist.normal(mu, sigma, obs = y)
 }
 
 # Run mcmc ------------------------------------------------

@@ -39,14 +39,14 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BayesianInference)
-#' m <- importBI(platform = "cpu")
-#' bi.dist.laplace(sample = TRUE)
+#' library(BayesForge)
+#' m <- importBF(platform = "cpu")
+#' bf.dist.laplace(sample = TRUE)
 #' }
 #' @export
 
 
-bi.dist.laplace <- function(
+bf.dist.laplace <- function(
     loc = 0.0,
     scale = 1.0,
     validate_args = py_none(),
@@ -61,12 +61,12 @@ bi.dist.laplace <- function(
     to_jax = TRUE) {
   shape <- do.call(tuple, as.list(as.integer(shape)))
   reticulate::py_run_string("def is_none(x): return x is None")
-  if (!.BI_env$.py$is_none(seed)) {
+  if (!.BF_env$.py$is_none(seed)) {
     seed <- as.integer(seed)
   }
-  .BI_env$.bi_instance$dist$laplace(
-    loc = .BI_env$jnp$array(loc),
-    scale = .BI_env$jnp$array(scale),
+  .BF_env$.bf_instance$dist$laplace(
+    loc = .BF_env$jnp$array(loc),
+    scale = .BF_env$jnp$array(scale),
     validate_args = validate_args, name = name, obs = obs, mask = mask, sample = sample, seed = seed, shape = shape, event = event, create_obj = create_obj, to_jax = to_jax
   )
 }

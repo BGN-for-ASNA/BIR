@@ -40,16 +40,16 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BayesianInference)
-#' m=importBI(platform='cpu')
-#' bi.dist.discrete_uniform(sample = TRUE)
+#' library(BayesForge)
+#' m=importBF(platform='cpu')
+#' bf.dist.discrete_uniform(sample = TRUE)
 #' }
 #' @export
-bi.dist.discrete_uniform=function(low=0, high=1, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
+bf.dist.discrete_uniform=function(low=0, high=1, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
-     if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
-     .BI_env$.bi_instance$dist$discrete_uniform(
-       low = .BI_env$jnp$array(low),
-       high = .BI_env$jnp$array(high),
+     if (!.BF_env$.py$is_none(seed)){seed=as.integer(seed);}
+     .BF_env$.bf_instance$dist$discrete_uniform(
+       low = .BF_env$jnp$array(low),
+       high = .BF_env$jnp$array(high),
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 }

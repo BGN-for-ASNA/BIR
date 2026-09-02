@@ -11,7 +11,7 @@
 #' @param scale_tril_column A numeric vector, matrix, or array representing the lower cholesky of columns correlation matrix.
 #' @param shape A numeric vector specifying the shape of the distribution.  Must be a vector.
 #' @param event An integer representing the number of batch dimensions to reinterpret as event dimensions.
-#' @param mask A logical vector, matrix, or array (.BI_env$jnp$array) to mask observations.
+#' @param mask A logical vector, matrix, or array (.BF_env$jnp$array) to mask observations.
 #' @param create_obj A logical value. If `TRUE`, returns the raw BI distribution object instead of creating a sample site.
 #' @param validate_args Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.
 #' @param sample A logical value that controls the function's behavior. If `TRUE`,
@@ -38,8 +38,8 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BayesianInference)
-#' m <- importBI(platform = "cpu")
+#' library(BayesForge)
+#' m <- importBF(platform = "cpu")
 #' n_rows <- 3
 #' n_cols <- 4
 #' loc <- matrix(rep(0, n_rows * n_cols), nrow = n_rows, ncol = n_cols, byrow = TRUE)
@@ -60,7 +60,7 @@
 #' scale_tril_column <- chol(V_col_cov)
 #'
 #'
-#' bi.dist.matrix_normal(
+#' bf.dist.matrix_normal(
 #'   loc = loc,
 #'   scale_tril_row = scale_tril_row,
 #'   scale_tril_column = scale_tril_column,
@@ -69,16 +69,16 @@
 #' }
 #' @export
 
-bi.dist.matrix_normal <- function(loc, scale_tril_row, scale_tril_column, validate_args = py_none(), name = "x", obs = py_none(), mask = py_none(), sample = FALSE, seed = py_none(), shape = c(), event = 0, create_obj = FALSE, to_jax = TRUE) {
+bf.dist.matrix_normal <- function(loc, scale_tril_row, scale_tril_column, validate_args = py_none(), name = "x", obs = py_none(), mask = py_none(), sample = FALSE, seed = py_none(), shape = c(), event = 0, create_obj = FALSE, to_jax = TRUE) {
   shape <- do.call(tuple, as.list(as.integer(shape)))
   reticulate::py_run_string("def is_none(x): return x is None")
-  if (!.BI_env$.py$is_none(seed)) {
+  if (!.BF_env$.py$is_none(seed)) {
     seed <- as.integer(seed)
   }
-  .BI_env$.bi_instance$dist$matrix_normal(
-    loc = .BI_env$jnp$array(loc),
-    scale_tril_row = .BI_env$jnp$array(scale_tril_row),
-    scale_tril_column = .BI_env$jnp$array(scale_tril_column),
+  .BF_env$.bf_instance$dist$matrix_normal(
+    loc = .BF_env$jnp$array(loc),
+    scale_tril_row = .BF_env$jnp$array(scale_tril_row),
+    scale_tril_column = .BF_env$jnp$array(scale_tril_column),
     validate_args = validate_args, name = name, obs = obs, mask = mask, sample = sample, seed = seed, shape = shape, event = event, create_obj = create_obj, to_jax = to_jax
   )
 }

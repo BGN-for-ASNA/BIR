@@ -41,17 +41,17 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BayesianInference)
-#' m=importBI(platform='cpu')
-#' bi.dist.cauchy(sample = TRUE)
+#' library(BayesForge)
+#' m=importBF(platform='cpu')
+#' bf.dist.cauchy(sample = TRUE)
 #' }
 #' @export
-bi.dist.cauchy=function(loc=0.0, scale=1.0, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
+bf.dist.cauchy=function(loc=0.0, scale=1.0, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
-     if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
-     .BI_env$.bi_instance$dist$cauchy(
-       loc=.BI_env$jnp$array(loc),
-       scale= .BI_env$jnp$array(scale),
+     if (!.BF_env$.py$is_none(seed)){seed=as.integer(seed);}
+     .BF_env$.bf_instance$dist$cauchy(
+       loc=.BF_env$jnp$array(loc),
+       scale= .BF_env$jnp$array(scale),
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 }

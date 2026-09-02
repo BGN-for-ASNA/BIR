@@ -48,24 +48,24 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BayesianInference)
-#' m=importBI(platform='cpu')
-#' bi.dist.zero_inflated_distribution(
-#' base_dist = bi.dist.poisson(5, create_obj = TRUE),
+#' library(BayesForge)
+#' m=importBF(platform='cpu')
+#' bf.dist.zero_inflated_distribution(
+#' base_dist = bf.dist.poisson(5, create_obj = TRUE),
 #' gate=0.3, sample = TRUE)
 #' }
 #' @export
-bi.dist.zero_inflated_distribution=function(base_dist, gate=py_none(), gate_logits=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE ) {
+bf.dist.zero_inflated_distribution=function(base_dist, gate=py_none(), gate_logits=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE ) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
-     if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
+     if (!.BF_env$.py$is_none(seed)){seed=as.integer(seed);}
 
-     if(!.BI_env$.py$is_none(gate)){gate = .BI_env$jnp$array(gate)}
-     if(!.BI_env$.py$is_none(gate_logits)){gate_logits = .BI_env$jnp$array(gate_logits)}
+     if(!.BF_env$.py$is_none(gate)){gate = .BF_env$jnp$array(gate)}
+     if(!.BF_env$.py$is_none(gate_logits)){gate_logits = .BF_env$jnp$array(gate_logits)}
 
-     .BI_env$.bi_instance$dist$zero_inflated_distribution(
+     .BF_env$.bf_instance$dist$zero_inflated_distribution(
        base_dist,
-       gate =  .BI_env$jnp$array(gate),
+       gate =  .BF_env$jnp$array(gate),
        gate_logits = gate_logits,
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 }

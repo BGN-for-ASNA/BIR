@@ -41,9 +41,9 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BayesianInference)
-#' m=importBI(platform='cpu')
-#' bi.dist.multivariate_normal(
+#' library(BayesForge)
+#' m=importBF(platform='cpu')
+#' bf.dist.multivariate_normal(
 #' loc =  c(1.0, 0.0, -2.0),
 #' covariance_matrix = matrix(
 #' c( 2.0,  0.7, -0.3, 0.7,  1.0,  0.5, -0.3,  0.5,  1.5),
@@ -51,17 +51,17 @@
 #' sample = TRUE)
 #' }
 #' @export
-bi.dist.multivariate_normal=function(loc=0.0, covariance_matrix=py_none(), precision_matrix=py_none(), scale_tril=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
+bf.dist.multivariate_normal=function(loc=0.0, covariance_matrix=py_none(), precision_matrix=py_none(), scale_tril=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      reticulate::py_run_string("def is_none(x): return x is None")
-     if(!.BI_env$.py$is_none(covariance_matrix)){covariance_matrix = .BI_env$jnp$array(covariance_matrix)}
-     if(!.BI_env$.py$is_none(precision_matrix)){precision_matrix = .BI_env$jnp$array(precision_matrix)}
-     if(!.BI_env$.py$is_none(scale_tril)){scale_tril = .BI_env$jnp$array(scale_tril)}
+     if(!.BF_env$.py$is_none(covariance_matrix)){covariance_matrix = .BF_env$jnp$array(covariance_matrix)}
+     if(!.BF_env$.py$is_none(precision_matrix)){precision_matrix = .BF_env$jnp$array(precision_matrix)}
+     if(!.BF_env$.py$is_none(scale_tril)){scale_tril = .BF_env$jnp$array(scale_tril)}
 
-     if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
+     if (!.BF_env$.py$is_none(seed)){seed=as.integer(seed);}
 
-     .BI_env$.bi_instance$dist$multivariate_normal(
-       loc = .BI_env$jnp$array(loc),
+     .BF_env$.bf_instance$dist$multivariate_normal(
+       loc = .BF_env$jnp$array(loc),
        covariance_matrix = covariance_matrix,
        precision_matrix = precision_matrix,
        scale_tril = scale_tril,

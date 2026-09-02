@@ -40,21 +40,21 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BayesianInference)
-#' m <- importBI(platform = "cpu")
-#' bi.dist.levy(loc = 1, scale = 10, sample = TRUE)
+#' library(BayesForge)
+#' m <- importBF(platform = "cpu")
+#' bf.dist.levy(loc = 1, scale = 10, sample = TRUE)
 #' }
 #' @export
 
-bi.dist.levy <- function(loc, scale, validate_args = py_none(), name = "x", obs = py_none(), mask = py_none(), sample = FALSE, seed = py_none(), shape = c(), event = 0, create_obj = FALSE, to_jax = TRUE) {
+bf.dist.levy <- function(loc, scale, validate_args = py_none(), name = "x", obs = py_none(), mask = py_none(), sample = FALSE, seed = py_none(), shape = c(), event = 0, create_obj = FALSE, to_jax = TRUE) {
   shape <- do.call(tuple, as.list(as.integer(shape)))
   reticulate::py_run_string("def is_none(x): return x is None")
-  if (!.BI_env$.py$is_none(seed)) {
+  if (!.BF_env$.py$is_none(seed)) {
     seed <- as.integer(seed)
   }
-  .BI_env$.bi_instance$dist$levy(
-    loc = .BI_env$jnp$array(loc),
-    scale = .BI_env$jnp$array(scale),
+  .BF_env$.bf_instance$dist$levy(
+    loc = .BF_env$jnp$array(loc),
+    scale = .BF_env$jnp$array(scale),
     validate_args = validate_args, name = name, obs = obs, mask = mask, sample = sample, seed = seed, shape = shape, event = event, create_obj = create_obj, to_jax = to_jax
   )
 }

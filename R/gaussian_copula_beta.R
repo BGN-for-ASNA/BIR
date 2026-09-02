@@ -36,25 +36,25 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BayesianInference)
-#' m=importBI(platform='cpu')
-#' bi.dist.gaussian_copula_beta(
+#' library(BayesForge)
+#' m=importBF(platform='cpu')
+#' bf.dist.gaussian_copula_beta(
 #'   concentration1 = c(2.0, 3.0),
 #'   concentration0 = c(5.0, 3.0),
 #'   correlation_matrix = matrix(c(1.0, 0.7, 0.7, 1.0), nrow = 2, byrow = TRUE),
 #'   sample = TRUE)
 #'   }
 #' @export
-bi.dist.gaussian_copula_beta=function(concentration1, concentration0, correlation_matrix=py_none(), correlation_cholesky=py_none(), validate_args=FALSE, name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
+bf.dist.gaussian_copula_beta=function(concentration1, concentration0, correlation_matrix=py_none(), correlation_cholesky=py_none(), validate_args=FALSE, name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      return(print("No more available since jax > 0.06"))
-     if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
-     if(!.BI_env$.py$is_none(correlation_cholesky)){correlation_cholesky = .BI_env$jnp$array(correlation_cholesky)}
-     if(!.BI_env$.py$is_none(correlation_matrix)){correlation_matrix = .BI_env$jnp$array(correlation_matrix)}
+     if (!.BF_env$.py$is_none(seed)){seed=as.integer(seed);}
+     if(!.BF_env$.py$is_none(correlation_cholesky)){correlation_cholesky = .BF_env$jnp$array(correlation_cholesky)}
+     if(!.BF_env$.py$is_none(correlation_matrix)){correlation_matrix = .BF_env$jnp$array(correlation_matrix)}
 
-     .BI_env$.bi_instance$dist$gaussian_copula_beta(
-       concentration1 = .BI_env$jnp$array(concentration1),
-       concentration0 = .BI_env$jnp$array(concentration0),
+     .BF_env$.bf_instance$dist$gaussian_copula_beta(
+       concentration1 = .BF_env$jnp$array(concentration1),
+       concentration0 = .BF_env$jnp$array(concentration0),
        correlation_matrix = correlation_matrix,
        correlation_cholesky = correlation_cholesky,
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)

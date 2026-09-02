@@ -12,6 +12,8 @@
 #' @import rstan
 #' @import reticulate
 #' @import abind
+#' @importFrom methods new
+#' @importFrom stats gaussian
 #' @export
 to_brms <- function(bi_fit, formula = NULL, data = NULL, family = NULL, par_map = NULL, ...) {
   # 0. Support default extraction if bi_fit has them
@@ -43,7 +45,7 @@ to_brms <- function(bi_fit, formula = NULL, data = NULL, family = NULL, par_map 
   }
 
   # 1. Extract samples and metadata
-  samples_info <- bi_extract_samples(bi_fit)
+  samples_info <- .bf_extract_samples(bi_fit)
   
   # 2. Create skeleton brmsfit
   brms_fit <- brms::brm(
@@ -116,7 +118,7 @@ to_brms <- function(bi_fit, formula = NULL, data = NULL, family = NULL, par_map 
   }
 
   # 4. Create stanfit object
-  stan_fit <- bi_to_stanfit(
+  stan_fit <- .bf_to_stanfit(
     samples_renamed,
     chains = samples_info$num_chains,
     iter = samples_info$num_samples,
@@ -130,7 +132,8 @@ to_brms <- function(bi_fit, formula = NULL, data = NULL, family = NULL, par_map 
 }
 
 #' @keywords internal
-bi_extract_samples <- function(bi_fit) {
+#' @noRd
+.bf_extract_samples <- function(bi_fit) {
   samples <- bi_fit$get_samples(group_by_chain = TRUE)
   samples_r <- reticulate::py_to_r(samples)
   
@@ -151,7 +154,8 @@ bi_extract_samples <- function(bi_fit) {
 }
 
 #' @keywords internal
-bi_to_stanfit <- function(samples_list, chains, iter, warmup) {
+#' @noRd
+.bf_to_stanfit <- function(samples_list, chains, iter, warmup) {
   p_names <- names(samples_list)
   # Standardize lp__
   if ("lp__" %in% p_names) {

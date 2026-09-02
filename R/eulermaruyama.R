@@ -34,8 +34,8 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BayesianInference)
-#' m=importBI(platform='cpu')
+#' library(BayesForge)
+#' m=importBF(platform='cpu')
 #'ornstein_uhlenbeck_sde <- function(x, t) {
 #'  # This function models dX = -theta * X dt + sigma dW
 #'  theta <- 1.0
@@ -48,21 +48,21 @@
 #'  # reticulate will convert this to a Python tuple
 #'  return(list(drift, diffusion))
 #'}
-#'bi.dist.euler_maruyama(
+#'bf.dist.euler_maruyama(
 #'t=c(0.0, 0.1, 0.2),
 #'sde_fn = ornstein_uhlenbeck_sde,
-#'init_dist=bi.dist.normal(0.0, 1.0, create_obj=TRUE),
+#'init_dist=bf.dist.normal(0.0, 1.0, create_obj=TRUE),
 #'sample = TRUE)
 #' }
 #' @export
-bi.dist.euler_maruyama=function(t, sde_fn, init_dist, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
+bf.dist.euler_maruyama=function(t, sde_fn, init_dist, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
      shape=do.call(reticulate::tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      reticulate::py_run_string("def is_none(x): return x is None")
-     if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
+     if (!.BF_env$.py$is_none(seed)){seed=as.integer(seed);}
 
-     .BI_env$.bi_instance$dist$euler_maruyama(
-       t = .BI_env$jnp$array(t),
+     .BF_env$.bf_instance$dist$euler_maruyama(
+       t = .BF_env$jnp$array(t),
        sde_fn = sde_fn,
        init_dist = init_dist,
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)

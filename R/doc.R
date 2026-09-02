@@ -6,6 +6,6 @@
 #' @return Invisibly returns `NULL`. The function is called for its side effect
 #' of opening a URL.
 #' @export
-bi.doc <- function() {
+bf.doc <- function() {
   browseURL("https://s-sosa.com/BI")
 }

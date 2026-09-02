@@ -39,16 +39,16 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BayesianInference)
-#' m=importBI(platform='cpu')
-#' bi.dist.relaxed_bernoulli_logits(1, 0.1, sample = TRUE)
+#' library(BayesForge)
+#' m=importBF(platform='cpu')
+#' bf.dist.relaxed_bernoulli_logits(1, 0.1, sample = TRUE)
 #' }
 #' @export
-bi.dist.relaxed_bernoulli_logits=function(temperature, logits, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
+bf.dist.relaxed_bernoulli_logits=function(temperature, logits, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
-     if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
-     .BI_env$.bi_instance$dist$relaxed_bernoulli_logits(
-       temperature = .BI_env$jnp$array(temperature),
-       logits = .BI_env$jnp$array(logits),
+     if (!.BF_env$.py$is_none(seed)){seed=as.integer(seed);}
+     .BF_env$.bf_instance$dist$relaxed_bernoulli_logits(
+       temperature = .BF_env$jnp$array(temperature),
+       logits = .BF_env$jnp$array(logits),
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 }

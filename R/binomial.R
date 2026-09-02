@@ -35,14 +35,14 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BayesianInference)
-#' m=importBI(platform='cpu')
-#' bi.dist.binomial(probs = c(0.5,0.5), sample = TRUE)
-#' bi.dist.binomial(logits = 1, sample = TRUE)
+#' library(BayesForge)
+#' m=importBF(platform='cpu')
+#' bf.dist.bfnomial(probs = c(0.5,0.5), sample = TRUE)
+#' bf.dist.bfnomial(logits = 1, sample = TRUE)
 #' }
 #' @export
 
-bi.dist.binomial=function(
+bf.dist.bfnomial=function(
     total_count=1L,
     probs=py_none(),
     logits=py_none(),
@@ -60,20 +60,20 @@ bi.dist.binomial=function(
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      reticulate::py_run_string("def is_none(x): return x is None")
-     if (!.BI_env$.py$is_none(seed)){
-       if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
+     if (!.BF_env$.py$is_none(seed)){
+       if (!.BF_env$.py$is_none(seed)){seed=as.integer(seed);}
      }
 
-     if (.BI_env$.py$is_none(logits)){
-       .BI_env$.bi_instance$dist$binomial(
-         total_count=.BI_env$jnp$array(total_count),
-         probs= .BI_env$jnp$array(probs),
+     if (.BF_env$.py$is_none(logits)){
+       .BF_env$.bf_instance$dist$binomial(
+         total_count=.BF_env$jnp$array(total_count),
+         probs= .BF_env$jnp$array(probs),
          validate_args= validate_args,
          name= name,  obs= obs,  mask= mask,
          sample= sample,  seed= seed,  shape= shape,
          event= event,  create_obj= create_obj,   to_jax = to_jax)
      }else{
-       .BI_env$.bi_instance$dist$binomial(total_count=.BI_env$jnp$array(total_count),  logits= .BI_env$jnp$array(logits),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj, to_jax = to_jax)
+       .BF_env$.bf_instance$dist$binomial(total_count=.BF_env$jnp$array(total_count),  logits= .BF_env$jnp$array(logits),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj, to_jax = to_jax)
 
      }
 }

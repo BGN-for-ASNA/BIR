@@ -45,13 +45,13 @@
 #'         When \code{create_obj=TRUE}: The raw BI distribution object (for advanced use cases).
 #' @examples
 #' \donttest{
-#' library(BayesianInference)
-#' m <- importBI(platform = "cpu")
-#' bi.dist.asymmetric_laplace(sample = TRUE)
+#' library(BayesForge)
+#' m <- importBF(platform = "cpu")
+#' bf.dist.asymmetric_laplace(sample = TRUE)
 #' }
 #' @seealso This is a wrapper of  \url{https://num.pyro.ai/en/stable/distributions.html#asymmetriclaplace}
 #' @export
-bi.dist.asymmetric_laplace <- function(
+bf.dist.asymmetric_laplace <- function(
     loc = 0.0,
     scale = 1.0,
     asymmetry = 1.0,
@@ -65,12 +65,12 @@ bi.dist.asymmetric_laplace <- function(
     create_obj = FALSE, to_jax = TRUE) {
   shape <- do.call(tuple, as.list(as.integer(shape)))
   event <- as.integer(event)
-  if (!.BI_env$.py$is_none(seed)) {
+  if (!.BF_env$.py$is_none(seed)) {
     seed <- as.integer(seed)
   }
-  .BI_env$.bi_instance$dist$asymmetric_laplace(
-    loc = .BI_env$jnp$array(loc),
-    scale = .BI_env$jnp$array(scale),
-    asymmetry = .BI_env$jnp$array(asymmetry), validate_args = validate_args, name = name, obs = obs, mask = mask, sample = sample, seed = seed, shape = shape, event = event, create_obj = create_obj, to_jax = to_jax
+  .BF_env$.bf_instance$dist$asymmetric_laplace(
+    loc = .BF_env$jnp$array(loc),
+    scale = .BF_env$jnp$array(scale),
+    asymmetry = .BF_env$jnp$array(asymmetry), validate_args = validate_args, name = name, obs = obs, mask = mask, sample = sample, seed = seed, shape = shape, event = event, create_obj = create_obj, to_jax = to_jax
   )
 }

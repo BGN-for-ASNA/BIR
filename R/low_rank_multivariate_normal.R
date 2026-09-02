@@ -42,24 +42,24 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BayesianInference)
-#' m=importBI(platform='cpu')
+#' library(BayesForge)
+#' m=importBF(platform='cpu')
 #' event_size = 10
 #' rank = 5
-#' bi.dist.low_rank_multivariate_normal(
-#'   loc = bi.dist.normal(0,1,shape = c(event_size), sample = TRUE)*2,
-#'   cov_factor = bi.dist.normal(0,1,shape = c(event_size, rank), sample = TRUE),
-#'   cov_diag = bi.dist.normal(10,0.5,shape = c(event_size), sample = TRUE),
+#' bf.dist.low_rank_multivariate_normal(
+#'   loc = bf.dist.normal(0,1,shape = c(event_size), sample = TRUE)*2,
+#'   cov_factor = bf.dist.normal(0,1,shape = c(event_size, rank), sample = TRUE),
+#'   cov_diag = bf.dist.normal(10,0.5,shape = c(event_size), sample = TRUE),
 #'   sample = TRUE)
 #' }
 #' @export
-bi.dist.low_rank_multivariate_normal=function(loc, cov_factor, cov_diag, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
+bf.dist.low_rank_multivariate_normal=function(loc, cov_factor, cov_diag, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      reticulate::py_run_string("def is_none(x): return x is None");
-     if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
-     .BI_env$.bi_instance$dist$low_rank_multivariate_normal(
-       loc = .BI_env$jnp$array(loc),
-       cov_factor = .BI_env$jnp$array(cov_factor),
-       cov_diag = .BI_env$jnp$array(cov_diag),
+     if (!.BF_env$.py$is_none(seed)){seed=as.integer(seed);}
+     .BF_env$.bf_instance$dist$low_rank_multivariate_normal(
+       loc = .BF_env$jnp$array(loc),
+       cov_factor = .BF_env$jnp$array(cov_factor),
+       cov_diag = .BF_env$jnp$array(cov_diag),
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 }

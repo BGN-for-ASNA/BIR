@@ -32,18 +32,18 @@
 
 #' @examples
 #' \donttest{
-#' library(BayesianInference)
-#' m=importBI(platform='cpu')
-#' bi.dist.geometric(logits = 0.5, sample = TRUE)
-#' bi.dist.geometric(probs = 0.5, sample = TRUE)
+#' library(BayesForge)
+#' m=importBF(platform='cpu')
+#' bf.dist.geometric(logits = 0.5, sample = TRUE)
+#' bf.dist.geometric(probs = 0.5, sample = TRUE)
 #' }
 #' @export
-bi.dist.geometric=function(probs=py_none(), logits=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
+bf.dist.geometric=function(probs=py_none(), logits=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
-     if (!.BI_env$.py$is_none(seed)){seed=as.integer(seed);}
-     if(!.BI_env$.py$is_none(logits)){logits= .BI_env$jnp$array(logits)}
-     if(!.BI_env$.py$is_none(probs)){probs= .BI_env$jnp$array(probs)}
-     .BI_env$.bi_instance$dist$geometric(probs = probs, logits = logits,  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
+     if (!.BF_env$.py$is_none(seed)){seed=as.integer(seed);}
+     if(!.BF_env$.py$is_none(logits)){logits= .BF_env$jnp$array(logits)}
+     if(!.BF_env$.py$is_none(probs)){probs= .BF_env$jnp$array(probs)}
+     .BF_env$.bf_instance$dist$geometric(probs = probs, logits = logits,  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 
 }
