@@ -49,9 +49,10 @@ treated as a latent (unobserved) variable. Defaults to `NULL`.}
 the function will directly draw samples from the distribution. If `FALSE`,
 it will create a random variable within a model. Defaults to `FALSE`.}
 
-\item{seed}{An integer used to set the random seed for reproducibility when
-`sample = TRUE`. This argument has no effect when `sample = FALSE`, as
-randomness is handled by the model's inference engine. Defaults to 0.}
+\item{seed}{An integer seed for this draw when `sample = TRUE`. By default
+(`py_none()`) the draw comes from the session's random stream, set by
+`importBF(rand_seed = ...)`, so consecutive draws differ but the whole
+sequence is reproducible. No effect when `sample = FALSE`.}
 
 \item{shape}{A numeric vector specifying the shape. When `sample=False`
 (model building), this is used with `.expand(shape)` to set the
@@ -61,18 +62,18 @@ used as `sample_shape` to draw a raw JAX array of the given shape.}
 \item{event}{The number of batch dimensions to reinterpret as event dimensions
 (used in model building).}
 
-\item{create_obj}{If `TRUE`, returns the raw BI distribution object
+\item{create_obj}{If `TRUE`, returns the raw BF distribution object
 instead of creating a sample site. This is essential for building complex
 distributions like `MixtureSameFamily`.}
 
 \item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
 }
 \value{
-- When \code{sample=FALSE}, a BI Wishart distribution object (for model building).
+- When \code{sample=FALSE}, a BF Wishart distribution object (for model building).
 
  - When \code{sample=TRUE}, a JAX array of samples drawn from the Wishart distribution (for direct sampling).
 
- - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
+ - When \code{create_obj=TRUE}, the raw BF distribution object (for advanced use cases).
 }
 \description{
 The Wishart distribution is a multivariate distribution used to model positive definite matrices,

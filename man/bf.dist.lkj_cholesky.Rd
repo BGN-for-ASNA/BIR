@@ -37,22 +37,25 @@ bf.dist.lkj_cholesky(
 
 \item{sample}{A logical value that controls the function's behavior. If `TRUE`, the function will directly draw samples from the distribution. If `FALSE`, it will create a random variable within a model. Defaults to `FALSE`.}
 
-\item{seed}{An integer used to set the random seed for reproducibility when `sample = TRUE`. This argument has no effect when `sample = FALSE`, as randomness is handled by the model's inference engine. Defaults to 0.}
+\item{seed}{An integer seed for this draw when `sample = TRUE`. By default
+(`py_none()`) the draw comes from the session's random stream, set by
+`importBF(rand_seed = ...)`, so consecutive draws differ but the whole
+sequence is reproducible. No effect when `sample = FALSE`.}
 
 \item{shape}{Numeric vector; A multi-purpose argument for shaping. When \code{sample=FALSE} (model building),  is used with `.expand(shape)` to set the distribution's batch shape. When \code{sample=TRUE} (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
 
 \item{event}{Numeric; The number of batch dimensions to reinterpret as event dimensions (used in model building).}
 
-\item{create_obj}{Logical; If TRUE, returns the raw BI distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+\item{create_obj}{Logical; If TRUE, returns the raw BF distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
 
 \item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
 }
 \value{
-- When \code{sample=FALSE}: A BI LKJ Cholesky distribution object (for model building).
+- When \code{sample=FALSE}: A BF LKJ Cholesky distribution object (for model building).
 
    - When \code{sample=TRUE}: A JAX array of samples drawn from the LKJ Cholesky distribution (for direct sampling).
 
-   - When \code{create_obj=TRUE}: The raw BI distribution object (for advanced use cases).
+   - When \code{create_obj=TRUE}: The raw BF distribution object (for advanced use cases).
 }
 \description{
 The LKJ (Leonard-Kjærgaard-Jørgensen) Cholesky distribution is a family of distributions on symmetric matrices, often used as a prior for the Cholesky decomposition of a

@@ -15,14 +15,15 @@
 #' @param shape A numeric vector representing the shape of the distribution.
 #' @param event Integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).
 #' @param mask A logical vector representing an optional boolean array to mask observations.
-#' @param create_obj Logical; If TRUE, returns the raw BI distribution object instead of creating a sample site.
+#' @param create_obj Logical; If TRUE, returns the raw BF distribution object instead of creating a sample site.
 #' @param validate_args Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.
 #' @param sample A logical value that controls the function's behavior. If `TRUE`,
 #'   the function will directly draw samples from the distribution. If `FALSE`,
 #'   it will create a random variable within a model. Defaults to `FALSE`.
-#' @param seed An integer used to set the random seed for reproducibility when
-#'   `sample = TRUE`. This argument has no effect when `sample = FALSE`, as
-#'   randomness is handled by the model's inference engine. Defaults to 0.
+#' @param seed An integer seed for this draw when `sample = TRUE`. By default
+#'   (`py_none()`) the draw comes from the session's random stream, set by
+#'   `importBF(rand_seed = ...)`, so consecutive draws differ but the whole
+#'   sequence is reproducible. No effect when `sample = FALSE`.
 #' @param obs A numeric vector or array of observed values. If provided, the
 #'   random variable is conditioned on these values. If `NULL`, the variable is
 #'   treated as a latent (unobserved) variable. Defaults to `NULL`.
@@ -31,11 +32,11 @@
 #' @param to_jax Boolean. Indicates whether to return a JAX array or not.
 #'
 #' @return
-#'  - When \code{sample=FALSE}, a BI Multivariate Normal distribution object (for model building).
+#'  - When \code{sample=FALSE}, a BF Multivariate Normal distribution object (for model building).
 #'
 #'  - When \code{sample=TRUE}, a JAX array of samples drawn from the Multivariate Normal distribution (for direct sampling).
 #'
-#'  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
+#'  - When \code{create_obj=TRUE}, the raw BF distribution object (for advanced use cases).
 #'
 #' @seealso \url{https://num.pyro.ai/en/stable/distributions.html#multivariate-normal}
 #'
@@ -54,14 +55,14 @@
 bf.dist.multivariate_normal=function(loc=0.0, covariance_matrix=py_none(), precision_matrix=py_none(), scale_tril=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      reticulate::py_run_string("def is_none(x): return x is None")
-     if(!.BF_env$.py$is_none(covariance_matrix)){covariance_matrix = .BF_env$jnp$array(covariance_matrix)}
-     if(!.BF_env$.py$is_none(precision_matrix)){precision_matrix = .BF_env$jnp$array(precision_matrix)}
-     if(!.BF_env$.py$is_none(scale_tril)){scale_tril = .BF_env$jnp$array(scale_tril)}
+     if(!.BF_env$.py$is_none(covariance_matrix)){covariance_matrix = .BF_env$jnp$asarray(covariance_matrix)}
+     if(!.BF_env$.py$is_none(precision_matrix)){precision_matrix = .BF_env$jnp$asarray(precision_matrix)}
+     if(!.BF_env$.py$is_none(scale_tril)){scale_tril = .BF_env$jnp$asarray(scale_tril)}
 
      if (!.BF_env$.py$is_none(seed)){seed=as.integer(seed);}
 
      .BF_env$.bf_instance$dist$multivariate_normal(
-       loc = .BF_env$jnp$array(loc),
+       loc = .BF_env$jnp$asarray(loc),
        covariance_matrix = covariance_matrix,
        precision_matrix = precision_matrix,
        scale_tril = scale_tril,

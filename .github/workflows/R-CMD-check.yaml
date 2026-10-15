@@ -29,7 +29,15 @@ jobs:
 
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.12"
+
+      # Install the Python side so the testthat suite runs instead of skipping.
+      - name: Install BayesForge (Python)
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install "bayesforge[cpu]"
+          echo "RETICULATE_PYTHON=$(python -c 'import sys; print(sys.executable)')" >> "$GITHUB_ENV"
 
       # This step installs all R package dependencies, including rcmdcheck.
       # It's more efficient and uses caching.

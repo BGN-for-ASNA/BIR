@@ -14,14 +14,15 @@
 #'   given shape.
 #' @param event An integer representing the number of batch dimensions to reinterpret as event dimensions.
 #' @param mask A numeric vector, matrix, or array (e.g., a JAX array) of boolean values to mask observations.
-#' @param create_obj A logical value. If `TRUE`, returns the raw BI distribution object instead of creating a sample site.
+#' @param create_obj A logical value. If `TRUE`, returns the raw BF distribution object instead of creating a sample site.
 #' @param validate_args Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.
 #' @param sample A logical value that controls the function's behavior. If `TRUE`,
 #'   the function will directly draw samples from the distribution. If `FALSE`,
 #'   it will create a random variable within a model. Defaults to `FALSE`.
-#' @param seed An integer used to set the random seed for reproducibility when
-#'   `sample = TRUE`. This argument has no effect when `sample = FALSE`, as
-#'   randomness is handled by the model's inference engine. Defaults to 0.
+#' @param seed An integer seed for this draw when `sample = TRUE`. By default
+#'   (`py_none()`) the draw comes from the session's random stream, set by
+#'   `importBF(rand_seed = ...)`, so consecutive draws differ but the whole
+#'   sequence is reproducible. No effect when `sample = FALSE`.
 #' @param obs A numeric vector or array of observed values. If provided, the
 #'   random variable is conditioned on these values. If `NULL`, the variable is
 #'   treated as a latent (unobserved) variable. Defaults to `NULL`.
@@ -30,11 +31,11 @@
 #' @param to_jax Boolean. Indicates whether to return a JAX array or not.
 #'
 #' @return
-#'  - When \code{sample=FALSE}, a BI Truncated PolyaGamma distribution object (for model building).
+#'  - When \code{sample=FALSE}, a BF Truncated PolyaGamma distribution object (for model building).
 #'
 #'  - When \code{sample=TRUE}, a JAX array of samples drawn from the Truncated PolyaGamma distribution (for direct sampling).
 #'
-#'  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
+#'  - When \code{create_obj=TRUE}, the raw BF distribution object (for advanced use cases).
 #'
 #' @examples
 #' \donttest{
