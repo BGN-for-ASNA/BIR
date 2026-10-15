@@ -10,3 +10,9 @@
   utils::modifyList(base, as.list(infer))
 }
 
+# Name of an observed site: the R variable passed as `obs` (obs = y -> "y");
+# "obs" for an expression (obs = y - 1). Used when `name` is not given, so an
+# observed site no longer defaults to "x" and collides with a parameter x.
+.bf_obs_name <- function(expr) {
+  if (is.name(expr)) deparse(expr) else "obs"
+}

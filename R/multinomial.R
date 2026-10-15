@@ -44,6 +44,8 @@
 #' }
 #' @export
 bf.dist.multinomial=function(total_count=1, probs=py_none(), logits=py_none(), total_count_max=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), infer=py_none(), enum=FALSE, sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
+     if (missing(name) && !missing(obs)) name <- .bf_obs_name(substitute(obs))  # obs = y -> site "y"
+
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      reticulate::py_run_string("def is_none(x): return x is None")

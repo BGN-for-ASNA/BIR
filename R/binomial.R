@@ -63,6 +63,8 @@ bf.dist.binomial=function(
     create_obj=FALSE,
     to_jax = TRUE
     ) {
+     if (missing(name) && !missing(obs)) name <- .bf_obs_name(substitute(obs))  # obs = y -> site "y"
+
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      reticulate::py_run_string("def is_none(x): return x is None")

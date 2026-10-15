@@ -42,6 +42,8 @@
 #' }
 #' @export
 bf.dist.gaussian_random_walk=function(scale=1.0, num_steps=1, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
+     if (missing(name) && !missing(obs)) name <- .bf_obs_name(substitute(obs))  # obs = y -> site "y"
+
   #return(print("No more available since jax > 0.06"))
   shape=do.call(tuple, as.list(as.integer(shape)))
   reticulate::py_run_string("def is_none(x): return x is None")

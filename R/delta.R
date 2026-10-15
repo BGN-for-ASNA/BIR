@@ -44,6 +44,8 @@
 #' @export
 #'
 bf.dist.delta=function(v=0.0, log_density=0.0, event_dim=0, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
+     if (missing(name) && !missing(obs)) name <- .bf_obs_name(substitute(obs))  # obs = y -> site "y"
+
      shape=do.call(tuple, as.list(as.integer(shape)))
      event_dim=as.integer(event)
      event=as.integer(event)

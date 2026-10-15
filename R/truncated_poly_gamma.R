@@ -45,6 +45,8 @@
 #' }
 #' @export
 bf.dist.truncated_polya_gamma=function(batch_shape=c(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE ) {
+     if (missing(name) && !missing(obs)) name <- .bf_obs_name(substitute(obs))  # obs = y -> site "y"
+
      shape=do.call(tuple, as.list(as.integer(shape)))
      batch_shape=do.call(tuple, as.list(as.integer(batch_shape)))
      if (!.BF_env$.py$is_none(seed)){seed=as.integer(seed);}
