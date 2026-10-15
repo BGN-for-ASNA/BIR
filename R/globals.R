@@ -16,3 +16,10 @@
 .bf_obs_name <- function(expr) {
   if (is.name(expr)) deparse(expr) else "obs"
 }
+
+# jnp$asarray() for an argument that may be left at py_none() (e.g. the
+# bounds of a truncated distribution): None is passed through unchanged.
+.bf_arr <- function(x) {
+  if (is.null(x) || inherits(x, "python.builtin.NoneType")) reticulate::py_none()
+  else .BF_env$jnp$asarray(x)
+}

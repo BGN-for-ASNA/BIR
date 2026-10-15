@@ -2,7 +2,7 @@
 % Please edit documentation in R/wishart_cholesky.R
 \name{bf.dist.wishart_cholesky}
 \alias{bf.dist.wishart_cholesky}
-\title{Wishart Cholesky Distribution}
+\title{Wishart Cholesky distribution}
 \usage{
 bf.dist.wishart_cholesky(
   concentration,
@@ -22,78 +22,103 @@ bf.dist.wishart_cholesky(
 )
 }
 \arguments{
-\item{concentration}{(numeric or vector) Positive concentration parameter analogous to the
-concentration of a `Gamma` distribution. The concentration must be larger
-than the dimensionality of the scale matrix.}
+\item{concentration}{See the Python documentation of \code{concentration}.}
 
-\item{scale_matrix}{(numeric vector, matrix, or array, optional) Scale matrix analogous to the inverse rate of a `Gamma`
-distribution. If not provided, `rate_matrix` or `scale_tril` must be.}
+\item{scale_matrix}{See the Python documentation of \code{scale_matrix}.}
 
-\item{rate_matrix}{(numeric vector, matrix, or array, optional) Rate matrix anaologous to the rate of a `Gamma`
-distribution. If not provided, `scale_matrix` or `scale_tril` must be.}
+\item{rate_matrix}{See the Python documentation of \code{rate_matrix}.}
 
-\item{scale_tril}{(numeric vector, matrix, or array, optional) Cholesky decomposition of the `scale_matrix`.
-If not provided, `scale_matrix` or `rate_matrix` must be.}
+\item{scale_tril}{See the Python documentation of \code{scale_tril}.}
 
-\item{validate_args}{Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.}
+\item{validate_args}{Logical. Whether to validate the parameter values.
+Defaults to \code{py_none()} (the NumPyro default).}
 
-\item{name}{A character string representing the name of the random variable
-within a model. This is used to uniquely identify the variable. Defaults to 'x'.}
+\item{name}{Character. Name of the random variable in the model. When not
+given, an observed site is named after the variable passed to \code{obs} (\code{obs = y} gives \code{"y"}); use \code{\link[=bf_model]{bf_model()}} to name parameters after the variables they
+are assigned to.}
 
-\item{obs}{A numeric vector or array of observed values. If provided, the
-random variable is conditioned on these values. If `NULL`, the variable is
-treated as a latent (unobserved) variable. Defaults to `NULL`.}
+\item{obs}{Numeric vector or array of observed values. If given, the random
+variable is conditioned on them (likelihood); otherwise it is latent.
+Defaults to \code{py_none()}.}
 
-\item{mask}{An optional boolean vector to mask observations.}
+\item{mask}{Optional logical vector or array masking observations (\code{FALSE} =
+ignored). Defaults to \code{py_none()}.}
 
-\item{sample}{A logical value that controls the function's behavior. If `TRUE`,
-the function will directly draw samples from the distribution. If `FALSE`,
-it will create a random variable within a model. Defaults to `FALSE`.}
+\item{sample}{Logical. If \code{TRUE}, directly draw values from the distribution
+and return them; if \code{FALSE} (default), create a random variable inside a
+model.}
 
-\item{seed}{An integer seed for this draw when `sample = TRUE`. By default
-(`py_none()`) the draw comes from the session's random stream, set by
-`importBF(rand_seed = ...)`, so consecutive draws differ but the whole
-sequence is reproducible. No effect when `sample = FALSE`.}
+\item{seed}{Integer seed for this draw when \code{sample = TRUE}. By default
+(\code{py_none()}) the draw comes from the session's random stream, set by
+\code{importBF(rand_seed = ...)}, so consecutive draws differ but the whole
+sequence is reproducible. No effect when \code{sample = FALSE}.}
 
-\item{shape}{A numeric vector.  This is used with `.expand(shape)` when `sample=False` (model building) to set the distribution's batch shape. When `sample=True` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{shape}{Integer vector. With \code{sample = FALSE}, the batch shape of the
+distribution in the model; with \code{sample = TRUE}, the shape of the draw.
+Defaults to \code{c()} (no extra dimensions).}
 
-\item{event}{An integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{event}{Integer. Number of batch dimensions reinterpreted as event
+dimensions (model building only). Defaults to \code{0}.}
 
-\item{create_obj}{A logical value. If `TRUE`, returns the raw BF distribution object instead of creating a sample site.}
+\item{create_obj}{Logical. If \code{TRUE}, return the distribution object itself
+instead of a random variable (e.g. to build mixtures). Defaults to \code{FALSE}.}
 
-\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
+\item{to_jax}{Logical. Return a JAX array (\code{TRUE}, default) or convert to R.}
 }
 \value{
-- When \code{sample=FALSE}, a BF Wishart Cholesky  distribution object (for model building).
-
- - When \code{sample=TRUE}, a JAX array of samples drawn from the Wishart Cholesky  distribution (for direct sampling).
-
- - When \code{create_obj=TRUE}, the raw BF distribution object (for advanced use cases).
+A random variable (model building) or draws (\code{sample = TRUE}).
 }
 \description{
-* The **Wishart** distribution is a distribution over positive definite matrices,
-often used as a prior for covariance or precision matrices in multivariate normal models.
-* The **Cholesky parameterization** of the Wishart (called "wishart_cholesky" in Stan, for example)
-reparameterizes the Wishart over its **lower (or upper) triangular Cholesky factor**. This is useful for numerical
-stability and unconstrained parameterization in Bayesian sampling frameworks.
-* In this parameterization, one works with a lower-triangular matrix $L_W$ such that
-\deqn{
-  \Sigma = L_W L_W^\top
+\itemize{
+\item The \strong{Wishart} distribution is a distribution over positive definite
+matrices, often used as a prior for covariance or precision matrices in
+multivariate normal models.
+\item The \strong{Cholesky parameterization} of the Wishart (called “wishart_cholesky”
+in Stan, for example) reparameterizes the Wishart over its \strong{lower (or upper)
+triangular Cholesky factor}. This is useful for numerical stability and
+unconstrained parameterization in Bayesian sampling frameworks.
+\item In this parameterization, one works with a lower‐triangular matrix
+\eqn{L_W} such that
 }
-and imposes a density over $L_W$ corresponding to the induced Wishart density on \deqn{\Sigma}.
 
-The Wishart distribution is a multivariate distribution used as a prior distribution
-for covariance matrices. This implementation represents the distribution in terms
-of its Cholesky decomposition.
+\deqn{\Sigma = L_W L_W^\top}
+
+and imposes a density over \eqn{L_W} corresponding to the induced Wishart
+density on (\\Sigma).
+
+The probability density function (PDF) is given by:
+
+If the dimension is \eqn{K}, degrees of freedom \eqn{\nu > K - 1}, and
+\eqn{L_S} is the lower‐triangular Cholesky factor of the scale matrix
+\eqn{S}, then the log density for \eqn{L_W} under the \strong{wishart_cholesky}
+distribution is:
+
+\deqn{\log p(L_W \mid \nu, L_S) = \log \bigl[ \text{Wishart}(L_W L_W^\top \mid \nu, L_S L_S^\top) \bigr] + \log \bigl| J_{f^{-1}} \bigr|}
+
+where \eqn{J_{f^{-1}}} is the Jacobian of the transformation from \eqn{L_W}
+to \eqn{\Sigma = L_W L_W^\top}.
+
+The Jacobian term (absolute log determinant) is:
+
+\deqn{\log |J_{f^{-1}}| = K \log 2 ; \sum_{k=1}^K (K - k + 1),\log L_{W_{k,k}}.}
+
+Thus the density includes both the usual Wishart density on \eqn{\Sigma} plus
+this extra Jacobian (which penalizes or weights the diagonal entries of
+\eqn{L_W}).
 }
 \examples{
 \donttest{
 library(BayesForge)
-m=importBF(platform='cpu')
-bf.dist.wishart_cholesky(
-concentration = 5,
-scale_matrix = matrix(c(1,0,0,1),
-nrow = 2),
-sample = TRUE)
+m <- importBF(platform = "cpu")
+bf.dist.wishart_cholesky(concentration = 5.0, scale_matrix = jnp$eye(2L), sample = TRUE)
 }
+
+}
+\references{
+[1]: https://en.wikipedia.org/wiki/Wishart_distribution "Wishart
+distribution"
+
+[2]:
+https://mc-stan.org/docs/2_32/functions-reference/wishart-cholesky-distribution.html"28.2
+Wishart distribution, Cholesky Parameterization - Stan"
 }

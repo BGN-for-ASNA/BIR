@@ -2,7 +2,7 @@
 % Please edit documentation in R/beta_binomial.R
 \name{bf.dist.beta_binomial}
 \alias{bf.dist.beta_binomial}
-\title{BetaBinomial}
+\title{BetaBinomial distribution}
 \usage{
 bf.dist.beta_binomial(
   concentration1,
@@ -23,66 +23,101 @@ bf.dist.beta_binomial(
 )
 }
 \arguments{
-\item{concentration1}{A numeric vector, matrix, or array representing the first concentration parameter (alpha) of the Beta distribution.}
+\item{concentration1}{The first concentration parameter (alpha) of the Beta
+distribution.}
 
-\item{concentration0}{A numeric vector, matrix, or array representing the second concentration parameter (beta) of the Beta distribution.}
+\item{concentration0}{The second concentration parameter (beta) of the Beta
+distribution.}
 
-\item{total_count}{A numeric vector, matrix, or array representing the number of Bernoulli trials in the Binomial part of the distribution.}
+\item{total_count}{The number of Bernoulli trials in the Binomial part of the
+distribution.}
 
-\item{validate_args}{Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.}
+\item{validate_args}{Logical. Whether to validate the parameter values.
+Defaults to \code{py_none()} (the NumPyro default).}
 
-\item{name}{A character string representing the name of the random variable
-within a model. This is used to uniquely identify the variable. Defaults to 'x'.}
+\item{name}{Character. Name of the random variable in the model. When not
+given, an observed site is named after the variable passed to \code{obs} (\code{obs = y} gives \code{"y"}); use \code{\link[=bf_model]{bf_model()}} to name parameters after the variables they
+are assigned to.}
 
-\item{obs}{A numeric vector or array of observed values. If provided, the
-random variable is conditioned on these values. If `NULL`, the variable is
-treated as a latent (unobserved) variable. Defaults to `NULL`.}
+\item{obs}{Numeric vector or array of observed values. If given, the random
+variable is conditioned on them (likelihood); otherwise it is latent.
+Defaults to \code{py_none()}.}
 
-\item{mask}{A logical vector. Optional boolean array to mask observations.}
+\item{mask}{Optional logical vector or array masking observations (\code{FALSE} =
+ignored). Defaults to \code{py_none()}.}
 
-\item{infer}{Optional named list passed to NumPyro's `infer` argument
-(e.g. `list(enumerate = "parallel")`).}
+\item{infer}{Optional named list passed to NumPyro's \code{infer} argument (e.g.
+\code{list(enumerate = "parallel")}).}
 
-\item{enum}{If `TRUE`, the discrete latent is summed out exactly (parallel
-enumeration) instead of sampled; same as `infer = list(enumerate = "parallel")`.
-Defaults to `FALSE`.}
+\item{enum}{Logical. If \code{TRUE}, the discrete latent is summed out exactly
+(parallel enumeration) instead of sampled; same as \code{infer = list(enumerate = "parallel")}. Defaults to \code{FALSE}.}
 
-\item{sample}{A logical value that controls the function's behavior. If `TRUE`,
-the function will directly draw samples from the distribution. If `FALSE`,
-it will create a random variable within a model. Defaults to `FALSE`.}
+\item{sample}{Logical. If \code{TRUE}, directly draw values from the distribution
+and return them; if \code{FALSE} (default), create a random variable inside a
+model.}
 
-\item{seed}{An integer seed for this draw when `sample = TRUE`. By default
-(`py_none()`) the draw comes from the session's random stream, set by
-`importBF(rand_seed = ...)`, so consecutive draws differ but the whole
-sequence is reproducible. No effect when `sample = FALSE`.}
+\item{seed}{Integer seed for this draw when \code{sample = TRUE}. By default
+(\code{py_none()}) the draw comes from the session's random stream, set by
+\code{importBF(rand_seed = ...)}, so consecutive draws differ but the whole
+sequence is reproducible. No effect when \code{sample = FALSE}.}
 
-\item{shape}{A numeric vector.  When `sample=False` (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When `sample=True` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{shape}{Integer vector. With \code{sample = FALSE}, the batch shape of the
+distribution in the model; with \code{sample = TRUE}, the shape of the draw.
+Defaults to \code{c()} (no extra dimensions).}
 
-\item{event}{An integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{event}{Integer. Number of batch dimensions reinterpreted as event
+dimensions (model building only). Defaults to \code{0}.}
 
-\item{create_obj}{A logical value. If `TRUE`, returns the raw BF distribution object instead of creating a sample site.}
+\item{create_obj}{Logical. If \code{TRUE}, return the distribution object itself
+instead of a random variable (e.g. to build mixtures). Defaults to \code{FALSE}.}
 
-\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
+\item{to_jax}{Logical. Return a JAX array (\code{TRUE}, default) or convert to R.}
 }
 \value{
-- When \code{sample=FALSE}, a BF Beta-Binomial distribution object (for model building).
-
- - When \code{sample=TRUE}, a JAX array of samples drawn from the Beta-Binomial distribution (for direct sampling).
-
- - When \code{create_obj=TRUE}, the raw BF distribution object (for advanced use cases).
+\itemize{
+\item When \code{sample = FALSE}: A BF BetaBinomial distribution object (for model
+building).
+\item When \code{sample = TRUE}: A JAX array of samples drawn from the
+BetaBinomial distribution (for direct sampling).
+\item When \code{create_obj = TRUE}: The raw BF BetaBinomial distribution object
+(for advanced use cases).
+}
 }
 \description{
-Samples from a BetaBinomial distribution, a compound distribution where the probability of success in a binomial
- experiment is drawn from a Beta distribution. This models situations where the underlying probability of success
- is not fixed but varies according to a prior belief represented by the Beta distribution. It is often used to model over-dispersion relative to the binomial distribution.
+Samples from a BetaBinomial distribution, a compound distribution where the
+probability of success in a binomial experiment is drawn from a Beta
+distribution. This models situations where the underlying probability of
+success is not fixed but varies according to a prior belief represented by
+the Beta distribution. It is often used to model over-dispersion relative to
+the binomial distribution.
+
+For \eqn{X \sim \mathrm{BetaBinomial}(N,\alpha,\beta)}, for \eqn{k =
+0,1,\dots,N}:
+
+\deqn{\Pr(X = k) = \binom{N}{k} ; \frac{B(k + \alpha,; N - k + \beta)}{B(\alpha,\beta)},}
+
+where (\eqn{B(u,v)}) is the Beta function \eqn{(B(u,v) =
+\frac{\Gamma(u),\Gamma(v)}{\Gamma(u+v)})}.
 }
 \examples{
 \donttest{
 library(BayesForge)
-m=importBF(platform='cpu')
-bf.dist.beta_binomial(0,1,sample = TRUE)
+m <- importBF(platform = "cpu")
+bf.dist.beta_binomial(concentration1 = 1.0, concentration0 = 1.0, total_count = 10L, sample = TRUE)
 }
+
+}
+\references{
+[1]: https://en.wikipedia.org/wiki/Beta-binomial_distribution
+"Beta-binomial distribution"
+
+[2]: https://www.statisticshowto.com/beta-binomial-distribution/
+"Beta-Binomial Distribution: Definition - Statistics How To"
+
+[3]:
+https://mc-stan.org/docs/2_19/functions-reference/beta-binomial-distribution.html
+"12.3 Beta-Binomial Distribution | Stan Functions Reference"
 }
 \seealso{
-This is a wrapper of  \url{https://num.pyro.ai/en/stable/distributions.html#betabinomial}
+\url{https://num.pyro.ai/en/stable/distributions.html#betabinomial}
 }

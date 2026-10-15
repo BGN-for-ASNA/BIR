@@ -1,45 +1,65 @@
-#' @title Gompertz Distribution
+#' @title Gompertz distribution
 #'
-#' @description The Gompertz distribution is a distribution with support on the positive real line that is closely
-#' related to the Gumbel distribution. This implementation follows the notation used in the Wikipedia
-#' entry for the Gompertz distribution. See https://en.wikipedia.org/wiki/Gompertz_distribution.
-
-#' @param concentration A positive numeric vector, matrix, or array representing the concentration parameter.
-#' @param rate A positive numeric vector, matrix, or array representing the rate parameter.
-#' @param shape A numeric vector representing the shape parameter.
-#' @param event Integer representing the number of batch dimensions to reinterpret as event dimensions.
-#' @param mask A boolean vector, matrix, or array representing an optional mask for observations.
-#' @param create_obj Logical value. If `TRUE`, returns the raw BF distribution object instead of creating a sample site.
-#' @param validate_args Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.
-#' @param sample A logical value that controls the function's behavior. If `TRUE`,
-#'   the function will directly draw samples from the distribution. If `FALSE`,
-#'   it will create a random variable within a model. Defaults to `FALSE`.
-#' @param seed An integer seed for this draw when `sample = TRUE`. By default
+#' @description
+#' The Gompertz distribution is a distribution with support on the positive real
+#' line that is closely related to the Gumbel distribution. This implementation
+#' follows the notation used in the Wikipedia entry for the Gompertz
+#' distribution. See https://en.wikipedia.org/wiki/Gompertz_distribution.
+#'
+#' The probability density function (PDF) is:
+#'
+#' \deqn{F(x) = 1 - \exp!\bigl[-a (e^x - 1)\bigr], \quad x \ge 0.}
+#'
+#' @param concentration The concentration parameter. Must be positive.
+#' @param rate The rate parameter. Must be positive.
+#' @param validate_args Logical. Whether to validate the parameter values.
+#'   Defaults to `py_none()` (the NumPyro default).
+#' @param name Character. Name of the random variable in the model. When not
+#'   given, an observed site is named after the variable passed to `obs` (`obs =
+#'   y` gives `"y"`); use [bf_model()] to name parameters after the variables they
+#'   are assigned to.
+#' @param obs Numeric vector or array of observed values. If given, the random
+#'   variable is conditioned on them (likelihood); otherwise it is latent.
+#'   Defaults to `py_none()`.
+#' @param mask Optional logical vector or array masking observations (`FALSE` =
+#'   ignored). Defaults to `py_none()`.
+#' @param sample Logical. If `TRUE`, directly draw values from the distribution
+#'   and return them; if `FALSE` (default), create a random variable inside a
+#'   model.
+#' @param seed Integer seed for this draw when `sample = TRUE`. By default
 #'   (`py_none()`) the draw comes from the session's random stream, set by
 #'   `importBF(rand_seed = ...)`, so consecutive draws differ but the whole
 #'   sequence is reproducible. No effect when `sample = FALSE`.
-#' @param obs A numeric vector or array of observed values. If provided, the
-#'   random variable is conditioned on these values. If `NULL`, the variable is
-#'   treated as a latent (unobserved) variable. Defaults to `NULL`.
-#' @param name A character string representing the name of the random variable
-#'   within a model. This is used to uniquely identify the variable. Defaults to 'x'.
-#' @param to_jax Boolean. Indicates whether to return a JAX array or not.
+#' @param shape Integer vector. With `sample = FALSE`, the batch shape of the
+#'   distribution in the model; with `sample = TRUE`, the shape of the draw.
+#'   Defaults to `c()` (no extra dimensions).
+#' @param event Integer. Number of batch dimensions reinterpreted as event
+#'   dimensions (model building only). Defaults to `0`.
+#' @param create_obj Logical. If `TRUE`, return the distribution object itself
+#'   instead of a random variable (e.g. to build mixtures). Defaults to `FALSE`.
+#' @param to_jax Logical. Return a JAX array (`TRUE`, default) or convert to R.
 #'
 #' @return
-#'    A BF Gompertz distribution object when \code{sample=FALSE} (for model building).
-#'
-#'    A JAX array when \code{sample=TRUE} (for direct sampling).
-#'
-#'    A BF distribution object when \code{create_obj=TRUE} (for advanced use cases).
-#'
-#' @seealso This is a wrapper of  \url{https://num.pyro.ai/en/stable/distributions.html#gompertz}
+#' \itemize{
+#'   \item BF Gompertz distribution object: When `sample = FALSE` (for model
+#'     building).
+#'   \item JAX array: When `sample = TRUE` (for direct sampling).
+#'   \item BF distribution object: When `create_obj = TRUE` (for advanced use
+#'     cases).
+#' }
 #'
 #' @examples
 #' \donttest{
 #' library(BayesForge)
-#' m=importBF(platform='cpu')
-#' bf.dist.gompertz(concentration = 5., sample = TRUE)
+#' m <- importBF(platform = "cpu")
+#' bf.dist.gompertz(concentration = 1.0, rate = 1.0, sample = TRUE)
 #' }
+#'
+#' @seealso \url{https://num.pyro.ai/en/stable/distributions.html#gompertz}
+#'
+#' @references
+#' https://en.wikipedia.org/wiki/Gompertz_distribution
+#'
 #' @export
 bf.dist.gompertz=function(concentration, rate=1.0, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
      if (missing(name) && !missing(obs)) name <- .bf_obs_name(substitute(obs))  # obs = y -> site "y"

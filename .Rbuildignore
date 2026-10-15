@@ -5,3 +5,4 @@
 ^.*\.Rcheck$
 ^BFR_.*\.tar\.gz$
 ^tests/to_brm/temp_fit\.rds$
+^tools$

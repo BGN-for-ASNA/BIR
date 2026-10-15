@@ -1,51 +1,78 @@
-#' @title Lower Truncated Power Law Distribution
+#' @title Lower Truncated Power Law distribution
 #'
 #' @description
-#' The *Lower-Truncated Power-Law* distribution (also known as the *Pareto Type I* or *power-law with a lower bound*)
-#'  models quantities that follow a heavy-tailed power-law behavior but are bounded below by a minimum value
-#'  \deqn{x_{\min}}. It is commonly used to describe phenomena such as wealth distributions, city sizes, and biological scaling laws.
+#' The *Lower-Truncated Power-Law* distribution (also known as the *Pareto Type
+#' I* or *power-law with a lower bound*) models quantities that follow a
+#' heavy-tailed power-law behavior but are bounded below by a minimum value (
+#' x_\{\\min\} ). It is commonly used to describe phenomena such as wealth
+#' distributions, city sizes, and biological scaling laws.
 #'
-#' @param alpha A numeric vector: index of the power law distribution. Must be less than -1.
-#' @param low A numeric vector: lower bound of the distribution. Must be greater than 0.
-#' @param shape A numeric vector: A multi-purpose argument for shaping. When `sample=False` (model building), this is used
-#'   with `.expand(shape)` to set the distribution's batch shape. When `sample=True` (direct sampling), this is
-#'   used as `sample_shape` to draw a raw JAX array of the given shape.
-#' @param event Integer: The number of batch dimensions to reinterpret as event dimensions (used in model building).
-#' @param mask A logical vector: Optional boolean array to mask observations.
-#' @param create_obj Logical: If `TRUE`, returns the raw BF distribution object instead of creating a sample site.
-#'   This is essential for building complex distributions like `MixtureSameFamily`.
-#' @param validate_args Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.
-#' @param sample A logical value that controls the function's behavior. If `TRUE`,
-#'   the function will directly draw samples from the distribution. If `FALSE`,
-#'   it will create a random variable within a model. Defaults to `FALSE`.
-#' @param seed An integer seed for this draw when `sample = TRUE`. By default
+#' The probability density function (PDF) is given by:
+#'
+#' For ( x \\ge x_\{\\min\} > 0 ):
+#'
+#' \deqn{f(x \mid \alpha, x_{\min}) = \frac{\alpha - 1}{x_{\min}} \left( \frac{x_{\min}}{x} \right)^{\alpha}}
+#'
+#' where \eqn{\alpha > 1} is the shape (scaling) parameter.
+#'
+#' @param alpha See the Python documentation of `alpha`.
+#' @param low See the Python documentation of `low`.
+#' @param validate_args Logical. Whether to validate the parameter values.
+#'   Defaults to `py_none()` (the NumPyro default).
+#' @param name Character. Name of the random variable in the model. When not
+#'   given, an observed site is named after the variable passed to `obs` (`obs =
+#'   y` gives `"y"`); use [bf_model()] to name parameters after the variables they
+#'   are assigned to.
+#' @param obs Numeric vector or array of observed values. If given, the random
+#'   variable is conditioned on them (likelihood); otherwise it is latent.
+#'   Defaults to `py_none()`.
+#' @param mask Optional logical vector or array masking observations (`FALSE` =
+#'   ignored). Defaults to `py_none()`.
+#' @param sample Logical. If `TRUE`, directly draw values from the distribution
+#'   and return them; if `FALSE` (default), create a random variable inside a
+#'   model.
+#' @param seed Integer seed for this draw when `sample = TRUE`. By default
 #'   (`py_none()`) the draw comes from the session's random stream, set by
 #'   `importBF(rand_seed = ...)`, so consecutive draws differ but the whole
 #'   sequence is reproducible. No effect when `sample = FALSE`.
-#' @param obs A numeric vector or array of observed values. If provided, the
-#'   random variable is conditioned on these values. If `NULL`, the variable is
-#'   treated as a latent (unobserved) variable. Defaults to `NULL`.
-#' @param name A character string representing the name of the random variable
-#'   within a model. This is used to uniquely identify the variable. Defaults to 'x'.
-#' @param to_jax Boolean. Indicates whether to return a JAX array or not.
+#' @param shape Integer vector. With `sample = FALSE`, the batch shape of the
+#'   distribution in the model; with `sample = TRUE`, the shape of the draw.
+#'   Defaults to `c()` (no extra dimensions).
+#' @param event Integer. Number of batch dimensions reinterpreted as event
+#'   dimensions (model building only). Defaults to `0`.
+#' @param create_obj Logical. If `TRUE`, return the distribution object itself
+#'   instead of a random variable (e.g. to build mixtures). Defaults to `FALSE`.
+#' @param to_jax Logical. Return a JAX array (`TRUE`, default) or convert to R.
 #'
 #' @return
-#'  - When \code{sample=FALSE}, a BF Lower Truncated Power Law distribution object (for model building).
-#'
-#'  - When \code{sample=TRUE}, a JAX array of samples drawn from the Lower Truncated Power Law distribution (for direct sampling).
-#'
-#'  - When \code{create_obj=TRUE}, the raw BF distribution object (for advanced use cases).
-#'
-#' @seealso This is a wrapper of  \url{https://num.pyro.ai/en/stable/distributions.html#lowertruncatedpowerlaw}
+#' \itemize{
+#'   \item When `sample = FALSE`: A BF LowerTruncatedPowerLaw distribution object
+#'     (for model building).
+#'   \item When `sample = TRUE`: A JAX array of samples drawn from the
+#'     LowerTruncatedPowerLaw distribution (for direct sampling).
+#'   \item When `create_obj = TRUE`: The raw BF distribution object (for advanced
+#'     use cases).
+#' }
 #'
 #' @examples
 #' \donttest{
 #' library(BayesForge)
 #' m <- importBF(platform = "cpu")
-#' bf.dist.lower_truncated_power_law(alpha = c(-2, 2), low = c(1, 0.5), sample = TRUE)
+#' bf.dist.lower_truncated_power_law(alpha = -2.0, low = 1.0, sample = TRUE)
 #' }
+#'
+#' @seealso \url{https://num.pyro.ai/en/stable/distributions.html#lowertruncatedpowerlaw}
+#'
+#' @references
+#' [Power-law distribution –
+#' Wikipedia](https://en.wikipedia.org/wiki/Power_law#Continuous_power-law_distribution)
+#'
+#' [Pareto distribution –
+#' Wikipedia](https://en.wikipedia.org/wiki/Pareto_distribution)
+#'
+#' [Truncated Pareto distribution](https://arxiv.org/abs/0706.1062)
+#'
 #' @export
-
 bf.dist.lower_truncated_power_law <- function(alpha, low, validate_args = py_none(), name = "x", obs = py_none(), mask = py_none(), sample = FALSE, seed = py_none(), shape = c(), event = 0, create_obj = FALSE, to_jax = TRUE) {
      if (missing(name) && !missing(obs)) name <- .bf_obs_name(substitute(obs))  # obs = y -> site "y"
 
@@ -56,7 +83,7 @@ bf.dist.lower_truncated_power_law <- function(alpha, low, validate_args = py_non
   }
   .BF_env$.bf_instance$dist$lower_truncated_power_law(
     alpha = .BF_env$jnp$asarray(alpha),
-    low = .BF_env$jnp$asarray(low),
+    low = .bf_arr(low),
     validate_args = validate_args, name = name, obs = obs, mask = mask, sample = sample, seed = seed, shape = shape, event = event, create_obj = create_obj, to_jax = to_jax
   )
 }

@@ -1,49 +1,88 @@
-#' @title A Zero Inflated Poisson distribution.
+#' @title A Zero Inflated Poisson distribution
+#'
 #' @description
-#' The Zero-Inflated Poisson distribution is a discrete count-distribution designed for data with *more zeros*
-#' than would be expected under a standard Poisson. Essentially, it assumes two underlying processes:
-
-#' * With probability \deqn{\pi} you are in a "structural zero" state (i.e., you automatically get a zero count).
-#' * With probability \deqn{1 - \pi} you draw from a standard Poisson distribution with parameter \deqn{\lambda}.
+#' The Zero-Inflated Poisson distribution is a discrete count‐distribution
+#' designed for data with *more zeros* than would be expected under a standard
+#' Poisson. Essentially, it assumes two underlying processes:
 #'
-#' This results in a mixture distribution that places more mass at zero than a Poisson alone would.
-#' It's widely used in, for instance, ecology (species counts with many zeros), insurance/claims problems, and any count-data setting with excess zeros.
+#' * With probability \eqn{\pi} you are in a “structural zero” state (i.e., you
+#' automatically get a zero count).
+#' * With probability \eqn{1 - \pi} you draw from a standard Poisson
+#' distribution with parameter \eqn{\lambda}.
 #'
-#' @param gate The gate parameter.
-#' @param rate A numeric vector, matrix, or array representing the rate parameter of the underlying Poisson distribution.
-#' @param shape A numeric vector used to shape the distribution. When `sample=False` (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When `sample=True` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.
-#' @param event The number of batch dimensions to reinterpret as event dimensions (used in model building).
-#' @param mask An optional boolean vector, matrix, or array to mask observations.
-#' @param create_obj Logical; If `TRUE`, returns the raw BF distribution object instead of creating a sample site.
-#' @param sample Logical; If `TRUE`, draws samples from the distribution.
-#' @param validate_args Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.
-#' @param sample A logical value that controls the function's behavior. If `TRUE`,
-#'   the function will directly draw samples from the distribution. If `FALSE`,
-#'   it will create a random variable within a model. Defaults to `FALSE`.
-#' @param seed An integer seed for this draw when `sample = TRUE`. By default
+#' This results in a mixture distribution that places more mass at zero than a
+#' Poisson alone would. It’s widely used in, for instance, ecology (species
+#' counts with many zeros), insurance/claims problems, and any count‐data
+#' setting with excess zeros.
+#'
+#' The probability density function (PDF) is given by:
+#'
+#' Let \eqn{X} be a random variable following a Zero-Inflated Poisson with
+#' parameters
+#'
+#' * \eqn{\pi\in[0,1]}: zero-inflation probability (chance of being structural
+#' zero)
+#' * \eqn{\lambda>0}: mean of the Poisson component
+#'
+#' Then:
+#'
+#' \deqn{P(X = k) = \begin{cases} \pi ;+; (1 - \pi),e^{-\lambda}, & \text{if } k = 0, [6pt] (1 - \pi),\dfrac{\lambda^k e^{-\lambda}}{k!}, & \text{if } k = 1,2,3,\dots \end{cases}}
+#'
+#' (Here the Poisson component contributes also a mass at zero of \eqn{(1 -
+#' \pi)e^{-\lambda}}, plus the extra \eqn{\pi} mass.)
+#'
+#' @param gate The probability of observing a zero.
+#' @param rate The rate parameter of the underlying Poisson distribution.
+#' @param validate_args Logical. Whether to validate the parameter values.
+#'   Defaults to `py_none()` (the NumPyro default).
+#' @param name Character. Name of the random variable in the model. When not
+#'   given, an observed site is named after the variable passed to `obs` (`obs =
+#'   y` gives `"y"`); use [bf_model()] to name parameters after the variables they
+#'   are assigned to.
+#' @param obs Numeric vector or array of observed values. If given, the random
+#'   variable is conditioned on them (likelihood); otherwise it is latent.
+#'   Defaults to `py_none()`.
+#' @param mask Optional logical vector or array masking observations (`FALSE` =
+#'   ignored). Defaults to `py_none()`.
+#' @param sample Logical. If `TRUE`, directly draw values from the distribution
+#'   and return them; if `FALSE` (default), create a random variable inside a
+#'   model.
+#' @param seed Integer seed for this draw when `sample = TRUE`. By default
 #'   (`py_none()`) the draw comes from the session's random stream, set by
 #'   `importBF(rand_seed = ...)`, so consecutive draws differ but the whole
 #'   sequence is reproducible. No effect when `sample = FALSE`.
-#' @param obs A numeric vector or array of observed values. If provided, the
-#'   random variable is conditioned on these values. If `NULL`, the variable is
-#'   treated as a latent (unobserved) variable. Defaults to `NULL`.
-#' @param name A character string representing the name of the random variable
-#'   within a model. This is used to uniquely identify the variable. Defaults to 'x'.
-#' @param to_jax Logical. Defaults to TRUE.
+#' @param shape Integer vector. With `sample = FALSE`, the batch shape of the
+#'   distribution in the model; with `sample = TRUE`, the shape of the draw.
+#'   Defaults to `c()` (no extra dimensions).
+#' @param event Integer. Number of batch dimensions reinterpreted as event
+#'   dimensions (model building only). Defaults to `0`.
+#' @param create_obj Logical. If `TRUE`, return the distribution object itself
+#'   instead of a random variable (e.g. to build mixtures). Defaults to `FALSE`.
+#' @param to_jax Logical. Return a JAX array (`TRUE`, default) or convert to R.
 #'
 #' @return
 #' \itemize{
-#'   \item When \code{sample=FALSE}, a BF Zero Inflated Poisson distribution object (for model building).
-#'   \item When \code{sample=TRUE}, a JAX array of samples drawn from the Zero Inflated Poisson distribution (for direct sampling).
-#'   \item When \code{create_obj=TRUE}, the raw BF distribution object (for advanced use cases).
+#'   \item BF ZeroInflatedPoisson distribution object (when `sample = FALSE`).
+#'   \item JAX array of samples drawn from the ZeroInflatedPoisson distribution
+#'     (when `sample = TRUE`).
+#'   \item The raw BF distribution object (when `create_obj = TRUE`).
 #' }
 #'
 #' @examples
 #' \donttest{
 #' library(BayesForge)
 #' m <- importBF(platform = "cpu")
-#' bf.dist.zero_inflated_poisson(gate = 0.3, rate = 5, sample = TRUE)
+#' bf.dist.zero_inflated_poisson(gate = 0.3, rate = 2.0, sample = TRUE)
 #' }
+#'
+#' @seealso \url{https://num.pyro.ai/en/stable/distributions.html#zeroinflatedpoisson}
+#'
+#' @references
+#' https://en.wikipedia.org/wiki/Zero-inflated_model "Zero-inflated model"
+#'
+#' https://www.statisticshowto.com/zero-inflated-poisson-distribution
+#' "Zero-Inflated Poisson distribution - Statistics How To"
+#'
 #' @export
 bf.dist.zero_inflated_poisson <- function(gate, rate = 1.0, validate_args = py_none(), name = "x", obs = py_none(), mask = py_none(), sample = FALSE, seed = py_none(), shape = c(), event = 0, create_obj = FALSE, to_jax = TRUE) {
      if (missing(name) && !missing(obs)) name <- .bf_obs_name(substitute(obs))  # obs = y -> site "y"

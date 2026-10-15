@@ -16,7 +16,7 @@ No return value, called for side effects.
 }
 \description{
 Binds the session to the BayesForge Python environment when it exists
-(before any Python is initialised) and sets up the lazy `jnp`/`jax`
+(before any Python is initialised) and sets up the lazy \code{jnp}/\code{jax}
 modules.
 }
 \keyword{internal}

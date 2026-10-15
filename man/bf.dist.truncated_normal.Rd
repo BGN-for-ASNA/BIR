@@ -2,7 +2,7 @@
 % Please edit documentation in R/truncated_normal.R
 \name{bf.dist.truncated_normal}
 \alias{bf.dist.truncated_normal}
-\title{Truncated Normal Distribution}
+\title{Truncated Normal distribution}
 \usage{
 bf.dist.truncated_normal(
   loc = 0,
@@ -24,66 +24,111 @@ bf.dist.truncated_normal(
 \arguments{
 \item{loc}{The location parameter of the normal distribution.}
 
-\item{scale}{The scale parameter of the normal distribution.}
+\item{scale}{See the Python documentation of \code{scale}.}
 
-\item{low}{(float, jnp.ndarray, optional): The lower truncation point. If `None`, the distribution is only truncated on the right. Defaults to `None`.}
+\item{low}{See the Python documentation of \code{low}.}
 
-\item{high}{(float, jnp.ndarray, optional): The upper truncation point. If `None`, the distribution is only truncated on the left. Defaults to `None`.}
+\item{high}{See the Python documentation of \code{high}.}
 
-\item{validate_args}{Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.}
+\item{validate_args}{Logical. Whether to validate the parameter values.
+Defaults to \code{py_none()} (the NumPyro default).}
 
-\item{name}{A character string representing the name of the random variable
-within a model. This is used to uniquely identify the variable. Defaults to 'x'.}
+\item{name}{Character. Name of the random variable in the model. When not
+given, an observed site is named after the variable passed to \code{obs} (\code{obs = y} gives \code{"y"}); use \code{\link[=bf_model]{bf_model()}} to name parameters after the variables they
+are assigned to.}
 
-\item{obs}{A numeric vector or array of observed values. If provided, the
-random variable is conditioned on these values. If `NULL`, the variable is
-treated as a latent (unobserved) variable. Defaults to `NULL`.}
+\item{obs}{Numeric vector or array of observed values. If given, the random
+variable is conditioned on them (likelihood); otherwise it is latent.
+Defaults to \code{py_none()}.}
 
-\item{mask}{An optional boolean array to mask observations.}
+\item{mask}{Optional logical vector or array masking observations (\code{FALSE} =
+ignored). Defaults to \code{py_none()}.}
 
-\item{sample}{A logical value that controls the function's behavior. If `TRUE`,
-the function will directly draw samples from the distribution. If `FALSE`,
-it will create a random variable within a model. Defaults to `FALSE`.}
+\item{sample}{Logical. If \code{TRUE}, directly draw values from the distribution
+and return them; if \code{FALSE} (default), create a random variable inside a
+model.}
 
-\item{seed}{An integer seed for this draw when `sample = TRUE`. By default
-(`py_none()`) the draw comes from the session's random stream, set by
-`importBF(rand_seed = ...)`, so consecutive draws differ but the whole
-sequence is reproducible. No effect when `sample = FALSE`.}
+\item{seed}{Integer seed for this draw when \code{sample = TRUE}. By default
+(\code{py_none()}) the draw comes from the session's random stream, set by
+\code{importBF(rand_seed = ...)}, so consecutive draws differ but the whole
+sequence is reproducible. No effect when \code{sample = FALSE}.}
 
-\item{shape}{A numeric vector (e.g., `c(10)`) used to shape the distribution.
-When `sample=False` (model building), this is used with `.expand(shape)` to set the
-distribution's batch shape. When `sample=True` (direct sampling),
-this is used as `sample_shape` to draw a raw JAX array of the
-given shape.}
+\item{shape}{Integer vector. With \code{sample = FALSE}, the batch shape of the
+distribution in the model; with \code{sample = TRUE}, the shape of the draw.
+Defaults to \code{c()} (no extra dimensions).}
 
-\item{event}{The number of batch dimensions to reinterpret as event
-dimensions (used in model building).}
+\item{event}{Integer. Number of batch dimensions reinterpreted as event
+dimensions (model building only). Defaults to \code{0}.}
 
-\item{create_obj}{Logical; If `TRUE`, returns the raw BF distribution
-object instead of creating a sample site.}
+\item{create_obj}{Logical. If \code{TRUE}, return the distribution object itself
+instead of a random variable (e.g. to build mixtures). Defaults to \code{FALSE}.}
 
-\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
+\item{to_jax}{Logical. Return a JAX array (\code{TRUE}, default) or convert to R.}
 }
 \value{
-- When \code{sample=FALSE}, a BF Truncated Normal distribution object (for model building).
-
- - When \code{sample=TRUE}, a JAX array of samples drawn from the Truncated Normal distribution (for direct sampling).
-
- - When \code{create_obj=TRUE}, the raw BF distribution object (for advanced use cases).
+\itemize{
+\item BF TruncatedNormal distribution object (for model building).
+\item JAX array of samples drawn from the TruncatedNormal distribution (for
+\item direct sampling).
+\item The raw BF distribution object (for advanced use cases).
+}
 }
 \description{
-A truncated normal distribution is derived from a normal (Gaussian)
-random variable by restricting (truncating) its domain to an interval \deqn{[a, b]}
-(which could be one-sided, e.g., (a) only or (b) only). It is defined by its location (`loc`), scale
-(`scale`), lower bound  \deqn{a} (`low`), and upper bound \deqn{b} (`high`). In effect:
-if \deqn{X \sim \mathcal N(\mu, \sigma^2)}, then the truncated version \deqn{Y = X | (a \le X \le b)}
-has the same "shape" but only supports values in \deqn{[a,b]}. This is used when you know that values outside a range
-are impossible or not observed (e.g., measurement limits, natural bounds).
+A truncated normal distribution is derived from a normal (Gaussian) random
+variable by restricting (truncating) its domain to an interval \eqn{[a, b]}
+(which could be one‐sided, e.g., (a) only or (b) only). It is defined by its
+location (\code{loc}), scale (\code{scale}), lower bound  \eqn{a} (\code{low}), and upper
+bound \eqn{b} (\code{high}). In effect: if \eqn{X \sim \mathcal N(\mu, \sigma^2)},
+then the truncated version \eqn{Y = X | (a \le X \le b)} has the same “shape”
+but only supports values in \eqn{[a,b]}. This is used when you know that
+values outside a range are impossible or not observed (e.g., measurement
+limits, natural bounds).
+
+Let \eqn{X \sim \mathcal N(\mu, \sigma^2)}. Define truncation bounds \eqn{a <
+b} (could be \eqn{a = -\infty} or \eqn{b = +\infty} for one‐sided
+truncation). Then for \eqn{y \in [a,b]},
+
+\deqn{f_Y(y) = \frac{1}{\sigma} ; \frac{\varphi!\bigl(\frac{y - \mu}{\sigma}\bigr)}{\Phi!\bigl(\frac{b - \mu}{\sigma}\bigr) - \Phi!\bigl(\frac{a - \mu}{\sigma}\bigr)} ,}
+
+where:
+\itemize{
+\item \eqn{\varphi(z)} is the standard normal PDF, \eqn{\varphi(z) =
+\frac1{\sqrt{2\pi}} e^{-z^2/2}}.
+\item \eqn{\Phi(z)} is the standard normal CDF.
+\item The denominator \eqn{\Phi\bigl(\tfrac{b - \mu}{\sigma}\bigr) -
+\Phi\bigl(\tfrac{a - \mu}{\sigma}\bigr)} normalises the density so the total
+probability over ([a,b]) is 1.
+}
+
+For values (y < a) or (y > b), (f_Y(y) = 0).
 }
 \examples{
 \donttest{
 library(BayesForge)
-m=importBF(platform='cpu')
-bf.dist.truncated_normal(loc = 0, scale = 2, low = 0, high = 1.5, sample = TRUE)
+m <- importBF(platform = "cpu")
+bf.dist.truncated_normal(loc = 0.0, scale = 1.0, sample = TRUE)
 }
+
+}
+\references{
+[1]: https://en.wikipedia.org/wiki/Truncated_normal_distribution "Truncated
+normal distribution"
+
+[2]:
+https://people.math.sc.edu/burkardt/m_src/truncated_normal/truncated_normal.html
+"TRUNCATED_NORMAL - The Truncated Normal Distribution"
+
+[3]: https://www.statisticshowto.com/truncated-normal-distribution/
+"Truncated Distribution / Truncated Normal Distribution - Statistics ..."
+
+[4]:
+https://real-statistics.com/normal-distribution/truncated-normal-distribution/
+"Truncated Normal Distribution | Real Statistics Using Excel"
+
+[5]:
+https://stats.stackexchange.com/questions/525894/understanding-the-pdf-of-a-truncated-normal-distribution
+"Understanding the pdf of a truncated normal distribution"
+}
+\seealso{
+\url{https://num.pyro.ai/en/stable/distributions.html#truncatednormal_lowercase}
 }

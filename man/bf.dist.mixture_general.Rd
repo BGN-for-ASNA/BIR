@@ -2,7 +2,7 @@
 % Please edit documentation in R/mixture_general.R
 \name{bf.dist.mixture_general}
 \alias{bf.dist.mixture_general}
-\title{A finite mixture of component distributions from different families.}
+\title{Mixture General distribution}
 \usage{
 bf.dist.mixture_general(
   mixing_distribution,
@@ -21,64 +21,127 @@ bf.dist.mixture_general(
 )
 }
 \arguments{
-\item{mixing_distribution}{A `Categorical` distribution specifying the weights for each mixture component.
-The size of this distribution specifies the number of components in the mixture.}
+\item{mixing_distribution}{See the Python documentation of
+\code{mixing_distribution}.}
 
-\item{component_distributions}{A list of distributions representing the components of the mixture.}
+\item{component_distributions}{See the Python documentation of
+\code{component_distributions}.}
 
-\item{support}{A constraint object specifying the support of the mixture distribution.
-If not provided, the support will be inferred from the component distributions.}
+\item{support}{See the Python documentation of \code{support}.}
 
-\item{validate_args}{Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.}
+\item{validate_args}{Logical. Whether to validate the parameter values.
+Defaults to \code{py_none()} (the NumPyro default).}
 
-\item{name}{A character string representing the name of the random variable
-within a model. This is used to uniquely identify the variable. Defaults to 'x'.}
+\item{name}{Character. Name of the random variable in the model. When not
+given, an observed site is named after the variable passed to \code{obs} (\code{obs = y} gives \code{"y"}); use \code{\link[=bf_model]{bf_model()}} to name parameters after the variables they
+are assigned to.}
 
-\item{obs}{A numeric vector or array of observed values. If provided, the
-random variable is conditioned on these values. If `NULL`, the variable is
-treated as a latent (unobserved) variable. Defaults to `NULL`.}
+\item{obs}{Numeric vector or array of observed values. If given, the random
+variable is conditioned on them (likelihood); otherwise it is latent.
+Defaults to \code{py_none()}.}
 
-\item{mask}{Logical vector. Optional boolean array to mask observations.}
+\item{mask}{Optional logical vector or array masking observations (\code{FALSE} =
+ignored). Defaults to \code{py_none()}.}
 
-\item{sample}{A logical value that controls the function's behavior. If `TRUE`,
-the function will directly draw samples from the distribution. If `FALSE`,
-it will create a random variable within a model. Defaults to `FALSE`.}
+\item{sample}{Logical. If \code{TRUE}, directly draw values from the distribution
+and return them; if \code{FALSE} (default), create a random variable inside a
+model.}
 
-\item{seed}{An integer seed for this draw when `sample = TRUE`. By default
-(`py_none()`) the draw comes from the session's random stream, set by
-`importBF(rand_seed = ...)`, so consecutive draws differ but the whole
-sequence is reproducible. No effect when `sample = FALSE`.}
+\item{seed}{Integer seed for this draw when \code{sample = TRUE}. By default
+(\code{py_none()}) the draw comes from the session's random stream, set by
+\code{importBF(rand_seed = ...)}, so consecutive draws differ but the whole
+sequence is reproducible. No effect when \code{sample = FALSE}.}
 
-\item{shape}{Numeric vector. A multi-purpose argument for shaping. When `sample=False` (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When `sample=True` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{shape}{Integer vector. With \code{sample = FALSE}, the batch shape of the
+distribution in the model; with \code{sample = TRUE}, the shape of the draw.
+Defaults to \code{c()} (no extra dimensions).}
 
-\item{event}{Integer. The number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{event}{Integer. Number of batch dimensions reinterpreted as event
+dimensions (model building only). Defaults to \code{0}.}
 
-\item{create_obj}{Logical. If True, returns the raw BF distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+\item{create_obj}{Logical. If \code{TRUE}, return the distribution object itself
+instead of a random variable (e.g. to build mixtures). Defaults to \code{FALSE}.}
 
-\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
+\item{to_jax}{Logical. Return a JAX array (\code{TRUE}, default) or convert to R.}
 }
 \value{
-- When \code{sample=FALSE}, a BF MixtureGeneral distribution object (for model building).
-
-   - When \code{sample=TRUE}, a JAX array of samples drawn from the MixtureGeneral distribution (for direct sampling).
-
-   - When \code{create_obj=TRUE}, the raw BF distribution object (for advanced use cases).
+A random variable (model building) or draws (\code{sample = TRUE}).
 }
 \description{
-A mixture distribution is a probability distribution constructed by selecting one of several component
-distributions according to specified weights, and then drawing a sample from the chosen component.
-It allows modelling of heterogeneous populations and multimodal data.
+A mixture distribution is a probability distribution constructed by selecting
+one of several component distributions according to specified weights, and
+then drawing a sample from the chosen component. It allows modelling of
+heterogeneous populations and multimodal data.
+
+Let the mixture have (K) component distributions with densities (f_i(x)) for
+(i = 1,\\dots,K). Let weights       (w_i\\ge0) satisfy (\\sum_\{i=1\}^K w_i =
+1). Then the PDF is
+
+\deqn{f(x) = \sum_{i=1}^K w_i ; f_i(x).}
+
+\strong{Parameters:}
+\itemize{
+\item \strong{mixing_distribution}:  A \code{Categorical} distribution representing the
+mixing weights.
+\item \strong{component_distributions}: A list of distributions representing the
+components of the mixture.
+\item **sample (bool, optional): A control-flow argument. If \code{TRUE}, the
+function will directly sample a raw JAX array from the distribution,
+bypassing the BF model context. If \code{FALSE}, it will create a \code{BF.sample} site
+within a model. Defaults to \code{FALSE}.
+\item \code{shape} (integer vector): A multi-purpose argument for shaping. When
+\code{sample = FALSE} (model building), this is used with \code{shape} to set the
+distribution's batch shape. When \code{sample = TRUE} (direct sampling), this is
+used as \code{sample_shape} to draw a raw JAX array of the given shape.
+\item \strong{seed (int, optional)}:  An integer seed for this draw when \code{sample = TRUE}. By default (\code{py_none()}) the draw comes from the session's random
+stream, set by \code{bf(rand_seed=...)}, so consecutive draws differ but the whole
+sequence is reproducible. No effect when \code{sample = FALSE}.
+\item \strong{obs (numeric vector or array, optional)}:  The observed value for this
+random variable. If provided, the sample site is conditioned on this value,
+and the function returns the observed value. If \code{py_none()}, the site is
+treated as a latent (unobserved) random variable. Defaults to \code{py_none()}.
+\item \strong{name (str, optional)}:  The name of the sample site in a BF model.
+This is used to uniquely identify the random variable. Defaults to 'x'.
+}
+
+\strong{#### Returns:}
+\itemize{
+\item \strong{When \code{sample = FALSE}}: A BF MixtureGeneral distribution object (for
+model building).
+\item \strong{When \code{sample = TRUE}}: A JAX array of samples drawn from the
+MixtureGeneral distribution (for direct sampling).
+\item \strong{When \code{create_obj = TRUE}}: The raw BF distribution object (for
+advanced use cases).
+}
+
+\strong{#### Example Usage:}
+
+from BayesForge import bf m = bf(platform='cpu') bf.dist.mixture_general(
+mixing_distribution=bf.dist.categorical(probs=jnp.array([0.3, 0.7]),
+create_obj = TRUE), component_distributions=[bf.dist.normal(loc=0.0,
+scale=1.0, create_obj = TRUE),bf.dist.normal  (loc=0.0, scale=1.0,
+create_obj = TRUE)], sample = TRUE )
 }
 \examples{
 \donttest{
 library(BayesForge)
-m=importBF(platform='cpu')
-bf.dist.mixture_general(
-mixing_distribution = bf.dist.categorical(probs = c(0.3, 0, 7),create_obj = TRUE),
-component_distributions = c(
-bf.dist.normal(0,1,create_obj = TRUE),
-bf.dist.normal(0,1,create_obj = TRUE),
-bf.dist.normal(0,1,create_obj = TRUE)),
-sample = TRUE)
+m <- importBF(platform = "cpu")
+bf.dist.mixture_general(mixing_distribution = bf.dist.categorical(probs = jnp$array(c(0.3, 0.7)), create_obj = TRUE), component_distributions = list(bf.dist.normal(-2.0, 1.0, create_obj = TRUE), bf.dist.normal(2.0, 1.0, create_obj = TRUE)), sample = TRUE)
 }
+
+}
+\references{
+[1]:
+https://preliz.readthedocs.io/en/latest/distributions/gallery/mixture.html
+"Mixture Distribution — PreliZ 0.22.0 documentation"
+
+[2]: https://reliability.readthedocs.io/en/latest/Mixture\\%20models.html
+"Mixture models — reliability 0.9.0 documentation"
+
+[3]:
+https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.Mixture.html
+"Mixture — SciPy v1.16.2 Manual"
+}
+\seealso{
+\url{https://num.pyro.ai/en/stable/distributions.html#mixturegeneral}
 }

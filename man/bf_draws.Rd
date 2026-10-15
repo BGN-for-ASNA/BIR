@@ -10,40 +10,40 @@ bf_draws(m, format = c("data.frame", "draws_df", "long"), labels = NULL)
 \method{as.data.frame}{BayesForge.Main.main.bf}(x, row.names = NULL, optional = FALSE, ...)
 }
 \arguments{
-\item{m}{A fitted BayesForge object (from [importBF()] followed by `m$fit()`).}
+\item{m}{A fitted BayesForge object (from \code{\link[=importBF]{importBF()}} followed by \code{m$fit()}).}
 
-\item{format}{`"data.frame"` (default, one row per draw), `"draws_df"`, which
-returns a `posterior::draws_df` (requires the **posterior** package), or
-`"long"`: one row per draw and parameter element, with columns `.chain`,
-`.iteration`, `.draw`, `.variable` (parameter name), `.index` (element,
-e.g. `"2"` or `"1,3"`; `NA` for a scalar) and `.value` -- the tidy layout
+\item{format}{\code{"data.frame"} (default, one row per draw), \code{"draws_df"}, which
+returns a \code{posterior::draws_df} (requires the \strong{posterior} package), or
+\code{"long"}: one row per draw and parameter element, with columns \code{.chain},
+\code{.iteration}, \code{.draw}, \code{.variable} (parameter name), \code{.index} (element,
+e.g. \code{"2"} or \code{"1,3"}; \code{NA} for a scalar) and \code{.value} -- the tidy layout
 used by ggplot2 / dplyr / tidybayes.}
 
-\item{labels}{For `format = "long"`: a named list replacing the index of a
-vector parameter by labels, e.g. `list(alpha = levels(df$group))` when
-`alpha` is indexed by the 0-based codes of factor `group` (from `m$index()`).}
+\item{labels}{For \code{format = "long"}: a named list replacing the index of a
+vector parameter by labels, e.g. \code{list(alpha = levels(df$group))} when
+\code{alpha} is indexed by the 0-based codes of factor \code{group} (from \code{m$index()}).}
 
 \item{x}{A fitted BayesForge object.}
 
-\item{row.names, optional, ...}{Ignored; for compatibility with [as.data.frame()].}
+\item{row.names, optional, ...}{Ignored; for compatibility with \code{\link[=as.data.frame]{as.data.frame()}}.}
 }
 \value{
-A `data.frame` (or a `posterior::draws_df`).
+A \code{data.frame} (or a \code{posterior::draws_df}).
 }
 \description{
 Extracts the posterior draws of a fitted BayesForge model into a plain R
-`data.frame`, so they can be summarised, plotted or combined with any other
+\code{data.frame}, so they can be summarised, plotted or combined with any other
 R tool (dplyr, ggplot2, bayesplot, loo, ...).
 }
 \details{
-Each row is one draw. The columns `.chain`, `.iteration` and `.draw` identify
-the draw (the layout used by the **posterior** package), followed by one column
-per scalar parameter element: a vector parameter `b` gives `b[1]`, `b[2]`, ...,
-a matrix parameter `S` gives `S[1,1]`, `S[2,1]`, ...
+Each row is one draw. The columns \code{.chain}, \code{.iteration} and \code{.draw} identify
+the draw (the layout used by the \strong{posterior} package), followed by one column
+per scalar parameter element: a vector parameter \code{b} gives \code{b[1]}, \code{b[2]}, ...,
+a matrix parameter \code{S} gives \code{S[1,1]}, \code{S[2,1]}, ...
 
-Note that these names follow the R (1-based) convention used by **posterior**,
-**brms** and **bayesplot**, while indexing *inside model code* is passed to
-Python and is 0-based: `a[0]` in the model is column `a[1]` here.
+Note that these names follow the R (1-based) convention used by \strong{posterior},
+\strong{brms} and \strong{bayesplot}, while indexing \emph{inside model code} is passed to
+Python and is 0-based: \code{a[0]} in the model is column \code{a[1]} here.
 }
 \examples{
 \dontrun{

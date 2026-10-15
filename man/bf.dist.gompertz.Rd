@@ -2,7 +2,7 @@
 % Please edit documentation in R/gompertz.R
 \name{bf.dist.gompertz}
 \alias{bf.dist.gompertz}
-\title{Gompertz Distribution}
+\title{Gompertz distribution}
 \usage{
 bf.dist.gompertz(
   concentration,
@@ -20,57 +20,75 @@ bf.dist.gompertz(
 )
 }
 \arguments{
-\item{concentration}{A positive numeric vector, matrix, or array representing the concentration parameter.}
+\item{concentration}{The concentration parameter. Must be positive.}
 
-\item{rate}{A positive numeric vector, matrix, or array representing the rate parameter.}
+\item{rate}{The rate parameter. Must be positive.}
 
-\item{validate_args}{Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.}
+\item{validate_args}{Logical. Whether to validate the parameter values.
+Defaults to \code{py_none()} (the NumPyro default).}
 
-\item{name}{A character string representing the name of the random variable
-within a model. This is used to uniquely identify the variable. Defaults to 'x'.}
+\item{name}{Character. Name of the random variable in the model. When not
+given, an observed site is named after the variable passed to \code{obs} (\code{obs = y} gives \code{"y"}); use \code{\link[=bf_model]{bf_model()}} to name parameters after the variables they
+are assigned to.}
 
-\item{obs}{A numeric vector or array of observed values. If provided, the
-random variable is conditioned on these values. If `NULL`, the variable is
-treated as a latent (unobserved) variable. Defaults to `NULL`.}
+\item{obs}{Numeric vector or array of observed values. If given, the random
+variable is conditioned on them (likelihood); otherwise it is latent.
+Defaults to \code{py_none()}.}
 
-\item{mask}{A boolean vector, matrix, or array representing an optional mask for observations.}
+\item{mask}{Optional logical vector or array masking observations (\code{FALSE} =
+ignored). Defaults to \code{py_none()}.}
 
-\item{sample}{A logical value that controls the function's behavior. If `TRUE`,
-the function will directly draw samples from the distribution. If `FALSE`,
-it will create a random variable within a model. Defaults to `FALSE`.}
+\item{sample}{Logical. If \code{TRUE}, directly draw values from the distribution
+and return them; if \code{FALSE} (default), create a random variable inside a
+model.}
 
-\item{seed}{An integer seed for this draw when `sample = TRUE`. By default
-(`py_none()`) the draw comes from the session's random stream, set by
-`importBF(rand_seed = ...)`, so consecutive draws differ but the whole
-sequence is reproducible. No effect when `sample = FALSE`.}
+\item{seed}{Integer seed for this draw when \code{sample = TRUE}. By default
+(\code{py_none()}) the draw comes from the session's random stream, set by
+\code{importBF(rand_seed = ...)}, so consecutive draws differ but the whole
+sequence is reproducible. No effect when \code{sample = FALSE}.}
 
-\item{shape}{A numeric vector representing the shape parameter.}
+\item{shape}{Integer vector. With \code{sample = FALSE}, the batch shape of the
+distribution in the model; with \code{sample = TRUE}, the shape of the draw.
+Defaults to \code{c()} (no extra dimensions).}
 
-\item{event}{Integer representing the number of batch dimensions to reinterpret as event dimensions.}
+\item{event}{Integer. Number of batch dimensions reinterpreted as event
+dimensions (model building only). Defaults to \code{0}.}
 
-\item{create_obj}{Logical value. If `TRUE`, returns the raw BF distribution object instead of creating a sample site.}
+\item{create_obj}{Logical. If \code{TRUE}, return the distribution object itself
+instead of a random variable (e.g. to build mixtures). Defaults to \code{FALSE}.}
 
-\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
+\item{to_jax}{Logical. Return a JAX array (\code{TRUE}, default) or convert to R.}
 }
 \value{
-A BF Gompertz distribution object when \code{sample=FALSE} (for model building).
-
-   A JAX array when \code{sample=TRUE} (for direct sampling).
-
-   A BF distribution object when \code{create_obj=TRUE} (for advanced use cases).
+\itemize{
+\item BF Gompertz distribution object: When \code{sample = FALSE} (for model
+building).
+\item JAX array: When \code{sample = TRUE} (for direct sampling).
+\item BF distribution object: When \code{create_obj = TRUE} (for advanced use
+cases).
+}
 }
 \description{
-The Gompertz distribution is a distribution with support on the positive real line that is closely
-related to the Gumbel distribution. This implementation follows the notation used in the Wikipedia
-entry for the Gompertz distribution. See https://en.wikipedia.org/wiki/Gompertz_distribution.
+The Gompertz distribution is a distribution with support on the positive real
+line that is closely related to the Gumbel distribution. This implementation
+follows the notation used in the Wikipedia entry for the Gompertz
+distribution. See https://en.wikipedia.org/wiki/Gompertz_distribution.
+
+The probability density function (PDF) is:
+
+\deqn{F(x) = 1 - \exp!\bigl[-a (e^x - 1)\bigr], \quad x \ge 0.}
 }
 \examples{
 \donttest{
 library(BayesForge)
-m=importBF(platform='cpu')
-bf.dist.gompertz(concentration = 5., sample = TRUE)
+m <- importBF(platform = "cpu")
+bf.dist.gompertz(concentration = 1.0, rate = 1.0, sample = TRUE)
 }
+
+}
+\references{
+https://en.wikipedia.org/wiki/Gompertz_distribution
 }
 \seealso{
-This is a wrapper of  \url{https://num.pyro.ai/en/stable/distributions.html#gompertz}
+\url{https://num.pyro.ai/en/stable/distributions.html#gompertz}
 }

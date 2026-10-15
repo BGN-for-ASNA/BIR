@@ -10,21 +10,21 @@ bf_model(f)
 \item{f}{A model function.}
 }
 \value{
-The same function, with `name =` added to its distribution calls.
+The same function, with \verb{name =} added to its distribution calls.
 }
 \description{
 Wraps an R model function so that every parameter assigned from a
 distribution gets the name of its variable, as in Python and in Julia
-(`@BF`): `a <- bf.dist.normal(0, 1)` becomes
-`a <- bf.dist.normal(0, 1, name = "a")`. An explicit `name =` is kept.
-Observed sites (`obs = y`) are already named after their variable by the
+(\verb{@BF}): \code{a <- bf.dist.normal(0, 1)} becomes
+\code{a <- bf.dist.normal(0, 1, name = "a")}. An explicit \verb{name =} is kept.
+Observed sites (\code{obs = y}) are already named after their variable by the
 distribution functions.
 }
 \details{
-The model body is rewritten once, when `bf_model()` is called; the
-function is otherwise unchanged. Both `<-` and `=` assignments are
-handled, also inside `with(m$dist$plate(...), ...)` blocks. The
-distribution calls recognised are `bf.dist.*(...)` and `m$dist$*(...)`.
+The model body is rewritten once, when \code{bf_model()} is called; the
+function is otherwise unchanged. Both \verb{<-} and \code{=} assignments are
+handled, also inside \code{with(m$dist$plate(...), ...)} blocks. The
+distribution calls recognised are \code{bf.dist.*(...)} and \verb{m$dist$*(...)}.
 }
 \examples{
 \donttest{

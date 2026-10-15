@@ -13,6 +13,6 @@ install_dependencies(envname = "BFR")
 Install dependencies
 }
 \details{
-Kept for backward compatibility; same as [update_BF()].
+Kept for backward compatibility; same as \code{\link[=update_BF]{update_BF()}}.
 }
 \keyword{internal}

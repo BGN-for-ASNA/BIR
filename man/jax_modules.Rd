@@ -6,7 +6,7 @@
 \alias{jax}
 \title{JAX modules}
 \description{
-`jnp` (`jax.numpy`) and `jax`, imported lazily from the BayesForge Python
+\code{jnp} (\code{jax.numpy}) and \code{jax}, imported lazily from the BayesForge Python
 environment, for building arrays passed to BayesForge models, e.g.
-`jnp$array(c(1, 2, 3))` or `jnp$eye(3L)`.
+\code{jnp$array(c(1, 2, 3))} or \code{jnp$eye(3L)}.
 }

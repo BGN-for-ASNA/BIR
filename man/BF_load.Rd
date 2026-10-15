@@ -7,12 +7,12 @@
 BF_load()
 }
 \value{
-The Python object corresponding to `BayesForge$bf`.
+The Python object corresponding to \code{BayesForge$bf}.
 }
 \description{
 Load the BayesForge module from Python
 }
 \details{
-Internal helper function to import the `BayesForge` Python module.
+Internal helper function to import the \code{BayesForge} Python module.
 }
 \keyword{internal}

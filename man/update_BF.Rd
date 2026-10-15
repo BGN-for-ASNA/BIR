@@ -15,7 +15,7 @@ update_BF(envname = "BFR", backend = "cpu")
 Update the BayesForge Python package
 }
 \details{
-Upgrades `bayesforge` (and, through its requirements, JAX/NumPyro/ArviZ)
+Upgrades \code{bayesforge} (and, through its requirements, JAX/NumPyro/ArviZ)
 in the environment.
 }
 \keyword{internal}

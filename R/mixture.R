@@ -1,60 +1,86 @@
-#' @title A marginalized finite mixture of component distributions.
+#' @title A marginalized finite mixture of component distributions. distribution
+#'
 #' @description
-#' This distribution represents a mixture of component distributions, where the
-#' mixing weights are determined by a Categorical distribution. The resulting
-#' distribution can be either a MixtureGeneral (when component distributions
-#' are a list) or a MixtureSameFamily (when component distributions are a single
+#' A **marginalised finite mixture of component distributions** refers to a
+#' probability model in which you have a finite number \eqn{K} of component
+#' distributions (e.g., normals, Poissons, etc.), each weighted by a mixing
+#' probability from a Categorical distribution. We **marginalise out** the
+#' latent assignment variable (i.e., you don’t explicitly model which component
+#' each data point came from). The resulting distribution can be either a
+#' `mixture_general` (when component distributions are a list) or a
+#' `mixture_same_Family` (when component distributions are a single
 #' distribution).
 #'
-#' @param mixing_distribution A `Categorical` distribution specifying the weights for each mixture component.
-#'   The size of this distribution specifies the number of components in the mixture.
-#' @param component_distributions A list of distributions representing the components of the mixture.
-#' @param shape A numeric vector specifying the shape of the distribution.
-#' @param event An integer representing the number of batch dimensions to reinterpret as event dimensions.
-#' @param mask A logical vector used to mask observations.
-#' @param create_obj A logical value. If `TRUE`, returns the raw BF distribution object.
-#' @param validate_args Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.
-#' @param sample A logical value that controls the function's behavior. If `TRUE`,
-#'   the function will directly draw samples from the distribution. If `FALSE`,
-#'   it will create a random variable within a model. Defaults to `FALSE`.
-#' @param seed An integer seed for this draw when `sample = TRUE`. By default
+#' Suppose you have:
+#'
+#' * Mixing weights \eqn{\pi_1, \dots, \pi_K}, with \eqn{\pi_j \ge 0} and
+#' \eqn{\sum_{j=1}^K \pi_j = 1}.
+#' * Component distributions (densities or PMFs) \eqn{f_j(x \mid \theta_j)}, for
+#' \eqn{j = 1,\dots,K}.
+#'
+#' Then the marginalised mixture distribution for an observed \eqn{X} is:
+#'
+#' \deqn{p(X = x) = \sum_{j=1}^K \pi_j ; f_j(x \mid \theta_j). $ This is exactly the mixture density/PMF you get when you marginalise the latent component‑assignment variable $Z \in {1,\dots,K}$ out of the joint distribution:}
+#'
+#' p(x) = \\sum_\{z=1\}^K p(z = j); p(x \\mid z = j) = \\sum_\{j=1\}^K \\pi_j ;
+#' f_j(x \\mid \\theta_j). $$
+#'
+#' @param mixing_distribution The distribution used to determine the mixing
+#'   weights.
+#' @param component_distributions The list of component distributions.
+#' @param validate_args Logical. Whether to validate the parameter values.
+#'   Defaults to `py_none()` (the NumPyro default).
+#' @param name Character. Name of the random variable in the model. When not
+#'   given, an observed site is named after the variable passed to `obs` (`obs =
+#'   y` gives `"y"`); use [bf_model()] to name parameters after the variables they
+#'   are assigned to.
+#' @param obs Numeric vector or array of observed values. If given, the random
+#'   variable is conditioned on them (likelihood); otherwise it is latent.
+#'   Defaults to `py_none()`.
+#' @param mask Optional logical vector or array masking observations (`FALSE` =
+#'   ignored). Defaults to `py_none()`.
+#' @param sample Logical. If `TRUE`, directly draw values from the distribution
+#'   and return them; if `FALSE` (default), create a random variable inside a
+#'   model.
+#' @param seed Integer seed for this draw when `sample = TRUE`. By default
 #'   (`py_none()`) the draw comes from the session's random stream, set by
 #'   `importBF(rand_seed = ...)`, so consecutive draws differ but the whole
 #'   sequence is reproducible. No effect when `sample = FALSE`.
-#' @param obs A numeric vector or array of observed values. If provided, the
-#'   random variable is conditioned on these values. If `NULL`, the variable is
-#'   treated as a latent (unobserved) variable. Defaults to `NULL`.
-#' @param name A character string representing the name of the random variable
-#'   within a model. This is used to uniquely identify the variable. Defaults to 'x'.
-#' @param to_jax Boolean. Indicates whether to return a JAX array or not.
+#' @param shape Integer vector. With `sample = FALSE`, the batch shape of the
+#'   distribution in the model; with `sample = TRUE`, the shape of the draw.
+#'   Defaults to `c()` (no extra dimensions).
+#' @param event Integer. Number of batch dimensions reinterpreted as event
+#'   dimensions (model building only). Defaults to `0`.
+#' @param create_obj Logical. If `TRUE`, return the distribution object itself
+#'   instead of a random variable (e.g. to build mixtures). Defaults to `FALSE`.
+#' @param to_jax Logical. Return a JAX array (`TRUE`, default) or convert to R.
 #'
-#' @return When \code{sample=FALSE}: A BF Mixture distribution object (for model building).
-#'         When \code{sample=TRUE}: A JAX array of samples drawn from the Mixture distribution (for direct sampling).
-#'         When \code{create_obj=TRUE}: The raw BF distribution object (for advanced use cases).
-#'
-#' @seealso
-#'  - When \code{sample=FALSE}, a BF marginalized finite mixture distribution object (for model building).
-#'
-#'  - When \code{sample=TRUE}, a JAX array of samples drawn from the marginalized finite mixture distribution (for direct sampling).
-#'
-#'  - When \code{create_obj=TRUE}, the raw BF distribution object (for advanced use cases).
+#' @return
+#' \itemize{
+#'   \item When `sample = FALSE`: A BF Mixture distribution object (for model
+#'   \item building).
+#'   \item When `sample = TRUE`: A JAX array of samples drawn from the Mixture
+#'   \item distribution (for direct sampling).
+#'   \item When `create_obj = TRUE`: The raw BF distribution object (for advanced
+#'   \item use cases).
+#' }
 #'
 #' @examples
 #' \donttest{
 #' library(BayesForge)
-#' m=importBF(platform='cpu')
-#' bf.dist.mixture(
-#'   mixing_distribution = bf.dist.categorical(probs = c(0.3, 0, 7),create_obj = TRUE),
-#'   component_distributions = c(
-#'   bf.dist.normal(0,1,create_obj = TRUE),
-#'   bf.dist.normal(0,1,create_obj = TRUE),
-#'   bf.dist.normal(0,1,create_obj = TRUE)
-#'   ),
-#'   sample = TRUE
-#' )
+#' m <- importBF(platform = "cpu")
+#' bf.dist.mixture(mixing_distribution = bf.dist.categorical(probs = jnp$array(c(0.3, 0.7)), create_obj = TRUE), component_distributions = list(bf.dist.normal(0, 1, create_obj = TRUE), bf.dist.normal(2, 1, create_obj = TRUE)), sample = TRUE, shape = c(10L))
 #' }
+#'
+#' @seealso \url{https://num.pyro.ai/en/stable/distributions.html#mixture}
+#'
+#' @references
+#' https://en.wikipedia.org/wiki/Mixture_distribution "Mixture distribution"
+#'
+#' https://pymc3-testing.readthedocs.io/en/rtd-docs/notebooks/marginalized_gaussian_mixture_model.html
+#' "Marginalized Gaussian Mixture Model — PyMC3 3.1rc3 documentation"
+#'
 #' @export
-
 bf.dist.mixture=function(mixing_distribution, component_distributions, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
      if (missing(name) && !missing(obs)) name <- .bf_obs_name(substitute(obs))  # obs = y -> site "y"
 

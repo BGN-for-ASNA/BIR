@@ -2,7 +2,7 @@
 % Please edit documentation in R/dirichlet.R
 \name{bf.dist.dirichlet}
 \alias{bf.dist.dirichlet}
-\title{Samples from a Dirichlet distribution.}
+\title{Dirichlet distribution}
 \usage{
 bf.dist.dirichlet(
   concentration,
@@ -19,54 +19,84 @@ bf.dist.dirichlet(
 )
 }
 \arguments{
-\item{concentration}{A numeric vector or array representing the concentration parameter(s) of the Dirichlet distribution. Must be positive.}
+\item{concentration}{The concentration parameter(s) of the Dirichlet
+distribution. Must be a positive array.}
 
-\item{validate_args}{Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.}
+\item{validate_args}{Logical. Whether to validate the parameter values.
+Defaults to \code{py_none()} (the NumPyro default).}
 
-\item{name}{A character string representing the name of the random variable
-within a model. This is used to uniquely identify the variable. Defaults to 'x'.}
+\item{name}{Character. Name of the random variable in the model. When not
+given, an observed site is named after the variable passed to \code{obs} (\code{obs = y} gives \code{"y"}); use \code{\link[=bf_model]{bf_model()}} to name parameters after the variables they
+are assigned to.}
 
-\item{obs}{A numeric vector or array of observed values. If provided, the
-random variable is conditioned on these values. If `NULL`, the variable is
-treated as a latent (unobserved) variable. Defaults to `NULL`.}
+\item{obs}{Numeric vector or array of observed values. If given, the random
+variable is conditioned on them (likelihood); otherwise it is latent.
+Defaults to \code{py_none()}.}
 
-\item{mask}{A logical vector or array to mask observations.}
+\item{mask}{Optional logical vector or array masking observations (\code{FALSE} =
+ignored). Defaults to \code{py_none()}.}
 
-\item{sample}{A logical value that controls the function's behavior. If `TRUE`,
-the function will directly draw samples from the distribution. If `FALSE`,
-it will create a random variable within a model. Defaults to `FALSE`.}
+\item{sample}{Logical. If \code{TRUE}, directly draw values from the distribution
+and return them; if \code{FALSE} (default), create a random variable inside a
+model.}
 
-\item{seed}{An integer seed for this draw when `sample = TRUE`. By default
-(`py_none()`) the draw comes from the session's random stream, set by
-`importBF(rand_seed = ...)`, so consecutive draws differ but the whole
-sequence is reproducible. No effect when `sample = FALSE`.}
+\item{seed}{Integer seed for this draw when \code{sample = TRUE}. By default
+(\code{py_none()}) the draw comes from the session's random stream, set by
+\code{importBF(rand_seed = ...)}, so consecutive draws differ but the whole
+sequence is reproducible. No effect when \code{sample = FALSE}.}
 
-\item{shape}{A numeric vector specifying the shape of the distribution.}
+\item{shape}{Integer vector. With \code{sample = FALSE}, the batch shape of the
+distribution in the model; with \code{sample = TRUE}, the shape of the draw.
+Defaults to \code{c()} (no extra dimensions).}
 
-\item{event}{Integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{event}{Integer. Number of batch dimensions reinterpreted as event
+dimensions (model building only). Defaults to \code{0}.}
 
-\item{create_obj}{Logical; If TRUE, returns the raw BF distribution object instead of creating a sample site.}
+\item{create_obj}{Logical. If \code{TRUE}, return the distribution object itself
+instead of a random variable (e.g. to build mixtures). Defaults to \code{FALSE}.}
 
-\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
+\item{to_jax}{Logical. Return a JAX array (\code{TRUE}, default) or convert to R.}
 }
 \value{
-- When \code{sample=FALSE}, a BF Dirichlet distribution object (for model building).
-
- - When \code{sample=TRUE}, a JAX array of samples drawn from the Dirichlet distribution (for direct sampling).
-
- - When \code{create_obj=TRUE}, the raw BF distribution object (for advanced use cases).
+\itemize{
+\item When \code{sample = FALSE}: A BF Dirichlet Distribution distribution object
+(for  model building).
+\item When \code{sample = TRUE}: A JAX array of samples drawn from the Dirichlet
+distribution (for direct sampling).
+\item When \code{create_obj = TRUE}: The raw BF Dirichlet Distribution object (for
+advanced use cases).
+}
 }
 \description{
-The Dirichlet distribution is a multivariate generalization of the Beta distribution.
-It is a probability distribution over a simplex, which is a set of vectors where each element is non-negative and sums to one. It is often used as a prior distribution for categorical distributions.
+Samples from a Dirichlet distribution.
+
+The Dirichlet distribution is a multivariate generalization of the Beta
+distribution. It is a probability distribution over a simplex, which is a set
+of vectors where each element is non-negative and sums to one. It is often
+used as a prior distribution for categorical distributions.
+
+For ( X = (X_1, \\dots, X_K) \\sim \\mathrm\{Dir\}(\\alpha)), the density is
+
+\deqn{f( x; \alpha) = \frac{1}{B(\alpha)} \prod_{i=1}^K x_i^{\alpha_i - 1}}
+
+for ( x) in the simplex, and 0 otherwise. Here (B(\\alpha)) is the
+multivariate Beta function (the normalization constant):
+
+\deqn{B(\alpha) = \frac{\prod_{i=1}^K \Gamma(\alpha_i)}{\Gamma\left(\sum_{i=1}^K \alpha_i\right)}.}
 }
 \examples{
 \donttest{
 library(BayesForge)
-m=importBF(platform='cpu')
-bf.dist.dirichlet(concentration =  c(0.1,.9), sample = TRUE)
+m <- importBF(platform = "cpu")
+bf.dist.dirichlet(concentration = jnp$array(c(1.0, 1.0, 1.0)), sample = TRUE)
 }
+
+}
+\references{
+https://distribution-explorer.github.io/multivariate_continuous/dirichlet.html
+
+https://en.wikipedia.org/wiki/Dirichlet_distribution
 }
 \seealso{
-This is a wrapper of  \url{https://num.pyro.ai/en/stable/distributions.html#dirichlet}
+\url{https://num.pyro.ai/en/stable/distributions.html#dirichlet}
 }

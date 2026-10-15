@@ -11,8 +11,8 @@ bf_plot_ns(py_ns)
 }
 \value{
 An environment of class \code{"bf_plot_ns"} where calling any method
-  automatically saves the returned plotly Figure to a temp HTML file and
-  opens it in the browser.
+automatically saves the returned plotly Figure to a temp HTML file and
+opens it in the browser.
 }
 \description{
 Wrap a BayesForge plot namespace so every method auto-displays plotly figures.

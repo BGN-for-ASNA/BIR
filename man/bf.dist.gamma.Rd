@@ -2,7 +2,7 @@
 % Please edit documentation in R/gamma.R
 \name{bf.dist.gamma}
 \alias{bf.dist.gamma}
-\title{Gamma Distribution}
+\title{Gamma distribution}
 \usage{
 bf.dist.gamma(
   concentration,
@@ -20,52 +20,85 @@ bf.dist.gamma(
 )
 }
 \arguments{
-\item{concentration}{A numeric vector representing the shape parameter of the Gamma distribution (k > 0).}
+\item{concentration}{The shape parameter of the Gamma distribution (k > 0).}
 
-\item{rate}{A numeric vector representing the rate parameter of the Gamma distribution (theta > 0).}
+\item{rate}{The rate parameter of the Gamma distribution (theta > 0).}
 
-\item{validate_args}{Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.}
+\item{validate_args}{Logical. Whether to validate the parameter values.
+Defaults to \code{py_none()} (the NumPyro default).}
 
-\item{name}{A character string representing the name of the random variable
-within a model. This is used to uniquely identify the variable. Defaults to 'x'.}
+\item{name}{Character. Name of the random variable in the model. When not
+given, an observed site is named after the variable passed to \code{obs} (\code{obs = y} gives \code{"y"}); use \code{\link[=bf_model]{bf_model()}} to name parameters after the variables they
+are assigned to.}
 
-\item{obs}{A numeric vector or array of observed values. If provided, the
-random variable is conditioned on these values. If `NULL`, the variable is
-treated as a latent (unobserved) variable. Defaults to `NULL`.}
+\item{obs}{Numeric vector or array of observed values. If given, the random
+variable is conditioned on them (likelihood); otherwise it is latent.
+Defaults to \code{py_none()}.}
 
-\item{mask}{A logical vector. Optional boolean array to mask observations.}
+\item{mask}{Optional logical vector or array masking observations (\code{FALSE} =
+ignored). Defaults to \code{py_none()}.}
 
-\item{sample}{A logical value that controls the function's behavior. If `TRUE`,
-the function will directly draw samples from the distribution. If `FALSE`,
-it will create a random variable within a model. Defaults to `FALSE`.}
+\item{sample}{Logical. If \code{TRUE}, directly draw values from the distribution
+and return them; if \code{FALSE} (default), create a random variable inside a
+model.}
 
-\item{seed}{An integer seed for this draw when `sample = TRUE`. By default
-(`py_none()`) the draw comes from the session's random stream, set by
-`importBF(rand_seed = ...)`, so consecutive draws differ but the whole
-sequence is reproducible. No effect when `sample = FALSE`.}
+\item{seed}{Integer seed for this draw when \code{sample = TRUE}. By default
+(\code{py_none()}) the draw comes from the session's random stream, set by
+\code{importBF(rand_seed = ...)}, so consecutive draws differ but the whole
+sequence is reproducible. No effect when \code{sample = FALSE}.}
 
-\item{shape}{A numeric vector. When `sample=False` (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When `sample=True` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{shape}{Integer vector. With \code{sample = FALSE}, the batch shape of the
+distribution in the model; with \code{sample = TRUE}, the shape of the draw.
+Defaults to \code{c()} (no extra dimensions).}
 
-\item{event}{An integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{event}{Integer. Number of batch dimensions reinterpreted as event
+dimensions (model building only). Defaults to \code{0}.}
 
-\item{create_obj}{A logical value. If `TRUE`, returns the raw BF distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+\item{create_obj}{Logical. If \code{TRUE}, return the distribution object itself
+instead of a random variable (e.g. to build mixtures). Defaults to \code{FALSE}.}
 
-\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
+\item{to_jax}{Logical. Return a JAX array (\code{TRUE}, default) or convert to R.}
 }
 \value{
-- When \code{sample=FALSE}, a BF Gamma distribution object (for model building).
-
- - When \code{sample=TRUE}, a JAX array of samples drawn from the Gamma distribution (for direct sampling).
-
- - When \code{create_obj=TRUE}, the raw BF distribution object (for advanced use cases).
+\itemize{
+\item Gamma: A BF Gamma distribution object (for model building).
+\item numeric vector or array: A JAX array of samples drawn from the Gamma
+distribution (for direct sampling).
+\item Gamma: The raw BF distribution object (for advanced use cases).
+}
 }
 \description{
-The Gamma distribution is a continuous probability distribution frequently used in Bayesian statistics, particularly as a prior distribution for variance parameters. It is defined by two positive shape parameters: concentration (k) and rate (\deqn{\lambda}).
+Samples from a Gamma distribution.
+
+The Gamma distribution is a continuous probability distribution frequently
+used in Bayesian statistics, particularly as a prior distribution for
+variance parameters. It is defined by two positive shape parameters:
+concentration ((k)) and rate ((\\lambda)).
+
+There are two common parameterizations:
+\enumerate{
+\item \strong{Shape–scale}: parameters ((\\alpha, \\theta)), with density [ f(x) =
+\\frac\{1\}\{\\Gamma(\\alpha) \\theta^\\alpha\} x^\{\\alpha - 1\}
+e^\{-x/\\theta\}, \\quad x \\ge 0 ]
+\item \strong{Shape–rate}: parameters ((\\alpha, \\lambda)) where (\\lambda =
+1/\\theta), with density [ f(x) =
+\\frac\{\\lambda^\\alpha\}\{\\Gamma(\\alpha)\} x^\{\\alpha - 1\}
+e^\{-\\lambda x\}, \\quad x \\ge 0 ]
+}
 }
 \examples{
 \donttest{
 library(BayesForge)
-m=importBF(platform='cpu')
-bf.dist.gamma(concentration = 1 , sample = TRUE)
+m <- importBF(platform = "cpu")
+bf.dist.gamma(concentration = 2.0, rate = 0.5, sample = TRUE)
 }
+
+}
+\references{
+https://reference.wolfram.com/language/ref/GammaDistribution.html
+
+https://en.wikipedia.org/wiki/Gamma_distribution
+}
+\seealso{
+\url{https://num.pyro.ai/en/stable/distributions.html#gamma}
 }

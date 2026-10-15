@@ -2,7 +2,7 @@
 % Please edit documentation in R/matrix_normal.R
 \name{bf.dist.matrix_normal}
 \alias{bf.dist.matrix_normal}
-\title{Matrix Normal Distribution}
+\title{Matrix Normal distribution}
 \usage{
 bf.dist.matrix_normal(
   loc,
@@ -21,85 +21,97 @@ bf.dist.matrix_normal(
 )
 }
 \arguments{
-\item{loc}{A numeric vector, matrix, or array representing the location of the distribution.}
+\item{loc}{See the Python documentation of \code{loc}.}
 
-\item{scale_tril_row}{A numeric vector, matrix, or array representing the lower cholesky of rows correlation matrix.}
+\item{scale_tril_row}{See the Python documentation of \code{scale_tril_row}.}
 
-\item{scale_tril_column}{A numeric vector, matrix, or array representing the lower cholesky of columns correlation matrix.}
+\item{scale_tril_column}{See the Python documentation of \code{scale_tril_column}.}
 
-\item{validate_args}{Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.}
+\item{validate_args}{Logical. Whether to validate the parameter values.
+Defaults to \code{py_none()} (the NumPyro default).}
 
-\item{name}{A character string representing the name of the random variable
-within a model. This is used to uniquely identify the variable. Defaults to 'x'.}
+\item{name}{Character. Name of the random variable in the model. When not
+given, an observed site is named after the variable passed to \code{obs} (\code{obs = y} gives \code{"y"}); use \code{\link[=bf_model]{bf_model()}} to name parameters after the variables they
+are assigned to.}
 
-\item{obs}{A numeric vector or array of observed values. If provided, the
-random variable is conditioned on these values. If `NULL`, the variable is
-treated as a latent (unobserved) variable. Defaults to `NULL`.}
+\item{obs}{Numeric vector or array of observed values. If given, the random
+variable is conditioned on them (likelihood); otherwise it is latent.
+Defaults to \code{py_none()}.}
 
-\item{mask}{A logical vector, matrix, or array (.BF_env$jnp$array) to mask observations.}
+\item{mask}{Optional logical vector or array masking observations (\code{FALSE} =
+ignored). Defaults to \code{py_none()}.}
 
-\item{sample}{A logical value that controls the function's behavior. If `TRUE`,
-the function will directly draw samples from the distribution. If `FALSE`,
-it will create a random variable within a model. Defaults to `FALSE`.}
+\item{sample}{Logical. If \code{TRUE}, directly draw values from the distribution
+and return them; if \code{FALSE} (default), create a random variable inside a
+model.}
 
-\item{seed}{An integer seed for this draw when `sample = TRUE`. By default
-(`py_none()`) the draw comes from the session's random stream, set by
-`importBF(rand_seed = ...)`, so consecutive draws differ but the whole
-sequence is reproducible. No effect when `sample = FALSE`.}
+\item{seed}{Integer seed for this draw when \code{sample = TRUE}. By default
+(\code{py_none()}) the draw comes from the session's random stream, set by
+\code{importBF(rand_seed = ...)}, so consecutive draws differ but the whole
+sequence is reproducible. No effect when \code{sample = FALSE}.}
 
-\item{shape}{A numeric vector specifying the shape of the distribution.  Must be a vector.}
+\item{shape}{Integer vector. With \code{sample = FALSE}, the batch shape of the
+distribution in the model; with \code{sample = TRUE}, the shape of the draw.
+Defaults to \code{c()} (no extra dimensions).}
 
-\item{event}{An integer representing the number of batch dimensions to reinterpret as event dimensions.}
+\item{event}{Integer. Number of batch dimensions reinterpreted as event
+dimensions (model building only). Defaults to \code{0}.}
 
-\item{create_obj}{A logical value. If `TRUE`, returns the raw BF distribution object instead of creating a sample site.}
+\item{create_obj}{Logical. If \code{TRUE}, return the distribution object itself
+instead of a random variable (e.g. to build mixtures). Defaults to \code{FALSE}.}
 
-\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
+\item{to_jax}{Logical. Return a JAX array (\code{TRUE}, default) or convert to R.}
 }
 \value{
-- When \code{sample=FALSE}, a BF Matrix Normal distribution object (for model building).
-
- - When \code{sample=TRUE}, a JAX array of samples drawn from the Matrix Normal distribution (for direct sampling).
-
- - When \code{create_obj=TRUE}, the raw BF distribution object (for advanced use cases).
+\itemize{
+\item When \code{sample = FALSE}: A BF MatrixNormal distribution object (for model
+building).
+\item When \code{sample = TRUE}: A JAX array of samples drawn from the
+MatrixNormal distribution (for direct sampling).
+\item When \code{create_obj = TRUE}: The raw BF distribution object (for advanced
+use cases).
+}
 }
 \description{
-Samples from a Matrix Normal distribution, which is a multivariate normal distribution over matrices.
-The distribution is characterized by a location matrix and two lower triangular matrices that define the correlation structure.
-The distribution is related to the multivariate normal distribution in the following way.
-If \deqn{X \sim MN(loc,U,V) \implies vec(X) \sim MVN(vec(loc), kron(V,U) )}.
+Samples from a Matrix Normal distribution, which is a multivariate normal
+distribution over matrices. The distribution is characterized by a location
+matrix and two lower triangular matrices that define the correlation
+structure. The distribution is related to the multivariate normal
+distribution in the following way. If \eqn{X ~ MN(loc,U,V)} then \eqn{vec(X)
+~ MVN(vec(loc), kron(V,U) )}.
+
+Let (X) be (n \\times p), with mean matrix
+\deqn{M\in\mathbb R^{n\times p}}
+, row-covariance matrix \eqn{U\in\mathbb R^{n\times n}} (positive-definite),
+and column-covariance matrix \eqn{V\in\mathbb R^{p\times
+p}}(positive-definite). Then the PDF is:
+
+\deqn{f(X;M,U,V) = \frac{1}{(2\pi)^{\tfrac{np}{2}},|V|^{\tfrac n2},|U|^{\tfrac p2}}, \exp!\Big[-\tfrac12,\mathrm{tr}!\big( V^{-1}(X-M)^\top,U^{-1}(X-M)\big)\Big].}
+
+Also the equivalence to vec-form is given:
+
+\deqn{\mathrm{vec}(X) \sim \mathcal N_{np}\big(\mathrm{vec}(M),,V\otimes U\big). ; ; \text{([The Book of Statistical Proofs][3])}}
 }
 \examples{
 \donttest{
 library(BayesForge)
 m <- importBF(platform = "cpu")
-n_rows <- 3
-n_cols <- 4
-loc <- matrix(rep(0, n_rows * n_cols), nrow = n_rows, ncol = n_cols, byrow = TRUE)
-
-U_row_cov <-
-  matrix(c(1.0, 0.5, 0.2, 0.5, 1.0, 0.3, 0.2, 0.3, 1.0),
-    nrow = n_rows, ncol = n_rows, byrow = TRUE
-  )
-scale_tril_row <- chol(U_row_cov)
-
-V_col_cov <- matrix(
-  c(
-    2.0, -0.8, 0.1, 0.4, -0.8, 2.0, 0.2, -0.2, 0.1,
-    0.2, 2.0, 0.0, 0.4, -0.2, 0.0, 2.0
-  ),
-  nrow = n_cols, ncol = n_cols, byrow = TRUE
-)
-scale_tril_column <- chol(V_col_cov)
-
-
-bf.dist.matrix_normal(
-  loc = loc,
-  scale_tril_row = scale_tril_row,
-  scale_tril_column = scale_tril_column,
-  sample = TRUE
-)
+n_rows <- 3L
+n_cols <- 4L
+loc <- jnp$zeros(c(n_rows, n_cols))
+U_row_cov <- jnp$array(matrix(c(1.0, 0.5, 0.2, 0.5, 1.0, 0.3, 0.2, 0.3, 1.0), nrow = 3L, byrow = TRUE))
+V_col_cov <- jnp$array(matrix(c(2.0, -0.8, 0.1, 0.4, -0.8, 2.0, 0.2, -0.2, 0.1, 0.2, 2.0, 0.0, 0.4, -0.2, 0.0, 2.0), nrow = 4L, byrow = TRUE))
+bf.dist.matrix_normal(loc = loc, scale_tril_row = jnp$linalg$cholesky(U_row_cov), scale_tril_column = jnp$linalg$cholesky(V_col_cov), sample = TRUE)
 }
+
+}
+\references{
+[1]: https://en.wikipedia.org/wiki/Matrix_normal_distribution "Matrix
+normal distribution"
+
+[2]: https://statproofbook.github.io/P/matn-pdf.html "Probability density
+function of the matrix-normal distribution | The Book of Statistical Proofs"
 }
 \seealso{
-This is a wrapper of  \url{https://num.pyro.ai/en/stable/distributions.html#matrixnormal_lowercase}
+\url{https://num.pyro.ai/en/stable/distributions.html#matrixnormal_lowercase}
 }

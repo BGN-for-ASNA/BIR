@@ -10,11 +10,11 @@ BF_starting_test()
 Make sure the BayesForge Python environment is ready
 }
 \details{
-Internal function called by [importBF()]. If the "BFR" environment exists,
+Internal function called by \code{\link[=importBF]{importBF()}}. If the "BFR" environment exists,
 the session is bound to it. If not, but the user selected their own Python
-(`RETICULATE_PYTHON`, `reticulate::use_python()`, ...) and `BayesForge` is
+(\code{RETICULATE_PYTHON}, \code{reticulate::use_python()}, ...) and \code{BayesForge} is
 installed there, that Python is used. Otherwise the user is offered to
-create the environment with [setup_env()] (interactive sessions), or an
+create the environment with \code{\link[=setup_env]{setup_env()}} (interactive sessions), or an
 error explains how to do so. It never reinstalls an existing environment.
 }
 \keyword{internal}

@@ -59,8 +59,21 @@ jobs:
       - name: Install R dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::rcmdcheck
+          extra-packages: |
+            any::rcmdcheck
+            any::roxygen2
           needs: check
+
+      # The help of the distribution wrappers is generated from the Python
+      # docstrings by tools/build_r_docs.py (no language model): regenerating
+      # it must change nothing.
+      - name: Help pages are up to date with the Python docstrings
+        if: matrix.config.os == 'ubuntu-latest' && matrix.config.r == 'release'
+        shell: bash
+        run: |
+          python tools/build_r_docs.py --check
+          Rscript -e 'roxygen2::roxygenise()'
+          git diff --exit-code -- man R
 
 
       - name: Check R package

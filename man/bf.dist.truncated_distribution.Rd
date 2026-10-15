@@ -2,7 +2,7 @@
 % Please edit documentation in R/truncated_distribution.R
 \name{bf.dist.truncated_distribution}
 \alias{bf.dist.truncated_distribution}
-\title{Truncated Distribution}
+\title{Truncated distribution}
 \usage{
 bf.dist.truncated_distribution(
   base_dist,
@@ -21,75 +21,117 @@ bf.dist.truncated_distribution(
 )
 }
 \arguments{
-\item{base_dist}{The base distribution to be truncated. This should be a univariate
-distribution. Currently, only the following distributions are supported:
-Cauchy, Laplace, Logistic, Normal, and StudentT.}
+\item{base_dist}{The base distribution to be truncated. This should be a
+univariate distribution. Currently, only the following distributions are
+supported: Cauchy, Laplace, Logistic, Normal, and StudentT.}
 
-\item{low}{(float, jnp.ndarray, optional): The lower truncation point. If `None`, the distribution is only truncated on the right. Defaults to `None`.}
+\item{low}{See the Python documentation of \code{low}.}
 
-\item{high}{(float, jnp.ndarray, optional): The upper truncation point. If `None`, the distribution is only truncated on the left. Defaults to `None`.}
+\item{high}{See the Python documentation of \code{high}.}
 
-\item{validate_args}{Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.}
+\item{validate_args}{Logical. Whether to validate the parameter values.
+Defaults to \code{py_none()} (the NumPyro default).}
 
-\item{name}{A character string representing the name of the random variable
-within a model. This is used to uniquely identify the variable. Defaults to 'x'.}
+\item{name}{Character. Name of the random variable in the model. When not
+given, an observed site is named after the variable passed to \code{obs} (\code{obs = y} gives \code{"y"}); use \code{\link[=bf_model]{bf_model()}} to name parameters after the variables they
+are assigned to.}
 
-\item{obs}{A numeric vector or array of observed values. If provided, the
-random variable is conditioned on these values. If `NULL`, the variable is
-treated as a latent (unobserved) variable. Defaults to `NULL`.}
+\item{obs}{Numeric vector or array of observed values. If given, the random
+variable is conditioned on them (likelihood); otherwise it is latent.
+Defaults to \code{py_none()}.}
 
-\item{mask}{An optional boolean array to mask observations.}
+\item{mask}{Optional logical vector or array masking observations (\code{FALSE} =
+ignored). Defaults to \code{py_none()}.}
 
-\item{sample}{A logical value that controls the function's behavior. If `TRUE`,
-the function will directly draw samples from the distribution. If `FALSE`,
-it will create a random variable within a model. Defaults to `FALSE`.}
+\item{sample}{Logical. If \code{TRUE}, directly draw values from the distribution
+and return them; if \code{FALSE} (default), create a random variable inside a
+model.}
 
-\item{seed}{An integer seed for this draw when `sample = TRUE`. By default
-(`py_none()`) the draw comes from the session's random stream, set by
-`importBF(rand_seed = ...)`, so consecutive draws differ but the whole
-sequence is reproducible. No effect when `sample = FALSE`.}
+\item{seed}{Integer seed for this draw when \code{sample = TRUE}. By default
+(\code{py_none()}) the draw comes from the session's random stream, set by
+\code{importBF(rand_seed = ...)}, so consecutive draws differ but the whole
+sequence is reproducible. No effect when \code{sample = FALSE}.}
 
-\item{shape}{A numeric vector (e.g., `c(10)`) specifying the shape. When \code{sample=FALSE}
-(model building), this is used with `.expand(shape)` to set the distribution's
-batch shape. When \code{sample=TRUE} (direct sampling), this is used as `sample_shape`
-to draw a raw JAX array of the given shape.}
+\item{shape}{Integer vector. With \code{sample = FALSE}, the batch shape of the
+distribution in the model; with \code{sample = TRUE}, the shape of the draw.
+Defaults to \code{c()} (no extra dimensions).}
 
-\item{event}{The number of batch dimensions to reinterpret as event dimensions
-(used in model building).}
+\item{event}{Integer. Number of batch dimensions reinterpreted as event
+dimensions (model building only). Defaults to \code{0}.}
 
-\item{create_obj}{Logical; If `TRUE`, returns the raw BF distribution object
-instead of creating a sample site. This is essential for building complex distributions
-like `MixtureSameFamily`.}
+\item{create_obj}{Logical. If \code{TRUE}, return the distribution object itself
+instead of a random variable (e.g. to build mixtures). Defaults to \code{FALSE}.}
 
-\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
+\item{to_jax}{Logical. Return a JAX array (\code{TRUE}, default) or convert to R.}
 }
 \value{
-- When \code{sample=FALSE}, a BF Truncated distribution object (for model building).
-
- - When \code{sample=TRUE}, a JAX array of samples drawn from the Truncated distribution (for direct sampling).
-
- - When \code{create_obj=TRUE}, the raw BF distribution object (for advanced use cases).
+\itemize{
+\item When \code{sample = FALSE}: A BF TruncatedDistribution distribution object
+(for model building).
+\item When \code{sample = TRUE}: A JAX array of samples drawn from the
+TruncatedDistribution distribution (for direct sampling).
+\item When \code{create_obj = TRUE}: The raw BF distribution object (for advanced
+use cases).
+}
 }
 \description{
-A **truncated distribution** arises when you take a random variable \deqn{X} that originally has
-some distribution (with PDF \deqn{f_X(x)} and CDF \deqn{F_X(x)}) and you restrict attention only to
-those values of \deqn{X} that are *above* a given truncation point \deqn{a}. In other words you only
-observe $X$ when $X > a$. All the "mass" below (or equal to) \deqn{a} is **excluded**
-(not just unobserved, but removed from the sample/analysis).
-This differs from *censoring*, where values below a threshold might be
-known (for example "< a"), but here they are entirely excluded from the domain.
-Left truncation is common in many applied fields.
+Samples from a Truncated Distribution.
+
+A \strong{truncated distribution} arises when you take a random variable \eqn{X}
+that originally has some distribution (with PDF \eqn{f_X(x)} and CDF
+\eqn{F_X(x)}) and you restrict attention only to those values of \eqn{X} that
+are \emph{above} a given truncation point \eqn{a}. In other words you only observe
+\eqn{X} when \eqn{X > a}. All the “mass” below (or equal to) \eqn{a} is
+\strong{excluded} (not just unobserved, but removed from the sample/analysis).
+This differs from \emph{censoring}, where values below a threshold might be known
+(for example “< a”), but here they are entirely excluded from the domain.
+Left truncation is common in many applied fields — for instance:
+\itemize{
+\item In survival analysis: subjects whose event time happens before the study
+start are not included.
+\item In insurance or losses: only losses above a deductible (threshold) are
+recorded, so the loss distribution is left-truncated at that deductible.
+\item In industrial/life-data: items used before data collection start, so only
+those with lifetime > some lower bound are observed.
+}
+
+Let (X) be a random variable with PDF. Choose truncation points \eqn{a < X
+\le b}. Then  the truncated distribution (Y = X \\mid (a < X \\le b)) has:
+
+\deqn{f_Y(y) = \frac{f_X(y)}{F_X(b) - F_X(a)}, \quad \text{for } a < y \le b,}
+
+and (0) outside that interval.
+\itemize{
+\item The lower bound (a) can be (-\\infty) (so only an upper truncation), and
+the upper bound (b) can be (+\\infty) (so only a lower truncation).
+([Statistics How To][2])
+\item If both bounds are finite (i.e., doubly truncated), that is a valid and
+often‐used scenario.
+}
 }
 \examples{
 \donttest{
 library(BayesForge)
-m=importBF(platform='cpu')
-bf.dist.truncated_distribution(
-base_dist = bf.dist.normal(0,1, create_obj = TRUE),
-high = 0.7,
-low = 0.1,
-sample = TRUE)
+m <- importBF(platform = "cpu")
+bf.dist.truncated_distribution(base_dist = bf.dist.normal(0, 1, create_obj = TRUE), high = 1, low = 0, sample = TRUE)
 }
+
+}
+\references{
+[1]: https://en.wikipedia.org/wiki/Truncated_distribution "Truncated
+distribution"
+
+[2]:
+https://pages.stern.nyu.edu/~wgreene/Text/Edition8/PDF/M19_GREE1366_08_SE_C19.pdf
+"19"
+
+[3]:
+https://search.r-project.org/CRAN/refmans/LaplacesDemon/html/dist.Truncated.html
+"R: Truncated Distributions"
+
+[4]:
+https://dspace.cuni.cz/bitstream/handle/20.500.11956/127921/130308341.pdf?isAllowed=y&sequence=1&utm_source.com
+"Truncated data thesis"
 }
 \seealso{
 \url{https://num.pyro.ai/en/stable/distributions.html#truncateddistribution}

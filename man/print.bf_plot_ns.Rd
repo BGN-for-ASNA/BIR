@@ -7,12 +7,12 @@
 \method{print}{bf_plot_ns}(x, ...)
 }
 \arguments{
-\item{x}{A `bf_plot_ns` object.}
+\item{x}{A \code{bf_plot_ns} object.}
 
 \item{...}{Ignored.}
 }
 \value{
-`x`, invisibly.
+\code{x}, invisibly.
 }
 \description{
 Print a BayesForge plot namespace

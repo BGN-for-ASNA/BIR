@@ -2,7 +2,7 @@
 % Please edit documentation in R/lower_truncated_powerlaw.R
 \name{bf.dist.lower_truncated_power_law}
 \alias{bf.dist.lower_truncated_power_law}
-\title{Lower Truncated Power Law Distribution}
+\title{Lower Truncated Power Law distribution}
 \usage{
 bf.dist.lower_truncated_power_law(
   alpha,
@@ -20,60 +20,85 @@ bf.dist.lower_truncated_power_law(
 )
 }
 \arguments{
-\item{alpha}{A numeric vector: index of the power law distribution. Must be less than -1.}
+\item{alpha}{See the Python documentation of \code{alpha}.}
 
-\item{low}{A numeric vector: lower bound of the distribution. Must be greater than 0.}
+\item{low}{See the Python documentation of \code{low}.}
 
-\item{validate_args}{Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.}
+\item{validate_args}{Logical. Whether to validate the parameter values.
+Defaults to \code{py_none()} (the NumPyro default).}
 
-\item{name}{A character string representing the name of the random variable
-within a model. This is used to uniquely identify the variable. Defaults to 'x'.}
+\item{name}{Character. Name of the random variable in the model. When not
+given, an observed site is named after the variable passed to \code{obs} (\code{obs = y} gives \code{"y"}); use \code{\link[=bf_model]{bf_model()}} to name parameters after the variables they
+are assigned to.}
 
-\item{obs}{A numeric vector or array of observed values. If provided, the
-random variable is conditioned on these values. If `NULL`, the variable is
-treated as a latent (unobserved) variable. Defaults to `NULL`.}
+\item{obs}{Numeric vector or array of observed values. If given, the random
+variable is conditioned on them (likelihood); otherwise it is latent.
+Defaults to \code{py_none()}.}
 
-\item{mask}{A logical vector: Optional boolean array to mask observations.}
+\item{mask}{Optional logical vector or array masking observations (\code{FALSE} =
+ignored). Defaults to \code{py_none()}.}
 
-\item{sample}{A logical value that controls the function's behavior. If `TRUE`,
-the function will directly draw samples from the distribution. If `FALSE`,
-it will create a random variable within a model. Defaults to `FALSE`.}
+\item{sample}{Logical. If \code{TRUE}, directly draw values from the distribution
+and return them; if \code{FALSE} (default), create a random variable inside a
+model.}
 
-\item{seed}{An integer seed for this draw when `sample = TRUE`. By default
-(`py_none()`) the draw comes from the session's random stream, set by
-`importBF(rand_seed = ...)`, so consecutive draws differ but the whole
-sequence is reproducible. No effect when `sample = FALSE`.}
+\item{seed}{Integer seed for this draw when \code{sample = TRUE}. By default
+(\code{py_none()}) the draw comes from the session's random stream, set by
+\code{importBF(rand_seed = ...)}, so consecutive draws differ but the whole
+sequence is reproducible. No effect when \code{sample = FALSE}.}
 
-\item{shape}{A numeric vector: A multi-purpose argument for shaping. When `sample=False` (model building), this is used
-with `.expand(shape)` to set the distribution's batch shape. When `sample=True` (direct sampling), this is
-used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{shape}{Integer vector. With \code{sample = FALSE}, the batch shape of the
+distribution in the model; with \code{sample = TRUE}, the shape of the draw.
+Defaults to \code{c()} (no extra dimensions).}
 
-\item{event}{Integer: The number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{event}{Integer. Number of batch dimensions reinterpreted as event
+dimensions (model building only). Defaults to \code{0}.}
 
-\item{create_obj}{Logical: If `TRUE`, returns the raw BF distribution object instead of creating a sample site.
-This is essential for building complex distributions like `MixtureSameFamily`.}
+\item{create_obj}{Logical. If \code{TRUE}, return the distribution object itself
+instead of a random variable (e.g. to build mixtures). Defaults to \code{FALSE}.}
 
-\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
+\item{to_jax}{Logical. Return a JAX array (\code{TRUE}, default) or convert to R.}
 }
 \value{
-- When \code{sample=FALSE}, a BF Lower Truncated Power Law distribution object (for model building).
-
- - When \code{sample=TRUE}, a JAX array of samples drawn from the Lower Truncated Power Law distribution (for direct sampling).
-
- - When \code{create_obj=TRUE}, the raw BF distribution object (for advanced use cases).
+\itemize{
+\item When \code{sample = FALSE}: A BF LowerTruncatedPowerLaw distribution object
+(for model building).
+\item When \code{sample = TRUE}: A JAX array of samples drawn from the
+LowerTruncatedPowerLaw distribution (for direct sampling).
+\item When \code{create_obj = TRUE}: The raw BF distribution object (for advanced
+use cases).
+}
 }
 \description{
-The *Lower-Truncated Power-Law* distribution (also known as the *Pareto Type I* or *power-law with a lower bound*)
- models quantities that follow a heavy-tailed power-law behavior but are bounded below by a minimum value
- \deqn{x_{\min}}. It is commonly used to describe phenomena such as wealth distributions, city sizes, and biological scaling laws.
+The \emph{Lower-Truncated Power-Law} distribution (also known as the \emph{Pareto Type
+I} or \emph{power-law with a lower bound}) models quantities that follow a
+heavy-tailed power-law behavior but are bounded below by a minimum value (
+x_\{\\min\} ). It is commonly used to describe phenomena such as wealth
+distributions, city sizes, and biological scaling laws.
+
+The probability density function (PDF) is given by:
+
+For ( x \\ge x_\{\\min\} > 0 ):
+
+\deqn{f(x \mid \alpha, x_{\min}) = \frac{\alpha - 1}{x_{\min}} \left( \frac{x_{\min}}{x} \right)^{\alpha}}
+
+where \eqn{\alpha > 1} is the shape (scaling) parameter.
 }
 \examples{
 \donttest{
 library(BayesForge)
 m <- importBF(platform = "cpu")
-bf.dist.lower_truncated_power_law(alpha = c(-2, 2), low = c(1, 0.5), sample = TRUE)
+bf.dist.lower_truncated_power_law(alpha = -2.0, low = 1.0, sample = TRUE)
 }
+
+}
+\references{
+\href{https://en.wikipedia.org/wiki/Power_law#Continuous_power-law_distribution}{Power-law distribution – Wikipedia}
+
+\href{https://en.wikipedia.org/wiki/Pareto_distribution}{Pareto distribution – Wikipedia}
+
+\href{https://arxiv.org/abs/0706.1062}{Truncated Pareto distribution}
 }
 \seealso{
-This is a wrapper of  \url{https://num.pyro.ai/en/stable/distributions.html#lowertruncatedpowerlaw}
+\url{https://num.pyro.ai/en/stable/distributions.html#lowertruncatedpowerlaw}
 }

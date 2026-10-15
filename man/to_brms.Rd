@@ -16,11 +16,11 @@ to_brms(
 \arguments{
 \item{bi_fit}{The reticulate object returned by BF fitting.}
 
-\item{formula}{The brms formula for the model. Defaults to `bi_fit$formula`.}
+\item{formula}{The brms formula for the model. Defaults to \code{bi_fit$formula}.}
 
-\item{data}{The data used for fitting. Defaults to `bi_fit$data`.}
+\item{data}{The data used for fitting. Defaults to \code{bi_fit$data}.}
 
-\item{family}{The family used. Defaults to `bi_fit$family` or `gaussian()`.}
+\item{family}{The family used. Defaults to \code{bi_fit$family} or \code{gaussian()}.}
 
 \item{par_map}{Optional list for custom naming: list(BI_name = brms_name).}
 

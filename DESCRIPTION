@@ -26,4 +26,5 @@ Suggests:
     rstan
 Config/testthat/edition: 3
 License: GPL (>= 3)
+Roxygen: list(markdown = TRUE)
 Config/roxygen2/version: 8.1.1

@@ -3,7 +3,7 @@
 \name{bf.dist.binomial}
 \alias{bf.dist.binomial}
 \alias{bf.dist.bfnomial}
-\title{Samples from a Binomial distribution.}
+\title{Binomial distribution}
 \usage{
 bf.dist.binomial(
   total_count = 1L,
@@ -26,69 +26,109 @@ bf.dist.binomial(
 bf.dist.bfnomial(...)
 }
 \arguments{
-\item{total_count}{(int): The number of trials *n*.}
+\item{total_count}{The number of trials \emph{n}.}
 
-\item{probs}{(numeric vector, optional): The probability of success *p* for each trial. Must be between 0 and 1.}
+\item{probs}{The probability of success \emph{p} for each trial. Must be between 0
+and 1.}
 
-\item{logits}{(numeric vector, optional): The log-odds of success for each trial.}
+\item{logits}{The log-odds of success for each trial.  \code{probs = jax.nn.sigmoid(logits)}.}
 
-\item{validate_args}{Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.}
+\item{validate_args}{Logical. Whether to validate the parameter values.
+Defaults to \code{py_none()} (the NumPyro default).}
 
-\item{name}{A character string representing the name of the random variable
-within a model. This is used to uniquely identify the variable. Defaults to 'x'.}
+\item{name}{Character. Name of the random variable in the model. When not
+given, an observed site is named after the variable passed to \code{obs} (\code{obs = y} gives \code{"y"}); use \code{\link[=bf_model]{bf_model()}} to name parameters after the variables they
+are assigned to.}
 
-\item{obs}{A numeric vector or array of observed values. If provided, the
-random variable is conditioned on these values. If `NULL`, the variable is
-treated as a latent (unobserved) variable. Defaults to `NULL`.}
+\item{obs}{Numeric vector or array of observed values. If given, the random
+variable is conditioned on them (likelihood); otherwise it is latent.
+Defaults to \code{py_none()}.}
 
-\item{mask}{(numeric vector of booleans, optional): Optional boolean array to mask observations.}
+\item{mask}{Optional logical vector or array masking observations (\code{FALSE} =
+ignored). Defaults to \code{py_none()}.}
 
-\item{infer}{Optional named list passed to NumPyro's `infer` argument
-(e.g. `list(enumerate = "parallel")`).}
+\item{infer}{Optional named list passed to NumPyro's \code{infer} argument (e.g.
+\code{list(enumerate = "parallel")}).}
 
-\item{enum}{If `TRUE`, the discrete latent is summed out exactly (parallel
-enumeration) instead of sampled; same as `infer = list(enumerate = "parallel")`.
-Defaults to `FALSE`.}
+\item{enum}{Logical. If \code{TRUE}, the discrete latent is summed out exactly
+(parallel enumeration) instead of sampled; same as \code{infer = list(enumerate = "parallel")}. Defaults to \code{FALSE}.}
 
-\item{sample}{A logical value that controls the function's behavior. If `TRUE`,
-the function will directly draw samples from the distribution. If `FALSE`,
-it will create a random variable within a model. Defaults to `FALSE`.}
+\item{sample}{Logical. If \code{TRUE}, directly draw values from the distribution
+and return them; if \code{FALSE} (default), create a random variable inside a
+model.}
 
-\item{seed}{An integer seed for this draw when `sample = TRUE`. By default
-(`py_none()`) the draw comes from the session's random stream, set by
-`importBF(rand_seed = ...)`, so consecutive draws differ but the whole
-sequence is reproducible. No effect when `sample = FALSE`.}
+\item{seed}{Integer seed for this draw when \code{sample = TRUE}. By default
+(\code{py_none()}) the draw comes from the session's random stream, set by
+\code{importBF(rand_seed = ...)}, so consecutive draws differ but the whole
+sequence is reproducible. No effect when \code{sample = FALSE}.}
 
-\item{shape}{(numeric vector): A multi-purpose argument for shaping. When `sample=False` (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When `sample=True` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{shape}{Integer vector. With \code{sample = FALSE}, the batch shape of the
+distribution in the model; with \code{sample = TRUE}, the shape of the draw.
+Defaults to \code{c()} (no extra dimensions).}
 
-\item{event}{(int): The number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{event}{Integer. Number of batch dimensions reinterpreted as event
+dimensions (model building only). Defaults to \code{0}.}
 
-\item{create_obj}{(logical, optional): If `TRUE`, returns the raw BF distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+\item{create_obj}{Logical. If \code{TRUE}, return the distribution object itself
+instead of a random variable (e.g. to build mixtures). Defaults to \code{FALSE}.}
 
-\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
+\item{to_jax}{Logical. Return a JAX array (\code{TRUE}, default) or convert to R.}
 
-\item{...}{Arguments passed to `bf.dist.binomial()`.}
+\item{...}{Arguments passed to \code{bf.dist.binomial()}.}
 }
 \value{
-- When \code{sample=FALSE}, a BF Binomial distribution object (for model building).
-
- - When \code{sample=TRUE}, a JAX array of samples drawn from the Binomial distribution (for direct sampling).
-
- - When \code{create_obj=TRUE}, the raw BF distribution object (for advanced use cases).
+\itemize{
+\item Binomial distribution object (for model building) when \code{sample = FALSE}.
+\item JAX array of samples drawn from the Binomial distribution (for direct
+sampling) when \code{sample = TRUE}.
+\item The raw BF distribution object (for advanced use cases) when
+\code{create_obj = TRUE}.
+}
 }
 \description{
-The Binomial distribution models the number of successes in a sequence of independent Bernoulli trials.
-It represents the probability of obtaining exactly *k* successes in *n* trials, where each trial has a probability *p* of success.
+The Binomial distribution models the number of successes in a sequence of
+independent Bernoulli trials. It represents the probability of obtaining
+exactly \emph{k} successes in \emph{n} trials, where each trial has a probability \emph{p}
+of success. It assumes:
+\enumerate{
+\item Each trial has exactly two possible outcomes (success or failure).
+\item The probability of success $p is constant across trials.
+\item Trials are independent.
+}
 
-\deqn{P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}}
+We denote:
 
-`bf.dist.bfnomial()` is a deprecated alias of `bf.dist.binomial()`.
+\deqn{X \sim \mathrm{Binomial}(n, p).}
+\subsection{Probability Mass Function (PMF)}{
+
+For \eqn{k = 0,1,2,\dots,n}:
+
+\deqn{\Pr(X = k) = \binom{n}{k} ; p^k ; (1 - p)^{,n - k},}
+
+where \eqn{\binom{n}{k} = \frac{n!}{k!(n-k)!}}.
+
+This formula counts the number of ways to choose which \eqn{k} out of \eqn{n}
+trials are the successes (the binomial coefficient) and then multiplies by
+the probability of each such configuration \eqn{p^k (1-p)^{n-k}}.
+}
+
+\code{bf.dist.bfnomial()} is a deprecated alias of \code{bf.dist.binomial()}.
 }
 \examples{
 \donttest{
 library(BayesForge)
-m=importBF(platform='cpu')
-bf.dist.binomial(probs = c(0.5,0.5), sample = TRUE)
-bf.dist.binomial(logits = 1, sample = TRUE)
+m <- importBF(platform = "cpu")
+bf.dist.binomial(total_count = 10L, probs = 0.5, sample = TRUE)
 }
+
+}
+\references{
+[1]: https://en.wikipedia.org/wiki/Binomial_distribution "Binomial
+distribution"
+
+[2]: https://www.itl.nist.gov/div898/handbook/eda/section3/eda366i.htm
+"1.3.6.6.18. Binomial Distribution - Information Technology Laboratory"
+}
+\seealso{
+\url{https://num.pyro.ai/en/stable/distributions.html#binomial}
 }

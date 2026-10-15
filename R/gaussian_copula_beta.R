@@ -1,50 +1,62 @@
-#' @title Gaussian Copula Beta distribution.
+#' @title Gaussian Copula Beta distribution
+#'
 #' @description
-#' This distribution combines a Gaussian copula with a Beta distribution.
-#' The Gaussian copula models the dependence structure between random variables,
-#' while the Beta distribution defines the marginal distributions of each variable.
-#' @param concentration1 A numeric vector or matrix representing the first shape parameter of the Beta distribution.
-#' @param concentration0 A numeric vector or matrix representing the second shape parameter of the Beta distribution.
-#' @param correlation_matrix array_like, optional: Correlation matrix of the coupling multivariate normal distribution. Defaults to `reticulate::py_none()`.
-#' @param correlation_cholesky A numeric vector, matrix, or array representing the Cholesky decomposition of the correlation matrix.
-#' @param shape A numeric vector.  This is used as `sample_shape` to draw a raw JAX array of the given shape when `sample=True`.
-#' @param event Integer indicating the number of batch dimensions to reinterpret as event dimensions (used in model building).
-#' @param mask A logical vector. Optional boolean array to mask observations.
-#' @param create_obj Logical. If `TRUE`, returns the raw BF distribution object instead of creating a sample site.
-#' @param validate_args Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.
-#' @param sample A logical value that controls the function's behavior. If `TRUE`,
-#'   the function will directly draw samples from the distribution. If `FALSE`,
-#'   it will create a random variable within a model. Defaults to `FALSE`.
-#' @param seed An integer seed for this draw when `sample = TRUE`. By default
+#' This distribution combines a Gaussian copula with a Beta distribution. The
+#' Gaussian copula models the dependence structure between random variables,
+#' while the Beta distribution defines the marginal distributions of each
+#' variable.
+#'
+#' @param concentration1 The first shape parameter of the Beta distribution.
+#' @param concentration0 The second shape parameter of the Beta distribution.
+#' @param correlation_matrix Correlation matrix of the coupling multivariate
+#'   normal distribution. Defaults to py_none().
+#' @param correlation_cholesky The Cholesky decomposition of the correlation
+#'   matrix.
+#' @param validate_args Logical. Whether to validate the parameter values.
+#'   Defaults to `py_none()` (the NumPyro default).
+#' @param name Character. Name of the random variable in the model. When not
+#'   given, an observed site is named after the variable passed to `obs` (`obs =
+#'   y` gives `"y"`); use [bf_model()] to name parameters after the variables they
+#'   are assigned to.
+#' @param obs Numeric vector or array of observed values. If given, the random
+#'   variable is conditioned on them (likelihood); otherwise it is latent.
+#'   Defaults to `py_none()`.
+#' @param mask Optional logical vector or array masking observations (`FALSE` =
+#'   ignored). Defaults to `py_none()`.
+#' @param sample Logical. If `TRUE`, directly draw values from the distribution
+#'   and return them; if `FALSE` (default), create a random variable inside a
+#'   model.
+#' @param seed Integer seed for this draw when `sample = TRUE`. By default
 #'   (`py_none()`) the draw comes from the session's random stream, set by
 #'   `importBF(rand_seed = ...)`, so consecutive draws differ but the whole
 #'   sequence is reproducible. No effect when `sample = FALSE`.
-#' @param obs A numeric vector or array of observed values. If provided, the
-#'   random variable is conditioned on these values. If `NULL`, the variable is
-#'   treated as a latent (unobserved) variable. Defaults to `NULL`.
-#' @param name A character string representing the name of the random variable
-#'   within a model. This is used to uniquely identify the variable. Defaults to 'x'.
-#' @param to_jax Boolean. Indicates whether to return a JAX array or not.
+#' @param shape Integer vector. With `sample = FALSE`, the batch shape of the
+#'   distribution in the model; with `sample = TRUE`, the shape of the draw.
+#'   Defaults to `c()` (no extra dimensions).
+#' @param event Integer. Number of batch dimensions reinterpreted as event
+#'   dimensions (model building only). Defaults to `0`.
+#' @param create_obj Logical. If `TRUE`, return the distribution object itself
+#'   instead of a random variable (e.g. to build mixtures). Defaults to `FALSE`.
+#' @param to_jax Logical. Return a JAX array (`TRUE`, default) or convert to R.
 #'
 #' @return
-#'  - When \code{sample=FALSE}, a BF Gaussian Copula Beta distribution object (for model building).
-#'
-#'  - When \code{sample=TRUE}, a JAX array of samples drawn from the Gaussian Copula Beta distribution (for direct sampling).
-#'
-#'  - When \code{create_obj=TRUE}, the raw BF distribution object (for advanced use cases).
-#'
-#' @seealso This is a wrapper of  \url{https://num.pyro.ai/en/stable/distributions.html#gaussiancopulabetadistribution}
+#' \itemize{
+#'   \item GaussianCopulaBeta: A BF GaussianCopulaBeta distribution object (for
+#'     model building).
+#'   \item numeric vector or array: A JAX array of samples drawn from the
+#'     GaussianCopulaBeta distribution (for direct sampling).
+#'   \item Distribution: The raw BF distribution object (for advanced use cases).
+#' }
 #'
 #' @examples
 #' \donttest{
 #' library(BayesForge)
-#' m=importBF(platform='cpu')
-#' bf.dist.gaussian_copula_beta(
-#'   concentration1 = c(2.0, 3.0),
-#'   concentration0 = c(5.0, 3.0),
-#'   correlation_matrix = matrix(c(1.0, 0.7, 0.7, 1.0), nrow = 2, byrow = TRUE),
-#'   sample = TRUE)
-#'   }
+#' m <- importBF(platform = "cpu")
+#' bf.dist.gaussian_copula_beta(concentration1 = jnp$array(c(2.0, 3.0)), concentration0 = jnp$array(c(5.0, 3.0)), correlation_cholesky = jnp$linalg$cholesky(jnp$array(matrix(c(1.0, 0.7, 0.7, 1.0), nrow = 2L, byrow = TRUE))), sample = TRUE)
+#' }
+#'
+#' @seealso \url{https://num.pyro.ai/en/stable/distributions.html#gaussiancopulabetadistribution}
+#'
 #' @export
 bf.dist.gaussian_copula_beta=function(concentration1, concentration0, correlation_matrix=py_none(), correlation_cholesky=py_none(), validate_args=FALSE, name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
      if (missing(name) && !missing(obs)) name <- .bf_obs_name(substitute(obs))  # obs = y -> site "y"

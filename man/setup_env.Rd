@@ -19,9 +19,9 @@ The path to the Python interpreter of the environment (invisibly).
 }
 \description{
 Creates a dedicated Python virtual environment (Python >= 3.12) and installs
-the `bayesforge` Python package into it, with JAX for the chosen backend.
+the \code{bayesforge} Python package into it, with JAX for the chosen backend.
 Versions of JAX, NumPyro and ArviZ are resolved by pip from the requirements
-of `bayesforge` itself, so the environment always matches the installed
+of \code{bayesforge} itself, so the environment always matches the installed
 BayesForge release. Running it again upgrades an existing environment.
 }
 \examples{

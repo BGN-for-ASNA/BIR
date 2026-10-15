@@ -2,7 +2,7 @@
 % Please edit documentation in R/delta.R
 \name{bf.dist.delta}
 \alias{bf.dist.delta}
-\title{The Delta distribution.}
+\title{Delta distribution}
 \usage{
 bf.dist.delta(
   v = 0,
@@ -21,57 +21,77 @@ bf.dist.delta(
 )
 }
 \arguments{
-\item{v}{A numeric vector representing the location of the point mass.}
+\item{v}{The location of the point mass.}
 
-\item{log_density}{The log probability density of the point mass. This is primarily for creating distributions that are non-normalized or for specific advanced use cases. For a standard delta distribution, this should be 0. Defaults to 0.0.}
+\item{log_density}{The log probability density of the point mass. This is
+primarily for creating distributions that are non-normalized or for specific
+advanced use cases. For a standard delta distribution, this should be 0.
+Defaults to 0.0.}
 
-\item{event_dim}{event_dim (A numeric vector, optional): The number of rightmost dimensions of `v` to interpret as event dimensions. Defaults to 0.}
+\item{event_dim}{The number of rightmost dimensions of \code{v} to interpret as
+event dimensions. Defaults to 0.}
 
-\item{validate_args}{Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.}
+\item{validate_args}{Logical. Whether to validate the parameter values.
+Defaults to \code{py_none()} (the NumPyro default).}
 
-\item{name}{A character string representing the name of the random variable
-within a model. This is used to uniquely identify the variable. Defaults to 'x'.}
+\item{name}{Character. Name of the random variable in the model. When not
+given, an observed site is named after the variable passed to \code{obs} (\code{obs = y} gives \code{"y"}); use \code{\link[=bf_model]{bf_model()}} to name parameters after the variables they
+are assigned to.}
 
-\item{obs}{A numeric vector or array of observed values. If provided, the
-random variable is conditioned on these values. If `NULL`, the variable is
-treated as a latent (unobserved) variable. Defaults to `NULL`.}
+\item{obs}{Numeric vector or array of observed values. If given, the random
+variable is conditioned on them (likelihood); otherwise it is latent.
+Defaults to \code{py_none()}.}
 
-\item{mask}{A boolean vector to mask observations.}
+\item{mask}{Optional logical vector or array masking observations (\code{FALSE} =
+ignored). Defaults to \code{py_none()}.}
 
-\item{sample}{A logical value that controls the function's behavior. If `TRUE`,
-the function will directly draw samples from the distribution. If `FALSE`,
-it will create a random variable within a model. Defaults to `FALSE`.}
+\item{sample}{Logical. If \code{TRUE}, directly draw values from the distribution
+and return them; if \code{FALSE} (default), create a random variable inside a
+model.}
 
-\item{seed}{An integer seed for this draw when `sample = TRUE`. By default
-(`py_none()`) the draw comes from the session's random stream, set by
-`importBF(rand_seed = ...)`, so consecutive draws differ but the whole
-sequence is reproducible. No effect when `sample = FALSE`.}
+\item{seed}{Integer seed for this draw when \code{sample = TRUE}. By default
+(\code{py_none()}) the draw comes from the session's random stream, set by
+\code{importBF(rand_seed = ...)}, so consecutive draws differ but the whole
+sequence is reproducible. No effect when \code{sample = FALSE}.}
 
-\item{shape}{A numeric vector used for shaping. When `sample=FALSE` (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When `sample=TRUE` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{shape}{Integer vector. With \code{sample = FALSE}, the batch shape of the
+distribution in the model; with \code{sample = TRUE}, the shape of the draw.
+Defaults to \code{c()} (no extra dimensions).}
 
-\item{event}{The number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{event}{Integer. Number of batch dimensions reinterpreted as event
+dimensions (model building only). Defaults to \code{0}.}
 
-\item{create_obj}{A logical value. If `TRUE`, returns the raw BF distribution object instead of creating a sample site.}
+\item{create_obj}{Logical. If \code{TRUE}, return the distribution object itself
+instead of a random variable (e.g. to build mixtures). Defaults to \code{FALSE}.}
 
-\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
+\item{to_jax}{Logical. Return a JAX array (\code{TRUE}, default) or convert to R.}
 }
 \value{
-- When \code{sample=FALSE}, a BF Delta distribution object (for model building).
-
- - When \code{sample=TRUE}, a JAX array of samples drawn from the Delta distribution (for direct sampling).
-
- - When \code{create_obj=TRUE}, the raw BF distribution object (for advanced use cases).
+\itemize{
+\item When \code{sample = FALSE}: A BF Circulant Delta Distribution distribution
+object (for  model building).
+\item When \code{sample = TRUE}: A JAX array of samples drawn from the
+BernoulliLogits distribution (for direct sampling).
+\item When \code{create_obj = TRUE}: The raw BF Circulant Delta Distribution
+object (for advanced use cases).
+}
 }
 \description{
-The Delta distribution, also known as a point mass distribution, assigns probability 1 to a single point and 0 elsewhere. It's useful for representing deterministic variables or as a building block for more complex distributions.
+The Delta distribution, also known as a point mass distribution, assigns
+probability 1 to a single point and 0 elsewhere. It's useful for representing
+deterministic variables or as a building block for more complex
+distributions.
+
+\deqn{F(x) = \begin{cases} 0, & x < a, \ 1, & x \ge a. \end{cases}}
 }
 \examples{
 \donttest{
 library(BayesForge)
-m=importBF(platform='cpu')
-bf.dist.delta(v = 5, sample = TRUE)
+m <- importBF(platform = "cpu")
+bf.dist.delta(v = 0.0, sample = TRUE)
 }
+
 }
 \seealso{
-This is a wrapper of  \url{https://num.pyro.ai/en/stable/distributions.html#delta}
+\url{https://num.pyro.ai/en/stable/distributions.html#delta}
 }

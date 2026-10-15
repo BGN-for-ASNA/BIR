@@ -2,7 +2,7 @@
 % Please edit documentation in R/zero_sum_normal.R
 \name{bf.dist.zero_sum_normal}
 \alias{bf.dist.zero_sum_normal}
-\title{zero_sum_normal}
+\title{Zero Sum Normal distribution}
 \usage{
 bf.dist.zero_sum_normal(
   scale,
@@ -20,57 +20,80 @@ bf.dist.zero_sum_normal(
 )
 }
 \arguments{
-\item{scale}{A numeric vector or array representing the standard deviation of the underlying normal distribution before the zerosum constraint is enforced.}
+\item{scale}{Standard deviation of the underlying normal distribution before
+the zerosum constraint is enforced.}
 
-\item{event_shape}{(numeric vector): The shape of the event, defining the dimensions of the vector that will be constrained to sum to zero.}
+\item{event_shape}{Shape of the event dimension of the distribution.}
 
-\item{validate_args}{Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.}
+\item{validate_args}{Logical. Whether to validate the parameter values.
+Defaults to \code{py_none()} (the NumPyro default).}
 
-\item{name}{A character string representing the name of the random variable
-within a model. This is used to uniquely identify the variable. Defaults to 'x'.}
+\item{name}{Character. Name of the random variable in the model. When not
+given, an observed site is named after the variable passed to \code{obs} (\code{obs = y} gives \code{"y"}); use \code{\link[=bf_model]{bf_model()}} to name parameters after the variables they
+are assigned to.}
 
-\item{obs}{A numeric vector or array of observed values. If provided, the
-random variable is conditioned on these values. If `NULL`, the variable is
-treated as a latent (unobserved) variable. Defaults to `NULL`.}
+\item{obs}{Numeric vector or array of observed values. If given, the random
+variable is conditioned on them (likelihood); otherwise it is latent.
+Defaults to \code{py_none()}.}
 
-\item{mask}{A logical vector or array. Optional boolean array to mask observations.}
+\item{mask}{Optional logical vector or array masking observations (\code{FALSE} =
+ignored). Defaults to \code{py_none()}.}
 
-\item{sample}{A logical value that controls the function's behavior. If `TRUE`,
-the function will directly draw samples from the distribution. If `FALSE`,
-it will create a random variable within a model. Defaults to `FALSE`.}
+\item{sample}{Logical. If \code{TRUE}, directly draw values from the distribution
+and return them; if \code{FALSE} (default), create a random variable inside a
+model.}
 
-\item{seed}{An integer seed for this draw when `sample = TRUE`. By default
-(`py_none()`) the draw comes from the session's random stream, set by
-`importBF(rand_seed = ...)`, so consecutive draws differ but the whole
-sequence is reproducible. No effect when `sample = FALSE`.}
+\item{seed}{Integer seed for this draw when \code{sample = TRUE}. By default
+(\code{py_none()}) the draw comes from the session's random stream, set by
+\code{importBF(rand_seed = ...)}, so consecutive draws differ but the whole
+sequence is reproducible. No effect when \code{sample = FALSE}.}
 
-\item{shape}{A numeric vector specifying the shape of the distribution. When `sample=False` (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When `sample=True` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{shape}{Integer vector. With \code{sample = FALSE}, the batch shape of the
+distribution in the model; with \code{sample = TRUE}, the shape of the draw.
+Defaults to \code{c()} (no extra dimensions).}
 
-\item{event}{An integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{event}{Integer. Number of batch dimensions reinterpreted as event
+dimensions (model building only). Defaults to \code{0}.}
 
-\item{create_obj}{A logical value. If `TRUE`, returns the raw BF distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+\item{create_obj}{Logical. If \code{TRUE}, return the distribution object itself
+instead of a random variable (e.g. to build mixtures). Defaults to \code{FALSE}.}
 
-\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
+\item{to_jax}{Logical. Return a JAX array (\code{TRUE}, default) or convert to R.}
 }
 \value{
-- When \code{sample=FALSE}, a BF zero_sum_normal distribution object (for model building).
-
- - When \code{sample=TRUE}, a JAX array of samples drawn from the zero_sum_normal distribution (for direct sampling).
-
- - When \code{create_obj=TRUE}, the raw BF distribution object (for advanced use cases).
+\itemize{
+\item When \code{sample = FALSE}: A BF ZeroSumNormal distribution object (for
+model building).
+\item When \code{sample = TRUE}: A JAX array of samples drawn from the
+ZeroSumNormal distribution (for direct sampling).
+\item When \code{create_obj = TRUE}: The raw BF distribution object (for advanced
+use cases).
+}
 }
 \description{
-A **zero-sum normal**  is a variant of a multivariate normal in which one (or more)
-linear constraint(s) force certain components to **sum to zero**.
-In practice, it's used to model vectors of random effects (e.g. in hierarchical models)
-where the effects are constrained to sum to zero (to avoid overparameterization or enforce identifiability).
+A \strong{zero-sum normal}  is a variant of a multivariate normal in which one (or
+more) linear constraint(s) force certain components to \strong{sum to zero}. In
+practice, it’s used to model vectors of random effects (e.g. in hierarchical
+models) where the effects are constrained to sum to zero (to avoid
+overparameterization or enforce identifiability).
+
+\deqn{ZSN(\sigma) = N(0, \sigma^2 (I - \tfrac{1}{n}J)) \\ \text{where} \ ~ J_{ij} = 1 \ ~ \text{and} \\ n = \text{number of zero-sum axes}}
+
+where \eqn{J}is the all-ones matrix and \eqn{n} is the number of constrained
+elements. So the covariance is \eqn{\sigma^2 (I - \tfrac{1}{n} J)}, which
+ensures that the sum of the components is 0 (since \eqn{J \mathbf{x} =
+\mathbf{1} \sum_i x_i}).
 }
 \examples{
 \donttest{
 library(BayesForge)
-m=importBF(platform='cpu')
-bf.dist.zero_sum_normal(scale=0.3, event_shape = c(), sample = TRUE)
+m <- importBF(platform = "cpu")
+bf.dist.zero_sum_normal(scale = 1.0, event_shape = c(2L), sample = TRUE)
 }
+
+}
+\references{
+https://www.pymc.io/projects/docs/en/latest/api/distributions/generated/pymc.ZeroSumNormal.html
 }
 \seealso{
 \url{https://num.pyro.ai/en/stable/distributions.html#zerosumnormal}

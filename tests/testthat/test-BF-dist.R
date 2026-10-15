@@ -482,9 +482,16 @@ test_that("bf.dist.negative_binomial_probs", {
 })
 
 test_that("bf.dist.negative_binomial", {
-  res = bf.dist.negative_binomial2(total_count = 100, probs = 0.5, sample = TRUE)
+  res = bf.dist.negative_binomial(total_count = 100, probs = 0.5, sample = TRUE)
   r2 = reticulate::py_to_r(res$tolist())
   expect_valid_draw(r2)
+})
+
+test_that("bf.dist.negative_binomial2 (mean, concentration)", {
+  res = bf.dist.negative_binomial2(mean = 3, concentration = 2, sample = TRUE, shape = c(2000L))
+  r2 = reticulate::py_to_r(res$tolist())
+  expect_valid_draw(r2)
+  expect_equal(mean(unlist(r2)), 3, tolerance = 0.1)   # mean parameterisation
 })
 
 test_that("bf.dist.normal", {

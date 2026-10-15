@@ -7,7 +7,7 @@
 bf.doc()
 }
 \value{
-Invisibly returns `NULL`. The function is called for its side effect
+Invisibly returns \code{NULL}. The function is called for its side effect
 of opening a URL.
 }
 \description{

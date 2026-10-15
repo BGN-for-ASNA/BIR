@@ -1,46 +1,84 @@
-#' @title Samples from a Logistic distribution.
-#' @description
-#' The Logistic distribution is a continuous probability distribution defined by two parameters: location and scale.
-#' It is often used to model growth processes and is closely related to the normal distribution.
-#' Its CDF is the logistic (sigmoid) function, which makes it appealing in modeling probabilities,
-#' logistic regression, and various growth models.
-#' It resembles the normal distribution in shape (bell-shaped, symmetric) but has **heavier tails**
-#' (i.e. more probability in the extremes) and simpler closed-form expressions for the CDF.
+#' @title Logistic distribution
 #'
-#' @param loc Numeric vector or single number. The location parameter, specifying the median of the distribution. Defaults to 0.0.
-#' @param scale Numeric vector or single number. The scale parameter, which determines the spread of the distribution. Must be positive. Defaults to 1.0.
-#' @param shape Numeric vector. A multi-purpose argument for shaping. When `sample=False` (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When `sample=True` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.
-#' @param event Integer. The number of batch dimensions to reinterpret as event dimensions (used in model building).
-#' @param mask Logical vector. Optional boolean array to mask observations.
-#' @param create_obj Logical. If True, returns the raw BF distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.
-#' @param validate_args Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.
-#' @param sample A logical value that controls the function's behavior. If `TRUE`,
-#'   the function will directly draw samples from the distribution. If `FALSE`,
-#'   it will create a random variable within a model. Defaults to `FALSE`.
-#' @param seed An integer seed for this draw when `sample = TRUE`. By default
+#' @description
+#' Samples from a Logistic distribution.
+#'
+#' The Logistic distribution is a continuous probability distribution defined by
+#' two parameters: location and scale. It is often used to model growth
+#' processes and is closely related to the normal distribution.Its CDF is the
+#' logistic (sigmoid) function, which makes it appealing in modeling
+#' probabilities, logistic regression, and various growth models. It resembles
+#' the normal distribution in shape (bell‐shaped, symmetric) but has **heavier
+#' tails** (i.e. more probability in the extremes) and simpler closed‐form
+#' expressions for the CDF.
+#'
+#' * **Location parameter**: \eqn{\mu \in \mathbb{R}}\ — the center or “mean” of
+#' the distribution.
+#' * **Scale parameter**: \eqn{\s > 0}\ — controls the spread (similar role to
+#' standard deviation).
+#' * **Support**: \eqn{\ x \in (-\infty, +\infty)}\.
+#'
+#' Let (X \\sim \\mathrm\{Logistic\}(\\mu, s)). Then:
+#'
+#' \deqn{F(x; \mu, s) = \frac{1}{1 + \exp\bigl(-\frac{x - \mu}{s}\bigr)}.}
+#'
+#' Equivalently:
+#'
+#' \deqn{F(x) = \frac12 + \frac12 \tanh!\bigl(\frac{x - \mu}{2s}\bigr).}
+#'
+#' @param loc The location parameter, specifying the median of the distribution.
+#'   Defaults to 0.0.
+#' @param scale The scale parameter, which determines the spread of the
+#'   distribution. Must be positive. Defaults to 1.0.
+#' @param validate_args Logical. Whether to validate the parameter values.
+#'   Defaults to `py_none()` (the NumPyro default).
+#' @param name Character. Name of the random variable in the model. When not
+#'   given, an observed site is named after the variable passed to `obs` (`obs =
+#'   y` gives `"y"`); use [bf_model()] to name parameters after the variables they
+#'   are assigned to.
+#' @param obs Numeric vector or array of observed values. If given, the random
+#'   variable is conditioned on them (likelihood); otherwise it is latent.
+#'   Defaults to `py_none()`.
+#' @param mask Optional logical vector or array masking observations (`FALSE` =
+#'   ignored). Defaults to `py_none()`.
+#' @param sample Logical. If `TRUE`, directly draw values from the distribution
+#'   and return them; if `FALSE` (default), create a random variable inside a
+#'   model.
+#' @param seed Integer seed for this draw when `sample = TRUE`. By default
 #'   (`py_none()`) the draw comes from the session's random stream, set by
 #'   `importBF(rand_seed = ...)`, so consecutive draws differ but the whole
 #'   sequence is reproducible. No effect when `sample = FALSE`.
-#' @param obs A numeric vector or array of observed values. If provided, the
-#'   random variable is conditioned on these values. If `NULL`, the variable is
-#'   treated as a latent (unobserved) variable. Defaults to `NULL`.
-#' @param name A character string representing the name of the random variable
-#'   within a model. This is used to uniquely identify the variable. Defaults to 'x'.
-#' @param to_jax Boolean. Indicates whether to return a JAX array or not.
+#' @param shape Integer vector. With `sample = FALSE`, the batch shape of the
+#'   distribution in the model; with `sample = TRUE`, the shape of the draw.
+#'   Defaults to `c()` (no extra dimensions).
+#' @param event Integer. Number of batch dimensions reinterpreted as event
+#'   dimensions (model building only). Defaults to `0`.
+#' @param create_obj Logical. If `TRUE`, return the distribution object itself
+#'   instead of a random variable (e.g. to build mixtures). Defaults to `FALSE`.
+#' @param to_jax Logical. Return a JAX array (`TRUE`, default) or convert to R.
 #'
 #' @return
-#'  - When \code{sample=FALSE}, a BF Logistic distribution object (for model building).
-#'
-#'  - When \code{sample=TRUE}, a JAX array of samples drawn from the Logistic distribution (for direct sampling).
-#'
-#'  - When \code{create_obj=TRUE}, the raw BF distribution object (for advanced use cases).
+#' \itemize{
+#'   \item BF Logistic distribution object (for model building) when `sample =
+#'     FALSE`.
+#'   \item JAX array of samples drawn from the Logistic distribution (for direct
+#'     sampling) when `sample = TRUE`.
+#'   \item The raw BF distribution object (for advanced use cases) when
+#'     `create_obj = TRUE`.
+#' }
 #'
 #' @examples
 #' \donttest{
 #' library(BayesForge)
 #' m <- importBF(platform = "cpu")
-#' bf.dist.logistic(sample = TRUE)
+#' bf.dist.logistic(loc = 0.0, scale = 1.0, sample = TRUE)
 #' }
+#'
+#' @seealso \url{https://num.pyro.ai/en/stable/distributions.html#logistic}
+#'
+#' @references
+#' https://en.wikipedia.org/wiki/Logistic_distribution
+#'
 #' @export
 bf.dist.logistic <- function(loc = 0.0, scale = 1.0, validate_args = py_none(), name = "x", obs = py_none(), mask = py_none(), sample = FALSE, seed = py_none(), shape = c(), event = 0, create_obj = FALSE, to_jax = TRUE) {
      if (missing(name) && !missing(obs)) name <- .bf_obs_name(substitute(obs))  # obs = y -> site "y"

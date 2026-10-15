@@ -2,7 +2,7 @@
 % Please edit documentation in R/relaxed_bernoulli_logits.R
 \name{bf.dist.relaxed_bernoulli_logits}
 \alias{bf.dist.relaxed_bernoulli_logits}
-\title{Relaxed Bernoulli Logits Distribution.}
+\title{Relaxed Bernoulli Logits distribution}
 \usage{
 bf.dist.relaxed_bernoulli_logits(
   temperature,
@@ -20,60 +20,94 @@ bf.dist.relaxed_bernoulli_logits(
 )
 }
 \arguments{
-\item{temperature}{A numeric vector or matrix representing the temperature parameter, must be positive.}
+\item{temperature}{The temperature parameter, must be positive.}
 
-\item{logits}{A numeric vector or matrix representing the logits parameter.}
+\item{logits}{The logits parameter.}
 
-\item{validate_args}{Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.}
+\item{validate_args}{Logical. Whether to validate the parameter values.
+Defaults to \code{py_none()} (the NumPyro default).}
 
-\item{name}{A character string representing the name of the random variable
-within a model. This is used to uniquely identify the variable. Defaults to 'x'.}
+\item{name}{Character. Name of the random variable in the model. When not
+given, an observed site is named after the variable passed to \code{obs} (\code{obs = y} gives \code{"y"}); use \code{\link[=bf_model]{bf_model()}} to name parameters after the variables they
+are assigned to.}
 
-\item{obs}{A numeric vector or array of observed values. If provided, the
-random variable is conditioned on these values. If `NULL`, the variable is
-treated as a latent (unobserved) variable. Defaults to `NULL`.}
+\item{obs}{Numeric vector or array of observed values. If given, the random
+variable is conditioned on them (likelihood); otherwise it is latent.
+Defaults to \code{py_none()}.}
 
-\item{mask}{A logical vector indicating observations to mask.}
+\item{mask}{Optional logical vector or array masking observations (\code{FALSE} =
+ignored). Defaults to \code{py_none()}.}
 
-\item{sample}{A logical value that controls the function's behavior. If `TRUE`,
-the function will directly draw samples from the distribution. If `FALSE`,
-it will create a random variable within a model. Defaults to `FALSE`.}
+\item{sample}{Logical. If \code{TRUE}, directly draw values from the distribution
+and return them; if \code{FALSE} (default), create a random variable inside a
+model.}
 
-\item{seed}{An integer seed for this draw when `sample = TRUE`. By default
-(`py_none()`) the draw comes from the session's random stream, set by
-`importBF(rand_seed = ...)`, so consecutive draws differ but the whole
-sequence is reproducible. No effect when `sample = FALSE`.}
+\item{seed}{Integer seed for this draw when \code{sample = TRUE}. By default
+(\code{py_none()}) the draw comes from the session's random stream, set by
+\code{importBF(rand_seed = ...)}, so consecutive draws differ but the whole
+sequence is reproducible. No effect when \code{sample = FALSE}.}
 
-\item{shape}{A numeric vector specifying the shape of the distribution.  When `sample=False` (model building),
-this is used with `.expand(shape)` to set the distribution's batch shape. When `sample=True`
-(direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{shape}{Integer vector. With \code{sample = FALSE}, the batch shape of the
+distribution in the model; with \code{sample = TRUE}, the shape of the draw.
+Defaults to \code{c()} (no extra dimensions).}
 
-\item{event}{An integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{event}{Integer. Number of batch dimensions reinterpreted as event
+dimensions (model building only). Defaults to \code{0}.}
 
-\item{create_obj}{A logical value. If `TRUE`, returns the raw BF distribution object instead of creating a sample
-site. This is essential for building complex distributions like `MixtureSameFamily`.}
+\item{create_obj}{Logical. If \code{TRUE}, return the distribution object itself
+instead of a random variable (e.g. to build mixtures). Defaults to \code{FALSE}.}
 
-\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
+\item{to_jax}{Logical. Return a JAX array (\code{TRUE}, default) or convert to R.}
 }
 \value{
-- When \code{sample=FALSE}, a BF Relaxed Bernoulli Logits distribution object (for model building).
-
- - When \code{sample=TRUE}, a JAX array of samples drawn from the Relaxed Bernoulli Logits distribution (for direct sampling).
-
- - When \code{create_obj=TRUE}, the raw BF distribution object (for advanced use cases).
+\itemize{
+\item RelaxedBernoulliLogits: A BF RelaxedBernoulliLogits distribution object
+(for model building).
+\item numeric vector or array: A JAX array of samples drawn from the
+RelaxedBernoulliLogits distribution (for direct sampling).
+\item RelaxedBernoulliLogits: The raw BF distribution object (for advanced
+use cases).
+}
 }
 \description{
-The Relaxed Bernoulli (logits) is a **continuous** relaxation of the standard Bernoulli distribution,
-parameterised by logits (or probabilities) and a **temperature** parameter.
-Rather than producing strictly 0 or 1, it produces values in the continuous interval (0, 1).
-As the temperature \eqn{\to 0}, the distribution approximates a Bernoulli; as temperature \eqn{\to \infty}, the distribution approximates a uniform distribution.
+The Relaxed Bernoulli (logits) is a \strong{continuous} relaxation of the standard
+Bernoulli distribution, parameterised by logits (or probabilities) and a
+\strong{temperature} parameter. Rather than producing strictly 0 or 1, it produces
+values in the continuous interval (0, 1). As the temperature → 0 the
+distribution approximates a Bernoulli; as temperature → \eqn{\infty} the
+distribution approximates a uniform distribution.
+
+It is used in variational inference and deep-learning contexts to allow
+gradient-based optimisation through otherwise discrete Bernoulli draws (see
+the “Concrete” or “Gumbel-Softmax” literature: The Concrete Distribution: A
+Continuous Relaxation of Discrete Random Variables  and Categorical
+Reparameterization with Gumbel‑Softmax ).
+
+Because this is a continuous relaxation, the “density” is defined over the
+unit interval (0,1) rather than a pmf at \{0,1\}. Using logistic or
+Gumbel‐softmax style construction one can express it as:
+
+If logits = ( \\ell ), and temperature = ( \\tau > 0 ), then one generates
+
+\deqn{u \sim \mathrm{Uniform}(0,1),\quad g = -\log(-\log(u)),\quad x = \sigma\big((\ell + g)/\tau\big)}
+
+where \eqn{\sigma(\cdot)} is the logistic (sigmoid) function. Then \eqn{x \in
+(0,1)} has the RelaxedBernoulli distribution.
+
+The exact density formula can be derived via change of variables from
+logistic/Gumbel, but is somewhat involved (including Jacobian of sigmoid
+transform).
 }
 \examples{
 \donttest{
 library(BayesForge)
-m=importBF(platform='cpu')
-bf.dist.relaxed_bernoulli_logits(1, 0.1, sample = TRUE)
+m <- importBF(platform = "cpu")
+bf.dist.relaxed_bernoulli_logits(temperature = 1.0, logits = 0.0, sample = TRUE)
 }
+
+}
+\references{
+https://arxiv.org/pdf/1611.00712
 }
 \seealso{
 \url{https://num.pyro.ai/en/stable/distributions.html#relaxed-bernoulli-logits}

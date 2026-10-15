@@ -2,7 +2,7 @@
 % Please edit documentation in R/lkj_cholesky.R
 \name{bf.dist.lkj_cholesky}
 \alias{bf.dist.lkj_cholesky}
-\title{LKJ Cholesky Distribution}
+\title{LKJ Cholesky distribution}
 \usage{
 bf.dist.lkj_cholesky(
   dimension,
@@ -21,51 +21,78 @@ bf.dist.lkj_cholesky(
 )
 }
 \arguments{
-\item{dimension}{Numeric for the dimensions of the LKJ Cholesky matrix.}
+\item{dimension}{See the Python documentation of \code{dimension}.}
 
-\item{concentration}{Numeric. A parameter controlling the concentration of the distribution around the identity matrix. Higher values indicate greater concentration. Must be greater than 1.}
+\item{concentration}{See the Python documentation of \code{concentration}.}
 
-\item{sample_method}{onion}
+\item{sample_method}{See the Python documentation of \code{sample_method}.}
 
-\item{validate_args}{Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.}
+\item{validate_args}{Logical. Whether to validate the parameter values.
+Defaults to \code{py_none()} (the NumPyro default).}
 
-\item{name}{A character string representing the name of the random variable within a model. This is used to uniquely identify the variable. Defaults to 'x'.}
+\item{name}{Character. Name of the random variable in the model. When not
+given, an observed site is named after the variable passed to \code{obs} (\code{obs = y} gives \code{"y"}); use \code{\link[=bf_model]{bf_model()}} to name parameters after the variables they
+are assigned to.}
 
-\item{obs}{A numeric vector or array of observed values. If provided, the random variable is conditioned on these values. If `NULL`, the variable is treated as a latent (unobserved) variable. Defaults to `NULL`.}
+\item{obs}{Numeric vector or array of observed values. If given, the random
+variable is conditioned on them (likelihood); otherwise it is latent.
+Defaults to \code{py_none()}.}
 
-\item{mask}{Logical vector; Optional boolean array to mask observations.}
+\item{mask}{Optional logical vector or array masking observations (\code{FALSE} =
+ignored). Defaults to \code{py_none()}.}
 
-\item{sample}{A logical value that controls the function's behavior. If `TRUE`, the function will directly draw samples from the distribution. If `FALSE`, it will create a random variable within a model. Defaults to `FALSE`.}
+\item{sample}{Logical. If \code{TRUE}, directly draw values from the distribution
+and return them; if \code{FALSE} (default), create a random variable inside a
+model.}
 
-\item{seed}{An integer seed for this draw when `sample = TRUE`. By default
-(`py_none()`) the draw comes from the session's random stream, set by
-`importBF(rand_seed = ...)`, so consecutive draws differ but the whole
-sequence is reproducible. No effect when `sample = FALSE`.}
+\item{seed}{Integer seed for this draw when \code{sample = TRUE}. By default
+(\code{py_none()}) the draw comes from the session's random stream, set by
+\code{importBF(rand_seed = ...)}, so consecutive draws differ but the whole
+sequence is reproducible. No effect when \code{sample = FALSE}.}
 
-\item{shape}{Numeric vector; A multi-purpose argument for shaping. When \code{sample=FALSE} (model building),  is used with `.expand(shape)` to set the distribution's batch shape. When \code{sample=TRUE} (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{shape}{Integer vector. With \code{sample = FALSE}, the batch shape of the
+distribution in the model; with \code{sample = TRUE}, the shape of the draw.
+Defaults to \code{c()} (no extra dimensions).}
 
-\item{event}{Numeric; The number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{event}{Integer. Number of batch dimensions reinterpreted as event
+dimensions (model building only). Defaults to \code{0}.}
 
-\item{create_obj}{Logical; If TRUE, returns the raw BF distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+\item{create_obj}{Logical. If \code{TRUE}, return the distribution object itself
+instead of a random variable (e.g. to build mixtures). Defaults to \code{FALSE}.}
 
-\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
+\item{to_jax}{Logical. Return a JAX array (\code{TRUE}, default) or convert to R.}
 }
 \value{
-- When \code{sample=FALSE}: A BF LKJ Cholesky distribution object (for model building).
-
-   - When \code{sample=TRUE}: A JAX array of samples drawn from the LKJ Cholesky distribution (for direct sampling).
-
-   - When \code{create_obj=TRUE}: The raw BF distribution object (for advanced use cases).
+A random variable (model building) or draws (\code{sample = TRUE}).
 }
 \description{
-The LKJ (Leonard-Kjærgaard-Jørgensen) Cholesky distribution is a family of distributions on symmetric matrices, often used as a prior for the Cholesky decomposition of a
-symmetric matrix. It is particularly useful in Bayesian inference for models with covariance structure.
+The LKJ (Leonard-Kjærgaard-Jørgensen) Cholesky distribution is a family of
+distributions on symmetric matrices, often used as a prior for the Cholesky
+decomposition of a symmetric matrix. It is particularly useful in BayesForge
+for models with covariance structure. Given a lower triangular matrix (L)
+with unit diagonal entries, the PDF is:
+
+\deqn{p(L | \eta) \propto \prod_{k=2}^d L_{kk}^{d-k+2\eta-2}}
+
+where:
+\itemize{
+\item (L_\{kk\}) is the diagonal element of (L).
+\item (\\eta) is the shape parameter.
+\item (d) is the dimension of the matrix.
+\item (\\eta = 1): Uniform prior over correlation matrices.
+\item (\\eta > 1): Prior favors correlation matrices close to the identity matrix
+(i.e., weak correlations).
+\item (\\eta < 1): Prior allows stronger correlations.
+}
 }
 \examples{
 \donttest{
 library(BayesForge)
-m <- importBF(platform='cpu')
-bf.dist.lkj_cholesky(dimension = 2, concentration = 1., sample = TRUE)
+m <- importBF(platform = "cpu")
+bf.dist.lkj_cholesky(dimension = 3L, concentration = 2.0, sample = TRUE)
 }
 
+}
+\references{
+https://mc-stan.org/docs/2_21/functions-reference/cholesky-lkj-correlation-distribution.html
 }

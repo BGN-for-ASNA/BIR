@@ -1,60 +1,91 @@
-#' @title Generic Zero Inflated distribution.
+#' @title Generic Zero Inflated distribution
+#'
 #' @description
-#' The Zero-Inflated Poisson distribution is a discrete count-distribution designed for data with *more zeros*
-#' than would be expected under a standard Poisson. Essentially, it assumes two underlying processes:
-
-#' * With probability \deqn{\pi} you are in a "structural zero" state (i.e., you automatically get a zero count).
-#' * With probability \deqn{1 - \pi} you draw from a standard Poisson distribution with parameter \deqn{\lambda}.
+#' A Zero-Inflated distribution combines a base distribution with a Bernoulli
+#' distribution to model data with an excess of zero values. It assumes that
+#' each observation is either drawn from the base distribution or is a zero with
+#' probability determined by the Bernoulli distribution (the "gate"). A
+#' **zero-inflated distribution** arises when you take a random variable \eqn{X}
+#' that originally has some distribution (with PMF \eqn{f_X(x)} ) *and* you add
+#' extra mass at zero. In other words you only observe \eqn{X} when \eqn{X \ge
+#' 0} (if count) and you assume there are more zeros than what the original
+#' distribution predicts — so you mix in a point-mass at zero. A zero-inflated
+#' model assumes two processes: a “structural zero” process with probability
+#' \eqn{\pi}, and another process (the base count/distribution) with probability
+#' \eqn{1 - \pi}, which itself may generate zeros *or* non-zeros.
 #'
-#' This results in a mixture distribution that places more mass at zero than a Poisson alone would.
-#' It's widely used in, for instance, ecology (species counts with many zeros), insurance/claims problems,
-#' and any count-data setting with excess zeros.
+#' - When / Why use it:
+#' * **Data collection constraints**: You can only observe values in a process
+#' when some condition is met; others are automatically zero (for example, when
+#' the event cannot happen for some units).
+#' * **Mixtures of processes**: Some observations are “structural zeros” (no
+#' risk) and others follow a regular count process (with risk).
+#' * **Overdispersion & excess zeros**: If you try a standard count distribution
+#' (Poisson, Negative Binomial) and you observe many more zeros than predicted
+#' (given the non-zero counts), a zero-inflated alternative may fit better.
 #'
-#' @param base_dist Distribution: The base distribution to be zero-inflated (e.g., Poisson, NegativeBinomial).
-#' @param gate numeric(1): Probability of extra zeros (between 0 and 1).
-#' @param gate_logits numeric(1): Log-odds of extra zeros.
-#' @param validate_args Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.
-#' @param shape numeric(1): A multi-purpose argument for shaping. When `sample=False` (model building),
-#'   this is used with `.expand(shape)` to set the distribution's batch shape.
-#'   When `sample=True` (direct sampling), this is used as `sample_shape` to draw a raw
-#'   JAX array of the given shape.  Provide as a numeric vector (e.g., `c(10)`).
-#' @param event int(1): The number of batch dimensions to reinterpret as event dimensions (used in model building).
-#' @param mask logical(1): Optional boolean array to mask observations.
-#' @param create_obj Logical: If True, returns the raw BF distribution object instead of creating a sample site.
-#'   This is essential for building complex distributions like `MixtureSameFamily`.
-#' @param validate_args Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.
-#' @param sample A logical value that controls the function's behavior. If `TRUE`,
-#'   the function will directly draw samples from the distribution. If `FALSE`,
-#'   it will create a random variable within a model. Defaults to `FALSE`.
-#' @param seed An integer seed for this draw when `sample = TRUE`. By default
+#' * The general PMF form is (for discrete count models):
+#'
+#' \deqn{P(X=0) = \pi + (1 - \pi),P_{\text{base}}(0), \quad P(X=k) = (1 - \pi),P_{\text{base}}(k), ; k > 0.}
+#'
+#' @param base_dist The base distribution to be zero-inflated (e.g., Poisson,
+#'   NegativeBinomial).
+#' @param gate Probability of extra zeros (between 0 and 1).
+#' @param gate_logits Log-odds of extra zeros.
+#' @param validate_args Logical. Whether to validate the parameter values.
+#'   Defaults to `py_none()` (the NumPyro default).
+#' @param name Character. Name of the random variable in the model. When not
+#'   given, an observed site is named after the variable passed to `obs` (`obs =
+#'   y` gives `"y"`); use [bf_model()] to name parameters after the variables they
+#'   are assigned to.
+#' @param obs Numeric vector or array of observed values. If given, the random
+#'   variable is conditioned on them (likelihood); otherwise it is latent.
+#'   Defaults to `py_none()`.
+#' @param mask Optional logical vector or array masking observations (`FALSE` =
+#'   ignored). Defaults to `py_none()`.
+#' @param sample Logical. If `TRUE`, directly draw values from the distribution
+#'   and return them; if `FALSE` (default), create a random variable inside a
+#'   model.
+#' @param seed Integer seed for this draw when `sample = TRUE`. By default
 #'   (`py_none()`) the draw comes from the session's random stream, set by
 #'   `importBF(rand_seed = ...)`, so consecutive draws differ but the whole
 #'   sequence is reproducible. No effect when `sample = FALSE`.
-#' @param obs A numeric vector or array of observed values. If provided, the
-#'   random variable is conditioned on these values. If `NULL`, the variable is
-#'   treated as a latent (unobserved) variable. Defaults to `NULL`.
-#' @param name A character string representing the name of the random variable
-#'   within a model. This is used to uniquely identify the variable. Defaults to 'x'.
-#' @param to_jax Boolean. Indicates whether to return a JAX array or not.
+#' @param shape Integer vector. With `sample = FALSE`, the batch shape of the
+#'   distribution in the model; with `sample = TRUE`, the shape of the draw.
+#'   Defaults to `c()` (no extra dimensions).
+#' @param event Integer. Number of batch dimensions reinterpreted as event
+#'   dimensions (model building only). Defaults to `0`.
+#' @param create_obj Logical. If `TRUE`, return the distribution object itself
+#'   instead of a random variable (e.g. to build mixtures). Defaults to `FALSE`.
+#' @param to_jax Logical. Return a JAX array (`TRUE`, default) or convert to R.
 #'
 #' @return
-#'
-#'  - When \code{sample=FALSE}, a BF Zero Inflated distribution object (for model building).
-#'
-#'  - When \code{sample=TRUE}, a JAX array of samples drawn from the Zero Inflated distribution (for direct sampling).
-#'
-#'  - When \code{create_obj=TRUE}, the raw BF distribution object (for advanced use cases).
-#'
-#' @seealso \url{https://num.pyro.ai/en/stable/distributions.html#zeroinflateddistribution}
+#' \itemize{
+#'   \item When `sample = FALSE`: A BF ZeroInflatedDistribution distribution
+#'     object (for model building).
+#'   \item When `sample = TRUE`: A JAX array of samples drawn from the
+#'     ZeroInflatedDistribution distribution (for direct sampling).
+#'   \item When `create_obj = TRUE`: The raw BF distribution object (for advanced
+#'     use cases).
+#' }
 #'
 #' @examples
 #' \donttest{
 #' library(BayesForge)
-#' m=importBF(platform='cpu')
-#' bf.dist.zero_inflated_distribution(
-#' base_dist = bf.dist.poisson(5, create_obj = TRUE),
-#' gate=0.3, sample = TRUE)
+#' m <- importBF(platform = "cpu")
+#' bf.dist.zero_inflated_distribution(base_dist = bf.dist.poisson(rate = 5, create_obj = TRUE), gate = 0.3, sample = TRUE)
 #' }
+#'
+#' @seealso \url{https://num.pyro.ai/en/stable/distributions.html#zeroinflateddistribution}
+#'
+#' @references
+#' \[1\]: https://en.wikipedia.org/wiki/Zero-inflated_model "Zero-inflated
+#' model"
+#'
+#' \[2\]:
+#' https://larmarange.github.io/guide-R/analyses_avancees/modeles-zero-inflated.html
+#' "48 Modèles de comptage zero-inflated et hurdle – guide-R"
+#'
 #' @export
 bf.dist.zero_inflated_distribution=function(base_dist, gate=py_none(), gate_logits=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE ) {
      if (missing(name) && !missing(obs)) name <- .bf_obs_name(substitute(obs))  # obs = y -> site "y"

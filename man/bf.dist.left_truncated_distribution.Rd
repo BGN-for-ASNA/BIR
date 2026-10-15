@@ -2,7 +2,7 @@
 % Please edit documentation in R/left_truncated_distribution.R
 \name{bf.dist.left_truncated_distribution}
 \alias{bf.dist.left_truncated_distribution}
-\title{Samples from a left-truncated distribution.}
+\title{Left Truncated distribution}
 \usage{
 bf.dist.left_truncated_distribution(
   base_dist,
@@ -20,67 +20,96 @@ bf.dist.left_truncated_distribution(
 )
 }
 \arguments{
-\item{base_dist}{The base distribution to truncate. Must be univariate and have real support.}
+\item{base_dist}{The base distribution to truncate. Must be univariate and
+have real support.}
 
-\item{low}{The lower truncation bound. Values less than this are excluded from the distribution.}
+\item{low}{The lower truncation bound. Values less than this are excluded
+from the distribution.}
 
-\item{validate_args}{Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.}
+\item{validate_args}{Logical. Whether to validate the parameter values.
+Defaults to \code{py_none()} (the NumPyro default).}
 
-\item{name}{A character string representing the name of the random variable
-within a model. This is used to uniquely identify the variable. Defaults to 'x'.}
+\item{name}{Character. Name of the random variable in the model. When not
+given, an observed site is named after the variable passed to \code{obs} (\code{obs = y} gives \code{"y"}); use \code{\link[=bf_model]{bf_model()}} to name parameters after the variables they
+are assigned to.}
 
-\item{obs}{A numeric vector or array of observed values. If provided, the
-random variable is conditioned on these values. If `NULL`, the variable is
-treated as a latent (unobserved) variable. Defaults to `NULL`.}
+\item{obs}{Numeric vector or array of observed values. If given, the random
+variable is conditioned on them (likelihood); otherwise it is latent.
+Defaults to \code{py_none()}.}
 
-\item{mask}{An optional boolean vector to mask observations.}
+\item{mask}{Optional logical vector or array masking observations (\code{FALSE} =
+ignored). Defaults to \code{py_none()}.}
 
-\item{sample}{A logical value that controls the function's behavior. If `TRUE`,
-the function will directly draw samples from the distribution. If `FALSE`,
-it will create a random variable within a model. Defaults to `FALSE`.}
+\item{sample}{Logical. If \code{TRUE}, directly draw values from the distribution
+and return them; if \code{FALSE} (default), create a random variable inside a
+model.}
 
-\item{seed}{An integer seed for this draw when `sample = TRUE`. By default
-(`py_none()`) the draw comes from the session's random stream, set by
-`importBF(rand_seed = ...)`, so consecutive draws differ but the whole
-sequence is reproducible. No effect when `sample = FALSE`.}
+\item{seed}{Integer seed for this draw when \code{sample = TRUE}. By default
+(\code{py_none()}) the draw comes from the session's random stream, set by
+\code{importBF(rand_seed = ...)}, so consecutive draws differ but the whole
+sequence is reproducible. No effect when \code{sample = FALSE}.}
 
-\item{shape}{A numeric vector. When \code{sample=FALSE} (model building),
-this is used with `.expand(shape)` to set the distribution's batch shape.
-When \code{sample=TRUE} (direct sampling), this is used as `sample_shape` to draw a raw
-JAX array of the given shape.}
+\item{shape}{Integer vector. With \code{sample = FALSE}, the batch shape of the
+distribution in the model; with \code{sample = TRUE}, the shape of the draw.
+Defaults to \code{c()} (no extra dimensions).}
 
-\item{event}{The number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{event}{Integer. Number of batch dimensions reinterpreted as event
+dimensions (model building only). Defaults to \code{0}.}
 
-\item{create_obj}{A logical value. If `TRUE`, returns the raw BF distribution object instead of creating a sample site.}
+\item{create_obj}{Logical. If \code{TRUE}, return the distribution object itself
+instead of a random variable (e.g. to build mixtures). Defaults to \code{FALSE}.}
 
-\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
+\item{to_jax}{Logical. Return a JAX array (\code{TRUE}, default) or convert to R.}
 }
 \value{
-- When \code{sample=FALSE}: A BF LeftTruncatedDistribution distribution object (for model building).
-
-   - When \code{sample=TRUE}: A JAX array of samples drawn from the LeftTruncatedDistribution distribution (for direct sampling).
-
-   - When \code{create_obj=TRUE}: The raw BF distribution object (for advanced use cases).
+\itemize{
+\item When \code{sample = FALSE}: A BF LeftTruncatedDistribution distribution
+object (for model building).
+\item When \code{sample = TRUE}: A JAX array of samples drawn from the
+LeftTruncatedDistribution distribution (for direct sampling).
+\item When \code{create_obj = TRUE}: The raw BF distribution object (for advanced
+use cases).
+}
 }
 \description{
-A left-truncated distribution is a probability distribution obtained by restricting the support of another distribution to values greater than a specified lower bound.
-This is useful when dealing with data that is known to be greater than a certain value.
-All the "mass" below (or equal to) (a) is excluded (not just unobserved, but removed from the sample/analysis).
+Samples from a left-truncated distribution.
 
-\deqn{f(x) = \begin{cases}
-          \frac{f(x)}{P(X > \text{low})} & \text{if } x > \text{low} \\
-          0 & \text{otherwise}
-          \end{cases}}
+A left-truncated distribution is a probability distribution obtained by
+restricting the support of another distribution to values greater than a
+specified lower bound. This is useful when dealing with data that is known to
+be greater than a certain value. All the “mass” below (or equal to) (a) is
+\strong{excluded} (not just unobserved, but removed from the sample/analysis).
+
+Let (X) be a random variable with PDF (f_X(x)) and CDF (F_X(x)). Choose a
+truncation point (a). Then define a new random variable (Y = X \\mid (X >
+a)). The PDF and CDF of (Y) are:
+\itemize{
+\item \strong{PDF} for ( y > a ):
+}
+
+\deqn{f_Y(y) = \frac{f_X(y)}{1 - F_X(a)} .}
+
+(Here (1 - F_X(a) = P(X > a)) is the normalising constant)
+([Wikipédia][1])
+\itemize{
+\item \strong{CDF} for (y > a):
+}
+
+\deqn{F_Y(y) = P(Y \le y) = \frac{F_X(y) - F_X(a)}{1 - F_X(a)} .}
 }
 \examples{
 \donttest{
 library(BayesForge)
-m=importBF(platform='cpu')
-bf.dist.left_truncated_distribution(
-base_dist = bf.dist.normal(loc = 1, scale = 10 ,  create_obj = TRUE),
-sample = TRUE)
+m <- importBF(platform = "cpu")
+bf.dist.left_truncated_distribution(base_dist = bf.dist.normal(0.0, 1.0, create_obj = TRUE), low = 0.0, sample = TRUE)
 }
+
+}
+\references{
+https://en.wikipedia.org/wiki/Truncated_distribution
+
+https://encyclopediaofmath.org/wiki/Truncated_distribution
 }
 \seealso{
-This is a wrapper of  \url{https://num.pyro.ai/en/stable/distributions.html#lefttruncateddistribution}
+\url{https://num.pyro.ai/en/stable/distributions.html#lefttruncateddistribution}
 }

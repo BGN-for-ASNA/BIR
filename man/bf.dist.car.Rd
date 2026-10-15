@@ -2,7 +2,7 @@
 % Please edit documentation in R/car.R
 \name{bf.dist.car}
 \alias{bf.dist.car}
-\title{Conditional Autoregressive (CAR) Distribution}
+\title{Conditional Autoregressive (CAR) distribution}
 \usage{
 bf.dist.car(
   loc,
@@ -23,73 +23,107 @@ bf.dist.car(
 )
 }
 \arguments{
-\item{loc}{Numeric vector, matrix, or array representing the mean of the distribution.}
+\item{loc}{Mean of the distribution.}
 
-\item{correlation}{Numeric vector, matrix, or array representing the correlation between variables.}
+\item{correlation}{Correlation between variables.}
 
-\item{conditional_precision}{Numeric vector, matrix, or array representing the precision of the distribution.}
+\item{conditional_precision}{Precision of the distribution.}
 
-\item{adj_matrix}{Numeric vector, matrix, or array representing the adjacency matrix defining the graph.}
+\item{adj_matrix}{Adjacency matrix defining the graph. is_sparse (bool):
+Whether the adjacency matrix is sparse. Defaults to FALSE. - *validate_args/
+(bool): Whether to validate arguments. Defaults to py_none().}
 
-\item{is_sparse}{Logical indicating whether the adjacency matrix is sparse. Defaults to `FALSE`.}
+\item{is_sparse}{See the Python documentation of \code{is_sparse}.}
 
-\item{validate_args}{Logical indicating whether to validate arguments. Defaults to `reticulate::py_none()`.}
+\item{validate_args}{Logical. Whether to validate the parameter values.
+Defaults to \code{py_none()} (the NumPyro default).}
 
-\item{name}{A character string representing the name of the random variable
-within a model. This is used to uniquely identify the variable. Defaults to 'x'.}
+\item{name}{Character. Name of the random variable in the model. When not
+given, an observed site is named after the variable passed to \code{obs} (\code{obs = y} gives \code{"y"}); use \code{\link[=bf_model]{bf_model()}} to name parameters after the variables they
+are assigned to.}
 
-\item{obs}{A numeric vector or array of observed values. If provided, the
-random variable is conditioned on these values. If `NULL`, the variable is
-treated as a latent (unobserved) variable. Defaults to `NULL`.}
+\item{obs}{Numeric vector or array of observed values. If given, the random
+variable is conditioned on them (likelihood); otherwise it is latent.
+Defaults to \code{py_none()}.}
 
-\item{mask}{An optional boolean vector to mask observations.}
+\item{mask}{Optional logical vector or array masking observations (\code{FALSE} =
+ignored). Defaults to \code{py_none()}.}
 
-\item{sample}{A logical value that controls the function's behavior. If `TRUE`,
-the function will directly draw samples from the distribution. If `FALSE`,
-it will create a random variable within a model. Defaults to `FALSE`.}
+\item{sample}{Logical. If \code{TRUE}, directly draw values from the distribution
+and return them; if \code{FALSE} (default), create a random variable inside a
+model.}
 
-\item{seed}{An integer seed for this draw when `sample = TRUE`. By default
-(`py_none()`) the draw comes from the session's random stream, set by
-`importBF(rand_seed = ...)`, so consecutive draws differ but the whole
-sequence is reproducible. No effect when `sample = FALSE`.}
+\item{seed}{Integer seed for this draw when \code{sample = TRUE}. By default
+(\code{py_none()}) the draw comes from the session's random stream, set by
+\code{importBF(rand_seed = ...)}, so consecutive draws differ but the whole
+sequence is reproducible. No effect when \code{sample = FALSE}.}
 
-\item{shape}{A numeric vector. When `sample=False` (model building), this is used with `.expand(shape)` to set the
-distribution's batch shape. When `sample=True` (direct sampling),
-this is used as `sample_shape` to draw a raw JAX array of the
-given shape.}
+\item{shape}{Integer vector. With \code{sample = FALSE}, the batch shape of the
+distribution in the model; with \code{sample = TRUE}, the shape of the draw.
+Defaults to \code{c()} (no extra dimensions).}
 
-\item{event}{An integer representing the number of batch dimensions to reinterpret as event
-dimensions (used in model building).}
+\item{event}{Integer. Number of batch dimensions reinterpreted as event
+dimensions (model building only). Defaults to \code{0}.}
 
-\item{create_obj}{A logical value. If `TRUE`, returns the raw BF distribution
-object instead of creating a sample site. This is essential for
-building complex distributions like `MixtureSameFamily`.}
+\item{create_obj}{Logical. If \code{TRUE}, return the distribution object itself
+instead of a random variable (e.g. to build mixtures). Defaults to \code{FALSE}.}
 
-\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
+\item{to_jax}{Logical. Return a JAX array (\code{TRUE}, default) or convert to R.}
 }
 \value{
-- When \code{sample=FALSE}, a BF CAR distribution object (for model building).
-
- - When \code{sample=TRUE}, a JAX array of samples drawn from the CAR distribution (for direct sampling).
-
- - When \code{create_obj=TRUE}, the raw BF distribution object (for advanced use cases).
+\itemize{
+\item When \code{sample = FALSE}: A BF CAR distribution object (for  model
+building).
+\item When \code{sample = TRUE}: A JAX array of samples drawn from the
+BernoulliLogits distribution (for direct sampling).
+\item When \code{create_obj = TRUE}: The raw BF CAR object (for advanced use
+cases).
+}
 }
 \description{
-The CAR distribution models a vector of variables where each variable is a linear
-combination of its neighbors in a graph. The CAR model captures spatial dependence in areal data by modeling each observation as conditionally dependent on its neighbors.
- It specifies a joint distribution of a vector of random variables \deqn{\mathbf{y} = (y_1, y_2, \dots, y_N)} based on their conditional distributions, where each \deqn{y_i} is conditionally independent of all other variables given its neighbors.
-- Application: Widely used in disease mapping, environmental modeling, and spatial econometrics to account for spatial autocorrelation.
+The CAR distribution models a vector of variables where each variable is a
+linear combination of its neighbors in a graph. The CAR model captures
+spatial dependence in areal data by modeling each observation as
+conditionally dependent on its neighbors.It specifies a joint distribution of
+a vector of random variables \eqn{\mathbf{y} = (y_1, y_2, \dots, y_N)} based
+on their conditional distributions, where each \eqn{y_i} is conditionally
+independent of all other variables given its neighbors.
+\itemize{
+\item \strong{Application}: Widely used in disease mapping, environmental modeling,
+and spatial econometrics to account for spatial autocorrelation.
+\item \strong{Conditional Distribution}: Each \eqn{y_i} given its neighbors
+\eqn{\mathbf{y}_{-i}} follows a normal distribution:
+}
+
+\deqn{y_i | \mathbf{y}*{-i} \sim \mathcal{N}\left( \frac{\sum*{j \in \mathcal{N}(i)} w_{ij} y_j}{\sum_{j \in \mathcal{N}(i)} w_{ij}}, \sigma^2 \right)}
+
+where:
+\itemize{
+\item \eqn{\mathcal{N}(i)} denotes the set of neighbors of unit \eqn{i},
+\item \eqn{w_{ij}} are the weights representing the strength of the spatial
+relationship between units \eqn{i} and \eqn{j},
+\item \eqn{\sigma^2} is the variance term. where \eqn{\mu_i} is a function of the
+values of the neighbors of site \eqn{i} and \eqn{\Sigma_i} is the variance of
+site \eqn{i}.
+}
 }
 \examples{
 \donttest{
 library(BayesForge)
-m=importBF(platform='cpu')
-bf.dist.car(
-  loc = c(1.,2.),
-  correlation = 0.9,
-  conditional_precision = 1.,
-  adj_matrix = matrix(c(1,0,0,1), nrow = 2),
-  sample = TRUE
- )
+m <- importBF(platform = "cpu")
+bf.dist.car(loc = 0.0, correlation = 0.9, conditional_precision = 1.0, adj_matrix = jnp$array(matrix(c(0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0), nrow = 3L, byrow = TRUE)), sample = TRUE)
 }
+
+}
+\references{
+[1]:
+https://www.pymc.io/projects/examples/en/latest/spatial/conditional_autoregressive_priors.html
+"Conditional Autoregressive (CAR) Models for Spatial Data"
+
+[2]: https://mc-stan.org/learn-stan/case-studies/icar_stan.html "Intrinsic
+Auto-Regressive Models for Areal Data - Stan"
+
+[3]:
+https://onlinelibrary.wiley.com/doi/abs/10.1002/9781118445112.stat08048
+"Conditional Autoregressive (CAR) Model - Schmidt"
 }

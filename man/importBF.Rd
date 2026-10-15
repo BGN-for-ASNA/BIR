@@ -15,34 +15,36 @@ importBF(
 }
 \arguments{
 \item{platform}{Character string, the computational platform to use
-(e.g. `"cpu"` or `"gpu"`). Defaults to `"cpu"`.}
+(e.g. \code{"cpu"} or \code{"gpu"}). Defaults to \code{"cpu"}.}
 
-\item{cores}{Integer or `NULL`. Number of CPU cores to use. Defaults to `NULL`.}
+\item{cores}{Integer or \code{NULL}. Number of CPU cores to use. Defaults to \code{NULL}.}
 
 \item{rand_seed}{Logical or integer. An integer gives reproducible results;
-`TRUE` draws an entropy-based seed. Defaults to `TRUE`.}
+\code{TRUE} draws an entropy-based seed. Defaults to \code{TRUE}.}
 
 \item{deallocate}{Logical. Whether memory should be deallocated when not in use.
-Defaults to `FALSE`.}
+Defaults to \code{FALSE}.}
 
-\item{print_devices_found}{Logical. Whether to print devices found. Defaults to `TRUE`.}
+\item{print_devices_found}{Logical. Whether to print devices found. Defaults to \code{TRUE}.}
 
-\item{backend}{Character. Backend to use (`"numpyro"` or `"tfp"`). Defaults to `"numpyro"`.}
+\item{backend}{Character. Backend to use (\code{"numpyro"} or \code{"tfp"}). Defaults to \code{"numpyro"}.}
 }
 \value{
-An initialised BayesForge object (Python object via **reticulate**).
+An initialised BayesForge object (Python object via \strong{reticulate}).
 }
 \description{
 Binds R to the BayesForge Python environment (created once with
-[setup_env()]), imports the `BayesForge` Python module through
-**reticulate** and returns an initialised BayesForge object.
+\code{\link[=setup_env]{setup_env()}}), imports the \code{BayesForge} Python module through
+\strong{reticulate} and returns an initialised BayesForge object.
 }
 \details{
-- If the "BFR" Python environment does not exist yet, interactive sessions
-  are offered to create it with [setup_env()]; otherwise an error explains
-  how to do it. An existing environment is never reinstalled.
-- `jnp` (`jax.numpy`) and `jax` are available as soon as the package is
-  loaded, e.g. `jnp$array(c(1, 2, 3))`.
+\itemize{
+\item If the "BFR" Python environment does not exist yet, interactive sessions
+are offered to create it with \code{\link[=setup_env]{setup_env()}}; otherwise an error explains
+how to do it. An existing environment is never reinstalled.
+\item \code{jnp} (\code{jax.numpy}) and \code{jax} are available as soon as the package is
+loaded, e.g. \code{jnp$array(c(1, 2, 3))}.
+}
 }
 \examples{
 \dontrun{

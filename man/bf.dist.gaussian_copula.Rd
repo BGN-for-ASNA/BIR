@@ -2,7 +2,7 @@
 % Please edit documentation in R/gaussian_copula.R
 \name{bf.dist.gaussian_copula}
 \alias{bf.dist.gaussian_copula}
-\title{Gaussian Copula Distribution}
+\title{Gaussian Copula distribution}
 \usage{
 bf.dist.gaussian_copula(
   marginal_dist,
@@ -21,59 +21,73 @@ bf.dist.gaussian_copula(
 )
 }
 \arguments{
-\item{marginal_dist}{Distribution: Distribution whose last batch axis is to be coupled.}
+\item{marginal_dist}{Distribution whose last batch axis is to be coupled.}
 
-\item{correlation_matrix}{array_like, optional: Correlation matrix of the coupling multivariate normal distribution. Defaults to `reticulate::py_none()`.}
+\item{correlation_matrix}{Correlation matrix of the coupling multivariate
+normal distribution. Defaults to py_none().}
 
-\item{correlation_cholesky}{array_like, optional: Correlation Cholesky factor of the coupling multivariate normal distribution. Defaults to `reticulate::py_none()`.}
+\item{correlation_cholesky}{Correlation Cholesky factor of the coupling
+multivariate normal distribution. Defaults to py_none().}
 
-\item{validate_args}{Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.}
+\item{validate_args}{Logical. Whether to validate the parameter values.
+Defaults to \code{py_none()} (the NumPyro default).}
 
-\item{name}{A character string representing the name of the random variable
-within a model. This is used to uniquely identify the variable. Defaults to 'x'.}
+\item{name}{Character. Name of the random variable in the model. When not
+given, an observed site is named after the variable passed to \code{obs} (\code{obs = y} gives \code{"y"}); use \code{\link[=bf_model]{bf_model()}} to name parameters after the variables they
+are assigned to.}
 
-\item{obs}{A numeric vector or array of observed values. If provided, the
-random variable is conditioned on these values. If `NULL`, the variable is
-treated as a latent (unobserved) variable. Defaults to `NULL`.}
+\item{obs}{Numeric vector or array of observed values. If given, the random
+variable is conditioned on them (likelihood); otherwise it is latent.
+Defaults to \code{py_none()}.}
 
-\item{mask}{jnp.ndarray, bool, optional: Optional boolean array to mask observations. Defaults to `reticulate::py_none()`.}
+\item{mask}{Optional logical vector or array masking observations (\code{FALSE} =
+ignored). Defaults to \code{py_none()}.}
 
-\item{sample}{A logical value that controls the function's behavior. If `TRUE`,
-the function will directly draw samples from the distribution. If `FALSE`,
-it will create a random variable within a model. Defaults to `FALSE`.}
+\item{sample}{Logical. If \code{TRUE}, directly draw values from the distribution
+and return them; if \code{FALSE} (default), create a random variable inside a
+model.}
 
-\item{seed}{An integer seed for this draw when `sample = TRUE`. By default
-(`py_none()`) the draw comes from the session's random stream, set by
-`importBF(rand_seed = ...)`, so consecutive draws differ but the whole
-sequence is reproducible. No effect when `sample = FALSE`.}
+\item{seed}{Integer seed for this draw when \code{sample = TRUE}. By default
+(\code{py_none()}) the draw comes from the session's random stream, set by
+\code{importBF(rand_seed = ...)}, so consecutive draws differ but the whole
+sequence is reproducible. No effect when \code{sample = FALSE}.}
 
-\item{shape}{numeric vector: A multi-purpose argument for shaping. When `sample=FALSE` (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When `sample=TRUE` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{shape}{Integer vector. With \code{sample = FALSE}, the batch shape of the
+distribution in the model; with \code{sample = TRUE}, the shape of the draw.
+Defaults to \code{c()} (no extra dimensions).}
 
-\item{event}{int: The number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{event}{Integer. Number of batch dimensions reinterpreted as event
+dimensions (model building only). Defaults to \code{0}.}
 
-\item{create_obj}{bool, optional: If `TRUE`, returns the raw BF distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`. Defaults to `FALSE`.}
+\item{create_obj}{Logical. If \code{TRUE}, return the distribution object itself
+instead of a random variable (e.g. to build mixtures). Defaults to \code{FALSE}.}
 
-\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
+\item{to_jax}{Logical. Return a JAX array (\code{TRUE}, default) or convert to R.}
 }
 \value{
-- When \code{sample=FALSE}, a BF Gaussian Copula distribution object (for model building).
-
- - When \code{sample=TRUE}, a JAX array of samples drawn from the Gaussian Copula distribution (for direct sampling).
-
- - When \code{create_obj=TRUE}, the raw BF distribution object (for advanced use cases).
+\itemize{
+\item BF GaussianCopula distribution object: When \code{sample = FALSE} (for model
+building).
+\item JAX array: When \code{sample = TRUE} (for direct sampling).
+\item BF distribution object: When \code{create_obj = TRUE} (for advanced use
+cases).
+}
 }
 \description{
-A distribution that links the `batch_shape[:-1]` of a marginal distribution with a multivariate Gaussian copula, odelling the correlation between the axes.
-A copula is a multivariate distribution over the uniform distribution on [0, 1].
-The Gaussian copula links the marginal distributions through a multivariate normal distribution.
+A distribution that links the \verb{batch_shape\[:-1\]} of a marginal distribution
+with a multivariate Gaussian copula, modelling the correlation between the
+axes. A copula is a multivariate distribution over the uniform distribution
+on [0, 1]. The Gaussian copula links the marginal distributions through a
+multivariate normal distribution.
 }
 \examples{
 \donttest{
 library(BayesForge)
-m=importBF(platform='cpu')
-bf.dist.gaussian_copula(
-  marginal_dist = bf.dist.gamma(concentration = 1 ,  create_obj = TRUE) ,
-  correlation_matrix =  matrix(c(1.0, 0.7, 0.7, 1.0),, nrow = 2, byrow = TRUE),
-  sample = TRUE)
+m <- importBF(platform = "cpu")
+bf.dist.gaussian_copula(marginal_dist = bf.dist.beta(2.0, 5.0, create_obj = TRUE), correlation_matrix = jnp$array(matrix(c(1.0, 0.7, 0.7, 1.0), nrow = 2L, byrow = TRUE)), sample = TRUE)
 }
+
+}
+\seealso{
+\url{https://num.pyro.ai/en/stable/distributions.html#gaussiancopula}
 }
