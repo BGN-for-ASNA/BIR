@@ -12,7 +12,7 @@ if (requireNamespace("reticulate", quietly = TRUE) &&
   library(testthat)
   library(BayesForge)
 
-  fit_lin <- function(intercept_only = FALSE, seed = 11) {
+  fit_lin <- function(intercept_only = FALSE, seed = 11L) {
     m <- importBF(platform = "cpu", rand_seed = seed, print_devices_found = FALSE)
     dat <- data.frame(x = seq(-1, 1, length.out = 30))
     dat$y <- 0.5 + 2 * dat$x + 0.1 * cos(7 * dat$x)
