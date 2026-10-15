@@ -46,7 +46,7 @@ if (requireNamespace("reticulate", quietly = TRUE) &&
     l1 <- loo::loo(m)
     expect_s3_class(l1, "loo")
     expect_equal(dim(l1$pointwise)[1], 30)  # one row per observation
-    py_elpd <- reticulate::py_to_r(m$diag$loo()$to_dict())[["elpd_loo"]]
+    py_elpd <- reticulate::py_to_r(m$diag$loo()[["elpd_loo"]])
     r_elpd <- l1$estimates["elpd_loo", "Estimate"]
     expect_lt(abs(r_elpd - py_elpd), 0.1)
   })
@@ -56,8 +56,8 @@ if (requireNamespace("reticulate", quietly = TRUE) &&
     m2 <- fit_lin(intercept_only = TRUE)
     cmp <- loo::loo_compare(loo::loo(m1), loo::loo(m2))
     expect_true("elpd_diff" %in% colnames(cmp))
-    # The slope model predicts better out of sample.
-    expect_gt(cmp["model2", "elpd_diff"], -Inf)
-    expect_lt(cmp["model2", "elpd_diff"], 0)
+    # loo_compare sorts best-first: row 1 is the slope model, row 2 the
+    # intercept-only model with a negative difference.
+    expect_lt(cmp[2, "elpd_diff"], 0)
   })
 }
