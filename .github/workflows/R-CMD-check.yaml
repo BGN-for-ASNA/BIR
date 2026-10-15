@@ -36,7 +36,9 @@ jobs:
         shell: bash
         run: |
           python -m pip install --upgrade pip
-          python -m pip install "bayesforge[cpu]"
+          # BayesForge `dev`: the tests use features not yet on PyPI
+          # (e.g. m$data(<data.frame>)).
+          python -m pip install "bayesforge[cpu] @ git+https://github.com/BGN-for-ASNA/BF.git@dev"
           echo "RETICULATE_PYTHON=$(python -c 'import sys; print(sys.executable)')" >> "$GITHUB_ENV"
 
       # Installs the package's own dependencies from DESCRIPTION (Imports and
