@@ -18,7 +18,7 @@ Imports:
     methods
 SystemRequirements: Python (>= 3.12), 'bayesforge' python library
     (installed by setup_env()).
-Depends: R (>= 3.5.0)
+Depends: R (>= 3.6.0)
 Suggests:
     testthat (>= 3.0.0),
     posterior,
