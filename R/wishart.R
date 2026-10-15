@@ -19,16 +19,17 @@
 #' @param event The number of batch dimensions to reinterpret as event dimensions
 #'   (used in model building).
 #' @param mask An optional boolean array to mask observations.
-#' @param create_obj If `TRUE`, returns the raw BI distribution object
+#' @param create_obj If `TRUE`, returns the raw BF distribution object
 #'   instead of creating a sample site. This is essential for building complex
 #'   distributions like `MixtureSameFamily`.
 #' @param validate_args Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.
 #' @param sample A logical value that controls the function's behavior. If `TRUE`,
 #'   the function will directly draw samples from the distribution. If `FALSE`,
 #'   it will create a random variable within a model. Defaults to `FALSE`.
-#' @param seed An integer used to set the random seed for reproducibility when
-#'   `sample = TRUE`. This argument has no effect when `sample = FALSE`, as
-#'   randomness is handled by the model's inference engine. Defaults to 0.
+#' @param seed An integer seed for this draw when `sample = TRUE`. By default
+#'   (`py_none()`) the draw comes from the session's random stream, set by
+#'   `importBF(rand_seed = ...)`, so consecutive draws differ but the whole
+#'   sequence is reproducible. No effect when `sample = FALSE`.
 #' @param obs A numeric vector or array of observed values. If provided, the
 #'   random variable is conditioned on these values. If `NULL`, the variable is
 #'   treated as a latent (unobserved) variable. Defaults to `NULL`.
@@ -37,11 +38,11 @@
 #' @param to_jax Boolean. Indicates whether to return a JAX array or not.
 #'
 #' @return
-#'  - When \code{sample=FALSE}, a BI Wishart distribution object (for model building).
+#'  - When \code{sample=FALSE}, a BF Wishart distribution object (for model building).
 #'
 #'  - When \code{sample=TRUE}, a JAX array of samples drawn from the Wishart distribution (for direct sampling).
 #'
-#'  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
+#'  - When \code{create_obj=TRUE}, the raw BF distribution object (for advanced use cases).
 #'
 #' @seealso \url{https://num.pyro.ai/en/stable/distributions.html#wishart}
 #'
@@ -53,13 +54,15 @@
 #' }
 #' @export
 bf.dist.wishart=function(concentration, scale_matrix=py_none(), rate_matrix=py_none(), scale_tril=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE ) {
+     if (missing(name) && !missing(obs)) name <- .bf_obs_name(substitute(obs))  # obs = y -> site "y"
+
      shape=do.call(tuple, as.list(as.integer(shape)))
-     if(!.BF_env$.py$is_none(scale_matrix)){scale_matrix = .BF_env$jnp$array(scale_matrix)}
-     if(!.BF_env$.py$is_none(rate_matrix)){rate_matrix = .BF_env$jnp$array(rate_matrix)}
-     if(!.BF_env$.py$is_none(scale_tril)){scale_tril = .BF_env$jnp$array(scale_tril)}
+     if(!.BF_env$.py$is_none(scale_matrix)){scale_matrix = .BF_env$jnp$asarray(scale_matrix)}
+     if(!.BF_env$.py$is_none(rate_matrix)){rate_matrix = .BF_env$jnp$asarray(rate_matrix)}
+     if(!.BF_env$.py$is_none(scale_tril)){scale_tril = .BF_env$jnp$asarray(scale_tril)}
      if (!.BF_env$.py$is_none(seed)){seed=as.integer(seed);}
      .BF_env$.bf_instance$dist$wishart(
-       concentration = .BF_env$jnp$array(concentration),
+       concentration = .BF_env$jnp$asarray(concentration),
        scale_matrix= scale_matrix,
        rate_matrix= rate_matrix,
        scale_tril= scale_tril,

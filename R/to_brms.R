@@ -1,7 +1,7 @@
-#' @title Convert BI fit to brmsfit
+#' @title Convert BF fit to brmsfit
 #' @description
-#' Converts a BI (NumPyro MCMC) object into a compatible brmsfit object.
-#' @param bi_fit The reticulate object returned by BI fitting.
+#' Converts a BF (NumPyro MCMC) object into a compatible brmsfit object.
+#' @param bi_fit The reticulate object returned by BF fitting.
 #' @param formula The brms formula for the model. Defaults to `bi_fit$formula`.
 #' @param data The data used for fitting. Defaults to `bi_fit$data`.
 #' @param family The family used. Defaults to `bi_fit$family` or `gaussian()`.
@@ -23,8 +23,8 @@ to_brms <- function(bi_fit, formula = NULL, data = NULL, family = NULL, par_map 
       if (!is.null(bi_fit$data)) {
           data <- bi_fit$data
       } else if (!is.null(bi_fit$data_on_model)) {
-          # Auto-convert BI data to R data frame
-          message("Converting BI data_on_model to data.frame...")
+          # Auto-convert BF data to R data frame
+          message("Converting BF data_on_model to data.frame...")
           py_data <- bi_fit$data_on_model
           r_data <- reticulate::py_to_r(py_data)
           # Convert jax arrays to R arrays/vectors

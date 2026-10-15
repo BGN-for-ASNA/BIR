@@ -25,14 +25,15 @@
 #' @param shape A numeric vector specifying the shape of the output.  This is used to set the batch shape when \code{sample=FALSE} (model building) or as `sample_shape` to draw a raw JAX array when \code{sample=TRUE} (direct sampling).
 #' @param event Integer specifying the number of batch dimensions to reinterpret as event dimensions (used in model building).
 #' @param mask A logical vector indicating which observations to mask.
-#' @param create_obj Logical; If `TRUE`, returns the raw BI distribution object instead of creating a sample site.
+#' @param create_obj Logical; If `TRUE`, returns the raw BF distribution object instead of creating a sample site.
 #' @param validate_args Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.
 #' @param sample A logical value that controls the function's behavior. If `TRUE`,
 #'   the function will directly draw samples from the distribution. If `FALSE`,
 #'   it will create a random variable within a model. Defaults to `FALSE`.
-#' @param seed An integer used to set the random seed for reproducibility when
-#'   `sample = TRUE`. This argument has no effect when `sample = FALSE`, as
-#'   randomness is handled by the model's inference engine. Defaults to 0.
+#' @param seed An integer seed for this draw when `sample = TRUE`. By default
+#'   (`py_none()`) the draw comes from the session's random stream, set by
+#'   `importBF(rand_seed = ...)`, so consecutive draws differ but the whole
+#'   sequence is reproducible. No effect when `sample = FALSE`.
 #' @param obs A numeric vector or array of observed values. If provided, the
 #'   random variable is conditioned on these values. If `NULL`, the variable is
 #'   treated as a latent (unobserved) variable. Defaults to `NULL`.
@@ -40,9 +41,9 @@
 #'   within a model. This is used to uniquely identify the variable. Defaults to 'x'.
 #' @param to_jax Boolean. Indicates whether to return a JAX array or not.
 #'
-#' @return When \code{sample=FALSE}: A BI AsymmetricLaplace distribution object (for model building).
+#' @return When \code{sample=FALSE}: A BF AsymmetricLaplace distribution object (for model building).
 #'         When \code{sample=TRUE}: A JAX array of samples drawn from the AsymmetricLaplace distribution (for direct sampling).
-#'         When \code{create_obj=TRUE}: The raw BI distribution object (for advanced use cases).
+#'         When \code{create_obj=TRUE}: The raw BF distribution object (for advanced use cases).
 #' @examples
 #' \donttest{
 #' library(BayesForge)
@@ -63,14 +64,16 @@ bf.dist.asymmetric_laplace <- function(
     shape = c(),
     event = 0,
     create_obj = FALSE, to_jax = TRUE) {
+     if (missing(name) && !missing(obs)) name <- .bf_obs_name(substitute(obs))  # obs = y -> site "y"
+
   shape <- do.call(tuple, as.list(as.integer(shape)))
   event <- as.integer(event)
   if (!.BF_env$.py$is_none(seed)) {
     seed <- as.integer(seed)
   }
   .BF_env$.bf_instance$dist$asymmetric_laplace(
-    loc = .BF_env$jnp$array(loc),
-    scale = .BF_env$jnp$array(scale),
-    asymmetry = .BF_env$jnp$array(asymmetry), validate_args = validate_args, name = name, obs = obs, mask = mask, sample = sample, seed = seed, shape = shape, event = event, create_obj = create_obj, to_jax = to_jax
+    loc = .BF_env$jnp$asarray(loc),
+    scale = .BF_env$jnp$asarray(scale),
+    asymmetry = .BF_env$jnp$asarray(asymmetry), validate_args = validate_args, name = name, obs = obs, mask = mask, sample = sample, seed = seed, shape = shape, event = event, create_obj = create_obj, to_jax = to_jax
   )
 }

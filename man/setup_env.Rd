@@ -2,25 +2,31 @@
 % Please edit documentation in R/BF_management.R
 \name{setup_env}
 \alias{setup_env}
-\title{Create a Python virtual environment}
+\title{Create (or upgrade) the Python environment used by BayesForge}
 \usage{
-setup_env(env_name = "BFR", backend = "cpu")
+setup_env(env_name = "BFR", backend = c("cpu", "gpu"), python = NULL)
 }
 \arguments{
-\item{env_name}{A character string for the name of the virtual environment.
-Defaults to "BFR-cpu" or "BFR-gpu".}
+\item{env_name}{Name of the virtual environment. Defaults to "BFR".}
 
-\item{backend}{A character string specifying the backend, either "cpu" or "gpu".}
+\item{backend}{Either "cpu" or "gpu" (Linux/WSL2 with an NVIDIA GPU).}
+
+\item{python}{Optional path to the Python interpreter used to create the
+environment. By default a Python >= 3.12 is located automatically.}
 }
 \value{
-The path to the created virtual environment.
-Create a Python virtual environment and install dependencies
-
-This function creates a Python virtual environment and installs a
-specified set of Python packages, with options for CPU or GPU builds.
-
-The path to the created virtual environment.
+The path to the Python interpreter of the environment (invisibly).
 }
 \description{
-This function creates a Python virtual environment using reticulate.
+Creates a dedicated Python virtual environment (Python >= 3.12) and installs
+the `bayesforge` Python package into it, with JAX for the chosen backend.
+Versions of JAX, NumPyro and ArviZ are resolved by pip from the requirements
+of `bayesforge` itself, so the environment always matches the installed
+BayesForge release. Running it again upgrades an existing environment.
+}
+\examples{
+\dontrun{
+setup_env()                # CPU
+setup_env(backend = "gpu") # NVIDIA GPU, Linux/WSL2 only
+}
 }

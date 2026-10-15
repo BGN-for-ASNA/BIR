@@ -4,10 +4,15 @@
 \alias{check_env}
 \title{Check if the default virtual environment is available}
 \usage{
-check_env()
+check_env(env_name = "BFR", verbose = TRUE)
+}
+\arguments{
+\item{env_name}{Name of the virtual environment. Defaults to "BFR".}
+
+\item{verbose}{Print whether the environment was found.}
 }
 \value{
-A logical value indicating whether the "cpu" or "gpu" environment exists.
+A logical value indicating whether the environment exists.
 }
 \description{
 This function checks for the existence of the default Python virtual environments.

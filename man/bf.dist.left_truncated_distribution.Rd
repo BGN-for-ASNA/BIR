@@ -39,9 +39,10 @@ treated as a latent (unobserved) variable. Defaults to `NULL`.}
 the function will directly draw samples from the distribution. If `FALSE`,
 it will create a random variable within a model. Defaults to `FALSE`.}
 
-\item{seed}{An integer used to set the random seed for reproducibility when
-`sample = TRUE`. This argument has no effect when `sample = FALSE`, as
-randomness is handled by the model's inference engine. Defaults to 0.}
+\item{seed}{An integer seed for this draw when `sample = TRUE`. By default
+(`py_none()`) the draw comes from the session's random stream, set by
+`importBF(rand_seed = ...)`, so consecutive draws differ but the whole
+sequence is reproducible. No effect when `sample = FALSE`.}
 
 \item{shape}{A numeric vector. When \code{sample=FALSE} (model building),
 this is used with `.expand(shape)` to set the distribution's batch shape.
@@ -50,16 +51,16 @@ JAX array of the given shape.}
 
 \item{event}{The number of batch dimensions to reinterpret as event dimensions (used in model building).}
 
-\item{create_obj}{A logical value. If `TRUE`, returns the raw BI distribution object instead of creating a sample site.}
+\item{create_obj}{A logical value. If `TRUE`, returns the raw BF distribution object instead of creating a sample site.}
 
 \item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
 }
 \value{
-- When \code{sample=FALSE}: A BI LeftTruncatedDistribution distribution object (for model building).
+- When \code{sample=FALSE}: A BF LeftTruncatedDistribution distribution object (for model building).
 
    - When \code{sample=TRUE}: A JAX array of samples drawn from the LeftTruncatedDistribution distribution (for direct sampling).
 
-   - When \code{create_obj=TRUE}: The raw BI distribution object (for advanced use cases).
+   - When \code{create_obj=TRUE}: The raw BF distribution object (for advanced use cases).
 }
 \description{
 A left-truncated distribution is a probability distribution obtained by restricting the support of another distribution to values greater than a specified lower bound.

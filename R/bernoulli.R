@@ -22,7 +22,12 @@
 #'
 #' @param mask A logical vector, matrix, or array (optional) to mask observations.
 #'
-#' @param create_obj A logical value (optional). If `TRUE`, returns the raw BI distribution object instead of creating a sample site.
+#' @param infer Optional named list passed to NumPyro's `infer` argument
+#'   (e.g. `list(enumerate = "parallel")`).
+#' @param enum If `TRUE`, the discrete latent is summed out exactly (parallel
+#'   enumeration) instead of sampled; same as `infer = list(enumerate = "parallel")`.
+#'   Defaults to `FALSE`.
+#' @param create_obj A logical value (optional). If `TRUE`, returns the raw BF distribution object instead of creating a sample site.
 #'
 #' @param validate_args Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.
 #'
@@ -30,9 +35,10 @@
 #'   the function will directly draw samples from the distribution. If `FALSE`,
 #'   it will create a random variable within a model. Defaults to `FALSE`.
 #'
-#' @param seed An integer used to set the random seed for reproducibility when
-#'   `sample = TRUE`. This argument has no effect when `sample = FALSE`, as
-#'   randomness is handled by the model's inference engine. Defaults to 0.
+#' @param seed An integer seed for this draw when `sample = TRUE`. By default
+#'   (`py_none()`) the draw comes from the session's random stream, set by
+#'   `importBF(rand_seed = ...)`, so consecutive draws differ but the whole
+#'   sequence is reproducible. No effect when `sample = FALSE`.
 #'
 #' @param obs A numeric vector or array of observed values. If provided, the
 #'   random variable is conditioned on these values. If `NULL`, the variable is
@@ -43,11 +49,11 @@
 #' @param to_jax Boolean. Indicates whether to return a JAX array or not.
 #'
 #' @return
-#'  - When \code{sample=FALSE}, a BI Bernoulli distribution object (for model building).
+#'  - When \code{sample=FALSE}, a BF Bernoulli distribution object (for model building).
 #'
 #'  - When \code{sample=TRUE}, a JAX array of samples drawn from the Bernoulli distribution (for direct sampling).
 #'
-#'  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
+#'  - When \code{create_obj=TRUE}, the raw BF distribution object (for advanced use cases).
 
 #' @examples
 #' \donttest{
@@ -58,14 +64,16 @@
 #' bf.dist.bernoulli(logits = 1, sample = TRUE, seed = 5)
 #' }
 #' @export
-bf.dist.bernoulli=function(probs=py_none(), logits=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
+bf.dist.bernoulli=function(probs=py_none(), logits=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), infer=py_none(), enum=FALSE, sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
+     if (missing(name) && !missing(obs)) name <- .bf_obs_name(substitute(obs))  # obs = y -> site "y"
+
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      if (!.BF_env$.py$is_none(seed)){seed=as.integer(seed);}
      if (.BF_env$.py$is_none(logits)){
-      .BF_env$.bf_instance$dist$bernoulli(probs=.BF_env$jnp$array(probs),   validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
+      .BF_env$.bf_instance$dist$bernoulli(probs=.BF_env$jnp$asarray(probs),   validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  infer= .bf_infer(infer, enum),  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
      }else{
-       .BF_env$.bf_instance$dist$bernoulli(logits= .BF_env$jnp$array(logits),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
+       .BF_env$.bf_instance$dist$bernoulli(logits= .BF_env$jnp$asarray(logits),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  infer= .bf_infer(infer, enum),  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 
      }
 }

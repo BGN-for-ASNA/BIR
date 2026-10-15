@@ -341,7 +341,7 @@ alpha = 0.6
 sigma = 4
 x = bf.dist.normal(0,4, shape = c(100), sample = TRUE, seed = 0)
 mu = alpha + beta * x
-y = bf.dist.bfnomial(total_count = 1L, logits =  mu, sample = TRUE)  # 📝 Or bf.dist.bfnomial(total_count = 1L, probs =   m$link$inv_logits(mu), sample = TRUE)
+y = bf.dist.binomial(total_count = 1L, logits =  mu, sample = TRUE)  # 📝 Or bf.dist.binomial(total_count = 1L, probs =   m$link$inv_logits(mu), sample = TRUE)
 ggplot() + geom_point(aes(x = to_r(x), y = to_r(y)), color = "blue")
 ```
 
@@ -380,7 +380,7 @@ model <- function(x, y){
   alpha = bf.dist.normal(loc = 0, scale = 1, name = 'alpha') 
   beta = bf.dist.normal(loc = 0, scale = 2, name = 'beta')
   mu = alpha + beta * x
-  bf.dist.bfnomial(total_count = 1, logits = mu, obs = y)
+  bf.dist.binomial(total_count = 1, logits = mu, obs = y)
 }
 
 # Run mcmc ------------------------------------------------
@@ -405,7 +405,7 @@ beta = 1.5
 alpha = 0.6
 x = bf.dist.normal(4, shape = c(100), sample = TRUE, seed = 0)
 mu = jnp$exp(alpha + beta * x) # ⚠️ link function
-y = bf.dist.poisson(rate = mu, sample = TRUE)  # 📝 Or bf.dist.bfnomial(total_count = 1L, probs =   m$link$inv_logits(mu), sample = TRUE)
+y = bf.dist.poisson(rate = mu, sample = TRUE)  # 📝 Or bf.dist.binomial(total_count = 1L, probs =   m$link$inv_logits(mu), sample = TRUE)
 ggplot() + geom_point(aes(x = to_r(x), y = to_r(y)), color = "blue")
 ```
 
@@ -570,7 +570,7 @@ alpha = bf.dist.normal(alpha_bar, sigma, shape = c(2), sample = TRUE, seed = 0) 
 print(alpha)
 
 p = alpha[k]
-y = bf.dist.bfnomial(total_count = 1L, logits = p , sample = TRUE)
+y = bf.dist.binomial(total_count = 1L, logits = p , sample = TRUE)
 
 df <- data.frame(
   k = to_r(k),
@@ -628,7 +628,7 @@ model <- function(k, y){
   alpha = bf.dist.normal(loc = alpha_bar, scale = sigma, name = 'alpha', shape = c(2)) 
   
   p = alpha[k] 
-  bf.dist.bfnomial(total_count = 1L, logits = p, obs = y)
+  bf.dist.binomial(total_count = 1L, logits = p, obs = y)
 }
 
 # Run mcmc ------------------------------------------------

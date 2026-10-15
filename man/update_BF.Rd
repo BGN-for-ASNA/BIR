@@ -2,17 +2,20 @@
 % Please edit documentation in R/BF_management.R
 \name{update_BF}
 \alias{update_BF}
-\title{Update the BI module from Python}
+\title{Update the BayesForge Python package}
 \usage{
-update_BF(envname = "BFR")
+update_BF(envname = "BFR", backend = "cpu")
 }
 \arguments{
 \item{envname}{A character string specifying the name of the virtual environment.}
+
+\item{backend}{Either "cpu" or "gpu".}
 }
 \description{
-Update the BI module from Python
+Update the BayesForge Python package
 }
 \details{
-Internal helper function to update the `BI` Python module.
+Upgrades `bayesforge` (and, through its requirements, JAX/NumPyro/ArviZ)
+in the environment.
 }
 \keyword{internal}

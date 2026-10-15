@@ -29,18 +29,29 @@ jobs:
 
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.12"
 
-      # This step installs all R package dependencies, including rcmdcheck.
-      # It's more efficient and uses caching.
+      # Install the Python side so the testthat suite runs instead of skipping.
+      - name: Install BayesForge (Python)
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          # BayesForge `dev`: the tests use features not yet on PyPI
+          # (e.g. m$data(<data.frame>)). From the zip archive, not git: BF has a
+          # file name with ":" that git cannot check out on Windows.
+          python -m pip install "bayesforge[cpu] @ https://github.com/BGN-for-ASNA/BF/archive/refs/heads/dev.zip"
+          echo "RETICULATE_PYTHON=$(python -c 'import sys; print(sys.executable)')" >> "$GITHUB_ENV"
+
+      # Installs the package's own dependencies from DESCRIPTION (Imports and
+      # Suggests: abind, posterior, testthat, ...) plus rcmdcheck. With
+      # `packages:` instead of `extra-packages:` only the listed packages were
+      # installed, and R CMD check stopped on "Package required but not
+      # available: 'abind'".
       - name: Install R dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          packages: |
-            any::rcmdcheck
-            any::remotes
-            any::reticulate
-            any::testthat
+          extra-packages: any::rcmdcheck
+          needs: check
 
 
       - name: Check R package

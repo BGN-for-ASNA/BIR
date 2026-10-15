@@ -2,7 +2,7 @@
 % Please edit documentation in R/importBF.R
 \name{importBF}
 \alias{importBF}
-\title{Import the BI Python Module}
+\title{Start a BayesForge session}
 \usage{
 importBF(
   platform = "cpu",
@@ -19,30 +19,30 @@ importBF(
 
 \item{cores}{Integer or `NULL`. Number of CPU cores to use. Defaults to `NULL`.}
 
-\item{rand_seed}{(Boolean): Random seed. Defaults to TRUE.}
+\item{rand_seed}{Logical or integer. An integer gives reproducible results;
+`TRUE` draws an entropy-based seed. Defaults to `TRUE`.}
 
 \item{deallocate}{Logical. Whether memory should be deallocated when not in use.
 Defaults to `FALSE`.}
 
-\item{print_devices_found}{(bool, optional): Whether to print devices found. Defaults to TRUE.}
+\item{print_devices_found}{Logical. Whether to print devices found. Defaults to `TRUE`.}
 
-\item{backend}{(str, optional): Backend to use (numpyro or tfp). Defaults to 'numpyro'.}
+\item{backend}{Character. Backend to use (`"numpyro"` or `"tfp"`). Defaults to `"numpyro"`.}
 }
 \value{
-An initialized BI module object (Python object via **reticulate**).
+An initialised BayesForge object (Python object via **reticulate**).
 }
 \description{
-This function initializes the BI Python module through **reticulate**,
-sets up the environment, and loads the necessary `jax` and `jax.numpy`
-modules. The BI module is stored in the hidden object `.bf` for internal use,
-but the initialized BI object is also returned for convenience.
+Binds R to the BayesForge Python environment (created once with
+[setup_env()]), imports the `BayesForge` Python module through
+**reticulate** and returns an initialised BayesForge object.
 }
 \details{
-- Internally, this function imports the `BI` Python package and assigns it
-  to the hidden variable `.bf`.
-- It also imports `jax` and `jax.numpy`, assigning them to `jax` and `jnp`
-  respectively.
-- Startup messages inform the user about the imports.
+- If the "BFR" Python environment does not exist yet, interactive sessions
+  are offered to create it with [setup_env()]; otherwise an error explains
+  how to do it. An existing environment is never reinstalled.
+- `jnp` (`jax.numpy`) and `jax` are available as soon as the package is
+  loaded, e.g. `jnp$array(c(1, 2, 3))`.
 }
 \examples{
 \dontrun{

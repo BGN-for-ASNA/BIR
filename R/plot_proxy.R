@@ -68,6 +68,12 @@ bf_show <- function(fig) {
   .bf_show_plotly(fig)
 }
 
+#' Print a BayesForge plot namespace
+#'
+#' @param x A `bf_plot_ns` object.
+#' @param ... Ignored.
+#' @return `x`, invisibly.
+#' @keywords internal
 #' @export
 print.bf_plot_ns <- function(x, ...) {
   fns <- ls(envir = x)
