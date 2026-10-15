@@ -42,8 +42,17 @@ class(.dummy_bf_instance) <- "dummy_bf_instance"
 #' @param pkgname Package name.
 #' @return No return value, called for side effects.
 #' @keywords internal
-onLoad <- function(libname = NULL, pkgname = "BI") {
-  packageStartupMessage("For documentation, run the command: bf.doc()")
+.onLoad <- function(libname = NULL, pkgname = "BayesForge") {
+  # `loo` is only Suggested, so `loo.BayesForge.Main.main.bf` cannot be
+  # declared in NAMESPACE (loading would fail when `loo` is absent).
+  # Register it here when available.
+  if (requireNamespace("loo", quietly = TRUE)) {
+    registerS3method(
+      "loo", "BayesForge.Main.main.bf",
+      loo.BayesForge.Main.main.bf,
+      envir = asNamespace("loo")
+    )
+  }
 }
 
 #' @title Package attach

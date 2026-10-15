@@ -43,18 +43,6 @@ loo.BayesForge.Main.main.bf <- function(x, ...) {  if (!requireNamespace("loo", 
   loo::loo(ll, r_eff = r_eff, cores = 1L, ...)
 }
 
-# `loo` is only Suggested, so the S3 method cannot be declared in NAMESPACE
-# (loading would fail when `loo` is absent). Register it when the namespace
-# loads and `loo` is available -- the same pattern used for
-# `posterior::as_draws_df`.
-if (requireNamespace("loo", quietly = TRUE)) {
-  registerS3method(
-    "loo", "BayesForge.Main.main.bf",
-    loo.BayesForge.Main.main.bf,
-    envir = asNamespace("loo")
-  )
-}
-
 #' Pointwise log-likelihood of a fitted model as an R array
 #'
 #' Reads the `log_likelihood` group built by ArviZ from the fitted sampler
