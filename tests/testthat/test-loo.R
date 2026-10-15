@@ -16,7 +16,11 @@ if (requireNamespace("reticulate", quietly = TRUE) &&
     m <- importBF(platform = "cpu", rand_seed = seed, print_devices_found = FALSE)
     dat <- data.frame(x = seq(-1, 1, length.out = 30))
     dat$y <- 0.5 + 2 * dat$x + 0.1 * cos(7 * dat$x)
-    invisible(m$data(dat))  # an R data.frame passed directly
+    # m$data() takes a CSV path on the released BF; newer BF also accepts a
+    # data.frame directly. A temp CSV works on both.
+    csv <- tempfile(fileext = ".csv")
+    utils::write.csv(dat, csv, row.names = FALSE)
+    invisible(m$data(csv))
     m$data_to_model(list("x", "y"))
     if (intercept_only) {
       model <- function(x, y) {
