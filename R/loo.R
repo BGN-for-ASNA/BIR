@@ -24,8 +24,7 @@
 #' loo::loo_compare(loo::loo(m1), loo::loo(m2))
 #' }
 #' @export
-loo.BayesForge.Main.main.bf <- function(x, ...) {
-  if (!requireNamespace("loo", quietly = TRUE)) {
+loo.BayesForge.Main.main.bf <- function(x, ...) {  if (!requireNamespace("loo", quietly = TRUE)) {
     stop("loo::loo() on a BayesForge model requires the 'loo' package.", call. = FALSE)
   }
   ll <- .bf_log_lik_array(x)  # iterations x chains x observations
@@ -42,6 +41,18 @@ loo.BayesForge.Main.main.bf <- function(x, ...) {
     r_eff <- NULL
   }
   loo::loo(ll, r_eff = r_eff, cores = 1L, ...)
+}
+
+# `loo` is only Suggested, so the S3 method cannot be declared in NAMESPACE
+# (loading would fail when `loo` is absent). Register it when the namespace
+# loads and `loo` is available -- the same pattern used for
+# `posterior::as_draws_df`.
+if (requireNamespace("loo", quietly = TRUE)) {
+  registerS3method(
+    "loo", "BayesForge.Main.main.bf",
+    loo.BayesForge.Main.main.bf,
+    envir = asNamespace("loo")
+  )
 }
 
 #' Pointwise log-likelihood of a fitted model as an R array
