@@ -16,6 +16,11 @@
 #' @param shape A numeric vector.  When \code{sample=FALSE} (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When \code{sample=TRUE} (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.
 #' @param event Integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).
 #' @param mask A logical vector. Optional boolean array to mask observations.
+#' @param infer Optional named list passed to NumPyro's `infer` argument
+#'   (e.g. `list(enumerate = "parallel")`).
+#' @param enum If `TRUE`, the discrete latent is summed out exactly (parallel
+#'   enumeration) instead of sampled; same as `infer = list(enumerate = "parallel")`.
+#'   Defaults to `FALSE`.
 #' @param create_obj Logical. If TRUE, returns the raw BF distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.
 #' @param validate_args Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.
 #' @param sample A logical value that controls the function's behavior. If `TRUE`,
@@ -46,11 +51,11 @@
 #' bf.dist.discrete_uniform(sample = TRUE)
 #' }
 #' @export
-bf.dist.discrete_uniform=function(low=0, high=1, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
+bf.dist.discrete_uniform=function(low=0, high=1, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), infer=py_none(), enum=FALSE, sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      if (!.BF_env$.py$is_none(seed)){seed=as.integer(seed);}
      .BF_env$.bf_instance$dist$discrete_uniform(
        low = .BF_env$jnp$asarray(low),
        high = .BF_env$jnp$asarray(high),
-       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
+       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  infer= .bf_infer(infer, enum),  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 }

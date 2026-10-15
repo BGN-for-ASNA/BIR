@@ -11,6 +11,11 @@
 #' @param shape (numeric vector): A multi-purpose argument for shaping. When `sample=False` (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When `sample=True` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.
 #' @param event (int): The number of batch dimensions to reinterpret as event dimensions (used in model building).
 #' @param mask (numeric vector of booleans, optional): Optional boolean array to mask observations.
+#' @param infer Optional named list passed to NumPyro's `infer` argument
+#'   (e.g. `list(enumerate = "parallel")`).
+#' @param enum If `TRUE`, the discrete latent is summed out exactly (parallel
+#'   enumeration) instead of sampled; same as `infer = list(enumerate = "parallel")`.
+#'   Defaults to `FALSE`.
 #' @param create_obj (logical, optional): If `TRUE`, returns the raw BF distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.
 #' @param validate_args Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.
 #' @param sample A logical value that controls the function's behavior. If `TRUE`,
@@ -50,7 +55,7 @@ bf.dist.binomial=function(
     validate_args=py_none(),
     name='x',
     obs=py_none(),
-    mask=py_none(),
+    mask=py_none(), infer=py_none(), enum=FALSE,
     sample=FALSE,
     seed=py_none(),
     shape=c(),
@@ -70,11 +75,11 @@ bf.dist.binomial=function(
          total_count=.BF_env$jnp$asarray(total_count),
          probs= .BF_env$jnp$asarray(probs),
          validate_args= validate_args,
-         name= name,  obs= obs,  mask= mask,
+         name= name,  obs= obs,  mask= mask,  infer= .bf_infer(infer, enum),
          sample= sample,  seed= seed,  shape= shape,
          event= event,  create_obj= create_obj,   to_jax = to_jax)
      }else{
-       .BF_env$.bf_instance$dist$binomial(total_count=.BF_env$jnp$asarray(total_count),  logits= .BF_env$jnp$asarray(logits),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj, to_jax = to_jax)
+       .BF_env$.bf_instance$dist$binomial(total_count=.BF_env$jnp$asarray(total_count),  logits= .BF_env$jnp$asarray(logits),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  infer= .bf_infer(infer, enum),  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj, to_jax = to_jax)
 
      }
 }

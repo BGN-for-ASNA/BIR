@@ -10,6 +10,11 @@
 #' @param shape A numeric vector. When `sample=False` (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When `sample=True` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.
 #' @param event The number of batch dimensions to reinterpret as event dimensions (used in model building).
 #' @param mask An optional boolean vector to mask observations.
+#' @param infer Optional named list passed to NumPyro's `infer` argument
+#'   (e.g. `list(enumerate = "parallel")`).
+#' @param enum If `TRUE`, the discrete latent is summed out exactly (parallel
+#'   enumeration) instead of sampled; same as `infer = list(enumerate = "parallel")`.
+#'   Defaults to `FALSE`.
 #' @param create_obj Logical. If `TRUE`, returns the raw BF distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.
 #' @param validate_args Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.
 #' @param sample A logical value that controls the function's behavior. If `TRUE`,
@@ -42,7 +47,7 @@
 #' bf.dist.multinomial_probs(probs =  c(0.2, 0.3, 0.5), total_count = c(10,10), sample = TRUE)
 #' }
 #' @export
-bf.dist.multinomial_probs=function(probs, total_count=1, total_count_max=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
+bf.dist.multinomial_probs=function(probs, total_count=1, total_count_max=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), infer=py_none(), enum=FALSE, sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      if (!.BF_env$.py$is_none(seed)){seed=as.integer(seed);}
      if(!.BF_env$.py$is_none(total_count_max)){total_count_max= as.integer(total_count_max)}
@@ -52,5 +57,5 @@ bf.dist.multinomial_probs=function(probs, total_count=1, total_count_max=py_none
        probs = .BF_env$jnp$asarray(probs),
        total_count= .BF_env$jnp$asarray(total_count),
        total_count_max= total_count_max,
-       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
+       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  infer= .bf_infer(infer, enum),  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 }

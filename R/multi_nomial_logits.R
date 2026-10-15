@@ -16,6 +16,11 @@
 #' @param shape A numeric vector specifying the shape of the distribution.  Use a vector (e.g., `c(10)`) to define the shape.
 #' @param event Integer specifying the number of batch dimensions to reinterpret as event dimensions (used in model building).
 #' @param mask A logical vector, matrix, or array to mask observations.
+#' @param infer Optional named list passed to NumPyro's `infer` argument
+#'   (e.g. `list(enumerate = "parallel")`).
+#' @param enum If `TRUE`, the discrete latent is summed out exactly (parallel
+#'   enumeration) instead of sampled; same as `infer = list(enumerate = "parallel")`.
+#'   Defaults to `FALSE`.
 #' @param create_obj Logical; If TRUE, returns the raw BF distribution object instead of creating a sample site.
 #' @param validate_args Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.
 #' @param sample A logical value that controls the function's behavior. If `TRUE`,
@@ -48,7 +53,7 @@
 #' bf.dist.multinomial_logits(logits =  c(0.2, 0.3, 0.5), total_count = 10, sample = TRUE)
 #' }
 #' @export
-bf.dist.multinomial_logits=function(logits, total_count=1, total_count_max=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
+bf.dist.multinomial_logits=function(logits, total_count=1, total_count_max=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), infer=py_none(), enum=FALSE, sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      if(!.BF_env$.py$is_none(total_count_max)){total_count_max= as.integer(total_count_max)}
      total_count= .BF_env$jnp$asarray(as.integer(total_count))
@@ -59,5 +64,5 @@ bf.dist.multinomial_logits=function(logits, total_count=1, total_count_max=py_no
        logits = .BF_env$jnp$asarray(logits),
        total_count = .BF_env$jnp$asarray(total_count),
        total_count_max = total_count_max,
-       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
+       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  infer= .bf_infer(infer, enum),  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 }

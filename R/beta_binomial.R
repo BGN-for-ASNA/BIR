@@ -9,6 +9,11 @@
 #' @param shape A numeric vector.  When `sample=False` (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When `sample=True` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.
 #' @param event An integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).
 #' @param mask A logical vector. Optional boolean array to mask observations.
+#' @param infer Optional named list passed to NumPyro's `infer` argument
+#'   (e.g. `list(enumerate = "parallel")`).
+#' @param enum If `TRUE`, the discrete latent is summed out exactly (parallel
+#'   enumeration) instead of sampled; same as `infer = list(enumerate = "parallel")`.
+#'   Defaults to `FALSE`.
 #' @param create_obj A logical value. If `TRUE`, returns the raw BF distribution object instead of creating a sample site.
 #' @param validate_args Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.
 #' @param sample A logical value that controls the function's behavior. If `TRUE`,
@@ -41,14 +46,14 @@
 #' bf.dist.beta_binomial(0,1,sample = TRUE)
 #' }
 #' @export
-bf.dist.beta_binomial=function(concentration1, concentration0, total_count=1, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
+bf.dist.beta_binomial=function(concentration1, concentration0, total_count=1, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), infer=py_none(), enum=FALSE, sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      if (!.BF_env$.py$is_none(seed)){seed=as.integer(seed);}
      .BF_env$.bf_instance$dist$beta_binomial(
        concentration1 = .BF_env$jnp$asarray(concentration1),
        concentration0 = .BF_env$jnp$asarray(concentration0),
-       total_count = .BF_env$jnp$asarray(as.integer(total_count)),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
+       total_count = .BF_env$jnp$asarray(as.integer(total_count)),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  infer= .bf_infer(infer, enum),  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 }
 
 

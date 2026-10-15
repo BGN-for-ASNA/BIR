@@ -13,6 +13,8 @@ bf.dist.multinomial(
   name = "x",
   obs = py_none(),
   mask = py_none(),
+  infer = py_none(),
+  enum = FALSE,
   sample = FALSE,
   seed = py_none(),
   shape = c(),
@@ -40,6 +42,13 @@ random variable is conditioned on these values. If `NULL`, the variable is
 treated as a latent (unobserved) variable. Defaults to `NULL`.}
 
 \item{mask}{A logical vector, optional, to mask observations.}
+
+\item{infer}{Optional named list passed to NumPyro's `infer` argument
+(e.g. `list(enumerate = "parallel")`).}
+
+\item{enum}{If `TRUE`, the discrete latent is summed out exactly (parallel
+enumeration) instead of sampled; same as `infer = list(enumerate = "parallel")`.
+Defaults to `FALSE`.}
 
 \item{sample}{A logical value that controls the function's behavior. If `TRUE`,
 the function will directly draw samples from the distribution. If `FALSE`,

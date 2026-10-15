@@ -16,6 +16,11 @@
 #'   of the given shape.
 #' @param event The number of batch dimensions to reinterpret as event dimensions (used in model building).
 #' @param mask An optional boolean vector to mask observations.
+#' @param infer Optional named list passed to NumPyro's `infer` argument
+#'   (e.g. `list(enumerate = "parallel")`).
+#' @param enum If `TRUE`, the discrete latent is summed out exactly (parallel
+#'   enumeration) instead of sampled; same as `infer = list(enumerate = "parallel")`.
+#'   Defaults to `FALSE`.
 #' @param create_obj Logical; If `TRUE`, returns the raw BF distribution object instead of creating a sample site.
 #' @param validate_args Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.
 #' @param sample A logical value that controls the function's behavior. If `TRUE`,
@@ -46,7 +51,7 @@
 #' bf.dist.categorical(probs = c(0.5,0.5), sample = TRUE, shape = c(3))
 #' }
 #' @export
-bf.dist.categorical=function(probs=py_none(), logits=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
+bf.dist.categorical=function(probs=py_none(), logits=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), infer=py_none(), enum=FALSE, sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      if (!.BF_env$.py$is_none(seed)){seed=as.integer(seed);}
@@ -56,7 +61,7 @@ bf.dist.categorical=function(probs=py_none(), logits=py_none(), validate_args=py
      .BF_env$.bf_instance$dist$categorical(
        probs = probs,
        logits = logits,
-       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
+       validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  infer= .bf_infer(infer, enum),  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 }
 
 

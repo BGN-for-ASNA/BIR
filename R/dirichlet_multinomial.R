@@ -14,6 +14,11 @@
 #'   array of the given shape.
 #' @param event The number of batch dimensions to reinterpret as event dimensions (used in model building).
 #' @param mask A logical vector or array to mask observations.
+#' @param infer Optional named list passed to NumPyro's `infer` argument
+#'   (e.g. `list(enumerate = "parallel")`).
+#' @param enum If `TRUE`, the discrete latent is summed out exactly (parallel
+#'   enumeration) instead of sampled; same as `infer = list(enumerate = "parallel")`.
+#'   Defaults to `FALSE`.
 #' @param create_obj A logical value. If `TRUE`, returns the raw BF distribution object instead of creating a sample site.
 #' @param validate_args Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.
 #' @param sample A logical value that controls the function's behavior. If `TRUE`,
@@ -45,7 +50,7 @@
 #' }
 #' @export
 
-bf.dist.dirichlet_multinomial=function(concentration, total_count=1, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
+bf.dist.dirichlet_multinomial=function(concentration, total_count=1, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), infer=py_none(), enum=FALSE, sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
 
@@ -56,7 +61,7 @@ bf.dist.dirichlet_multinomial=function(concentration, total_count=1, validate_ar
        validate_args = validate_args,
        name= name,
        obs= obs,
-       mask= mask,
+       mask= mask,  infer= .bf_infer(infer, enum),
        sample= sample,
        seed= seed,
        shape= shape,
