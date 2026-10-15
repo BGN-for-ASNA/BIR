@@ -31,6 +31,15 @@ jobs:
         with:
           python-version: "3.12"
 
+      # This package must agree with the compatibility matrix (compat.toml) of
+      # BGN-for-ASNA/BF: version, Python and minimum bayesforge.
+      - name: Check compatibility matrix
+        shell: bash
+        run: |
+          curl -fsSL -o check_compat.py https://raw.githubusercontent.com/BGN-for-ASNA/BF/dev/tools/check_compat.py
+          python check_compat.py --python BGN-for-ASNA/BF@dev --r . --only r | tee -a "$GITHUB_STEP_SUMMARY"
+          rm check_compat.py
+
       # Install the Python side so the testthat suite runs instead of skipping.
       - name: Install BayesForge (Python)
         shell: bash

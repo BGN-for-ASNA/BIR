@@ -22,6 +22,9 @@ ask_yes_no <- function(prompt = "Do you want to continue? (Y/N): ") {
 
 # Minimum Python version required by the 'bayesforge' Python package.
 .bf_python_version <- ">=3.12"
+# Minimum 'bayesforge' (Python) version this R package works with. Both values
+# must agree with compat.toml of BGN-for-ASNA/BF (checked in CI).
+.bf_bayesforge_version <- ">=0.0.59"
 
 #' Check if the default virtual environment is available
 #'
@@ -91,7 +94,7 @@ setup_env <- function(env_name = "BFR", backend = c("cpu", "gpu"), python = NULL
     if (is.null(python)) python <- find_python()
     reticulate::virtualenv_create(envname = env_name, python = python)
   }
-  pkg <- sprintf("bayesforge[%s]", backend)
+  pkg <- sprintf("bayesforge[%s]%s", backend, .bf_bayesforge_version)
   packageStartupMessage("Installing ", pkg, " into '", env_name, "' (this can take a few minutes)...")
   reticulate::virtualenv_install(envname = env_name, packages = pkg)
   packageStartupMessage("BayesForge Python environment ready.")
