@@ -37,8 +37,9 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           # BayesForge `dev`: the tests use features not yet on PyPI
-          # (e.g. m$data(<data.frame>)).
-          python -m pip install "bayesforge[cpu] @ git+https://github.com/BGN-for-ASNA/BF.git@dev"
+          # (e.g. m$data(<data.frame>)). From the zip archive, not git: BF has a
+          # file name with ":" that git cannot check out on Windows.
+          python -m pip install "bayesforge[cpu] @ https://github.com/BGN-for-ASNA/BF/archive/refs/heads/dev.zip"
           echo "RETICULATE_PYTHON=$(python -c 'import sys; print(sys.executable)')" >> "$GITHUB_ENV"
 
       # Installs the package's own dependencies from DESCRIPTION (Imports and
