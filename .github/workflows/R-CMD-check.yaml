@@ -39,16 +39,16 @@ jobs:
           python -m pip install "bayesforge[cpu]"
           echo "RETICULATE_PYTHON=$(python -c 'import sys; print(sys.executable)')" >> "$GITHUB_ENV"
 
-      # This step installs all R package dependencies, including rcmdcheck.
-      # It's more efficient and uses caching.
+      # Installs the package's own dependencies from DESCRIPTION (Imports and
+      # Suggests: abind, posterior, testthat, ...) plus rcmdcheck. With
+      # `packages:` instead of `extra-packages:` only the listed packages were
+      # installed, and R CMD check stopped on "Package required but not
+      # available: 'abind'".
       - name: Install R dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          packages: |
-            any::rcmdcheck
-            any::remotes
-            any::reticulate
-            any::testthat
+          extra-packages: any::rcmdcheck
+          needs: check
 
 
       - name: Check R package
