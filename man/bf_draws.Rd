@@ -5,15 +5,23 @@
 \alias{as.data.frame.BayesForge.Main.main.bf}
 \title{Posterior draws as an R data frame}
 \usage{
-bf_draws(m, format = c("data.frame", "draws_df"))
+bf_draws(m, format = c("data.frame", "draws_df", "long"), labels = NULL)
 
 \method{as.data.frame}{BayesForge.Main.main.bf}(x, row.names = NULL, optional = FALSE, ...)
 }
 \arguments{
 \item{m}{A fitted BayesForge object (from [importBF()] followed by `m$fit()`).}
 
-\item{format}{`"data.frame"` (default) or `"draws_df"`, which returns a
-`posterior::draws_df` (requires the **posterior** package).}
+\item{format}{`"data.frame"` (default, one row per draw), `"draws_df"`, which
+returns a `posterior::draws_df` (requires the **posterior** package), or
+`"long"`: one row per draw and parameter element, with columns `.chain`,
+`.iteration`, `.draw`, `.variable` (parameter name), `.index` (element,
+e.g. `"2"` or `"1,3"`; `NA` for a scalar) and `.value` -- the tidy layout
+used by ggplot2 / dplyr / tidybayes.}
+
+\item{labels}{For `format = "long"`: a named list replacing the index of a
+vector parameter by labels, e.g. `list(alpha = levels(df$group))` when
+`alpha` is indexed by the 0-based codes of factor `group` (from `m$index()`).}
 
 \item{x}{A fitted BayesForge object.}
 
@@ -44,5 +52,6 @@ m <- importBF()
 draws <- bf_draws(m)
 colMeans(draws[, -(1:3)])
 posterior::summarise_draws(bf_draws(m, "draws_df"))
+long <- bf_draws(m, "long", labels = list(alpha = levels(df$group)))
 }
 }

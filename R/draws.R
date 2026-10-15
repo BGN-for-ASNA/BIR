@@ -14,8 +14,15 @@
 #' Python and is 0-based: `a[0]` in the model is column `a[1]` here.
 #'
 #' @param m A fitted BayesForge object (from [importBF()] followed by `m$fit()`).
-#' @param format `"data.frame"` (default) or `"draws_df"`, which returns a
-#'   `posterior::draws_df` (requires the **posterior** package).
+#' @param format `"data.frame"` (default, one row per draw), `"draws_df"`, which
+#'   returns a `posterior::draws_df` (requires the **posterior** package), or
+#'   `"long"`: one row per draw and parameter element, with columns `.chain`,
+#'   `.iteration`, `.draw`, `.variable` (parameter name), `.index` (element,
+#'   e.g. `"2"` or `"1,3"`; `NA` for a scalar) and `.value` -- the tidy layout
+#'   used by ggplot2 / dplyr / tidybayes.
+#' @param labels For `format = "long"`: a named list replacing the index of a
+#'   vector parameter by labels, e.g. `list(alpha = levels(df$group))` when
+#'   `alpha` is indexed by the 0-based codes of factor `group` (from `m$index()`).
 #'
 #' @return A `data.frame` (or a `posterior::draws_df`).
 #' @examples
@@ -25,9 +32,10 @@
 #' draws <- bf_draws(m)
 #' colMeans(draws[, -(1:3)])
 #' posterior::summarise_draws(bf_draws(m, "draws_df"))
+#' long <- bf_draws(m, "long", labels = list(alpha = levels(df$group)))
 #' }
 #' @export
-bf_draws <- function(m, format = c("data.frame", "draws_df")) {
+bf_draws <- function(m, format = c("data.frame", "draws_df", "long"), labels = NULL) {
   format <- match.arg(format)
   if (is.null(m$sampler) || inherits(m$sampler, "python.builtin.NoneType")) {
     stop("No posterior draws: fit the model first with m$fit().", call. = FALSE)
@@ -70,6 +78,9 @@ bf_draws <- function(m, format = c("data.frame", "draws_df")) {
   )
   out <- cbind(out, as.data.frame(columns, check.names = FALSE))
 
+  if (format == "long") {
+    return(.bf_draws_long(out, labels))
+  }
   if (format == "draws_df") {
     if (!requireNamespace("posterior", quietly = TRUE)) {
       stop("format = \"draws_df\" requires the 'posterior' package.", call. = FALSE)
@@ -91,4 +102,33 @@ as.data.frame.BayesForge.Main.main.bf <- function(x, row.names = NULL, optional 
 # 'posterior' package is installed (it is only suggested).
 .as_draws_df_bf <- function(x, ...) {
   bf_draws(x, format = "draws_df")
+}
+
+# Wide draws (one column per parameter element) -> one row per draw and
+# parameter element: .chain, .iteration, .draw, .variable, .index, .value.
+# `labels`: named list, e.g. list(alpha = levels(df$group)), replacing the
+# 1-based index of a vector parameter by these labels.
+.bf_draws_long <- function(wide, labels = NULL) {
+  ids <- c(".chain", ".iteration", ".draw")
+  cols <- setdiff(names(wide), ids)
+  variable <- sub("\\[.*$", "", cols)
+  index <- ifelse(grepl("\\[", cols), sub("^[^[]*\\[(.*)\\]$", "\\1", cols), NA_character_)
+  for (v in names(labels)) {
+    sel <- variable == v
+    if (!any(sel)) stop("labels: no parameter called ", v, call. = FALSE)
+    pos <- suppressWarnings(as.integer(index[sel]))
+    if (anyNA(pos) || max(pos) > length(labels[[v]]))
+      stop("labels: ", v, " needs one label per element (", sum(sel), ")", call. = FALSE)
+    index[sel] <- as.character(labels[[v]])[pos]
+  }
+  n <- nrow(wide)
+  data.frame(
+    .chain = rep(wide$.chain, times = length(cols)),
+    .iteration = rep(wide$.iteration, times = length(cols)),
+    .draw = rep(wide$.draw, times = length(cols)),
+    .variable = rep(variable, each = n),
+    .index = rep(index, each = n),
+    .value = unlist(wide[cols], use.names = FALSE),
+    stringsAsFactors = FALSE
+  )
 }
