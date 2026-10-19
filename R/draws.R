@@ -32,6 +32,7 @@
 #' draws <- bf_draws(m)
 #' colMeans(draws[, -(1:3)])
 #' posterior::summarise_draws(bf_draws(m, "draws_df"))
+#' bayesplot::mcmc_trace(as.array(m))   # iterations x chains x parameters
 #' long <- bf_draws(m, "long", labels = list(alpha = levels(df$group)))
 #' }
 #' @export
@@ -131,4 +132,21 @@ as.data.frame.BayesForge.Main.main.bf <- function(x, row.names = NULL, optional 
     .value = unlist(wide[cols], use.names = FALSE),
     stringsAsFactors = FALSE
   )
+}
+
+# as.array(m): iterations x chains x parameters, the layout of the
+# bayesplot mcmc_*() functions (and of rstan / posterior draws_array).
+# Parameter names are those of bf_draws(): a, b[1], b[2], ...
+# Registered in NAMESPACE as S3method(as.array, BayesForge.Main.main.bf, .bf_as_array).
+.bf_as_array <- function(x, ...) {
+  w <- bf_draws(x)
+  vars <- setdiff(names(w), c(".chain", ".iteration", ".draw"))
+  C <- max(w$.chain)
+  S <- max(w$.iteration)
+  out <- array(NA_real_, dim = c(S, C, length(vars)),
+               dimnames = list(iteration = NULL, chain = paste0("chain:", seq_len(C)),
+                               variable = vars))
+  # bf_draws() rows run over chains, then iterations: a column-major S x C fill
+  for (k in seq_along(vars)) out[, , k] <- matrix(w[[vars[k]]], nrow = S, ncol = C)
+  out
 }

@@ -52,6 +52,7 @@ m <- importBF()
 draws <- bf_draws(m)
 colMeans(draws[, -(1:3)])
 posterior::summarise_draws(bf_draws(m, "draws_df"))
+bayesplot::mcmc_trace(as.array(m))   # iterations x chains x parameters
 long <- bf_draws(m, "long", labels = list(alpha = levels(df$group)))
 }
 }
