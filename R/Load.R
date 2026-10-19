@@ -71,6 +71,12 @@ jax <- NULL
                      .as_draws_df_bf,
                      envir = asNamespace("posterior"))
   }
+  # loo is only suggested as well: register loo() for fitted models.
+  if (requireNamespace("loo", quietly = TRUE)) {
+    registerS3method("loo", "BayesForge.Main.main.bf",
+                     loo.BayesForge.Main.main.bf,
+                     envir = asNamespace("loo"))
+  }
 }
 
 #' @title Package attach

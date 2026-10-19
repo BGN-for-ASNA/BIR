@@ -23,6 +23,7 @@ Suggests:
     testthat (>= 3.0.0),
     posterior,
     brms,
+    loo,
     rstan
 Config/testthat/edition: 3
 License: GPL (>= 3)
