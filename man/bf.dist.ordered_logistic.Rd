@@ -110,7 +110,11 @@ model.
 \donttest{
 library(BayesForge)
 m <- importBF(platform = "cpu")
-bf.dist.ordered_logistic(predictor = jnp$array(c(0.2, 0.5, 0.8)), cutpoints = jnp$array(c(-1.0, 0.0, 1.0)), sample = TRUE)
+bf.dist.ordered_logistic(
+    predictor = jnp$array(c(0.2, 0.5, 0.8)),
+    cutpoints = jnp$array(c(-1.0, 0.0, 1.0)),
+    sample = TRUE
+)
 }
 
 }

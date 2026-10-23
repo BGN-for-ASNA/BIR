@@ -73,7 +73,11 @@
 #' \donttest{
 #' library(BayesForge)
 #' m <- importBF(platform = "cpu")
-#' bf.dist.zero_inflated_distribution(base_dist = bf.dist.poisson(rate = 5, create_obj = TRUE), gate = 0.3, sample = TRUE)
+#' bf.dist.zero_inflated_distribution(
+#'     base_dist = bf.dist.poisson(rate = 5, create_obj = TRUE),
+#'     gate = 0.3,
+#'     sample = TRUE
+#' )
 #' }
 #'
 #' @seealso \url{https://num.pyro.ai/en/stable/distributions.html#zeroinflateddistribution}

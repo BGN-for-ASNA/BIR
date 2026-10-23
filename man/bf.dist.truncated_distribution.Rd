@@ -113,7 +113,12 @@ often‐used scenario.
 \donttest{
 library(BayesForge)
 m <- importBF(platform = "cpu")
-bf.dist.truncated_distribution(base_dist = bf.dist.normal(0, 1, create_obj = TRUE), high = 1, low = 0, sample = TRUE)
+bf.dist.truncated_distribution(
+    base_dist = bf.dist.normal(0, 1, create_obj = TRUE),
+    high = 1,
+    low = 0,
+    sample = TRUE
+)
 }
 
 }

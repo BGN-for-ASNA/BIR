@@ -74,7 +74,15 @@
 #' \donttest{
 #' library(BayesForge)
 #' m <- importBF(platform = "cpu")
-#' bf.dist.car(loc = 0.0, correlation = 0.9, conditional_precision = 1.0, adj_matrix = jnp$array(matrix(c(0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0), nrow = 3L, byrow = TRUE)), sample = TRUE)
+#' bf.dist.car(
+#'     loc = 0.0,
+#'     correlation = 0.9,
+#'     conditional_precision = 1.0,
+#'     adj_matrix = jnp$array(
+#'         matrix(c(0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0), nrow = 3L, byrow = TRUE)
+#'     ),
+#'     sample = TRUE
+#' )
 #' }
 #'
 #' @references

@@ -77,7 +77,11 @@
 #' \donttest{
 #' library(BayesForge)
 #' m <- importBF(platform = "cpu")
-#' bf.dist.multinomial_logits(logits = jnp$array(c(1.0, 0.5)), total_count = 5L, sample = TRUE)
+#' bf.dist.multinomial_logits(
+#'     logits = jnp$array(c(1.0, 0.5)),
+#'     total_count = 5L,
+#'     sample = TRUE
+#' )
 #' }
 #'
 #' @seealso \url{https://num.pyro.ai/en/stable/distributions.html#multinomiallogits}

@@ -102,7 +102,11 @@ via logits) and temperature parameter \eqn{\lambda > 0}. Then the PDF is:
 \donttest{
 library(BayesForge)
 m <- importBF(platform = "cpu")
-bf.dist.relaxed_bernoulli(temperature = 1.0, probs = jnp$array(c(0.2, 0.3, 0.5)), sample = TRUE)
+bf.dist.relaxed_bernoulli(
+    temperature = 1.0,
+    probs = jnp$array(c(0.2, 0.3, 0.5)),
+    sample = TRUE
+)
 }
 
 }

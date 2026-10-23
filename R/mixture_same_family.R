@@ -60,7 +60,19 @@
 #' \donttest{
 #' library(BayesForge)
 #' m <- importBF(platform = "cpu")
-#' bf.dist.mixture_same_family(mixing_distribution = bf.dist.categorical(probs = jnp$array(c(0.3, 0.7)), create_obj = TRUE), component_distribution = bf.dist.normal(loc = 0.0, scale = 1.0, shape = c(2L), create_obj = TRUE), sample = TRUE)
+#' bf.dist.mixture_same_family(
+#'     mixing_distribution = bf.dist.categorical(
+#'         probs = jnp$array(c(0.3, 0.7)),
+#'         create_obj = TRUE
+#'     ),
+#'     component_distribution = bf.dist.normal(
+#'         loc = 0.0,
+#'         scale = 1.0,
+#'         shape = c(2L),
+#'         create_obj = TRUE
+#'     ),
+#'     sample = TRUE
+#' )
 #' }
 #'
 #' @seealso \url{https://num.pyro.ai/en/stable/distributions.html#mixture-,}

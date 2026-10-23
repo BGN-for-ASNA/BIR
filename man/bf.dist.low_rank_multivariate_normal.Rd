@@ -91,7 +91,12 @@ library(BayesForge)
 m <- importBF(platform = "cpu")
 event_size <- 100L
 rank <- 5L
-bf.dist.low_rank_multivariate_normal(loc = bf.dist.normal(0, 1, shape = c(event_size), sample = TRUE) * 2, cov_factor = bf.dist.normal(0, 1, shape = c(event_size, rank), sample = TRUE), cov_diag = jnp$exp(bf.dist.normal(0, 1, shape = c(event_size), sample = TRUE)) * 0.1, sample = TRUE)
+bf.dist.low_rank_multivariate_normal(
+    loc = bf.dist.normal(0, 1, shape = c(event_size), sample = TRUE) * 2,
+    cov_factor = bf.dist.normal(0, 1, shape = c(event_size, rank), sample = TRUE),
+    cov_diag = jnp$exp(bf.dist.normal(0, 1, shape = c(event_size), sample = TRUE)) * 0.1,
+    sample = TRUE
+)
 }
 
 }

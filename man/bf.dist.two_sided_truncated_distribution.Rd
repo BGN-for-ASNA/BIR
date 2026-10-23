@@ -88,7 +88,12 @@ distribution.
 \donttest{
 library(BayesForge)
 m <- importBF(platform = "cpu")
-bf.dist.two_sided_truncated_distribution(base_dist = bf.dist.normal(0.0, 1.0, create_obj = TRUE), low = -1.0, high = 1.0, sample = TRUE)
+bf.dist.two_sided_truncated_distribution(
+    base_dist = bf.dist.normal(0.0, 1.0, create_obj = TRUE),
+    low = -1.0,
+    high = 1.0,
+    sample = TRUE
+)
 }
 
 }

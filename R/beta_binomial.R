@@ -68,7 +68,12 @@
 #' \donttest{
 #' library(BayesForge)
 #' m <- importBF(platform = "cpu")
-#' bf.dist.beta_binomial(concentration1 = 1.0, concentration0 = 1.0, total_count = 10L, sample = TRUE)
+#' bf.dist.beta_binomial(
+#'     concentration1 = 1.0,
+#'     concentration0 = 1.0,
+#'     total_count = 10L,
+#'     sample = TRUE
+#' )
 #' }
 #'
 #' @seealso \url{https://num.pyro.ai/en/stable/distributions.html#betabinomial}

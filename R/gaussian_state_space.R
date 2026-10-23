@@ -53,7 +53,12 @@
 #' \donttest{
 #' library(BayesForge)
 #' m <- importBF(platform = "cpu")
-#' bf.dist.gaussian_state_space(num_steps = 5L, transition_matrix = jnp$array(matrix(c(0.5, 0.1, 0.0, 0.8), nrow = 2L, byrow = TRUE)), covariance_matrix = jnp$array(matrix(c(1.0, 0.6, 0.6, 1.0), nrow = 2L, byrow = TRUE)), sample = TRUE)
+#' bf.dist.gaussian_state_space(
+#'     num_steps = 5L,
+#'     transition_matrix = jnp$array(matrix(c(0.5, 0.1, 0.0, 0.8), nrow = 2L, byrow = TRUE)),
+#'     covariance_matrix = jnp$array(matrix(c(1.0, 0.6, 0.6, 1.0), nrow = 2L, byrow = TRUE)),
+#'     sample = TRUE
+#' )
 #' }
 #'
 #' @seealso \url{https://num.pyro.ai/en/stable/distributions.html#gaussianstate}

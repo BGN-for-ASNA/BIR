@@ -112,7 +112,11 @@ and \eqn{p_k} is given by the softmax of logits.
 \donttest{
 library(BayesForge)
 m <- importBF(platform = "cpu")
-bf.dist.multinomial_logits(logits = jnp$array(c(1.0, 0.5)), total_count = 5L, sample = TRUE)
+bf.dist.multinomial_logits(
+    logits = jnp$array(c(1.0, 0.5)),
+    total_count = 5L,
+    sample = TRUE
+)
 }
 
 }

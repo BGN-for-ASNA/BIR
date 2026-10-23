@@ -90,7 +90,11 @@ probability of occurring.
 \donttest{
 library(BayesForge)
 m <- importBF(platform = "cpu")
-bf.dist.multinomial_probs(probs = jnp$array(c(0.2, 0.3, 0.5)), total_count = 10L, sample = TRUE)
+bf.dist.multinomial_probs(
+    probs = jnp$array(c(0.2, 0.3, 0.5)),
+    total_count = 10L,
+    sample = TRUE
+)
 }
 
 }

@@ -52,7 +52,13 @@
 #' \donttest{
 #' library(BayesForge)
 #' m <- importBF(platform = "cpu")
-#' bf.dist.gaussian_copula(marginal_dist = bf.dist.beta(2.0, 5.0, create_obj = TRUE), correlation_matrix = jnp$array(matrix(c(1.0, 0.7, 0.7, 1.0), nrow = 2L, byrow = TRUE)), sample = TRUE)
+#' bf.dist.gaussian_copula(
+#'     marginal_dist = bf.dist.beta(2.0, 5.0, create_obj = TRUE),
+#'     correlation_matrix = jnp$array(
+#'         matrix(c(1.0, 0.7, 0.7, 1.0), nrow = 2L, byrow = TRUE)
+#'     ),
+#'     sample = TRUE
+#' )
 #' }
 #'
 #' @seealso \url{https://num.pyro.ai/en/stable/distributions.html#gaussiancopula}

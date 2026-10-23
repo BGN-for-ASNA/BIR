@@ -80,7 +80,11 @@ and the 'rate' parameter is derived from 'probs'.
 \donttest{
 library(BayesForge)
 m <- importBF(platform = "cpu")
-bf.dist.negative_binomial_probs(total_count = 10.0, probs = jnp$array(c(0.2, 0.3, 0.5)), sample = TRUE)
+bf.dist.negative_binomial_probs(
+    total_count = 10.0,
+    probs = jnp$array(c(0.2, 0.3, 0.5)),
+    sample = TRUE
+)
 }
 
 }

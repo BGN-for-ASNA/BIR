@@ -69,7 +69,11 @@
 #' \donttest{
 #' library(BayesForge)
 #' m <- importBF(platform = "cpu")
-#' bf.dist.left_truncated_distribution(base_dist = bf.dist.normal(0.0, 1.0, create_obj = TRUE), low = 0.0, sample = TRUE)
+#' bf.dist.left_truncated_distribution(
+#'     base_dist = bf.dist.normal(0.0, 1.0, create_obj = TRUE),
+#'     low = 0.0,
+#'     sample = TRUE
+#' )
 #' }
 #'
 #' @seealso \url{https://num.pyro.ai/en/stable/distributions.html#lefttruncateddistribution}

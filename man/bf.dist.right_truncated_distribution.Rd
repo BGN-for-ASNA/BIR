@@ -105,7 +105,11 @@ value \code{b} (meaning \verb{k ≤ b}), the new PMF, \code{P_T(X = k)}, is:
 \donttest{
 library(BayesForge)
 m <- importBF(platform = "cpu")
-bf.dist.right_truncated_distribution(base_dist = bf.dist.normal(0, 1, create_obj = TRUE), high = 0, sample = TRUE)
+bf.dist.right_truncated_distribution(
+    base_dist = bf.dist.normal(0, 1, create_obj = TRUE),
+    high = 0,
+    sample = TRUE
+)
 }
 
 }

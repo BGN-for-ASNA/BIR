@@ -312,6 +312,112 @@ def example_to_r(example_lines, r_name, r_names):
     return ["library(BayesForge)", "m <- importBF(platform = \"cpu\")"] + out
 
 
+def _wrap_r_call(line, width=90, indent=""):
+    """Split an R statement longer than `width` into shorter lines: an optional
+    leading assignment (`lhs <- ` or, for an argument, `name = `) stays on the
+    first line, the arguments of the outermost call each get a continuation
+    line, and an argument that is itself too long is wrapped the same way.
+    Commas inside nested (), [], {} or quoted strings are left alone; a plain
+    c(...) of numbers is packed with as many numbers per line as fit."""
+    if len(line) <= width:
+        return [line]
+
+    def top_level(s):
+        """Yield (index, char) for characters outside quotes and brackets."""
+        depth, quote, i = 0, None, 0
+        while i < len(s):
+            ch = s[i]
+            if quote:
+                if ch == "\\":
+                    i += 2
+                    continue
+                if ch == quote:
+                    quote = None
+            elif ch in "'\"":
+                quote = ch
+            elif ch in "([{":
+                depth += 1
+                if depth == 1 and ch == "(":
+                    yield i, ch
+            elif ch in ")]}":
+                if depth and ch == ")" and depth == 1:
+                    yield i, ch
+                depth -= 1
+            elif depth == 0:
+                yield i, ch
+            i += 1
+
+    def split_args(s):
+        """Split the inside of a call at its top-level commas."""
+        args, start, depth, quote, i = [], 0, 0, None, 0
+        while i < len(s):
+            ch = s[i]
+            if quote:
+                if ch == "\\":
+                    i += 2
+                    continue
+                if ch == quote:
+                    quote = None
+            elif ch in "'\"":
+                quote = ch
+            elif ch in "([{":
+                depth += 1
+            elif ch in ")]}":
+                depth -= 1
+            elif ch == "," and depth == 0:
+                args.append(s[start:i].strip())
+                start = i + 1
+            i += 1
+        args.append(s[start:].strip())
+        return [a for a in args if a]
+
+    stripped = line.rstrip()
+    tail = "," if stripped.endswith(",") else ""
+    body = stripped[:-1] if tail else stripped
+    lead = line[:len(line) - len(line.lstrip())] or indent
+    m = re.match(r"[A-Za-z._][A-Za-z0-9._$]*\s*(?:<-|=(?!=))\s+", body[len(lead):])
+    prefix, rest = "", body[len(lead):]
+    if m:
+        prefix = body[len(lead):len(lead) + m.end()]
+        rest = body[len(lead) + m.end():]
+    if not rest.endswith(")"):
+        return [line]
+    open_ = close = -1
+    for i, ch in top_level(rest):
+        if ch == "(":
+            if open_ >= 0:                   # first "(" is not the call's
+                return [line]
+            open_ = i
+        elif ch == ")":
+            close = i
+            break
+    if open_ < 0 or close != len(rest) - 1:
+        return [line]
+    head, args = rest[:open_], split_args(rest[open_ + 1:close])
+    if not args:
+        return [line]
+    ind = lead + "    "
+    out = [lead + prefix + head + "("]
+    number = re.compile(r"^[+-]?(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?[L]?$")
+    if head == "c" and all(number.match(a) for a in args):
+        cur = ind
+        for k, a in enumerate(args):
+            piece = a + ("," if k < len(args) - 1 else "")
+            if cur != ind and len(cur) + 1 + len(piece) > width:
+                out.append(cur)
+                cur = ind + piece
+            else:
+                cur = cur + (" " if cur != ind else "") + piece
+        if cur != ind:
+            out.append(cur)
+    else:
+        for k, a in enumerate(args):
+            child = ind + a + ("," if k < len(args) - 1 else "")
+            out += _wrap_r_call(child, width, ind) if len(child) > width else [child]
+    out.append(lead + ")" + tail)
+    return out
+
+
 def _blocks(text):
     """Paragraphs, list items and \\deqn lines of a markdown text."""
     blocks, cur = [], []
@@ -406,7 +512,8 @@ def roxygen_block(r_name, r_args, py_method, parsed, r_names):
     lines.append("#'")
     lines.append("#' @examples")
     lines.append("#' \\donttest{")
-    lines += ["#' " + ln for ln in example_to_r(parsed["example"], r_name, r_names)]
+    for ln in example_to_r(parsed["example"], r_name, r_names):
+        lines += ["#' " + x for x in _wrap_r_call(ln)]
     lines.append("#' }")
     if parsed["wrapper"]:
         lines += ["#'", f"#' @seealso \\url{{{parsed['wrapper']}}}"]

@@ -55,7 +55,11 @@
 #' \donttest{
 #' library(BayesForge)
 #' m <- importBF(platform = "cpu")
-#' bf.dist.negative_binomial(total_count = 5.0, probs = jnp$array(c(0.2, 0.3, 0.5)), sample = TRUE)
+#' bf.dist.negative_binomial(
+#'     total_count = 5.0,
+#'     probs = jnp$array(c(0.2, 0.3, 0.5)),
+#'     sample = TRUE
+#' )
 #' }
 #'
 #' @seealso \url{https://num.pyro.ai/en/stable/distributions.html#negativebinomial}

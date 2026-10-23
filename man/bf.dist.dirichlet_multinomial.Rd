@@ -109,7 +109,11 @@ probabilities vary according to the Dirichlet prior.
 \donttest{
 library(BayesForge)
 m <- importBF(platform = "cpu")
-counts <- bf.dist.dirichlet_multinomial(concentration = jnp$array(c(1.0, 1.0, 1.0)), total_count = 10L, sample = TRUE)
+counts <- bf.dist.dirichlet_multinomial(
+    concentration = jnp$array(c(1.0, 1.0, 1.0)),
+    total_count = 10L,
+    sample = TRUE
+)
 }
 
 }

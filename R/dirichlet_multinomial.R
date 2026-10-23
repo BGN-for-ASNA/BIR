@@ -74,7 +74,11 @@
 #' \donttest{
 #' library(BayesForge)
 #' m <- importBF(platform = "cpu")
-#' counts <- bf.dist.dirichlet_multinomial(concentration = jnp$array(c(1.0, 1.0, 1.0)), total_count = 10L, sample = TRUE)
+#' counts <- bf.dist.dirichlet_multinomial(
+#'     concentration = jnp$array(c(1.0, 1.0, 1.0)),
+#'     total_count = 10L,
+#'     sample = TRUE
+#' )
 #' }
 #'
 #' @seealso \url{https://num.pyro.ai/en/stable/distributions.html#dirichletmultinomial}

@@ -127,7 +127,12 @@ distribution for count \eqn{k}.
 \donttest{
 library(BayesForge)
 m <- importBF(platform = "cpu")
-bf.dist.zero_inflated_negative_binomial(mean = 2.0, concentration = 3.0, gate = 0.3, sample = TRUE)
+bf.dist.zero_inflated_negative_binomial(
+    mean = 2.0,
+    concentration = 3.0,
+    gate = 0.3,
+    sample = TRUE
+)
 }
 
 }

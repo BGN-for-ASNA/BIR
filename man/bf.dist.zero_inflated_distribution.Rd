@@ -107,7 +107,11 @@ risk) and others follow a regular count process (with risk).
 \donttest{
 library(BayesForge)
 m <- importBF(platform = "cpu")
-bf.dist.zero_inflated_distribution(base_dist = bf.dist.poisson(rate = 5, create_obj = TRUE), gate = 0.3, sample = TRUE)
+bf.dist.zero_inflated_distribution(
+    base_dist = bf.dist.poisson(rate = 5, create_obj = TRUE),
+    gate = 0.3,
+    sample = TRUE
+)
 }
 
 }

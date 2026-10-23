@@ -55,7 +55,12 @@
 #' \donttest{
 #' library(BayesForge)
 #' m <- importBF(platform = "cpu")
-#' bf.dist.euler_maruyama(t = jnp$array(c(0.0, 0.1, 0.2)), sde_fn = function(x, t) reticulate::tuple(x, 1.0), init_dist = bf.dist.normal(0.0, 1.0, create_obj = TRUE), sample = TRUE)
+#' bf.dist.euler_maruyama(
+#'     t = jnp$array(c(0.0, 0.1, 0.2)),
+#'     sde_fn = function(x, t) reticulate::tuple(x, 1.0),
+#'     init_dist = bf.dist.normal(0.0, 1.0, create_obj = TRUE),
+#'     sample = TRUE
+#' )
 #' }
 #'
 #' @export

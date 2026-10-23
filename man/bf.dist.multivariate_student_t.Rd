@@ -101,7 +101,20 @@ where:
 \donttest{
 library(BayesForge)
 m <- importBF(platform = "cpu")
-bf.dist.multivariate_student_t(df = 2, loc = jnp$array(c(1.0, 0.0, -2.0)), scale_tril = jnp$linalg$cholesky(jnp$array(matrix(c(2.0, 0.7, -0.3, 0.7, 1.0, 0.5, -0.3, 0.5, 1.5), nrow = 3L, byrow = TRUE))), sample = TRUE)
+bf.dist.multivariate_student_t(
+    df = 2,
+    loc = jnp$array(c(1.0, 0.0, -2.0)),
+    scale_tril = jnp$linalg$cholesky(
+        jnp$array(
+            matrix(
+                c(2.0, 0.7, -0.3, 0.7, 1.0, 0.5, -0.3, 0.5, 1.5),
+                nrow = 3L,
+                byrow = TRUE
+            )
+        )
+    ),
+    sample = TRUE
+)
 }
 
 }

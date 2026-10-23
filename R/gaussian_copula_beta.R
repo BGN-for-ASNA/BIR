@@ -52,7 +52,14 @@
 #' \donttest{
 #' library(BayesForge)
 #' m <- importBF(platform = "cpu")
-#' bf.dist.gaussian_copula_beta(concentration1 = jnp$array(c(2.0, 3.0)), concentration0 = jnp$array(c(5.0, 3.0)), correlation_cholesky = jnp$linalg$cholesky(jnp$array(matrix(c(1.0, 0.7, 0.7, 1.0), nrow = 2L, byrow = TRUE))), sample = TRUE)
+#' bf.dist.gaussian_copula_beta(
+#'     concentration1 = jnp$array(c(2.0, 3.0)),
+#'     concentration0 = jnp$array(c(5.0, 3.0)),
+#'     correlation_cholesky = jnp$linalg$cholesky(
+#'         jnp$array(matrix(c(1.0, 0.7, 0.7, 1.0), nrow = 2L, byrow = TRUE))
+#'     ),
+#'     sample = TRUE
+#' )
 #' }
 #'
 #' @seealso \url{https://num.pyro.ai/en/stable/distributions.html#gaussiancopulabetadistribution}

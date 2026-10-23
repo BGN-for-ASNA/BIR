@@ -98,7 +98,17 @@
 #' \donttest{
 #' library(BayesForge)
 #' m <- importBF(platform = "cpu")
-#' bf.dist.mixture_general(mixing_distribution = bf.dist.categorical(probs = jnp$array(c(0.3, 0.7)), create_obj = TRUE), component_distributions = list(bf.dist.normal(-2.0, 1.0, create_obj = TRUE), bf.dist.normal(2.0, 1.0, create_obj = TRUE)), sample = TRUE)
+#' bf.dist.mixture_general(
+#'     mixing_distribution = bf.dist.categorical(
+#'         probs = jnp$array(c(0.3, 0.7)),
+#'         create_obj = TRUE
+#'     ),
+#'     component_distributions = list(
+#'         bf.dist.normal(-2.0, 1.0, create_obj = TRUE),
+#'         bf.dist.normal(2.0, 1.0, create_obj = TRUE)
+#'     ),
+#'     sample = TRUE
+#' )
 #' }
 #'
 #' @seealso \url{https://num.pyro.ai/en/stable/distributions.html#mixturegeneral}

@@ -67,9 +67,25 @@
 #' n_rows <- 3L
 #' n_cols <- 4L
 #' loc <- jnp$zeros(c(n_rows, n_cols))
-#' U_row_cov <- jnp$array(matrix(c(1.0, 0.5, 0.2, 0.5, 1.0, 0.3, 0.2, 0.3, 1.0), nrow = 3L, byrow = TRUE))
-#' V_col_cov <- jnp$array(matrix(c(2.0, -0.8, 0.1, 0.4, -0.8, 2.0, 0.2, -0.2, 0.1, 0.2, 2.0, 0.0, 0.4, -0.2, 0.0, 2.0), nrow = 4L, byrow = TRUE))
-#' bf.dist.matrix_normal(loc = loc, scale_tril_row = jnp$linalg$cholesky(U_row_cov), scale_tril_column = jnp$linalg$cholesky(V_col_cov), sample = TRUE)
+#' U_row_cov <- jnp$array(
+#'     matrix(c(1.0, 0.5, 0.2, 0.5, 1.0, 0.3, 0.2, 0.3, 1.0), nrow = 3L, byrow = TRUE)
+#' )
+#' V_col_cov <- jnp$array(
+#'     matrix(
+#'         c(
+#'             2.0, -0.8, 0.1, 0.4, -0.8, 2.0, 0.2, -0.2, 0.1, 0.2, 2.0, 0.0, 0.4, -0.2, 0.0,
+#'             2.0
+#'         ),
+#'         nrow = 4L,
+#'         byrow = TRUE
+#'     )
+#' )
+#' bf.dist.matrix_normal(
+#'     loc = loc,
+#'     scale_tril_row = jnp$linalg$cholesky(U_row_cov),
+#'     scale_tril_column = jnp$linalg$cholesky(V_col_cov),
+#'     sample = TRUE
+#' )
 #' }
 #'
 #' @seealso \url{https://num.pyro.ai/en/stable/distributions.html#matrixnormal_lowercase}

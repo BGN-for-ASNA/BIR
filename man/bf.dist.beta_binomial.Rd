@@ -103,7 +103,12 @@ where (\eqn{B(u,v)}) is the Beta function \eqn{(B(u,v) =
 \donttest{
 library(BayesForge)
 m <- importBF(platform = "cpu")
-bf.dist.beta_binomial(concentration1 = 1.0, concentration0 = 1.0, total_count = 10L, sample = TRUE)
+bf.dist.beta_binomial(
+    concentration1 = 1.0,
+    concentration0 = 1.0,
+    total_count = 10L,
+    sample = TRUE
+)
 }
 
 }

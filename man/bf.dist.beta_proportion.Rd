@@ -90,7 +90,12 @@ hyperpriors on (\\mu) (the “center”) and (\\kappa) (the “spread”).
 \donttest{
 library(BayesForge)
 m <- importBF(platform = "cpu")
-samples <- bf.dist.beta_proportion(mean = 0.5, concentration = 2.0, sample = TRUE, shape = c(1000L))
+samples <- bf.dist.beta_proportion(
+    mean = 0.5,
+    concentration = 2.0,
+    sample = TRUE,
+    shape = c(1000L)
+)
 }
 
 }
