@@ -24,6 +24,7 @@ Suggests:
     posterior,
     brms,
     loo,
+    knitr,
     rstan
 Config/testthat/edition: 3
 License: GPL (>= 3)

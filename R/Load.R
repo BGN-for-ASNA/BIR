@@ -77,6 +77,12 @@ jax <- NULL
                      loo.BayesForge.Main.main.bf,
                      envir = asNamespace("loo"))
   }
+  # knitr is only suggested: plotly figures render as HTML in R Markdown / Quarto.
+  if (requireNamespace("knitr", quietly = TRUE)) {
+    registerS3method("knit_print", "plotly.basedatatypes.BaseFigure",
+                     .bf_knit_print_plotly,
+                     envir = asNamespace("knitr"))
+  }
 }
 
 #' @title Package attach
