@@ -15,7 +15,8 @@ LazyData: true
 Imports:
     reticulate (>= 1.31),
     abind,
-    methods
+    methods,
+    parallel
 SystemRequirements: Python (>= 3.12), 'bayesforge' python library
     (installed by setup_env()).
 Depends: R (>= 3.6.0)
