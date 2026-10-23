@@ -16,7 +16,8 @@ Imports:
     reticulate (>= 1.31),
     abind,
     methods,
-    parallel
+    parallel,
+    future
 SystemRequirements: Python (>= 3.12), 'bayesforge' python library
     (installed by setup_env()).
 Depends: R (>= 3.6.0)
@@ -26,6 +27,8 @@ Suggests:
     brms,
     loo,
     knitr,
+    bayesplot,
+    rstantools,
     rstan
 Config/testthat/edition: 3
 License: GPL (>= 3)

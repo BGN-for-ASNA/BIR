@@ -181,25 +181,45 @@
                 n, length(cl), plan$cores_per_worker)
       cat(hdr)
     }
-    # Dynamic dispatch, as clusterApplyLB does it, but reporting each result as
-    # it arrives instead of all at the end. sendCall/recvOneResult are
-    # parallel's internals (hence :::); no exported function streams results.
-    submit <- function(node, j) {
-      parallel:::sendCall(cl[[node]], task, list(plan$scenarios[[j]]), tag = j)
+    # future runs the tasks on the cluster set up above (only exported API, so
+    # the package stays CRAN-clean). One future per simulation, at most one per
+    # worker; poll and report each result as it arrives (dynamic dispatch).
+    old_plan <- future::plan(future::cluster, workers = cl)
+    on.exit(future::plan(old_plan), add = TRUE, after = FALSE)
+    pids <- unlist(parallel::clusterCall(cl, Sys.getpid))
+    submit <- function(j) {
+      scenario <- plan$scenarios[[j]]
+      future::future(list(pid = Sys.getpid(), value = task(scenario)),
+                     globals = list(task = task, scenario = scenario),
+                     seed = TRUE, stdout = FALSE)
     }
     first <- min(n, length(cl))
-    for (k in seq_len(first)) submit(k, k)
-    for (i in seq_len(n)) {
-      d <- tryCatch(parallel:::recvOneResult(cl), error = function(e) {
+    running <- lapply(seq_len(first), submit)
+    tags <- seq_len(first)
+    nxt <- first + 1L
+    done <- 0L
+    while (length(running)) {
+      ready <- which(vapply(running, future::resolved, logical(1)))
+      if (!length(ready)) {
+        Sys.sleep(0.05)
+        next
+      }
+      k <- ready[[1L]]
+      d <- tryCatch(future::value(running[[k]]), error = function(e) {
         stop("run_simulations: a worker process failed: ", conditionMessage(e),
              call. = FALSE)
       })
-      if (i + first <= n) submit(d$node, i + first)
-      if (inherits(d$value, "try-error")) {
-        stop("run_simulations: worker error: ", d$value, call. = FALSE)
+      j <- tags[[k]]
+      running[[k]] <- NULL
+      tags <- tags[-k]
+      if (nxt <= n) {
+        running[[length(running) + 1L]] <- submit(nxt)
+        tags <- c(tags, nxt)
+        nxt <- nxt + 1L
       }
-      results[[d$tag]] <- d$value
-      if (progress) .bf_sim_report(d$value, d$node, i, n, scenario_cols)
+      done <- done + 1L
+      results[[j]] <- d$value
+      if (progress) .bf_sim_report(d$value, match(d$pid, pids), done, n, scenario_cols)
     }
   }
 

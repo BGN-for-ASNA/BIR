@@ -380,14 +380,17 @@ if (requireNamespace("reticulate", quietly = TRUE) &&
                  tolerance = 1e-7)
 
     # R reference: rstantools::loo_pit with loo::psis(-log_lik, r_eff = 1)
-    # weights, as make_reference.R does. The Python test xfails this comparison
-    # on its fixture (ArviZ-style PSIS vs loo::psis differ by 1.15e-8 there);
-    # with this fit PSIS smoothing is inactive and both agree to ~1e-15, so it
-    # is asserted here instead of skipped.
+    # weights, as make_reference.R does. BayesForge smooths the importance
+    # weights with its own ArviZ-style PSIS, not loo::psis: where tail
+    # smoothing kicks in (it depends on the fit, hence on the platform) the
+    # two differ by ~1e-5 (seen on macOS CI: 4e-5), elsewhere by ~1e-15.
+    # 1e-3 absorbs that and still catches a wrong PIT (unnormalised weights
+    # gave values up to 5).
     psis <- loo::psis(-ll, r_eff = 1)
     set.seed(1)   # rstantools breaks ties with runif()
     pit_r <- as.numeric(rstantools::loo_pit(object = s$yrep, y = s$y,
                                             lw = stats::weights(psis)))
-    expect_equal(pit, pit_r, tolerance = 1e-7)
+    expect_true(all(pit >= 0 & pit <= 1))
+    expect_equal(pit, pit_r, tolerance = 1e-3)
   })
 }
