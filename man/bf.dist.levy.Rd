@@ -20,60 +20,87 @@ bf.dist.levy(
 )
 }
 \arguments{
-\item{loc}{A numeric vector, matrix, or array representing the location parameter.}
+\item{loc}{Location parameter.}
 
-\item{scale}{A numeric vector, matrix, or array representing the scale parameter.}
+\item{scale}{See the Python documentation of \code{scale}.}
 
-\item{validate_args}{Logical: Whether to validate parameter values. Defaults to `reticulate::py_none()`.}
+\item{validate_args}{Logical. Whether to validate the parameter values.
+Defaults to \code{py_none()} (the NumPyro default).}
 
-\item{name}{A character string representing the name of the random variable
-within a model. This is used to uniquely identify the variable. Defaults to 'x'.}
+\item{name}{Character. Name of the random variable in the model. When not
+given, an observed site is named after the variable passed to \code{obs} (\code{obs = y} gives \code{"y"}); use \code{\link[=bf_model]{bf_model()}} to name parameters after the variables they
+are assigned to.}
 
-\item{obs}{A numeric vector or array of observed values. If provided, the
-random variable is conditioned on these values. If `NULL`, the variable is
-treated as a latent (unobserved) variable. Defaults to `NULL`.}
+\item{obs}{Numeric vector or array of observed values. If given, the random
+variable is conditioned on them (likelihood); otherwise it is latent.
+Defaults to \code{py_none()}.}
 
-\item{mask}{A logical vector, matrix, or array to mask observations.}
+\item{mask}{Optional logical vector or array masking observations (\code{FALSE} =
+ignored). Defaults to \code{py_none()}.}
 
-\item{sample}{A logical value that controls the function's behavior. If `TRUE`,
-the function will directly draw samples from the distribution. If `FALSE`,
-it will create a random variable within a model. Defaults to `FALSE`.}
+\item{sample}{Logical. If \code{TRUE}, directly draw values from the distribution
+and return them; if \code{FALSE} (default), create a random variable inside a
+model.}
 
-\item{seed}{An integer used to set the random seed for reproducibility when
-`sample = TRUE`. This argument has no effect when `sample = FALSE`, as
-randomness is handled by the model's inference engine. Defaults to 0.}
+\item{seed}{Integer seed for this draw when \code{sample = TRUE}. By default
+(\code{py_none()}) the draw comes from the session's random stream, set by
+\code{importBF(rand_seed = ...)}, so consecutive draws differ but the whole
+sequence is reproducible. No effect when \code{sample = FALSE}.}
 
-\item{shape}{A numeric vector used for shaping. When `sample=FALSE` (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When `sample=TRUE` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{shape}{Integer vector. With \code{sample = FALSE}, the batch shape of the
+distribution in the model; with \code{sample = TRUE}, the shape of the draw.
+Defaults to \code{c()} (no extra dimensions).}
 
-\item{event}{Integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{event}{Integer. Number of batch dimensions reinterpreted as event
+dimensions (model building only). Defaults to \code{0}.}
 
-\item{create_obj}{Logical; If `TRUE`, returns the raw BI distribution object instead of creating a sample site.}
+\item{create_obj}{Logical. If \code{TRUE}, return the distribution object itself
+instead of a random variable (e.g. to build mixtures). Defaults to \code{FALSE}.}
 
-\item{to_jax}{Logical. Defaults to TRUE.}
+\item{to_jax}{Logical. Return a JAX array (\code{TRUE}, default) or convert to R.}
 }
 \value{
 \itemize{
-  \item When \code{sample=FALSE}, a BI Levy distribution object (for model building).
-  \item When \code{sample=TRUE}, a JAX array of samples drawn from the Levy distribution (for direct sampling).
-  \item When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
+\item BF Levy distribution object: When \code{sample = FALSE} (for model
+building).
+\item JAX array: When \code{sample = TRUE} (for direct sampling).
+\item BF distribution object: When \code{create_obj = TRUE} (for advanced use
+cases).
 }
 }
 \description{
-The Levy distribution (or L\'evy) is a continuous probability distribution on the positive real line
-(or shifted positive line) that is heavy-tailed, skewed, and arises naturally in connection
-with stable distributions, specifically the case with stability index \eqn{\alpha = 1/2}.
-It is often used in contexts such as hitting-time problems for Brownian motion, physics
-(e.g., van der Waals line-shapes), and modelling very heavy-tailed phenomena.
-Let \eqn{X} be a Levy-distributed random variable with location parameter \eqn{\mu}
-and scale parameter \eqn{c > 0}. The support is \eqn{x \ge \mu}.
+Samples from a Levy distribution. The Lévy distribution is a continuous
+probability distribution on the positive real line (or shifted positive line)
+that is \emph{heavy-tailed}, \emph{skewed}, and arises naturally in connection with
+stable distributions specifically the case with stability index \eqn{\alpha =
+\tfrac12}. It is often used in contexts such as hitting‐time problems for
+Brownian motion, physics (e.g., van der Waals line‐shapes), and modelling
+very heavy‐tailed phenomena. Let (X) be a Lévy‐distributed random variable
+with \strong{location} parameter \eqn{\mu} and \strong{scale} parameter (c > 0). The
+support is \eqn{x \ge \mu}.
+
+\strong{PDF}
+
+\deqn{f(x; \mu, c) = \sqrt{\frac{c}{2\pi}} ; \frac{1}{(x - \mu)^{3/2}} ; \exp!\Bigl( -\frac{c}{2 (x - \mu)} \Bigr), \quad x \ge \mu.}
+
+\strong{CDF}
+
+\deqn{F(x; \mu, c) = \Pr(X \le x) = \operatorname{erfc}!\Bigl(\sqrt{\tfrac{c}{2 (x - \mu)}}\Bigr) = 2 - 2,\Phi!\Bigl(\sqrt{\tfrac{c}{(x - \mu)}}\Bigr), \quad x \ge \mu.}
+
+Here \eqn{\operatorname{erfc}} is the complementary error function and
+\eqn{\Phi} is the standard normal CDF.
+
+In the \emph{standard} case with \eqn{\mu = 0} and \eqn{c = 1}, one often simply
+writes \eqn{X \sim \text{Lévy}(0,1)}.
 }
 \examples{
 \donttest{
 library(BayesForge)
 m <- importBF(platform = "cpu")
-bf.dist.levy(loc = 1, scale = 10, sample = TRUE)
+bf.dist.levy(loc = 0.0, scale = 1.0, sample = TRUE)
 }
+
 }
 \seealso{
-This is a wrapper of \url{https://num.pyro.ai/en/stable/distributions.html#levy}
+\url{https://num.pyro.ai/en/stable/distributions.html#levy}
 }

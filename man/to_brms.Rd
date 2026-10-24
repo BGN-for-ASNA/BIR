@@ -2,7 +2,7 @@
 % Please edit documentation in R/to_brms.R
 \name{to_brms}
 \alias{to_brms}
-\title{Convert BI fit to brmsfit}
+\title{Convert BF fit to brmsfit}
 \usage{
 to_brms(
   bi_fit,
@@ -14,13 +14,13 @@ to_brms(
 )
 }
 \arguments{
-\item{bi_fit}{The reticulate object returned by BI fitting.}
+\item{bi_fit}{The reticulate object returned by BF fitting.}
 
-\item{formula}{The brms formula for the model. Defaults to `bi_fit$formula`.}
+\item{formula}{The brms formula for the model. Defaults to \code{bi_fit$formula}.}
 
-\item{data}{The data used for fitting. Defaults to `bi_fit$data`.}
+\item{data}{The data used for fitting. Defaults to \code{bi_fit$data}.}
 
-\item{family}{The family used. Defaults to `bi_fit$family` or `gaussian()`.}
+\item{family}{The family used. Defaults to \code{bi_fit$family} or \code{gaussian()}.}
 
 \item{par_map}{Optional list for custom naming: list(BI_name = brms_name).}
 
@@ -30,5 +30,5 @@ to_brms(
 A brmsfit object.
 }
 \description{
-Converts a BI (NumPyro MCMC) object into a compatible brmsfit object.
+Converts a BF (NumPyro MCMC) object into a compatible brmsfit object.
 }

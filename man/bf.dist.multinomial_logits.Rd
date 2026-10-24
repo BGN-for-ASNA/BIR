@@ -2,7 +2,7 @@
 % Please edit documentation in R/multi_nomial_logits.R
 \name{bf.dist.multinomial_logits}
 \alias{bf.dist.multinomial_logits}
-\title{Multinomial logit}
+\title{Multinomial Logits distribution}
 \usage{
 bf.dist.multinomial_logits(
   logits,
@@ -12,6 +12,8 @@ bf.dist.multinomial_logits(
   name = "x",
   obs = py_none(),
   mask = py_none(),
+  infer = py_none(),
+  enum = FALSE,
   sample = FALSE,
   seed = py_none(),
   shape = c(),
@@ -21,62 +23,106 @@ bf.dist.multinomial_logits(
 )
 }
 \arguments{
-\item{logits}{A numeric vector, matrix, or array representing the logits for each outcome.}
+\item{logits}{Logits for each outcome. Must be at least one-dimensional.}
 
-\item{total_count}{A numeric vector, matrix, or array representing the total number of trials.}
+\item{total_count}{The total number of trials.}
 
-\item{total_count_max}{(int, optional): An optional integer providing an upper bound on `total_count`. This is used for performance optimization with `lax.scan` when `total_count` is a dynamic JAX tracer, helping to avoid recompilation.}
+\item{total_count_max}{See the Python documentation of \code{total_count_max}.}
 
-\item{validate_args}{Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.}
+\item{validate_args}{Logical. Whether to validate the parameter values.
+Defaults to \code{py_none()} (the NumPyro default).}
 
-\item{name}{A character string representing the name of the random variable
-within a model. This is used to uniquely identify the variable. Defaults to 'x'.}
+\item{name}{Character. Name of the random variable in the model. When not
+given, an observed site is named after the variable passed to \code{obs} (\code{obs = y} gives \code{"y"}); use \code{\link[=bf_model]{bf_model()}} to name parameters after the variables they
+are assigned to.}
 
-\item{obs}{A numeric vector or array of observed values. If provided, the
-random variable is conditioned on these values. If `NULL`, the variable is
-treated as a latent (unobserved) variable. Defaults to `NULL`.}
+\item{obs}{Numeric vector or array of observed values. If given, the random
+variable is conditioned on them (likelihood); otherwise it is latent.
+Defaults to \code{py_none()}.}
 
-\item{mask}{A logical vector, matrix, or array to mask observations.}
+\item{mask}{Optional logical vector or array masking observations (\code{FALSE} =
+ignored). Defaults to \code{py_none()}.}
 
-\item{sample}{A logical value that controls the function's behavior. If `TRUE`,
-the function will directly draw samples from the distribution. If `FALSE`,
-it will create a random variable within a model. Defaults to `FALSE`.}
+\item{infer}{Optional named list passed to NumPyro's \code{infer} argument (e.g.
+\code{list(enumerate = "parallel")}).}
 
-\item{seed}{An integer used to set the random seed for reproducibility when
-`sample = TRUE`. This argument has no effect when `sample = FALSE`, as
-randomness is handled by the model's inference engine. Defaults to 0.}
+\item{enum}{Logical. If \code{TRUE}, the discrete latent is summed out exactly
+(parallel enumeration) instead of sampled; same as \code{infer = list(enumerate = "parallel")}. Defaults to \code{FALSE}.}
 
-\item{shape}{A numeric vector specifying the shape of the distribution.  Use a vector (e.g., `c(10)`) to define the shape.}
+\item{sample}{Logical. If \code{TRUE}, directly draw values from the distribution
+and return them; if \code{FALSE} (default), create a random variable inside a
+model.}
 
-\item{event}{Integer specifying the number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{seed}{Integer seed for this draw when \code{sample = TRUE}. By default
+(\code{py_none()}) the draw comes from the session's random stream, set by
+\code{importBF(rand_seed = ...)}, so consecutive draws differ but the whole
+sequence is reproducible. No effect when \code{sample = FALSE}.}
 
-\item{create_obj}{Logical; If TRUE, returns the raw BI distribution object instead of creating a sample site.}
+\item{shape}{Integer vector. With \code{sample = FALSE}, the batch shape of the
+distribution in the model; with \code{sample = TRUE}, the shape of the draw.
+Defaults to \code{c()} (no extra dimensions).}
 
-\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
+\item{event}{Integer. Number of batch dimensions reinterpreted as event
+dimensions (model building only). Defaults to \code{0}.}
+
+\item{create_obj}{Logical. If \code{TRUE}, return the distribution object itself
+instead of a random variable (e.g. to build mixtures). Defaults to \code{FALSE}.}
+
+\item{to_jax}{Logical. Return a JAX array (\code{TRUE}, default) or convert to R.}
 }
 \value{
-- When \code{sample=FALSE}, a BI MultinomialLogits distribution object (for model building).
-
-   - When \code{sample=TRUE}, a JAX array of samples drawn from the MultinomialLogits distribution (for direct sampling).
-
-   - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
+\itemize{
+\item When \code{sample = FALSE}: A BF MultinomialLogits distribution object (for
+model building).
+\item When \code{sample = TRUE}: A JAX array of samples drawn from the
+MultinomialLogits distribution (for direct sampling).
+\item When \code{create_obj = TRUE}: The raw BF distribution object (for advanced
+use cases).
+}
 }
 \description{
-A *multinomial logits* distribution refers to a categorical (or more generally multinomial)
-distribution over \eqn{K} classes whose probabilities are given via the softmax of a vector of logits.
-That is, given a vector of real-valued logits \eqn{\ell = (\ell_1, \dots, \ell_K)}, the class probabilities are:
-\deqn{
-  p_k = \frac{\exp(\ell_k)}{\sum_{j=1}^K \exp(\ell_j)}.
- }
-Then a single draw from the distribution yields one of the \eqn{K} classes (or for a multinomial count version, counts over the classes) with those probabilities.#' @export
+A \emph{multinomial logits} distribution refers to a categorical (or more
+generally multinomial) distribution over (K) classes whose probabilities are
+given via the softmax of a vector of logits. That is, given a vector of
+real-valued logits \eqn{\ell = (\ell_1, …, \ell_K)}, the class probabilities
+are:
+
+\deqn{p_k = \frac{\exp(\ell_k)}{\sum_{j=1}^K \exp(\ell_j)}.}
+
+Then a single draw from the distribution yields one of the (K) classes (or
+for a multinomial count version, counts over the classes) with those
+probabilities.
+
+\strong{Categorical version (one draw):} Let (X \\in \{1,2,\\dots,K\}) be the
+class. Then
+
+\deqn{\Pr(X=k \mid \ell) ;=; p_k = \frac{\exp(\ell_k)}{\sum_{j=1}^K \exp(\ell_j)}.}
+
+This directly uses the logits \eqn{\ell}.
+
+\strong{Multinomial version (n draws):} If you draw (n) independent draws (or
+equivalently count vector) with probabilities (p = (p_1,…,p_K)), then for a
+count vector (x = (x_1,…,x_K)) with (\\sum_k x_k = n),
+
+\deqn{\Pr(X = x \mid n, p) = \frac{n!}{x_1! \cdots x_K!} ; \prod_{k=1}^K p_k^{x_k}}
+
+and \eqn{p_k} is given by the softmax of logits.
 }
 \examples{
 \donttest{
 library(BayesForge)
-m=importBF(platform='cpu')
-bf.dist.multinomial_logits(logits =  c(0.2, 0.3, 0.5), total_count = 10, sample = TRUE)
+m <- importBF(platform = "cpu")
+bf.dist.multinomial_logits(
+    logits = jnp$array(c(1.0, 0.5)),
+    total_count = 5L,
+    sample = TRUE
+)
 }
+
+}
+\references{
+https://en.wikipedia.org/wiki/Multinomial_distribution
 }
 \seealso{
-This is a wrapper of  \url{https://num.pyro.ai/en/stable/distributions.html#multinomiallogits}
+\url{https://num.pyro.ai/en/stable/distributions.html#multinomiallogits}
 }

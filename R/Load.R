@@ -31,19 +31,58 @@ class(.dummy_bf_instance) <- "dummy_bf_instance"
 
 .BF_env$loaded <- FALSE
 .BF_env$.bf <- NULL
-.BF_env$jnp <- list(array = function(x, ...) x)
+.BF_env$jnp <- list(array = function(x, ...) x, asarray = function(x, ...) x)
 .BF_env$.py <- list(is_none = function(x) is.null(x) || inherits(x, "python.builtin.NoneType"))
 .BF_env$.bf_instance <- .dummy_bf_instance
 
-#' @title Package Load
+#' JAX modules
+#'
+#' `jnp` (`jax.numpy`) and `jax`, imported lazily from the BayesForge Python
+#' environment, for building arrays passed to BayesForge models, e.g.
+#' `jnp$array(c(1, 2, 3))` or `jnp$eye(3L)`.
+#'
+#' @name jax_modules
+#' @aliases jnp jax
+#' @export jnp
+#' @export jax
+NULL
+jnp <- NULL
+jax <- NULL
+
+#' @title Package load hook
 #' @description
-#' Internal function to run when the package is loaded.
+#' Binds the session to the BayesForge Python environment when it exists
+#' (before any Python is initialised) and sets up the lazy `jnp`/`jax`
+#' modules.
 #' @param libname Library name.
 #' @param pkgname Package name.
 #' @return No return value, called for side effects.
 #' @keywords internal
-onLoad <- function(libname = NULL, pkgname = "BI") {
-  packageStartupMessage("For documentation, run the command: bf.doc()")
+.onLoad <- function(libname, pkgname) {
+  if (reticulate::virtualenv_exists("BFR") && !reticulate::py_available(initialize = FALSE)) {
+    reticulate::use_virtualenv("BFR", required = FALSE)
+  }
+  jnp <<- reticulate::import("jax.numpy", delay_load = TRUE)
+  jax <<- reticulate::import("jax", delay_load = TRUE)
+  # posterior is only suggested: register as_draws_df() for fitted models
+  # when it is installed.
+  if (requireNamespace("posterior", quietly = TRUE)) {
+    registerS3method("as_draws_df", "BayesForge.Main.main.bf",
+                     .as_draws_df_bf,
+                     envir = asNamespace("posterior"))
+  }
+  # loo is only suggested as well: register loo() for fitted models.
+  if (requireNamespace("loo", quietly = TRUE)) {
+    registerS3method("loo", "BayesForge.Main.main.bf",
+                     loo.BayesForge.Main.main.bf,
+                     envir = asNamespace("loo"))
+  }
+  # knitr is only suggested: plotly figures render as HTML in R Markdown / Quarto.
+  if (requireNamespace("knitr", quietly = TRUE)) {
+    registerS3method("knit_print", "plotly.basedatatypes.BaseFigure",
+                     .bf_knit_print_plotly,
+                     envir = asNamespace("knitr"))
+  }
 }
 
 #' @title Package attach
@@ -54,12 +93,10 @@ onLoad <- function(libname = NULL, pkgname = "BI") {
 #' @keywords internal
 .onAttach <- function(libname, pkgname) {
   packageStartupMessage("For documentation, run the command: bf.doc()")
-  # This function runs ONLY in an interactive session to show a message.
-  # packageStartupMessage("For documentation, run the command: bf.doc()")
-  BI_venv_present <- check_env()
-  if (BI_venv_present) {
-    reticulate::use_virtualenv("BFR", required = TRUE)
-  } else {
-    packageStartupMessage("It seems that the BFR virtual environment is not set up. Please run: BF_starting_test()")
+  if (!reticulate::virtualenv_exists("BFR") && !nzchar(Sys.getenv("RETICULATE_PYTHON"))) {
+    packageStartupMessage(
+      "The BayesForge Python environment is not set up yet. ",
+      "Run setup_env() once (see ?setup_env)."
+    )
   }
 }

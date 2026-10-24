@@ -2,19 +2,19 @@
 % Please edit documentation in R/BF_management.R
 \name{BF_starting_test}
 \alias{BF_starting_test}
-\title{Run a starting test for the BI environment}
+\title{Make sure the BayesForge Python environment is ready}
 \usage{
 BF_starting_test()
 }
 \description{
-Run a starting test for the BI environment
+Make sure the BayesForge Python environment is ready
 }
 \details{
-Internal function that checks whether Python and the `bayesforge`
-package are available, and sets internal `.BF_env` flags accordingly.
-
-Checks if the `reticulate` package is installed, if Python is available,
-and if the `bayesforge` package exists in the target environment.
-Updates `.BF_env$loaded` and `.BF_env$.bf` accordingly.
+Internal function called by \code{\link[=importBF]{importBF()}}. If the "BFR" environment exists,
+the session is bound to it. If not, but the user selected their own Python
+(\code{RETICULATE_PYTHON}, \code{reticulate::use_python()}, ...) and \code{BayesForge} is
+installed there, that Python is used. Otherwise the user is offered to
+create the environment with \code{\link[=setup_env]{setup_env()}} (interactive sessions), or an
+error explains how to do so. It never reinstalls an existing environment.
 }
 \keyword{internal}

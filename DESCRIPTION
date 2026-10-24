@@ -1,11 +1,11 @@
 Package: BayesForge
 Type: Package
 Title: Bayesian Inference
-Version: 0.0.1
+Version: 0.0.2
 Authors@R: c(
     person(
       "Sebastian", "Sosa",
-      email = "bi@s-sosa.com",
+      email = "bf@s-sosa.com",
       role = c("aut", "cre")
     )
   )
@@ -13,16 +13,24 @@ Description: BayesForge is a high-performance probabilistic programming library 
 Encoding: UTF-8
 LazyData: true
 Imports:
-    reticulate,
+    reticulate (>= 1.31),
     abind,
-    methods
-SystemRequirements: Python (>= 3.6), 'bayesforge' python library.
-Depends: R (>= 3.5.0)
+    methods,
+    parallel,
+    future
+SystemRequirements: Python (>= 3.12), 'bayesforge' python library
+    (installed by setup_env()).
+Depends: R (>= 3.6.0)
 Suggests:
     testthat (>= 3.0.0),
+    posterior,
     brms,
+    loo,
+    knitr,
+    bayesplot,
+    rstantools,
     rstan
 Config/testthat/edition: 3
-RoxygenNote: 8.0.0
 License: GPL (>= 3)
-Config/roxygen2/version: 8.0.0
+Roxygen: list(markdown = TRUE)
+Config/roxygen2/version: 8.1.1

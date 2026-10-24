@@ -2,7 +2,7 @@
 % Please edit documentation in R/gaussian_copula_beta.R
 \name{bf.dist.gaussian_copula_beta}
 \alias{bf.dist.gaussian_copula_beta}
-\title{Gaussian Copula Beta distribution.}
+\title{Gaussian Copula Beta distribution}
 \usage{
 bf.dist.gaussian_copula_beta(
   concentration1,
@@ -22,64 +22,81 @@ bf.dist.gaussian_copula_beta(
 )
 }
 \arguments{
-\item{concentration1}{A numeric vector or matrix representing the first shape parameter of the Beta distribution.}
+\item{concentration1}{The first shape parameter of the Beta distribution.}
 
-\item{concentration0}{A numeric vector or matrix representing the second shape parameter of the Beta distribution.}
+\item{concentration0}{The second shape parameter of the Beta distribution.}
 
-\item{correlation_matrix}{array_like, optional: Correlation matrix of the coupling multivariate normal distribution. Defaults to `reticulate::py_none()`.}
+\item{correlation_matrix}{Correlation matrix of the coupling multivariate
+normal distribution. Defaults to py_none().}
 
-\item{correlation_cholesky}{A numeric vector, matrix, or array representing the Cholesky decomposition of the correlation matrix.}
+\item{correlation_cholesky}{The Cholesky decomposition of the correlation
+matrix.}
 
-\item{validate_args}{Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.}
+\item{validate_args}{Logical. Whether to validate the parameter values.
+Defaults to \code{py_none()} (the NumPyro default).}
 
-\item{name}{A character string representing the name of the random variable
-within a model. This is used to uniquely identify the variable. Defaults to 'x'.}
+\item{name}{Character. Name of the random variable in the model. When not
+given, an observed site is named after the variable passed to \code{obs} (\code{obs = y} gives \code{"y"}); use \code{\link[=bf_model]{bf_model()}} to name parameters after the variables they
+are assigned to.}
 
-\item{obs}{A numeric vector or array of observed values. If provided, the
-random variable is conditioned on these values. If `NULL`, the variable is
-treated as a latent (unobserved) variable. Defaults to `NULL`.}
+\item{obs}{Numeric vector or array of observed values. If given, the random
+variable is conditioned on them (likelihood); otherwise it is latent.
+Defaults to \code{py_none()}.}
 
-\item{mask}{A logical vector. Optional boolean array to mask observations.}
+\item{mask}{Optional logical vector or array masking observations (\code{FALSE} =
+ignored). Defaults to \code{py_none()}.}
 
-\item{sample}{A logical value that controls the function's behavior. If `TRUE`,
-the function will directly draw samples from the distribution. If `FALSE`,
-it will create a random variable within a model. Defaults to `FALSE`.}
+\item{sample}{Logical. If \code{TRUE}, directly draw values from the distribution
+and return them; if \code{FALSE} (default), create a random variable inside a
+model.}
 
-\item{seed}{An integer used to set the random seed for reproducibility when
-`sample = TRUE`. This argument has no effect when `sample = FALSE`, as
-randomness is handled by the model's inference engine. Defaults to 0.}
+\item{seed}{Integer seed for this draw when \code{sample = TRUE}. By default
+(\code{py_none()}) the draw comes from the session's random stream, set by
+\code{importBF(rand_seed = ...)}, so consecutive draws differ but the whole
+sequence is reproducible. No effect when \code{sample = FALSE}.}
 
-\item{shape}{A numeric vector.  This is used as `sample_shape` to draw a raw JAX array of the given shape when `sample=True`.}
+\item{shape}{Integer vector. With \code{sample = FALSE}, the batch shape of the
+distribution in the model; with \code{sample = TRUE}, the shape of the draw.
+Defaults to \code{c()} (no extra dimensions).}
 
-\item{event}{Integer indicating the number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{event}{Integer. Number of batch dimensions reinterpreted as event
+dimensions (model building only). Defaults to \code{0}.}
 
-\item{create_obj}{Logical. If `TRUE`, returns the raw BI distribution object instead of creating a sample site.}
+\item{create_obj}{Logical. If \code{TRUE}, return the distribution object itself
+instead of a random variable (e.g. to build mixtures). Defaults to \code{FALSE}.}
 
-\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
+\item{to_jax}{Logical. Return a JAX array (\code{TRUE}, default) or convert to R.}
 }
 \value{
-- When \code{sample=FALSE}, a BI Gaussian Copula Beta distribution object (for model building).
-
- - When \code{sample=TRUE}, a JAX array of samples drawn from the Gaussian Copula Beta distribution (for direct sampling).
-
- - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
+\itemize{
+\item GaussianCopulaBeta: A BF GaussianCopulaBeta distribution object (for
+model building).
+\item numeric vector or array: A JAX array of samples drawn from the
+GaussianCopulaBeta distribution (for direct sampling).
+\item Distribution: The raw BF distribution object (for advanced use cases).
+}
 }
 \description{
-This distribution combines a Gaussian copula with a Beta distribution.
-The Gaussian copula models the dependence structure between random variables,
-while the Beta distribution defines the marginal distributions of each variable.
+This distribution combines a Gaussian copula with a Beta distribution. The
+Gaussian copula models the dependence structure between random variables,
+while the Beta distribution defines the marginal distributions of each
+variable.
 }
 \examples{
 \donttest{
 library(BayesForge)
-m=importBF(platform='cpu')
+m <- importBF(platform = "cpu")
 bf.dist.gaussian_copula_beta(
-  concentration1 = c(2.0, 3.0),
-  concentration0 = c(5.0, 3.0),
-  correlation_matrix = matrix(c(1.0, 0.7, 0.7, 1.0), nrow = 2, byrow = TRUE),
-  sample = TRUE)
-  }
+    concentration1 = jnp$array(c(2.0, 3.0)),
+    concentration0 = jnp$array(c(5.0, 3.0)),
+    correlation_cholesky = jnp$linalg$cholesky(
+        jnp$array(matrix(c(1.0, 0.7, 0.7, 1.0), nrow = 2L, byrow = TRUE))
+    ),
+    sample = TRUE
+)
+}
+
 }
 \seealso{
-This is a wrapper of  \url{https://num.pyro.ai/en/stable/distributions.html#gaussiancopulabetadistribution}
+\url{https://num.pyro.ai/en/stable/distributions.html#gaussiancopulabetadistribution}
 }

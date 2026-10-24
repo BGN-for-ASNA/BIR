@@ -11,10 +11,29 @@
 
 #' @keywords internal
 .bf_show_plotly <- function(fig) {
+  # The RStudio / VS Code viewer when there is one, else the browser.
   tmp <- tempfile(fileext = ".html")
   fig$write_html(tmp)
-  utils::browseURL(tmp)
+  viewer <- getOption("viewer")
+  if (is.function(viewer)) viewer(tmp) else utils::browseURL(tmp)
   invisible(fig)
+}
+
+# print() of a plotly Figure returned by m$diag / m$ppc: show the interactive
+# plot instead of the Python repr of the figure dict.
+#' @keywords internal
+.bf_print_plotly <- function(x, ...) {
+  .bf_show_plotly(x)
+}
+
+# knitr / Quarto chunks: embed the figure as HTML (plotly.js from the CDN).
+# Registered in .onLoad() when knitr is installed.
+#' @keywords internal
+.bf_knit_print_plotly <- function(x, ...) {
+  knitr::asis_output(
+    x$to_html(full_html = FALSE, include_plotlyjs = "cdn"),
+    meta = NULL
+  )
 }
 
 #' Wrap a BayesForge plot namespace so every method auto-displays plotly figures.
@@ -68,6 +87,12 @@ bf_show <- function(fig) {
   .bf_show_plotly(fig)
 }
 
+#' Print a BayesForge plot namespace
+#'
+#' @param x A `bf_plot_ns` object.
+#' @param ... Ignored.
+#' @return `x`, invisibly.
+#' @keywords internal
 #' @export
 print.bf_plot_ns <- function(x, ...) {
   fns <- ls(envir = x)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/right_truncated_distribution.R
 \name{bf.dist.right_truncated_distribution}
 \alias{bf.dist.right_truncated_distribution}
-\title{Samples from a right-truncated distribution.}
+\title{Right Truncated distribution}
 \usage{
 bf.dist.right_truncated_distribution(
   base_dist,
@@ -20,58 +20,102 @@ bf.dist.right_truncated_distribution(
 )
 }
 \arguments{
-\item{base_dist}{The base distribution to truncate. Must be a univariate distribution with real support.}
+\item{base_dist}{The base distribution to truncate.  Must be a univariate
+distribution with real support.}
 
-\item{high}{(float, jnp.ndarray, optional): The upper truncation point. The support of the new distribution is \eqn{(-\infty, \text{high})}. Defaults to 0.0.}
+\item{high}{The upper truncation point. The support of the new distribution
+is \eqn{(-\infty, \text{high}]}. Defaults to 0.0.}
 
-\item{validate_args}{Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.}
+\item{validate_args}{Logical. Whether to validate the parameter values.
+Defaults to \code{py_none()} (the NumPyro default).}
 
-\item{name}{A character string representing the name of the random variable
-within a model. This is used to uniquely identify the variable. Defaults to 'x'.}
+\item{name}{Character. Name of the random variable in the model. When not
+given, an observed site is named after the variable passed to \code{obs} (\code{obs = y} gives \code{"y"}); use \code{\link[=bf_model]{bf_model()}} to name parameters after the variables they
+are assigned to.}
 
-\item{obs}{A numeric vector or array of observed values. If provided, the
-random variable is conditioned on these values. If `NULL`, the variable is
-treated as a latent (unobserved) variable. Defaults to `NULL`.}
+\item{obs}{Numeric vector or array of observed values. If given, the random
+variable is conditioned on them (likelihood); otherwise it is latent.
+Defaults to \code{py_none()}.}
 
-\item{mask}{An optional boolean vector to mask observations.}
+\item{mask}{Optional logical vector or array masking observations (\code{FALSE} =
+ignored). Defaults to \code{py_none()}.}
 
-\item{sample}{A logical value that controls the function's behavior. If `TRUE`,
-the function will directly draw samples from the distribution. If `FALSE`,
-it will create a random variable within a model. Defaults to `FALSE`.}
+\item{sample}{Logical. If \code{TRUE}, directly draw values from the distribution
+and return them; if \code{FALSE} (default), create a random variable inside a
+model.}
 
-\item{seed}{An integer used to set the random seed for reproducibility when
-`sample = TRUE`. This argument has no effect when `sample = FALSE`, as
-randomness is handled by the model's inference engine. Defaults to 0.}
+\item{seed}{Integer seed for this draw when \code{sample = TRUE}. By default
+(\code{py_none()}) the draw comes from the session's random stream, set by
+\code{importBF(rand_seed = ...)}, so consecutive draws differ but the whole
+sequence is reproducible. No effect when \code{sample = FALSE}.}
 
-\item{shape}{A numeric vector. When \code{sample=FALSE} (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When \code{sample=TRUE} (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{shape}{Integer vector. With \code{sample = FALSE}, the batch shape of the
+distribution in the model; with \code{sample = TRUE}, the shape of the draw.
+Defaults to \code{c()} (no extra dimensions).}
 
-\item{event}{The number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{event}{Integer. Number of batch dimensions reinterpreted as event
+dimensions (model building only). Defaults to \code{0}.}
 
-\item{create_obj}{Logical. If `TRUE`, returns the raw BI distribution object instead of creating a sample site.}
+\item{create_obj}{Logical. If \code{TRUE}, return the distribution object itself
+instead of a random variable (e.g. to build mixtures). Defaults to \code{FALSE}.}
 
-\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
+\item{to_jax}{Logical. Return a JAX array (\code{TRUE}, default) or convert to R.}
 }
 \value{
-- When \code{sample=FALSE}, a BI right-truncated distribution object (for model building).
-
- - When \code{sample=TRUE}, a JAX array of samples drawn from the right-truncated distribution (for direct sampling).
-
- - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
+\itemize{
+\item When \code{sample = FALSE}: A BF RightTruncatedDistribution distribution
+object (for model building).
+\item When \code{sample = TRUE}: A JAX array of samples drawn from the
+RightTruncatedDistribution distribution (for direct sampling).
+\item When \code{create_obj = TRUE}: The raw BF distribution object (for advanced
+use cases).
+}
 }
 \description{
-A right-truncated distribution is a statistical distribution that arises
-when the possible values  of a random variable are restricted to be below a
-certain specified value `high`. In essence, the right tail of the original distribution is "cut off"
-at a particular point, and the remaining probability is redistributed among the allowable values.
-This type of distribution is common in various fields where there are inherent upper limits or observational constraints.
+A right-truncated distribution is a statistical distribution that arises when
+the possible values  of a random variable are restricted to be below a
+certain specified value \code{high}. In essence, the right tail of the original
+distribution is "cut off" at a particular point, and the remaining
+probability is redistributed among the allowable values. This type of
+distribution is common in various fields where there are inherent upper
+limits or observational constraints.
+
+The probability density function (PDF) for a continuous right-truncated
+distribution or the probability mass function (PMF) for a discrete one is
+derived from the original distribution by normalizing it over the restricted
+range.
+
+\strong{For a continuous random variable X:}
+
+If the original probability density function is \code{f(x)} and the cumulative
+distribution function is \code{F(x)}, and the distribution is right-truncated at a
+value \code{b} (meaning \verb{x ≤ b}), the new PDF, \code{f_T(x)}, is:
+
+\deqn{f_{\rm trunc}(x \mid X \le b) = \begin{cases} \displaystyle \frac{,f(x),}{,F(b),}, & x \le b, \ 0, & x > b. \end{cases}}
+
+\strong{For a discrete random variable X:}
+
+If the original probability mass function is \code{P(X = k)} and the cumulative
+distribution function is \code{F(k)}, and the distribution is right-truncated at a
+value \code{b} (meaning \verb{k ≤ b}), the new PMF, \code{P_T(X = k)}, is:
+
+\deqn{P_T(X=k) = \begin{cases} \frac{P(X=k)}{F(b)} & \text{if } k \le b \\ 0 & \text{if } k > b \end{cases}}
 }
 \examples{
 \donttest{
 library(BayesForge)
-m=importBF(platform='cpu')
+m <- importBF(platform = "cpu")
 bf.dist.right_truncated_distribution(
-base_dist = bf.dist.normal(0,1, create_obj = TRUE),
-high = 10,
-sample = TRUE)
+    base_dist = bf.dist.normal(0, 1, create_obj = TRUE),
+    high = 0,
+    sample = TRUE
+)
 }
+
+}
+\references{
+https://en.wikipedia.org/wiki/Truncated_normal_distribution
+}
+\seealso{
+\url{https://num.pyro.ai/en/stable/distributions.html#righttruncateddistribution}
 }

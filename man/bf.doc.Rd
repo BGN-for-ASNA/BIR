@@ -2,15 +2,15 @@
 % Please edit documentation in R/doc.R
 \name{bf.doc}
 \alias{bf.doc}
-\title{title Open the BI Documentation Website}
+\title{title Open the BF Documentation Website}
 \usage{
 bf.doc()
 }
 \value{
-Invisibly returns `NULL`. The function is called for its side effect
+Invisibly returns \code{NULL}. The function is called for its side effect
 of opening a URL.
 }
 \description{
-This function opens the BI documentation webpage in the user's default
+This function opens the BF documentation webpage in the user's default
 web browser.
 }

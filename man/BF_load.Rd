@@ -2,17 +2,17 @@
 % Please edit documentation in R/BF_management.R
 \name{BF_load}
 \alias{BF_load}
-\title{Load the BI module from Python}
+\title{Load the BayesForge module from Python}
 \usage{
 BF_load()
 }
 \value{
-The Python object corresponding to `BayesForge$bf`.
+The Python object corresponding to \code{BayesForge$bf}.
 }
 \description{
-Load the BI module from Python
+Load the BayesForge module from Python
 }
 \details{
-Internal helper function to import the `BI` Python module.
+Internal helper function to import the \code{BayesForge} Python module.
 }
 \keyword{internal}

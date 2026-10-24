@@ -2,7 +2,7 @@
 % Please edit documentation in R/dirichlet_multinomial.R
 \name{bf.dist.dirichlet_multinomial}
 \alias{bf.dist.dirichlet_multinomial}
-\title{Samples from a Dirichlet Multinomial distribution.}
+\title{Dirichlet-Multinomial distribution}
 \usage{
 bf.dist.dirichlet_multinomial(
   concentration,
@@ -11,6 +11,8 @@ bf.dist.dirichlet_multinomial(
   name = "x",
   obs = py_none(),
   mask = py_none(),
+  infer = py_none(),
+  enum = FALSE,
   sample = FALSE,
   seed = py_none(),
   shape = c(),
@@ -20,57 +22,106 @@ bf.dist.dirichlet_multinomial(
 )
 }
 \arguments{
-\item{concentration}{A numeric vector or array representing the concentration parameter (alpha) for the Dirichlet distribution.}
+\item{concentration}{The concentration parameter (alpha) for the Dirichlet
+prior. Values must be positive. The last dimension is interpreted as the
+number of categories.}
 
-\item{total_count}{(int, jnp.ndarray, optional): The total number of trials (n). This must be a non-negative integer. Defaults to 1.}
+\item{total_count}{The total number of trials (n). This must be a
+non-negative integer. Defaults to 1.}
 
-\item{validate_args}{Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.}
+\item{validate_args}{Logical. Whether to validate the parameter values.
+Defaults to \code{py_none()} (the NumPyro default).}
 
-\item{name}{A character string representing the name of the random variable
-within a model. This is used to uniquely identify the variable. Defaults to 'x'.}
+\item{name}{Character. Name of the random variable in the model. When not
+given, an observed site is named after the variable passed to \code{obs} (\code{obs = y} gives \code{"y"}); use \code{\link[=bf_model]{bf_model()}} to name parameters after the variables they
+are assigned to.}
 
-\item{obs}{A numeric vector or array of observed values. If provided, the
-random variable is conditioned on these values. If `NULL`, the variable is
-treated as a latent (unobserved) variable. Defaults to `NULL`.}
+\item{obs}{Numeric vector or array of observed values. If given, the random
+variable is conditioned on them (likelihood); otherwise it is latent.
+Defaults to \code{py_none()}.}
 
-\item{mask}{A logical vector or array to mask observations.}
+\item{mask}{Optional logical vector or array masking observations (\code{FALSE} =
+ignored). Defaults to \code{py_none()}.}
 
-\item{sample}{A logical value that controls the function's behavior. If `TRUE`,
-the function will directly draw samples from the distribution. If `FALSE`,
-it will create a random variable within a model. Defaults to `FALSE`.}
+\item{infer}{Optional named list passed to NumPyro's \code{infer} argument (e.g.
+\code{list(enumerate = "parallel")}).}
 
-\item{seed}{An integer used to set the random seed for reproducibility when
-`sample = TRUE`. This argument has no effect when `sample = FALSE`, as
-randomness is handled by the model's inference engine. Defaults to 0.}
+\item{enum}{Logical. If \code{TRUE}, the discrete latent is summed out exactly
+(parallel enumeration) instead of sampled; same as \code{infer = list(enumerate = "parallel")}. Defaults to \code{FALSE}.}
 
-\item{shape}{A numeric vector specifying the shape of the distribution. When `sample=False` (model building),
-this is used with `.expand(shape)` to set the distribution's batch shape. When
-`sample=True` (direct sampling), this is used as `sample_shape` to draw a raw JAX
-array of the given shape.}
+\item{sample}{Logical. If \code{TRUE}, directly draw values from the distribution
+and return them; if \code{FALSE} (default), create a random variable inside a
+model.}
 
-\item{event}{The number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{seed}{Integer seed for this draw when \code{sample = TRUE}. By default
+(\code{py_none()}) the draw comes from the session's random stream, set by
+\code{importBF(rand_seed = ...)}, so consecutive draws differ but the whole
+sequence is reproducible. No effect when \code{sample = FALSE}.}
 
-\item{create_obj}{A logical value. If `TRUE`, returns the raw BI distribution object instead of creating a sample site.}
+\item{shape}{Integer vector. With \code{sample = FALSE}, the batch shape of the
+distribution in the model; with \code{sample = TRUE}, the shape of the draw.
+Defaults to \code{c()} (no extra dimensions).}
 
-\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
+\item{event}{Integer. Number of batch dimensions reinterpreted as event
+dimensions (model building only). Defaults to \code{0}.}
+
+\item{create_obj}{Logical. If \code{TRUE}, return the distribution object itself
+instead of a random variable (e.g. to build mixtures). Defaults to \code{FALSE}.}
+
+\item{to_jax}{Logical. Return a JAX array (\code{TRUE}, default) or convert to R.}
 }
 \value{
-- When \code{sample=FALSE}, a BI Dirichlet Multinomial  distribution object (for model building).
-
- - When \code{sample=TRUE}, a JAX array of samples drawn from the Dirichlet Multinomial  distribution (for direct sampling).
-
- - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
+\itemize{
+\item When \code{sample = FALSE}: A BF dirichlet_multinomial Distribution
+distribution object (for  model building).
+\item When \code{sample = TRUE}: A JAX array of samples drawn from the
+dirichlet_multinomial distribution (for direct sampling).
+\item When \code{create_obj = TRUE}: The raw BF dirichlet_multinomial Distribution
+object (for advanced use cases).
+}
 }
 \description{
 Creates a Dirichlet-Multinomial compound distribution, which is a Multinomial
 distribution with a Dirichlet prior on its probabilities. It is often used in
-Bayesian statistics to model count data where the proportions of categories are
-uncertain.
+Bayesian statistics to model count data where the proportions of categories
+are uncertain.
+
+The \strong{Dirichlet-Multinomial} distribution describes a model in which you
+first draw a probability vector
+
+\deqn{\mathbf{p} = (p_1, \dots, p_K) \sim \mathrm{Dirichlet}(\alpha)}
+
+and then you draw counts
+
+\deqn{\mathbf{x} = (x_1, \dots, x_K) \sim \mathrm{Multinomial}(n, \mathbf{p}).}
+
+Integrating out \eqn{\mathbf{p}} gives you the marginal distribution of
+\eqn{\mathbf{x}}.
+\itemize{
+\item It generalizes the \strong{Beta-Binomial} model to multiple categories (i.e.
+\eqn{K > 2}).
+\item A key feature is that it introduces \strong{overdispersion} relative to a
+standard multinomial: counts are more “clumped” because the underlying
+probabilities vary according to the Dirichlet prior.
+}
 }
 \examples{
 \donttest{
 library(BayesForge)
-m=importBF(platform='cpu')
-bf.dist.dirichlet_multinomial(concentration = c(0,1), sample = TRUE, shape = c(3))
+m <- importBF(platform = "cpu")
+counts <- bf.dist.dirichlet_multinomial(
+    concentration = jnp$array(c(1.0, 1.0, 1.0)),
+    total_count = 10L,
+    sample = TRUE
+)
 }
+
+}
+\references{
+https://en.wikipedia.org/wiki/Dirichlet-multinomial_distribution
+
+https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.dirichlet_multinomial.html
+}
+\seealso{
+\url{https://num.pyro.ai/en/stable/distributions.html#dirichletmultinomial}
 }

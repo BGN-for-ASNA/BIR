@@ -2,7 +2,7 @@
 % Please edit documentation in R/zero_inflated_distribution.R
 \name{bf.dist.zero_inflated_distribution}
 \alias{bf.dist.zero_inflated_distribution}
-\title{Generic Zero Inflated distribution.}
+\title{Generic Zero Inflated distribution}
 \usage{
 bf.dist.zero_inflated_distribution(
   base_dist,
@@ -21,68 +21,107 @@ bf.dist.zero_inflated_distribution(
 )
 }
 \arguments{
-\item{base_dist}{Distribution: The base distribution to be zero-inflated (e.g., Poisson, NegativeBinomial).}
+\item{base_dist}{The base distribution to be zero-inflated (e.g., Poisson,
+NegativeBinomial).}
 
-\item{gate}{numeric(1): Probability of extra zeros (between 0 and 1).}
+\item{gate}{Probability of extra zeros (between 0 and 1).}
 
-\item{gate_logits}{numeric(1): Log-odds of extra zeros.}
+\item{gate_logits}{Log-odds of extra zeros.}
 
-\item{validate_args}{Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.}
+\item{validate_args}{Logical. Whether to validate the parameter values.
+Defaults to \code{py_none()} (the NumPyro default).}
 
-\item{name}{A character string representing the name of the random variable
-within a model. This is used to uniquely identify the variable. Defaults to 'x'.}
+\item{name}{Character. Name of the random variable in the model. When not
+given, an observed site is named after the variable passed to \code{obs} (\code{obs = y} gives \code{"y"}); use \code{\link[=bf_model]{bf_model()}} to name parameters after the variables they
+are assigned to.}
 
-\item{obs}{A numeric vector or array of observed values. If provided, the
-random variable is conditioned on these values. If `NULL`, the variable is
-treated as a latent (unobserved) variable. Defaults to `NULL`.}
+\item{obs}{Numeric vector or array of observed values. If given, the random
+variable is conditioned on them (likelihood); otherwise it is latent.
+Defaults to \code{py_none()}.}
 
-\item{mask}{logical(1): Optional boolean array to mask observations.}
+\item{mask}{Optional logical vector or array masking observations (\code{FALSE} =
+ignored). Defaults to \code{py_none()}.}
 
-\item{sample}{A logical value that controls the function's behavior. If `TRUE`,
-the function will directly draw samples from the distribution. If `FALSE`,
-it will create a random variable within a model. Defaults to `FALSE`.}
+\item{sample}{Logical. If \code{TRUE}, directly draw values from the distribution
+and return them; if \code{FALSE} (default), create a random variable inside a
+model.}
 
-\item{seed}{An integer used to set the random seed for reproducibility when
-`sample = TRUE`. This argument has no effect when `sample = FALSE`, as
-randomness is handled by the model's inference engine. Defaults to 0.}
+\item{seed}{Integer seed for this draw when \code{sample = TRUE}. By default
+(\code{py_none()}) the draw comes from the session's random stream, set by
+\code{importBF(rand_seed = ...)}, so consecutive draws differ but the whole
+sequence is reproducible. No effect when \code{sample = FALSE}.}
 
-\item{shape}{numeric(1): A multi-purpose argument for shaping. When `sample=False` (model building),
-this is used with `.expand(shape)` to set the distribution's batch shape.
-When `sample=True` (direct sampling), this is used as `sample_shape` to draw a raw
-JAX array of the given shape.  Provide as a numeric vector (e.g., `c(10)`).}
+\item{shape}{Integer vector. With \code{sample = FALSE}, the batch shape of the
+distribution in the model; with \code{sample = TRUE}, the shape of the draw.
+Defaults to \code{c()} (no extra dimensions).}
 
-\item{event}{int(1): The number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{event}{Integer. Number of batch dimensions reinterpreted as event
+dimensions (model building only). Defaults to \code{0}.}
 
-\item{create_obj}{Logical: If True, returns the raw BI distribution object instead of creating a sample site.
-This is essential for building complex distributions like `MixtureSameFamily`.}
+\item{create_obj}{Logical. If \code{TRUE}, return the distribution object itself
+instead of a random variable (e.g. to build mixtures). Defaults to \code{FALSE}.}
 
-\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
+\item{to_jax}{Logical. Return a JAX array (\code{TRUE}, default) or convert to R.}
 }
 \value{
-- When \code{sample=FALSE}, a BI Zero Inflated distribution object (for model building).
-
- - When \code{sample=TRUE}, a JAX array of samples drawn from the Zero Inflated distribution (for direct sampling).
-
- - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
+\itemize{
+\item When \code{sample = FALSE}: A BF ZeroInflatedDistribution distribution
+object (for model building).
+\item When \code{sample = TRUE}: A JAX array of samples drawn from the
+ZeroInflatedDistribution distribution (for direct sampling).
+\item When \code{create_obj = TRUE}: The raw BF distribution object (for advanced
+use cases).
+}
 }
 \description{
-The Zero-Inflated Poisson distribution is a discrete count-distribution designed for data with *more zeros*
-than would be expected under a standard Poisson. Essentially, it assumes two underlying processes:
-* With probability \deqn{\pi} you are in a "structural zero" state (i.e., you automatically get a zero count).
-* With probability \deqn{1 - \pi} you draw from a standard Poisson distribution with parameter \deqn{\lambda}.
+A Zero-Inflated distribution combines a base distribution with a Bernoulli
+distribution to model data with an excess of zero values. It assumes that
+each observation is either drawn from the base distribution or is a zero with
+probability determined by the Bernoulli distribution (the "gate"). A
+\strong{zero-inflated distribution} arises when you take a random variable \eqn{X}
+that originally has some distribution (with PMF \eqn{f_X(x)} ) \emph{and} you add
+extra mass at zero. In other words you only observe \eqn{X} when \eqn{X \ge
+0} (if count) and you assume there are more zeros than what the original
+distribution predicts — so you mix in a point-mass at zero. A zero-inflated
+model assumes two processes: a “structural zero” process with probability
+\eqn{\pi}, and another process (the base count/distribution) with probability
+\eqn{1 - \pi}, which itself may generate zeros \emph{or} non-zeros.
+\itemize{
+\item When / Why use it:
+}
+\itemize{
+\item \strong{Data collection constraints}: You can only observe values in a process
+when some condition is met; others are automatically zero (for example, when
+the event cannot happen for some units).
+\item \strong{Mixtures of processes}: Some observations are “structural zeros” (no
+risk) and others follow a regular count process (with risk).
+\item \strong{Overdispersion & excess zeros}: If you try a standard count distribution
+(Poisson, Negative Binomial) and you observe many more zeros than predicted
+(given the non-zero counts), a zero-inflated alternative may fit better.
+\item The general PMF form is (for discrete count models):
+}
 
-This results in a mixture distribution that places more mass at zero than a Poisson alone would.
-It's widely used in, for instance, ecology (species counts with many zeros), insurance/claims problems,
-and any count-data setting with excess zeros.
+\deqn{P(X=0) = \pi + (1 - \pi),P_{\text{base}}(0), \quad P(X=k) = (1 - \pi),P_{\text{base}}(k), ; k > 0.}
 }
 \examples{
 \donttest{
 library(BayesForge)
-m=importBF(platform='cpu')
+m <- importBF(platform = "cpu")
 bf.dist.zero_inflated_distribution(
-base_dist = bf.dist.poisson(5, create_obj = TRUE),
-gate=0.3, sample = TRUE)
+    base_dist = bf.dist.poisson(rate = 5, create_obj = TRUE),
+    gate = 0.3,
+    sample = TRUE
+)
 }
+
+}
+\references{
+[1]: https://en.wikipedia.org/wiki/Zero-inflated_model "Zero-inflated
+model"
+
+[2]:
+https://larmarange.github.io/guide-R/analyses_avancees/modeles-zero-inflated.html
+"48 Modèles de comptage zero-inflated et hurdle – guide-R"
 }
 \seealso{
 \url{https://num.pyro.ai/en/stable/distributions.html#zeroinflateddistribution}

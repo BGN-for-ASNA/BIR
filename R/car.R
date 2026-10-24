@@ -1,71 +1,114 @@
-#' @title Conditional Autoregressive (CAR) Distribution
+#' @title Conditional Autoregressive (CAR) distribution
 #'
 #' @description
-#' The CAR distribution models a vector of variables where each variable is a linear
-#' combination of its neighbors in a graph. The CAR model captures spatial dependence in areal data by modeling each observation as conditionally dependent on its neighbors.
-#'  It specifies a joint distribution of a vector of random variables \deqn{\mathbf{y} = (y_1, y_2, \dots, y_N)} based on their conditional distributions, where each \deqn{y_i} is conditionally independent of all other variables given its neighbors.
-
-#' - Application: Widely used in disease mapping, environmental modeling, and spatial econometrics to account for spatial autocorrelation.
+#' The CAR distribution models a vector of variables where each variable is a
+#' linear combination of its neighbors in a graph. The CAR model captures
+#' spatial dependence in areal data by modeling each observation as
+#' conditionally dependent on its neighbors.It specifies a joint distribution of
+#' a vector of random variables \eqn{\mathbf{y} = (y_1, y_2, \dots, y_N)} based
+#' on their conditional distributions, where each \eqn{y_i} is conditionally
+#' independent of all other variables given its neighbors.
 #'
-#' @param loc Numeric vector, matrix, or array representing the mean of the distribution.
-#' @param correlation Numeric vector, matrix, or array representing the correlation between variables.
-#' @param conditional_precision Numeric vector, matrix, or array representing the precision of the distribution.
-#' @param adj_matrix Numeric vector, matrix, or array representing the adjacency matrix defining the graph.
-#' @param is_sparse Logical indicating whether the adjacency matrix is sparse. Defaults to `FALSE`.
-#' @param shape A numeric vector. When `sample=False` (model building), this is used with `.expand(shape)` to set the
-#'   distribution's batch shape. When `sample=True` (direct sampling),
-#'   this is used as `sample_shape` to draw a raw JAX array of the
-#'   given shape.
-#' @param event An integer representing the number of batch dimensions to reinterpret as event
-#'   dimensions (used in model building).
-#' @param mask An optional boolean vector to mask observations.
-#' @param create_obj A logical value. If `TRUE`, returns the raw BI distribution
-#'   object instead of creating a sample site. This is essential for
-#'   building complex distributions like `MixtureSameFamily`.
-#' @param validate_args Logical indicating whether to validate arguments. Defaults to `reticulate::py_none()`.
-#' @param sample A logical value that controls the function's behavior. If `TRUE`,
-#'   the function will directly draw samples from the distribution. If `FALSE`,
-#'   it will create a random variable within a model. Defaults to `FALSE`.
-#' @param seed An integer used to set the random seed for reproducibility when
-#'   `sample = TRUE`. This argument has no effect when `sample = FALSE`, as
-#'   randomness is handled by the model's inference engine. Defaults to 0.
-#' @param obs A numeric vector or array of observed values. If provided, the
-#'   random variable is conditioned on these values. If `NULL`, the variable is
-#'   treated as a latent (unobserved) variable. Defaults to `NULL`.
-#' @param name A character string representing the name of the random variable
-#'   within a model. This is used to uniquely identify the variable. Defaults to 'x'.
-#' @param to_jax Boolean. Indicates whether to return a JAX array or not.
+#' * **Application**: Widely used in disease mapping, environmental modeling,
+#' and spatial econometrics to account for spatial autocorrelation.
+#'
+#' * **Conditional Distribution**: Each \eqn{y_i} given its neighbors
+#' \eqn{\mathbf{y}_{-i}} follows a normal distribution:
+#'
+#' \deqn{y_i | \mathbf{y}*{-i} \sim \mathcal{N}\left( \frac{\sum*{j \in \mathcal{N}(i)} w_{ij} y_j}{\sum_{j \in \mathcal{N}(i)} w_{ij}}, \sigma^2 \right)}
+#'
+#' where:
+#'
+#' * \eqn{\mathcal{N}(i)} denotes the set of neighbors of unit \eqn{i},
+#' * \eqn{w_{ij}} are the weights representing the strength of the spatial
+#' relationship between units \eqn{i} and \eqn{j},
+#' * \eqn{\sigma^2} is the variance term. where \eqn{\mu_i} is a function of the
+#' values of the neighbors of site \eqn{i} and \eqn{\Sigma_i} is the variance of
+#' site \eqn{i}.
+#'
+#' @param loc Mean of the distribution.
+#' @param correlation Correlation between variables.
+#' @param conditional_precision Precision of the distribution.
+#' @param adj_matrix Adjacency matrix defining the graph. is_sparse (bool):
+#'   Whether the adjacency matrix is sparse. Defaults to FALSE. - *validate_args/
+#'   (bool): Whether to validate arguments. Defaults to py_none().
+#' @param is_sparse See the Python documentation of `is_sparse`.
+#' @param validate_args Logical. Whether to validate the parameter values.
+#'   Defaults to `py_none()` (the NumPyro default).
+#' @param name Character. Name of the random variable in the model. When not
+#'   given, an observed site is named after the variable passed to `obs` (`obs =
+#'   y` gives `"y"`); use [bf_model()] to name parameters after the variables they
+#'   are assigned to.
+#' @param obs Numeric vector or array of observed values. If given, the random
+#'   variable is conditioned on them (likelihood); otherwise it is latent.
+#'   Defaults to `py_none()`.
+#' @param mask Optional logical vector or array masking observations (`FALSE` =
+#'   ignored). Defaults to `py_none()`.
+#' @param sample Logical. If `TRUE`, directly draw values from the distribution
+#'   and return them; if `FALSE` (default), create a random variable inside a
+#'   model.
+#' @param seed Integer seed for this draw when `sample = TRUE`. By default
+#'   (`py_none()`) the draw comes from the session's random stream, set by
+#'   `importBF(rand_seed = ...)`, so consecutive draws differ but the whole
+#'   sequence is reproducible. No effect when `sample = FALSE`.
+#' @param shape Integer vector. With `sample = FALSE`, the batch shape of the
+#'   distribution in the model; with `sample = TRUE`, the shape of the draw.
+#'   Defaults to `c()` (no extra dimensions).
+#' @param event Integer. Number of batch dimensions reinterpreted as event
+#'   dimensions (model building only). Defaults to `0`.
+#' @param create_obj Logical. If `TRUE`, return the distribution object itself
+#'   instead of a random variable (e.g. to build mixtures). Defaults to `FALSE`.
+#' @param to_jax Logical. Return a JAX array (`TRUE`, default) or convert to R.
 #'
 #' @return
-#'  - When \code{sample=FALSE}, a BI CAR distribution object (for model building).
+#' \itemize{
+#'   \item When `sample = FALSE`: A BF CAR distribution object (for  model
+#'     building).
+#'   \item When `sample = TRUE`: A JAX array of samples drawn from the
+#'     BernoulliLogits distribution (for direct sampling).
+#'   \item When `create_obj = TRUE`: The raw BF CAR object (for advanced use
+#'     cases).
+#' }
 #'
-#'  - When \code{sample=TRUE}, a JAX array of samples drawn from the CAR distribution (for direct sampling).
-#'
-#'  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
-
 #' @examples
 #' \donttest{
 #' library(BayesForge)
-#' m=importBF(platform='cpu')
+#' m <- importBF(platform = "cpu")
 #' bf.dist.car(
-#'   loc = c(1.,2.),
-#'   correlation = 0.9,
-#'   conditional_precision = 1.,
-#'   adj_matrix = matrix(c(1,0,0,1), nrow = 2),
-#'   sample = TRUE
-#'  )
+#'     loc = 0.0,
+#'     correlation = 0.9,
+#'     conditional_precision = 1.0,
+#'     adj_matrix = jnp$array(
+#'         matrix(c(0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0), nrow = 3L, byrow = TRUE)
+#'     ),
+#'     sample = TRUE
+#' )
 #' }
-#' @export
 #'
+#' @references
+#' \[1\]:
+#' https://www.pymc.io/projects/examples/en/latest/spatial/conditional_autoregressive_priors.html
+#' "Conditional Autoregressive (CAR) Models for Spatial Data"
+#'
+#' \[2\]: https://mc-stan.org/learn-stan/case-studies/icar_stan.html "Intrinsic
+#' Auto-Regressive Models for Areal Data - Stan"
+#'
+#' \[3\]:
+#' https://onlinelibrary.wiley.com/doi/abs/10.1002/9781118445112.stat08048
+#' "Conditional Autoregressive (CAR) Model - Schmidt"
+#'
+#' @export
 bf.dist.car=function(loc, correlation, conditional_precision, adj_matrix, is_sparse=FALSE, validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
+     if (missing(name) && !missing(obs)) name <- .bf_obs_name(substitute(obs))  # obs = y -> site "y"
+
      shape=do.call(tuple, as.list(as.integer(shape)))
      event=as.integer(event)
      if (!.BF_env$.py$is_none(seed)){seed=as.integer(seed);}
-     if(!.BF_env$.py$is_none(correlation)){correlation = .BF_env$jnp$array(correlation)}
-     if(!.BF_env$.py$is_none(conditional_precision)){conditional_precision = .BF_env$jnp$array(conditional_precision)}
-     if(!.BF_env$.py$is_none(adj_matrix)){adj_matrix = .BF_env$jnp$array(adj_matrix)}
+     if(!.BF_env$.py$is_none(correlation)){correlation = .BF_env$jnp$asarray(correlation)}
+     if(!.BF_env$.py$is_none(conditional_precision)){conditional_precision = .BF_env$jnp$asarray(conditional_precision)}
+     if(!.BF_env$.py$is_none(adj_matrix)){adj_matrix = .BF_env$jnp$asarray(adj_matrix)}
      .BF_env$.bf_instance$dist$car(
-       loc = .BF_env$jnp$array(loc),
+       loc = .BF_env$jnp$asarray(loc),
        correlation=correlation,
        conditional_precision=conditional_precision,
        adj_matrix=adj_matrix,

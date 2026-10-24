@@ -1,55 +1,134 @@
-#' @title A finite mixture of component distributions from different families.
+#' @title Mixture General distribution
 #'
 #' @description
-#' A mixture distribution is a probability distribution constructed by selecting one of several component
-#' distributions according to specified weights, and then drawing a sample from the chosen component.
-#' It allows modelling of heterogeneous populations and multimodal data.
+#' A mixture distribution is a probability distribution constructed by selecting
+#' one of several component distributions according to specified weights, and
+#' then drawing a sample from the chosen component. It allows modelling of
+#' heterogeneous populations and multimodal data.
 #'
-#' @param mixing_distribution A `Categorical` distribution specifying the weights for each mixture component.
-#'   The size of this distribution specifies the number of components in the mixture.
-#' @param component_distributions A list of distributions representing the components of the mixture.
-#' @param support A constraint object specifying the support of the mixture distribution.
-#'   If not provided, the support will be inferred from the component distributions.
-#' @param shape Numeric vector. A multi-purpose argument for shaping. When `sample=False` (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When `sample=True` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.
-#' @param event Integer. The number of batch dimensions to reinterpret as event dimensions (used in model building).
-#' @param mask Logical vector. Optional boolean array to mask observations.
-#' @param create_obj Logical. If True, returns the raw BI distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.
-#' @param validate_args Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.
-#' @param sample A logical value that controls the function's behavior. If `TRUE`,
-#'   the function will directly draw samples from the distribution. If `FALSE`,
-#'   it will create a random variable within a model. Defaults to `FALSE`.
-#' @param seed An integer used to set the random seed for reproducibility when
-#'   `sample = TRUE`. This argument has no effect when `sample = FALSE`, as
-#'   randomness is handled by the model's inference engine. Defaults to 0.
-#' @param obs A numeric vector or array of observed values. If provided, the
-#'   random variable is conditioned on these values. If `NULL`, the variable is
-#'   treated as a latent (unobserved) variable. Defaults to `NULL`.
-#' @param name A character string representing the name of the random variable
-#'   within a model. This is used to uniquely identify the variable. Defaults to 'x'.
-#' @param to_jax Boolean. Indicates whether to return a JAX array or not.
+#' Let the mixture have (K) component distributions with densities (f_i(x)) for
+#' (i = 1,\\dots,K). Let weights       (w_i\\ge0) satisfy (\\sum_\{i=1\}^K w_i =
+#' 1). Then the PDF is
 #'
-#' @return
-#'    - When \code{sample=FALSE}, a BI MixtureGeneral distribution object (for model building).
+#' \deqn{f(x) = \sum_{i=1}^K w_i ; f_i(x).}
 #'
-#'    - When \code{sample=TRUE}, a JAX array of samples drawn from the MixtureGeneral distribution (for direct sampling).
+#' **Parameters:**
 #'
-#'    - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
-
+#' *   **mixing_distribution**:  A `Categorical` distribution representing the
+#' mixing weights.
+#'
+#' *   **component_distributions**: A list of distributions representing the
+#' components of the mixture.
+#'
+#' *   **sample (bool, optional): A control-flow argument. If `TRUE`, the
+#' function will directly sample a raw JAX array from the distribution,
+#' bypassing the BF model context. If `FALSE`, it will create a `BF.sample` site
+#' within a model. Defaults to `FALSE`.
+#'
+#' * `shape` (integer vector): A multi-purpose argument for shaping. When
+#' `sample = FALSE` (model building), this is used with `shape` to set the
+#' distribution's batch shape. When `sample = TRUE` (direct sampling), this is
+#' used as `sample_shape` to draw a raw JAX array of the given shape.
+#'
+#' *   **seed (int, optional)**:  An integer seed for this draw when `sample =
+#' TRUE`. By default (`py_none()`) the draw comes from the session's random
+#' stream, set by `bf(rand_seed=...)`, so consecutive draws differ but the whole
+#' sequence is reproducible. No effect when `sample = FALSE`.
+#'
+#' *   **obs (numeric vector or array, optional)**:  The observed value for this
+#' random variable. If provided, the sample site is conditioned on this value,
+#' and the function returns the observed value. If `py_none()`, the site is
+#' treated as a latent (unobserved) random variable. Defaults to `py_none()`.
+#'
+#' *   **name (str, optional)**:  The name of the sample site in a BF model.
+#' This is used to uniquely identify the random variable. Defaults to 'x'.
+#'
+#' **#### Returns:**
+#'
+#' *   **When `sample = FALSE`**: A BF MixtureGeneral distribution object (for
+#' model building).
+#' *   **When `sample = TRUE`**: A JAX array of samples drawn from the
+#' MixtureGeneral distribution (for direct sampling).
+#' *   **When `create_obj = TRUE`**: The raw BF distribution object (for
+#' advanced use cases).
+#'
+#' **#### Example Usage:**
+#'
+#' from BayesForge import bf m = bf(platform='cpu') bf.dist.mixture_general(
+#' mixing_distribution=bf.dist.categorical(probs=jnp.array(\[0.3, 0.7\]),
+#' create_obj = TRUE), component_distributions=\[bf.dist.normal(loc=0.0,
+#' scale=1.0, create_obj = TRUE),bf.dist.normal  (loc=0.0, scale=1.0,
+#' create_obj = TRUE)\], sample = TRUE )
+#'
+#' @param mixing_distribution See the Python documentation of
+#'   `mixing_distribution`.
+#' @param component_distributions See the Python documentation of
+#'   `component_distributions`.
+#' @param support See the Python documentation of `support`.
+#' @param validate_args Logical. Whether to validate the parameter values.
+#'   Defaults to `py_none()` (the NumPyro default).
+#' @param name Character. Name of the random variable in the model. When not
+#'   given, an observed site is named after the variable passed to `obs` (`obs =
+#'   y` gives `"y"`); use [bf_model()] to name parameters after the variables they
+#'   are assigned to.
+#' @param obs Numeric vector or array of observed values. If given, the random
+#'   variable is conditioned on them (likelihood); otherwise it is latent.
+#'   Defaults to `py_none()`.
+#' @param mask Optional logical vector or array masking observations (`FALSE` =
+#'   ignored). Defaults to `py_none()`.
+#' @param sample Logical. If `TRUE`, directly draw values from the distribution
+#'   and return them; if `FALSE` (default), create a random variable inside a
+#'   model.
+#' @param seed Integer seed for this draw when `sample = TRUE`. By default
+#'   (`py_none()`) the draw comes from the session's random stream, set by
+#'   `importBF(rand_seed = ...)`, so consecutive draws differ but the whole
+#'   sequence is reproducible. No effect when `sample = FALSE`.
+#' @param shape Integer vector. With `sample = FALSE`, the batch shape of the
+#'   distribution in the model; with `sample = TRUE`, the shape of the draw.
+#'   Defaults to `c()` (no extra dimensions).
+#' @param event Integer. Number of batch dimensions reinterpreted as event
+#'   dimensions (model building only). Defaults to `0`.
+#' @param create_obj Logical. If `TRUE`, return the distribution object itself
+#'   instead of a random variable (e.g. to build mixtures). Defaults to `FALSE`.
+#' @param to_jax Logical. Return a JAX array (`TRUE`, default) or convert to R.
+#'
+#' @return A random variable (model building) or draws (`sample = TRUE`).
 #'
 #' @examples
 #' \donttest{
 #' library(BayesForge)
-#' m=importBF(platform='cpu')
+#' m <- importBF(platform = "cpu")
 #' bf.dist.mixture_general(
-#' mixing_distribution = bf.dist.categorical(probs = c(0.3, 0, 7),create_obj = TRUE),
-#' component_distributions = c(
-#' bf.dist.normal(0,1,create_obj = TRUE),
-#' bf.dist.normal(0,1,create_obj = TRUE),
-#' bf.dist.normal(0,1,create_obj = TRUE)),
-#' sample = TRUE)
+#'     mixing_distribution = bf.dist.categorical(
+#'         probs = jnp$array(c(0.3, 0.7)),
+#'         create_obj = TRUE
+#'     ),
+#'     component_distributions = list(
+#'         bf.dist.normal(-2.0, 1.0, create_obj = TRUE),
+#'         bf.dist.normal(2.0, 1.0, create_obj = TRUE)
+#'     ),
+#'     sample = TRUE
+#' )
 #' }
+#'
+#' @seealso \url{https://num.pyro.ai/en/stable/distributions.html#mixturegeneral}
+#'
+#' @references
+#' \[1\]:
+#' https://preliz.readthedocs.io/en/latest/distributions/gallery/mixture.html
+#' "Mixture Distribution — PreliZ 0.22.0 documentation"
+#'
+#' \[2\]: https://reliability.readthedocs.io/en/latest/Mixture\%20models.html
+#' "Mixture models — reliability 0.9.0 documentation"
+#'
+#' \[3\]:
+#' https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.Mixture.html
+#' "Mixture — SciPy v1.16.2 Manual"
+#'
 #' @export
 bf.dist.mixture_general=function(mixing_distribution, component_distributions, support=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
+     if (missing(name) && !missing(obs)) name <- .bf_obs_name(substitute(obs))  # obs = y -> site "y"
+
      shape=do.call(tuple, as.list(as.integer(shape)))
      reticulate::py_run_string("def is_none(x): return x is None");
      if (!.BF_env$.py$is_none(seed)){seed=as.integer(seed);}

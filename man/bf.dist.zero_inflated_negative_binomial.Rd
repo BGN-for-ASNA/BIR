@@ -2,7 +2,8 @@
 % Please edit documentation in R/zero_inflated_negativebinomial2.R
 \name{bf.dist.zero_inflated_negative_binomial}
 \alias{bf.dist.zero_inflated_negative_binomial}
-\title{Zero-Inflated Negative Binomial  Distribution}
+\alias{bf.dist.zero_inflated_negative_binomial2}
+\title{Zero-Inflated Negative Binomial distribution}
 \usage{
 bf.dist.zero_inflated_negative_binomial(
   mean,
@@ -20,74 +21,133 @@ bf.dist.zero_inflated_negative_binomial(
   create_obj = FALSE,
   to_jax = TRUE
 )
+
+bf.dist.zero_inflated_negative_binomial2(...)
 }
 \arguments{
-\item{mean}{Numeric or a numeric vector. The mean of the Negative Binomial 2 distribution.}
+\item{mean}{The mean of the Negative Binomial 2 distribution.}
 
-\item{concentration}{Numeric or a numeric vector. The concentration parameter of the Negative Binomial 2 distribution.}
+\item{concentration}{The concentration parameter of the Negative Binomial 2
+distribution.}
 
-\item{gate}{numeric(1): Probability of extra zeros (between 0 and 1).}
+\item{gate}{See the Python documentation of \code{gate}.}
 
-\item{gate_logits}{numeric(1): Log-odds of extra zeros.}
+\item{gate_logits}{See the Python documentation of \code{gate_logits}.}
 
-\item{validate_args}{Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.}
+\item{validate_args}{Logical. Whether to validate the parameter values.
+Defaults to \code{py_none()} (the NumPyro default).}
 
-\item{name}{A character string representing the name of the random variable
-within a model. This is used to uniquely identify the variable. Defaults to 'x'.}
+\item{name}{Character. Name of the random variable in the model. When not
+given, an observed site is named after the variable passed to \code{obs} (\code{obs = y} gives \code{"y"}); use \code{\link[=bf_model]{bf_model()}} to name parameters after the variables they
+are assigned to.}
 
-\item{obs}{A numeric vector or array of observed values. If provided, the
-random variable is conditioned on these values. If `NULL`, the variable is
-treated as a latent (unobserved) variable. Defaults to `NULL`.}
+\item{obs}{Numeric vector or array of observed values. If given, the random
+variable is conditioned on them (likelihood); otherwise it is latent.
+Defaults to \code{py_none()}.}
 
-\item{mask}{Logical vector. Optional boolean array to mask observations.}
+\item{mask}{Optional logical vector or array masking observations (\code{FALSE} =
+ignored). Defaults to \code{py_none()}.}
 
-\item{sample}{A logical value that controls the function's behavior. If `TRUE`,
-the function will directly draw samples from the distribution. If `FALSE`,
-it will create a random variable within a model. Defaults to `FALSE`.}
+\item{sample}{Logical. If \code{TRUE}, directly draw values from the distribution
+and return them; if \code{FALSE} (default), create a random variable inside a
+model.}
 
-\item{seed}{An integer used to set the random seed for reproducibility when
-`sample = TRUE`. This argument has no effect when `sample = FALSE`, as
-randomness is handled by the model's inference engine. Defaults to 0.}
+\item{seed}{Integer seed for this draw when \code{sample = TRUE}. By default
+(\code{py_none()}) the draw comes from the session's random stream, set by
+\code{importBF(rand_seed = ...)}, so consecutive draws differ but the whole
+sequence is reproducible. No effect when \code{sample = FALSE}.}
 
-\item{shape}{A numeric vector.  A multi-purpose argument for shaping. When `sample=False` (model building),
-this is used with `.expand(shape)` to set the distribution's batch shape.
-When `sample=True` (direct sampling), this is used as `sample_shape` to draw a raw
-JAX array of the given shape.}
+\item{shape}{Integer vector. With \code{sample = FALSE}, the batch shape of the
+distribution in the model; with \code{sample = TRUE}, the shape of the draw.
+Defaults to \code{c()} (no extra dimensions).}
 
-\item{event}{Integer. The number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{event}{Integer. Number of batch dimensions reinterpreted as event
+dimensions (model building only). Defaults to \code{0}.}
 
-\item{create_obj}{Logical. If `TRUE`, returns the raw NumPyro distribution object instead of creating a sample site.
-This is essential for building complex distributions like `MixtureSameFamily`.}
+\item{create_obj}{Logical. If \code{TRUE}, return the distribution object itself
+instead of a random variable (e.g. to build mixtures). Defaults to \code{FALSE}.}
 
-\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
+\item{to_jax}{Logical. Return a JAX array (\code{TRUE}, default) or convert to R.}
+
+\item{...}{For \code{bf.dist.zero_inflated_negative_binomial2()}, the arguments of
+\code{bf.dist.zero_inflated_negative_binomial()} (same function, Python name).}
 }
 \value{
-- When \code{sample=FALSE}, a BI Zero-Inflated Negative Binomial distribution object (for model building).
-
- - When \code{sample=TRUE}, a JAX array of samples drawn from the Zero-Inflated Negative Binomial distribution (for direct sampling).
-
- - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
+\itemize{
+\item When \code{sample = FALSE}: A BF ZeroInflatedNegativeBinomial2 distribution
+object (for model building).
+\item When \code{sample = TRUE}: A JAX array of samples drawn from the
+ZeroInflatedNegativeBinomial2 distribution (for direct sampling).
+\item When \code{create_obj = TRUE}: The raw BF distribution object (for advanced
+use cases).
+}
 }
 \description{
-A Zero-Inflated Negative Binomial distribution is used for count data that exhibit **both** (a)
-over-dispersion relative to a Poisson (i.e., variance > mean) *and* (b)
-an excess of zero counts beyond what a standard Negative Binomial would predict.
-It assumes two latent processes:
- 1. With probability \deqn{\pi } (sometimes denoted \deqn{\psi} or "zero-inflation probability")
- you are in a "structural zero" state ??? you observe a zero.
- 2. With probability \deqn{1 - \pi}, you come from a regular Negative Binomial distribution
- (with parameters e.g. mean \deqn{\mu} and dispersion parameter \deqn{ \alpha }
-  or size/r parameter) and then you might observe zero or a positive count.
- Thus the model is a mixture of a point-mass at zero + a Negative Binomial for counts.
- This distribution combines a Negative Binomial distribution with a binary gate variable. Observations are
- either drawn from the Negative Binomial distribution with probability (1 - gate) or are treated as zero with probability 'gate'.
+A Zero-Inflated Negative Binomial distribution is used for count data that
+exhibit \strong{both} (a) over-dispersion relative to a Poisson (i.e., variance >
+mean) \emph{and} (b) an excess of zero counts beyond what a standard Negative
+Binomial would predict. It assumes two latent processes:
+\enumerate{
+\item With probability \eqn{\pi} (sometimes denoted \eqn{\psi} or
+“zero-inflation probability”) you are in a “structural zero” state → you
+observe a zero.
+\item With probability \eqn{1 - \pi}, you come from a regular Negative Binomial
+distribution (with parameters e.g. mean \eqn{\mu} and dispersion parameter
+\eqn{\alpha} or size/r parameter) and then you might observe zero or a
+positive count.
+}
 
-  This models data with excess zeros compared to what a standard Negative Binomial distribution would predict.
+Thus the model is a mixture of a point‐mass at zero + a Negative Binomial for
+counts.
+
+This distribution combines a Negative Binomial distribution with a binary
+gate variable. Observations are either drawn from the Negative Binomial
+distribution with probability (1 - gate) or are treated as zero with
+probability 'gate'. This models data with excess zeros compared to what a
+standard Negative Binomial distribution would predict.
+
+Let \eqn{X} denote the count random variable, support \eqn{{0,1,2,\dots}}.
+Denote:
+\itemize{
+\item \eqn{\pi} = probability of being in the “always zero” (structural zero)
+process, with \eqn{0 \le \pi \le 1}.
+\item The count process is NB with parameters: mean \eqn{\mu>0} and
+dispersion/shape parameter \eqn{\alpha>0} (or equivalently size parameter
+(r)). Then:
+}
+
+\deqn{P(X = 0) = \pi ;+; (1 - \pi); P_{\text{NB}}(0;\mu,\alpha),}
+
+\deqn{P(X = k) = (1 - \pi); P_{\text{NB}}(k;\mu,\alpha), \quad k = 1,2,3,\dots}
+
+Here \eqn{P_{\text{NB}}(k;\mu,\alpha)} is the PMF of the negative binomial
+distribution for count \eqn{k}.
 }
 \examples{
 \donttest{
 library(BayesForge)
 m <- importBF(platform = "cpu")
-bf.dist.zero_inflated_negative_binomial(mean = 2, concentration = 1, gate = 0.3, sample = TRUE)
+bf.dist.zero_inflated_negative_binomial(
+    mean = 2.0,
+    concentration = 3.0,
+    gate = 0.3,
+    sample = TRUE
+)
 }
+
+}
+\references{
+[1]: https://www.ewadirect.com/proceedings/tns/article/view/27624 "Social
+Networks Count Data: Negative Binomial Distributions and Extensions Versus
+Poisson and Bernoulli Models"
+
+[2]: https://pmc.ncbi.nlm.nih.gov/articles/PMC7880198/ "Bayesian
+Zero-Inflated Negative Binomial Regression Based on Pólya-Gamma Mixtures -
+PMC"
+
+[3]: https://search.r-project.org/CRAN/refmans/emdbook/html/dzinbinom.html
+"R: Zero-inflated negative binomial distribution"
+}
+\seealso{
+\url{https://num.pyro.ai/en/stable/distributions.html#zeroinflatednegativebinomial2}
 }

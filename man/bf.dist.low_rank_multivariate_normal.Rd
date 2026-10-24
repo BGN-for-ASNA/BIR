@@ -2,7 +2,7 @@
 % Please edit documentation in R/low_rank_multivariate_normal.R
 \name{bf.dist.low_rank_multivariate_normal}
 \alias{bf.dist.low_rank_multivariate_normal}
-\title{Low Rank Multivariate Normal Distribution}
+\title{Low Rank Multivariate Normal distribution}
 \usage{
 bf.dist.low_rank_multivariate_normal(
   loc,
@@ -21,68 +21,90 @@ bf.dist.low_rank_multivariate_normal(
 )
 }
 \arguments{
-\item{loc}{A numeric vector representing the mean vector.}
+\item{loc}{Mean vector. cov_factor (numeric vector or array): Matrix used to
+construct the covariance matrix. cov_diag (numeric vector or array): Diagonal
+elements of the covariance matrix.}
 
-\item{cov_factor}{A numeric vector or matrix used to construct the covariance matrix.}
+\item{cov_factor}{See the Python documentation of \code{cov_factor}.}
 
-\item{cov_diag}{A numeric vector representing the diagonal elements of the covariance matrix.}
+\item{cov_diag}{See the Python documentation of \code{cov_diag}.}
 
-\item{validate_args}{Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.}
+\item{validate_args}{Logical. Whether to validate the parameter values.
+Defaults to \code{py_none()} (the NumPyro default).}
 
-\item{name}{A character string representing the name of the random variable
-within a model. This is used to uniquely identify the variable. Defaults to 'x'.}
+\item{name}{Character. Name of the random variable in the model. When not
+given, an observed site is named after the variable passed to \code{obs} (\code{obs = y} gives \code{"y"}); use \code{\link[=bf_model]{bf_model()}} to name parameters after the variables they
+are assigned to.}
 
-\item{obs}{A numeric vector or array of observed values. If provided, the
-random variable is conditioned on these values. If `NULL`, the variable is
-treated as a latent (unobserved) variable. Defaults to `NULL`.}
+\item{obs}{Numeric vector or array of observed values. If given, the random
+variable is conditioned on them (likelihood); otherwise it is latent.
+Defaults to \code{py_none()}.}
 
-\item{mask}{Logical vector. Optional boolean array to mask observations.}
+\item{mask}{Optional logical vector or array masking observations (\code{FALSE} =
+ignored). Defaults to \code{py_none()}.}
 
-\item{sample}{A logical value that controls the function's behavior. If `TRUE`,
-the function will directly draw samples from the distribution. If `FALSE`,
-it will create a random variable within a model. Defaults to `FALSE`.}
+\item{sample}{Logical. If \code{TRUE}, directly draw values from the distribution
+and return them; if \code{FALSE} (default), create a random variable inside a
+model.}
 
-\item{seed}{An integer used to set the random seed for reproducibility when
-`sample = TRUE`. This argument has no effect when `sample = FALSE`, as
-randomness is handled by the model's inference engine. Defaults to 0.}
+\item{seed}{Integer seed for this draw when \code{sample = TRUE}. By default
+(\code{py_none()}) the draw comes from the session's random stream, set by
+\code{importBF(rand_seed = ...)}, so consecutive draws differ but the whole
+sequence is reproducible. No effect when \code{sample = FALSE}.}
 
-\item{shape}{Numeric vector. A multi-purpose argument for shaping. When `sample=False` (model building), this is used with `.expand(shape)` to set the distribution's batch shape. When `sample=True` (direct sampling), this is used as `sample_shape` to draw a raw JAX array of the given shape.}
+\item{shape}{Integer vector. With \code{sample = FALSE}, the batch shape of the
+distribution in the model; with \code{sample = TRUE}, the shape of the draw.
+Defaults to \code{c()} (no extra dimensions).}
 
-\item{event}{Integer. The number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{event}{Integer. Number of batch dimensions reinterpreted as event
+dimensions (model building only). Defaults to \code{0}.}
 
-\item{create_obj}{Logical. If True, returns the raw BI distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+\item{create_obj}{Logical. If \code{TRUE}, return the distribution object itself
+instead of a random variable (e.g. to build mixtures). Defaults to \code{FALSE}.}
 
-\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
+\item{to_jax}{Logical. Return a JAX array (\code{TRUE}, default) or convert to R.}
 }
 \value{
-- When \code{sample=FALSE}, a BI Low Rank Multivariate Normal distribution object (for model building).
-
- - When \code{sample=TRUE}, a JAX array of samples drawn from the Low Rank Multivariate Normal distribution (for direct sampling).
-
- - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
+A random variable (model building) or draws (\code{sample = TRUE}).
 }
 \description{
-The *Low-Rank Multivariate Normal* (LRMVN) distribution is a parameterizaton of the multivariate normal distribution where the covariance matrix is expressed as a low-rank plus diagonal decomposition:
-\deqn{
-  \Sigma = F F^\top + D
-}
-where $F$ is a low-rank matrix (capturing correlations) and $D$ is a diagonal matrix (capturing independent noise).
-This representation is often used in probabilistic modeling and variational inference to efficiently handle high-dimensional
-Gaussian distributions with structured covariance.
+The \emph{Low-Rank Multivariate Normal} (LRMVN) distribution is a parameterization
+of the multivariate normal distribution where the covariance matrix is
+expressed as a low-rank plus diagonal decomposition:
+
+\deqn{\Sigma = F F^\top + D}
+
+where \eqn{F} is a low-rank matrix (capturing correlations) and \eqn{D} is a
+diagonal matrix (capturing independent noise). This representation is often
+used in probabilistic modeling and variational inference to efficiently
+handle high-dimensional Gaussian distributions with structured covariance.
+
+For a (d)-dimensional random vector ( x \\in \\mathbb\{R\}^d ),
+
+\deqn{p(x \mid \mu, F, D) = \frac{1}{(2\pi)^{d/2} |\Sigma|^{1/2}} \exp\left(-\frac{1}{2}(x - \mu)^\top \Sigma^{-1} (x - \mu)\right),}
+
+where ( \\Sigma = F F^\\top + D ).
 }
 \examples{
 \donttest{
 library(BayesForge)
-m=importBF(platform='cpu')
-event_size = 10
-rank = 5
+m <- importBF(platform = "cpu")
+event_size <- 100L
+rank <- 5L
 bf.dist.low_rank_multivariate_normal(
-  loc = bf.dist.normal(0,1,shape = c(event_size), sample = TRUE)*2,
-  cov_factor = bf.dist.normal(0,1,shape = c(event_size, rank), sample = TRUE),
-  cov_diag = bf.dist.normal(10,0.5,shape = c(event_size), sample = TRUE),
-  sample = TRUE)
+    loc = bf.dist.normal(0, 1, shape = c(event_size), sample = TRUE) * 2,
+    cov_factor = bf.dist.normal(0, 1, shape = c(event_size, rank), sample = TRUE),
+    cov_diag = jnp$exp(bf.dist.normal(0, 1, shape = c(event_size), sample = TRUE)) * 0.1,
+    sample = TRUE
+)
 }
+
+}
+\references{
+\href{https://en.wikipedia.org/wiki/Multivariate_normal_distribution}{Multivariate normal distribution – Wikipedia}
+
+\href{https://www.tensorflow.org/probability/api_docs/python/tfp/distributions/MultivariateNormalDiagPlusLowRank}{TensorFlow Probability: LowRankMultivariateNormal}
 }
 \seealso{
-This is a wrapper of  \url{https://num.pyro.ai/en/stable/distributions.html#lowrankmultivariatenormal}
+\url{https://num.pyro.ai/en/stable/distributions.html#lowrankmultivariatenormal}
 }

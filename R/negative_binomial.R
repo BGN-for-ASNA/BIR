@@ -1,62 +1,85 @@
-#' @title Samples from a Negative Binomial distribution.
+#' @title Negative Binomial distribution
+#'
 #' @description
-#' The NB2 parameterisation of the negative-binomial distribution is a count distribution used for modelling over-dispersed count data
-#' (variance > mean). It is defined such that the variance grows **quadratically** in the mean:
-
-#' \deqn{
-#'   Var(Y) = \mu + \alpha,\mu^2,
-#' }
-#' where \deqn{\mu = E[Y]) and (\alpha>0)} is the dispersion (heterogeneity) parameter.
-#' Because of this quadratic variance growth, it is called the NB2 family.
+#' The Negative Binomial distribution models the number of failures (or the
+#' total number of trials) in a sequence of independent Bernoulli trials with
+#' success probability (p), until a specified number `total_count` (r) of
+#' successes is achieved. It is often used as a count-data model when the
+#' variance exceeds the mean (“overdispersion”) relative to a Poisson.
 #'
+#' PMF (Probability Mass Function): Given (X) = number of failures before the
+#' (r)th success (so (X = 0,1,2,\\dots)), with (r) successes fixed, success
+#' probability (p), failure probability (q = 1 - p):
 #'
-#' \deqn{P(k) = \frac{\Gamma(k + \alpha)}{\Gamma(k + 1) \Gamma(\alpha)} \left(\frac{\beta}{\alpha + \beta}\right)^k \left(1 - \frac{\beta}{\alpha + \beta}\right)^k}
+#' \deqn{\Pr(X = k) ;=; \binom{k + r - 1}{k} ; p^r ; q^k, \quad k = 0,1,2,\dots}
 #'
-#' @param total_count (int): The number of trials *n*.
-#' @param probs A numeric vector, matrix, or array representing the probability of success for each Bernoulli trial. Must be between 0 and 1.
-#' @param logits A numeric vector, matrix, or array representing the log-odds of success for each trial.
-#' @param shape A numeric vector.  Used with `.expand(shape)` when `sample=False` (model building) to set the distribution's batch shape. When `sample=True` (direct sampling), used as `sample_shape` to draw a raw JAX array of the given shape.
-#' @param event An integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).
-#' @param mask An optional logical vector to mask observations.
-#' @param create_obj A logical value. If `TRUE`, returns the raw BI distribution object instead of creating a sample site.
-#' @param validate_args Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.
-#' @param sample A logical value that controls the function's behavior. If `TRUE`,
-#'   the function will directly draw samples from the distribution. If `FALSE`,
-#'   it will create a random variable within a model. Defaults to `FALSE`.
-#' @param seed An integer used to set the random seed for reproducibility when
-#'   `sample = TRUE`. This argument has no effect when `sample = FALSE`, as
-#'   randomness is handled by the model's inference engine. Defaults to 0.
-#' @param obs A numeric vector or array of observed values. If provided, the
-#'   random variable is conditioned on these values. If `NULL`, the variable is
-#'   treated as a latent (unobserved) variable. Defaults to `NULL`.
-#' @param name A character string representing the name of the random variable
-#'   within a model. This is used to uniquely identify the variable. Defaults to 'x'.
-#' @param to_jax Boolean. Indicates whether to return a JAX array or not.
+#' @param total_count The total number of events.
+#' @param probs See the Python documentation of `probs`.
+#' @param logits See the Python documentation of `logits`.
+#' @param validate_args Logical. Whether to validate the parameter values.
+#'   Defaults to `py_none()` (the NumPyro default).
+#' @param name Character. Name of the random variable in the model. When not
+#'   given, an observed site is named after the variable passed to `obs` (`obs =
+#'   y` gives `"y"`); use [bf_model()] to name parameters after the variables they
+#'   are assigned to.
+#' @param obs Numeric vector or array of observed values. If given, the random
+#'   variable is conditioned on them (likelihood); otherwise it is latent.
+#'   Defaults to `py_none()`.
+#' @param mask Optional logical vector or array masking observations (`FALSE` =
+#'   ignored). Defaults to `py_none()`.
+#' @param sample Logical. If `TRUE`, directly draw values from the distribution
+#'   and return them; if `FALSE` (default), create a random variable inside a
+#'   model.
+#' @param seed Integer seed for this draw when `sample = TRUE`. By default
+#'   (`py_none()`) the draw comes from the session's random stream, set by
+#'   `importBF(rand_seed = ...)`, so consecutive draws differ but the whole
+#'   sequence is reproducible. No effect when `sample = FALSE`.
+#' @param shape Integer vector. With `sample = FALSE`, the batch shape of the
+#'   distribution in the model; with `sample = TRUE`, the shape of the draw.
+#'   Defaults to `c()` (no extra dimensions).
+#' @param event Integer. Number of batch dimensions reinterpreted as event
+#'   dimensions (model building only). Defaults to `0`.
+#' @param create_obj Logical. If `TRUE`, return the distribution object itself
+#'   instead of a random variable (e.g. to build mixtures). Defaults to `FALSE`.
+#' @param to_jax Logical. Return a JAX array (`TRUE`, default) or convert to R.
 #'
 #' @return
-#'  - When \code{sample=FALSE}, a BI Negative Binomial distribution object (for model building).
-#'
-#'  - When \code{sample=TRUE}, a JAX array of samples drawn from the Negative Binomial distribution (for direct sampling).
-#'
-#'  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
-#'
-#' @seealso \url{https://num.pyro.ai/en/stable/distributions.html#negativebinomial2}
+#' \itemize{
+#'   \item BF NegativeBinomial distribution object (for model building).
+#'   \item JAX array of samples drawn from the NegativeBinomial distribution (for
+#'     direct sampling).
+#'   \item The raw BF distribution object (for advanced use cases).
+#' }
 #'
 #' @examples
 #' \donttest{
 #' library(BayesForge)
-#' m=importBF(platform='cpu')
-#' bf.dist.negative_binomial2(total_count = 100, probs = 0.5, sample = TRUE)
+#' m <- importBF(platform = "cpu")
+#' bf.dist.negative_binomial(
+#'     total_count = 5.0,
+#'     probs = jnp$array(c(0.2, 0.3, 0.5)),
+#'     sample = TRUE
+#' )
 #' }
+#'
+#' @seealso \url{https://num.pyro.ai/en/stable/distributions.html#negativebinomial}
+#'
+#' @references
+#' https://en.wikipedia.org/wiki/Negative_binomial_distribution
+#'
+#' https://www.statology.org/negative-binomial-distribution/
+#'
 #' @export
-bf.dist.negative_binomial2=function(total_count, probs, logits=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
+bf.dist.negative_binomial=function(total_count, probs, logits=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
+     if (missing(name) && !missing(obs)) name <- .bf_obs_name(substitute(obs))  # obs = y -> site "y"
+
      shape=do.call(tuple, as.list(as.integer(shape)))
      if (!.BF_env$.py$is_none(seed)){seed=as.integer(seed);}
 
      if (.BF_env$.py$is_none(logits)){
-       .BF_env$.bf_instance$dist$negative_binomial(total_count = .BF_env$jnp$array(total_count), probs=.BF_env$jnp$array(probs),   validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
+       .BF_env$.bf_instance$dist$negative_binomial(total_count = .BF_env$jnp$asarray(total_count), probs=.BF_env$jnp$asarray(probs),   validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
      }else{
-       .BF_env$.bf_instance$dist$negative_binomial(total_count = .BF_env$jnp$array(total_count), logits= .BF_env$jnp$array(logits),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
+       .BF_env$.bf_instance$dist$negative_binomial(total_count = .BF_env$jnp$asarray(total_count), logits= .BF_env$jnp$asarray(logits),  validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 
      }
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/gumbel.R
 \name{bf.dist.gumbel}
 \alias{bf.dist.gumbel}
-\title{Samples from a Gumbel (or Extreme Value) distribution.}
+\title{Gumbel distribution}
 \usage{
 bf.dist.gumbel(
   loc = 0,
@@ -20,52 +20,75 @@ bf.dist.gumbel(
 )
 }
 \arguments{
-\item{loc}{Location parameter.}
+\item{loc}{Location parameter. Defaults to 0.0.}
 
-\item{scale}{Scale parameter. Must be positive.}
+\item{scale}{Scale parameter. Must be positive. Defaults to 1.0.}
 
-\item{validate_args}{Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.}
+\item{validate_args}{Logical. Whether to validate the parameter values.
+Defaults to \code{py_none()} (the NumPyro default).}
 
-\item{name}{A character string representing the name of the random variable
-within a model. This is used to uniquely identify the variable. Defaults to 'x'.}
+\item{name}{Character. Name of the random variable in the model. When not
+given, an observed site is named after the variable passed to \code{obs} (\code{obs = y} gives \code{"y"}); use \code{\link[=bf_model]{bf_model()}} to name parameters after the variables they
+are assigned to.}
 
-\item{obs}{A numeric vector or array of observed values. If provided, the
-random variable is conditioned on these values. If `NULL`, the variable is
-treated as a latent (unobserved) variable. Defaults to `NULL`.}
+\item{obs}{Numeric vector or array of observed values. If given, the random
+variable is conditioned on them (likelihood); otherwise it is latent.
+Defaults to \code{py_none()}.}
 
-\item{mask}{Optional boolean array to mask observations.}
+\item{mask}{Optional logical vector or array masking observations (\code{FALSE} =
+ignored). Defaults to \code{py_none()}.}
 
-\item{sample}{A logical value that controls the function's behavior. If `TRUE`,
-the function will directly draw samples from the distribution. If `FALSE`,
-it will create a random variable within a model. Defaults to `FALSE`.}
+\item{sample}{Logical. If \code{TRUE}, directly draw values from the distribution
+and return them; if \code{FALSE} (default), create a random variable inside a
+model.}
 
-\item{seed}{An integer used to set the random seed for reproducibility when
-`sample = TRUE`. This argument has no effect when `sample = FALSE`, as
-randomness is handled by the model's inference engine. Defaults to 0.}
+\item{seed}{Integer seed for this draw when \code{sample = TRUE}. By default
+(\code{py_none()}) the draw comes from the session's random stream, set by
+\code{importBF(rand_seed = ...)}, so consecutive draws differ but the whole
+sequence is reproducible. No effect when \code{sample = FALSE}.}
 
-\item{shape}{A numeric vector. When \code{sample=FALSE} (model building), this is used with \code{.expand(shape)} to set the distribution's batch shape. When \code{sample=TRUE} (direct sampling), this is used as \code{sample_shape} to draw a raw JAX array of the given shape.}
+\item{shape}{Integer vector. With \code{sample = FALSE}, the batch shape of the
+distribution in the model; with \code{sample = TRUE}, the shape of the draw.
+Defaults to \code{c()} (no extra dimensions).}
 
-\item{event}{The number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{event}{Integer. Number of batch dimensions reinterpreted as event
+dimensions (model building only). Defaults to \code{0}.}
 
-\item{create_obj}{If \code{TRUE}, returns the raw BI distribution object instead of creating a sample site.}
+\item{create_obj}{Logical. If \code{TRUE}, return the distribution object itself
+instead of a random variable (e.g. to build mixtures). Defaults to \code{FALSE}.}
 
-\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
+\item{to_jax}{Logical. Return a JAX array (\code{TRUE}, default) or convert to R.}
 }
 \value{
-- When \code{sample=FALSE}, a BI Gumbel distribution object (for model building).
-
- - When \code{sample=TRUE}, a JAX array of samples drawn from the Gumbel distribution (for direct sampling).
-
- - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
+\itemize{
+\item When \code{sample = FALSE}: A BF Gumbel distribution object (for model
+building).
+\item When \code{sample = TRUE}: A JAX array of samples drawn from the Gumbel
+distribution (for direct sampling).
+\item When \code{create_obj = TRUE}: The raw BF distribution object (for advanced
+use cases).
+}
 }
 \description{
-The Gumbel distribution is a continuous probability distribution named after German mathematician Carl Gumbel.
-It is often used to model the distribution of maximum values in a sequence of independent random variables.
+Samples from a Gumbel (or Extreme Value) distribution.
+
+The Gumbel distribution is a continuous probability distribution named after
+German mathematician Carl Gumbel. It is often used to model the distribution
+of maximum values in a sequence of independent random variables.
+
+\deqn{F(x;\mu,\beta) = \exp\bigl( -\exp\bigl( -\tfrac{x - \mu}{\beta} \bigr) \bigr), \quad x \in \mathbb{R}.}
 }
 \examples{
 \donttest{
 library(BayesForge)
-m=importBF(platform='cpu')
-bf.dist.gumbel(sample = TRUE)
+m <- importBF(platform = "cpu")
+bf.dist.gumbel(loc = 0.0, scale = 1.0, sample = TRUE)
 }
+
+}
+\references{
+https://en.wikipedia.org/wiki/Gumbel_distribution
+}
+\seealso{
+\url{https://num.pyro.ai/en/stable/distributions.html#gumbel}
 }

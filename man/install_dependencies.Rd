@@ -13,6 +13,6 @@ install_dependencies(envname = "BFR")
 Install dependencies
 }
 \details{
-Internal helper function to install dependencies for the `BFR` package.
+Kept for backward compatibility; same as \code{\link[=update_BF]{update_BF()}}.
 }
 \keyword{internal}

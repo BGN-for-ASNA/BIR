@@ -2,7 +2,7 @@
 % Please edit documentation in R/eulermaruyama.R
 \name{bf.dist.euler_maruyama}
 \alias{bf.dist.euler_maruyama}
-\title{Euler-Maruyama method}
+\title{Euler–Maruyama distribution}
 \usage{
 bf.dist.euler_maruyama(
   t,
@@ -21,70 +21,80 @@ bf.dist.euler_maruyama(
 )
 }
 \arguments{
-\item{t}{A numeric vector representing the discretized time steps.}
+\item{t}{Discretized time steps.}
 
-\item{sde_fn}{A function that takes the current state and time as input and returns the drift and diffusion coefficients.}
+\item{sde_fn}{A function that takes the current state and time as input and
+returns the drift and diffusion coefficients.}
 
 \item{init_dist}{The initial distribution of the system.}
 
-\item{validate_args}{A logical value indicating whether to validate the arguments. Defaults to `TRUE`.}
+\item{validate_args}{Logical. Whether to validate the parameter values.
+Defaults to \code{py_none()} (the NumPyro default).}
 
-\item{name}{A character string representing the name of the random variable
-within a model. This is used to uniquely identify the variable. Defaults to 'x'.}
+\item{name}{Character. Name of the random variable in the model. When not
+given, an observed site is named after the variable passed to \code{obs} (\code{obs = y} gives \code{"y"}); use \code{\link[=bf_model]{bf_model()}} to name parameters after the variables they
+are assigned to.}
 
-\item{obs}{A numeric vector or array of observed values. If provided, the
-random variable is conditioned on these values. If `NULL`, the variable is
-treated as a latent (unobserved) variable. Defaults to `NULL`.}
+\item{obs}{Numeric vector or array of observed values. If given, the random
+variable is conditioned on them (likelihood); otherwise it is latent.
+Defaults to \code{py_none()}.}
 
-\item{mask}{A logical vector. Optional boolean array to mask observations.}
+\item{mask}{Optional logical vector or array masking observations (\code{FALSE} =
+ignored). Defaults to \code{py_none()}.}
 
-\item{sample}{A logical value that controls the function's behavior. If `TRUE`,
-the function will directly draw samples from the distribution. If `FALSE`,
-it will create a random variable within a model. Defaults to `FALSE`.}
+\item{sample}{Logical. If \code{TRUE}, directly draw values from the distribution
+and return them; if \code{FALSE} (default), create a random variable inside a
+model.}
 
-\item{seed}{An integer used to set the random seed for reproducibility when
-`sample = TRUE`. This argument has no effect when `sample = FALSE`, as
-randomness is handled by the model's inference engine. Defaults to 0.}
+\item{seed}{Integer seed for this draw when \code{sample = TRUE}. By default
+(\code{py_none()}) the draw comes from the session's random stream, set by
+\code{importBF(rand_seed = ...)}, so consecutive draws differ but the whole
+sequence is reproducible. No effect when \code{sample = FALSE}.}
 
-\item{shape}{A numeric vector specifying the shape of the output tensor.  Defaults to `NULL`.}
+\item{shape}{Integer vector. With \code{sample = FALSE}, the batch shape of the
+distribution in the model; with \code{sample = TRUE}, the shape of the draw.
+Defaults to \code{c()} (no extra dimensions).}
 
-\item{event}{Integer representing the number of batch dimensions to reinterpret as event dimensions (used in model building).}
+\item{event}{Integer. Number of batch dimensions reinterpreted as event
+dimensions (model building only). Defaults to \code{0}.}
 
-\item{create_obj}{Logical. If TRUE, returns the raw BI distribution object instead of creating a sample site. This is essential for building complex distributions like `MixtureSameFamily`.}
+\item{create_obj}{Logical. If \code{TRUE}, return the distribution object itself
+instead of a random variable (e.g. to build mixtures). Defaults to \code{FALSE}.}
 
-\item{to_jax}{Boolean. Indicates whether to return a JAX array or not.}
+\item{to_jax}{Logical. Return a JAX array (\code{TRUE}, default) or convert to R.}
 }
 \value{
-- When \code{sample=FALSE}, a BI Euler-Maruyama distribution object (for model building).
-
- - When \code{sample=TRUE}, a JAX array of samples drawn from the Euler-Maruyama distribution (for direct sampling).
-
- - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
+\itemize{
+\item numeric vector or array: Samples drawn from the Euler–Maruyama
+distribution.
+}
 }
 \description{
-Euler-Maruyama methode is a method for the approximate numerical solution of a stochastic differential equation (SDE).
-It simulates the solution to an SDE by iteratively applying the Euler method to each time step, incorporating a random perturbation to account for the diffusion term.
+Euler–Maruyama methode is a method for the approximate numerical solution of
+a stochastic differential equation (SDE). It simulates the solution to an SDE
+by iteratively applying the Euler method to each time step, incorporating a
+random perturbation to account for the diffusion term.
+
+\deqn{dX_t = f(X_t, t) dt + g(X_t, t) dW_t}
+
+where:
+\itemize{
+\item \eqn{X_t` is the state of the system at time}t`.
+\item $f(X_t, t)` is the drift coefficient.
+\item $g(X_t, t)` is the diffusion coefficient.
+\item $dW_t` is a Wiener process (Brownian motion).
+}
 }
 \examples{
 \donttest{
 library(BayesForge)
-m=importBF(platform='cpu')
-ornstein_uhlenbeck_sde <- function(x, t) {
- # This function models dX = -theta * X dt + sigma dW
- theta <- 1.0
- sigma <- 0.5
-
- drift <- -theta * x
- diffusion <- sigma
-
- # Return a list of two elements: drift and diffusion
- # reticulate will convert this to a Python tuple
- return(list(drift, diffusion))
-}
+m <- importBF(platform = "cpu")
 bf.dist.euler_maruyama(
-t=c(0.0, 0.1, 0.2),
-sde_fn = ornstein_uhlenbeck_sde,
-init_dist=bf.dist.normal(0.0, 1.0, create_obj=TRUE),
-sample = TRUE)
+    t = jnp$array(c(0.0, 0.1, 0.2)),
+    sde_fn = function(x, t) reticulate::tuple(x, 1.0),
+    init_dist = bf.dist.normal(0.0, 1.0, create_obj = TRUE),
+    sample = TRUE
+)
 }
+
 }

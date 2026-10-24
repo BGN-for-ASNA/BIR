@@ -1,62 +1,110 @@
-#' @title Truncated Normal Distribution
+#' @title Truncated Normal distribution
+#'
 #' @description
-#' A truncated normal distribution is derived from a normal (Gaussian)
-#' random variable by restricting (truncating) its domain to an interval \deqn{[a, b]}
-#' (which could be one-sided, e.g., (a) only or (b) only). It is defined by its location (`loc`), scale
-#' (`scale`), lower bound  \deqn{a} (`low`), and upper bound \deqn{b} (`high`). In effect:
-#' if \deqn{X \sim \mathcal N(\mu, \sigma^2)}, then the truncated version \deqn{Y = X | (a \le X \le b)}
-#' has the same "shape" but only supports values in \deqn{[a,b]}. This is used when you know that values outside a range
-#' are impossible or not observed (e.g., measurement limits, natural bounds).
+#' A truncated normal distribution is derived from a normal (Gaussian) random
+#' variable by restricting (truncating) its domain to an interval \eqn{[a, b]}
+#' (which could be one‐sided, e.g., (a) only or (b) only). It is defined by its
+#' location (`loc`), scale (`scale`), lower bound  \eqn{a} (`low`), and upper
+#' bound \eqn{b} (`high`). In effect: if \eqn{X \sim \mathcal N(\mu, \sigma^2)},
+#' then the truncated version \eqn{Y = X | (a \le X \le b)} has the same “shape”
+#' but only supports values in \eqn{[a,b]}. This is used when you know that
+#' values outside a range are impossible or not observed (e.g., measurement
+#' limits, natural bounds).
+#'
+#' Let \eqn{X \sim \mathcal N(\mu, \sigma^2)}. Define truncation bounds \eqn{a <
+#' b} (could be \eqn{a = -\infty} or \eqn{b = +\infty} for one‐sided
+#' truncation). Then for \eqn{y \in [a,b]},
+#'
+#' \deqn{f_Y(y) = \frac{1}{\sigma} ; \frac{\varphi!\bigl(\frac{y - \mu}{\sigma}\bigr)}{\Phi!\bigl(\frac{b - \mu}{\sigma}\bigr) - \Phi!\bigl(\frac{a - \mu}{\sigma}\bigr)} ,}
+#'
+#' where:
+#'
+#' * \eqn{\varphi(z)} is the standard normal PDF, \eqn{\varphi(z) =
+#' \frac1{\sqrt{2\pi}} e^{-z^2/2}}.
+#' * \eqn{\Phi(z)} is the standard normal CDF.
+#' * The denominator \eqn{\Phi\bigl(\tfrac{b - \mu}{\sigma}\bigr) -
+#' \Phi\bigl(\tfrac{a - \mu}{\sigma}\bigr)} normalises the density so the total
+#' probability over (\[a,b\]) is 1.
+#'
+#' For values (y < a) or (y > b), (f_Y(y) = 0).
 #'
 #' @param loc The location parameter of the normal distribution.
-#' @param scale The scale parameter of the normal distribution.
-#' @param low (float, jnp.ndarray, optional): The lower truncation point. If `None`, the distribution is only truncated on the right. Defaults to `None`.
-#' @param high (float, jnp.ndarray, optional): The upper truncation point. If `None`, the distribution is only truncated on the left. Defaults to `None`.
-#' @param shape A numeric vector (e.g., `c(10)`) used to shape the distribution.
-#'   When `sample=False` (model building), this is used with `.expand(shape)` to set the
-#'   distribution's batch shape. When `sample=True` (direct sampling),
-#'   this is used as `sample_shape` to draw a raw JAX array of the
-#'   given shape.
-#' @param event The number of batch dimensions to reinterpret as event
-#'   dimensions (used in model building).
-#' @param mask An optional boolean array to mask observations.
-#' @param create_obj Logical; If `TRUE`, returns the raw BI distribution
-#'   object instead of creating a sample site.
-#' @param validate_args Logical: Whether to validate parameter values.  Defaults to `reticulate::py_none()`.
-#' @param sample A logical value that controls the function's behavior. If `TRUE`,
-#'   the function will directly draw samples from the distribution. If `FALSE`,
-#'   it will create a random variable within a model. Defaults to `FALSE`.
-#' @param seed An integer used to set the random seed for reproducibility when
-#'   `sample = TRUE`. This argument has no effect when `sample = FALSE`, as
-#'   randomness is handled by the model's inference engine. Defaults to 0.
-#' @param obs A numeric vector or array of observed values. If provided, the
-#'   random variable is conditioned on these values. If `NULL`, the variable is
-#'   treated as a latent (unobserved) variable. Defaults to `NULL`.
-#' @param name A character string representing the name of the random variable
-#'   within a model. This is used to uniquely identify the variable. Defaults to 'x'.
-#' @param to_jax Boolean. Indicates whether to return a JAX array or not.
+#' @param scale See the Python documentation of `scale`.
+#' @param low See the Python documentation of `low`.
+#' @param high See the Python documentation of `high`.
+#' @param validate_args Logical. Whether to validate the parameter values.
+#'   Defaults to `py_none()` (the NumPyro default).
+#' @param name Character. Name of the random variable in the model. When not
+#'   given, an observed site is named after the variable passed to `obs` (`obs =
+#'   y` gives `"y"`); use [bf_model()] to name parameters after the variables they
+#'   are assigned to.
+#' @param obs Numeric vector or array of observed values. If given, the random
+#'   variable is conditioned on them (likelihood); otherwise it is latent.
+#'   Defaults to `py_none()`.
+#' @param mask Optional logical vector or array masking observations (`FALSE` =
+#'   ignored). Defaults to `py_none()`.
+#' @param sample Logical. If `TRUE`, directly draw values from the distribution
+#'   and return them; if `FALSE` (default), create a random variable inside a
+#'   model.
+#' @param seed Integer seed for this draw when `sample = TRUE`. By default
+#'   (`py_none()`) the draw comes from the session's random stream, set by
+#'   `importBF(rand_seed = ...)`, so consecutive draws differ but the whole
+#'   sequence is reproducible. No effect when `sample = FALSE`.
+#' @param shape Integer vector. With `sample = FALSE`, the batch shape of the
+#'   distribution in the model; with `sample = TRUE`, the shape of the draw.
+#'   Defaults to `c()` (no extra dimensions).
+#' @param event Integer. Number of batch dimensions reinterpreted as event
+#'   dimensions (model building only). Defaults to `0`.
+#' @param create_obj Logical. If `TRUE`, return the distribution object itself
+#'   instead of a random variable (e.g. to build mixtures). Defaults to `FALSE`.
+#' @param to_jax Logical. Return a JAX array (`TRUE`, default) or convert to R.
 #'
 #' @return
-#'  - When \code{sample=FALSE}, a BI Truncated Normal distribution object (for model building).
-#'
-#'  - When \code{sample=TRUE}, a JAX array of samples drawn from the Truncated Normal distribution (for direct sampling).
-#'
-#'  - When \code{create_obj=TRUE}, the raw BI distribution object (for advanced use cases).
+#' \itemize{
+#'   \item BF TruncatedNormal distribution object (for model building).
+#'   \item JAX array of samples drawn from the TruncatedNormal distribution (for
+#'   \item direct sampling).
+#'   \item The raw BF distribution object (for advanced use cases).
+#' }
 #'
 #' @examples
 #' \donttest{
 #' library(BayesForge)
-#' m=importBF(platform='cpu')
-#' bf.dist.truncated_normal(loc = 0, scale = 2, low = 0, high = 1.5, sample = TRUE)
+#' m <- importBF(platform = "cpu")
+#' bf.dist.truncated_normal(loc = 0.0, scale = 1.0, sample = TRUE)
 #' }
+#'
+#' @seealso \url{https://num.pyro.ai/en/stable/distributions.html#truncatednormal_lowercase}
+#'
+#' @references
+#' \[1\]: https://en.wikipedia.org/wiki/Truncated_normal_distribution "Truncated
+#' normal distribution"
+#'
+#' \[2\]:
+#' https://people.math.sc.edu/burkardt/m_src/truncated_normal/truncated_normal.html
+#' "TRUNCATED_NORMAL - The Truncated Normal Distribution"
+#'
+#' \[3\]: https://www.statisticshowto.com/truncated-normal-distribution/
+#' "Truncated Distribution / Truncated Normal Distribution - Statistics ..."
+#'
+#' \[4\]:
+#' https://real-statistics.com/normal-distribution/truncated-normal-distribution/
+#' "Truncated Normal Distribution | Real Statistics Using Excel"
+#'
+#' \[5\]:
+#' https://stats.stackexchange.com/questions/525894/understanding-the-pdf-of-a-truncated-normal-distribution
+#' "Understanding the pdf of a truncated normal distribution"
+#'
 #' @export
 bf.dist.truncated_normal=function(loc=0.0, scale=1.0, low=py_none(), high=py_none(), validate_args=py_none(), name='x', obs=py_none(), mask=py_none(), sample=FALSE, seed = py_none(), shape=c(), event=0, create_obj=FALSE, to_jax = TRUE) {
+     if (missing(name) && !missing(obs)) name <- .bf_obs_name(substitute(obs))  # obs = y -> site "y"
+
      shape=do.call(tuple, as.list(as.integer(shape)))
      if (!.BF_env$.py$is_none(seed)){seed=as.integer(seed);}
      .BF_env$.bf_instance$dist$truncated_normal(
-       loc=.BF_env$jnp$array(loc),
-       scale= .BF_env$jnp$array(scale),
-       low= .BF_env$jnp$array(low),
-       high = .BF_env$jnp$array(high),
+       loc=.BF_env$jnp$asarray(loc),
+       scale= .BF_env$jnp$asarray(scale),
+       low= .bf_arr(low),
+       high = .bf_arr(high),
        validate_args= validate_args,  name= name,  obs= obs,  mask= mask,  sample= sample,  seed= seed,  shape= shape,  event= event,  create_obj= create_obj,   to_jax = to_jax)
 }
